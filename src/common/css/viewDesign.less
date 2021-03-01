@@ -1,0 +1,20 @@
+@import "~view-design/src/styles/index.less";
+// 更改遮罩层样式
+.ivu-modal-mask {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.my-modal /deep/ {
+  .ivu-modal-header {
+    border: none;
+    padding: 30px 24px 20px 24px;
+  }
+  .ivu-modal-body{
+    padding: 0px 24px 24px 24px;
+  }
+}
+
+.ivu-modal-content {
+  box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
