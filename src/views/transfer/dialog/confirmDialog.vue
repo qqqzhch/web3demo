@@ -62,22 +62,22 @@
           </div>
 
           <div class="details-warpper">
-            <div class="details-items flex justify-between items-center">
+            <div class="details-items">
               <p>Asset</p>
-              <div class="details-items flex justify-between items-center">
+              <div class="details-items">
                 <img src="../../../assets/img/lamblogo-32.png">
                 <span>tLAMB</span>
               </div>
             </div>
-            <div class="details-items flex justify-between items-center">
+            <div class="details-items">
               <p>Destination</p>
               <span>0x298jk…jh23llkn25</span>
             </div>
-            <div class="details-items flex justify-between items-center">
+            <div class="details-items">
               <p>Network Fee</p>
               <span>11 (100% discount)</span>
             </div>
-            <div class="details-items flex justify-between items-center">
+            <div class="details-items">
               <p>You will receive</p>
               <div class="flex justify-between items-center">
                 <img src="../../../assets/img/ethlogo-32.png">
@@ -190,6 +190,10 @@ export default {
     .details-warpper {
       .details-items {
         margin-top: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
         p {
           width: 100px;
           font-size: 14px;
