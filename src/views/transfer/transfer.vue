@@ -540,7 +540,7 @@ export default {
     ...mapState(['token', 'ethAddress']),
   },
   created() {
-    this.initEth();
+    // this.initEth();
   },
 };
 </script>

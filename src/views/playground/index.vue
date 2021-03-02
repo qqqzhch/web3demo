@@ -20,6 +20,9 @@
     <button @click="openconfirmtDialog">
       openconfirmtDialog
     </button>
+    <button @click="pairlist">
+      读取默认交易对
+    </button>
 
 
     <div class="modal-wrapper">
@@ -45,6 +48,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+import {readpairpool} from '@/contactLogic/readpairpool.js';
+
 export default {
   name: "Home",
   components: {
@@ -75,8 +82,19 @@ export default {
     },
     openconfirmtDialog(){
       this.$refs.confirm.open();
+    },
+    pairlist(){
+      const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      const account = this.ethAddress;
+
+      readpairpool(chainID,library, account);
+
     }
   },
+  computed: {
+    ...mapState(['ethAddress','ethChainID']),
+  }
 };
 </script>
 <style lang="less" scoped>

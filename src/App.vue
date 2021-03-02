@@ -4,7 +4,7 @@
     <main class="main-wrapper container mx-auto">
       <router-view v-if="isRouterAlive" />
     </main>
-    <wallet />
+    <initialWallet />
     <layoutFoot />
   </div>
 </template>
@@ -13,7 +13,7 @@
 import layoutHead from '@/components/layout/header.vue';
 import layoutFoot from '@/components/layout/footer.vue';
 
-import wallet from '@/components/basic/wallet.vue';
+import initialWallet from '@/components/basic/initialWallet.vue';
 
 export default {
   provide() {
@@ -29,7 +29,7 @@ export default {
   components: {
     layoutHead,
     layoutFoot,
-    wallet
+    initialWallet
   },
   methods: {
     reload() {
