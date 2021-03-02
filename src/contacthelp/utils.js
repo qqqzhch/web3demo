@@ -5,6 +5,8 @@ import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { BigNumber } from "@ethersproject/bignumber";
 import { abi as IUniswapV2Router02ABI } from "@uniswap/v2-periphery/build/IUniswapV2Router02.json";
 
+import { Contract as ContractMulticall} from '@webfans/ethers-multicall';
+
 import {
   ChainId,
   JSBI,
@@ -39,13 +41,24 @@ export function getProviderOrSigner(library, account) {
 
 // account is optional
 export function getContract(address, ABI, library, account) {
-  console.log('getContract')
+  console.log('getContract');
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
 
   return new Contract(address, ABI, getProviderOrSigner(library, account));
 }
+
+export function getContractMulticall(address, ABI) {
+  console.log('getContract');
+  if (!isAddress(address) || address === AddressZero) {
+    throw Error(`Invalid 'address' parameter '${address}'.`);
+  }
+
+  return new ContractMulticall(address, ABI);
+}
+
+
 
 // account is optional
 export function getRouterContract(_, library, account) {
@@ -67,32 +80,32 @@ export function calculateGasMargin(value) {
     .div(BigNumber.from(10000));
 }
 
-export function calculateGasMarginS(value) {
-  // console.log('calculateGasMarginS',value)
-  var BN = web3.utils.BN;
-  return value.mul(new BN(10000).add(new BN(1000))).div(new BN(10000));
-}
+// export function calculateGasMarginS(value) {
+//   // console.log('calculateGasMarginS',value)
+//   const BN = web3.utils.BN;
+//   return value.mul(new BN(10000).add(new BN(1000))).div(new BN(10000));
+// }
 
-export function useSingleCallResult(contract, methodName, inputs, options) {
-  const fragment = () => contract?.interface?.getFunction(methodName);
+// export function useSingleCallResult(contract, methodName, inputs, options) {
+//   const fragment = () => contract?.interface?.getFunction(methodName);
 
-  const calls = () => {
-    return contract && fragment && isValidMethodArgs(inputs)
-      ? [
-          {
-            address: contract.address,
-            callData: contract.interface.encodeFunctionData(fragment, inputs),
-          },
-        ]
-      : [];
-  };
+//   const calls = () => {
+//     return contract && fragment && isValidMethodArgs(inputs)
+//       ? [
+//           {
+//             address: contract.address,
+//             callData: contract.interface.encodeFunctionData(fragment, inputs),
+//           },
+//         ]
+//       : [];
+//   };
 
-  const result = useCallsData(calls, options)[0];
-  const latestBlockNumber = useBlockNumber();
+//   const result = useCallsData(calls, options)[0];
+//   const latestBlockNumber = useBlockNumber();
 
-  {
-  }
-}
+//   {
+//   }
+// }
 
 export function calculateSlippageAmount(value, slippage) {
   if (slippage < 0 || slippage > 10000) {
@@ -111,8 +124,8 @@ export function calculateSlippageAmount(value, slippage) {
 }
 
 export function isNum(data) {
-  var isnuma = /^[0-9]+$/.test(data);
-  var isnumb = /^[0-9]+\.?[0-9]+?$/.test(data);
+  const isnuma = /^[0-9]+$/.test(data);
+  const isnumb = /^[0-9]+\.?[0-9]+?$/.test(data);
   if (isnuma || isnumb) {
     return true;
   } else {

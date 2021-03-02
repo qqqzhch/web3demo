@@ -9,9 +9,6 @@ import { ChainId, Token, TokenAmount, Fetcher ,
 import getethProvider from '@/contacthelp/getethProvider.js';
 import _ from 'underscore';
 
-import { Contract, Provider } from '@webfans/ethers-multicall';
-
-import { ethers } from 'ethers';
 
 
 export async function readpairpool(chainID,library, account){
@@ -40,7 +37,8 @@ export async function readpairpool(chainID,library, account){
 
         dataList.push({
             Pair:element,
-            price:price
+            price:price,
+            pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`
         });
 
     });

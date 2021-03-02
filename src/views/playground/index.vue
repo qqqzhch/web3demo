@@ -23,6 +23,9 @@
     <button @click="pairlist">
       读取默认交易对
     </button>
+    <button @click="readswapamount">
+      读取交易对各个币种的余额
+    </button>
 
 
     <div class="modal-wrapper">
@@ -51,6 +54,7 @@
 import { mapState } from 'vuex';
 
 import {readpairpool} from '@/contactLogic/readpairpool.js';
+import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
 export default {
   name: "Home",
@@ -89,6 +93,20 @@ export default {
       const account = this.ethAddress;
 
       readpairpool(chainID,library, account);
+
+    },
+   async readswapamount(){
+      const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      const account = this.ethAddress;
+      const TokenA = getToken('tUSD',chainID);
+      const TokenB = getToken('USDT',chainID);
+
+      const data = await readSwapBalance(chainID,library, account,TokenA,TokenB);
+
+      console.log(data);
+
+      
 
     }
   },
