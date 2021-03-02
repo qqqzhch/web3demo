@@ -26,6 +26,9 @@
     <button @click="readswapamount">
       读取交易对各个币种的余额
     </button>
+    <button @click="buildswap">
+      构造交易对象
+    </button>
 
 
     <div class="modal-wrapper">
@@ -53,8 +56,17 @@
 <script>
 import { mapState } from 'vuex';
 
+import { ChainId, Token, TokenAmount, Fetcher ,
+    Route, Percent, Router,TradeType,
+} from "@webfans/uniswapsdk";
+
 import {readpairpool} from '@/contactLogic/readpairpool.js';
 import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
+
+import {tradeCalculate} from '@/contactLogic/swaplogoc.js';
+import Web3 from 'web3';
+
+
 
 export default {
   name: "Home",
@@ -105,6 +117,37 @@ export default {
       const data = await readSwapBalance(chainID,library, account,TokenA,TokenB);
 
       console.log(data);
+
+      
+
+    },
+    async buildswap(){
+     console.log('buildswap');
+      const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      const account = this.ethAddress;
+      const TokenA = getToken('tUSD',chainID);
+      const TokenB = getToken('USDT',chainID);
+
+      const num = '1' ;
+
+      const inputAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(num, "ether")) ;
+      
+      const outToken = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei('0', "ether"));
+
+      console.log(inputAmount,outToken);
+      
+      const result = await tradeCalculate(inputAmount,outToken);
+
+      console.log(result);
+
+      
+
+      // console.log(data);
 
       
 
