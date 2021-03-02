@@ -87,12 +87,14 @@ export async function tradeCalculate(coinATokenAmount,coinBTokenAmount){
 
     const pct = basisPointsToPercent(INITIAL_ALLOWED_SLIPPAGE);
     const Minimumreceived = trade.minimumAmountOut(pct);
+    const coinBValue = trade.outputAmount;
 
     return {
         trade,
         PriceImpact,
         PriceImpactGreater,
-        Minimumreceived
+        Minimumreceived,
+        coinBValue
     };
 
 
