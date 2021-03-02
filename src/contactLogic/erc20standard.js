@@ -25,7 +25,7 @@ export async function useTokenAllowance(
   const contract = useTokenContract(library, account, token.address, false);
 
   console.log(contract);
-  var allowance;
+  let allowance;
   try {
     allowance = await contract.allowance(owner, spender);
   } catch (error) {
