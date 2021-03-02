@@ -7,6 +7,9 @@ import _ from 'underscore';
 import { useTokenContractMulticall 
 } from "../contacthelp/useContractMulticall.js";
 
+import {  Token, 
+} from "@webfans/uniswapsdk";
+
 export async function readSwapBalance(chainID,library, account,TokenA,TokenB){
     console.log('readSwapBalance');
      const  TokenAContract = useTokenContractMulticall(TokenA);
@@ -28,6 +31,7 @@ export async function readSwapBalance(chainID,library, account,TokenA,TokenB){
 
 export function getToken(tokensymbol,chainID){
     console.log(tokens);
-    const coin= _.find(tokens.tokens,{chainId:chainID,symbol:tokensymbol});
-    return coin;
+    const coinA= _.find(tokens.tokens,{chainId:chainID,symbol:tokensymbol});
+    const TokenA = new Token(coinA.chainId,coinA.address,coinA.decimals,coinA.symbol);
+    return TokenA;
 }
