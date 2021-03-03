@@ -11,7 +11,7 @@ import _ from 'underscore';
 
 
 
-export async function readpairpool(chainID,library, account){
+export async function readpairpool(chainID,library){
     const list =  _.where(pairlist,{chainId:chainID});
     const tokenList= _.where(token.tokens,{chainId:chainID});
     const callList=[];
@@ -31,13 +31,17 @@ export async function readpairpool(chainID,library, account){
     const PairList = await Promise.all(callList);
     console.log(PairList);
     const dataList=[];
+    /*
+    this.$data.price = price.toSignificant(6);
+    this.$data.invertprice = price.invert().toSignificant(6);
+    */
     PairList.forEach(async element=>{
         const route = new Route([element], element.tokenAmounts[0].token);
         const price = route.pairs[0].priceOf(element.tokenAmounts[0].token);
 
         dataList.push({
             Pair:element,
-            price:price,
+            price:price.toSignificant(6),
             pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`
         });
 

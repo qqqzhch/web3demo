@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Home from "@/views/swap/swap.vue";
 
 Vue.use(VueRouter);
 
@@ -16,8 +16,8 @@ const routes = [
     component: () => import("@/views/playground/index.vue"),
   },
   {
-    path: "/swap",
-    name: "swap",
+    path: "/history",
+    name: "history",
     component: () => import("@/views/swap/history.vue"),
   },
 ];

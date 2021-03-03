@@ -13,37 +13,18 @@
             <img src="../../assets/img/problem-16.png">
           </div>
         </div>
-        <div class="list-item">
+        <div
+          v-for="item in pairlist"
+          :key="item.pairName"
+          :class="selectPairName==item.pairName?'list-item active':'list-item'"
+          @click="selectPair(item)"
+        >
           <div>
             <img src="../../assets/img/eth.png">
-            <p>cUSD/USD</p>
+            <p>{{ item.pairName }}</p>
           </div>
           <p class="price">
-            $ 1.62
-          </p>
-          <p class="change">
-            +12.34%
-          </p>
-        </div>
-        <div class="list-item active">
-          <div>
-            <img src="../../assets/img/eth.png">
-            <p>TFI/tUSD</p>
-          </div>
-          <p class="price">
-            $ 1.62
-          </p>
-          <p class="change decline">
-            -1.40%
-          </p>
-        </div>
-        <div class="list-item">
-          <div>
-            <img src="../../assets/img/eth.png">
-            <p>cUSD/USD</p>
-          </div>
-          <p class="price">
-            $ 1.62
+            {{ item.price }}
           </p>
           <p class="change">
             +12.34%
@@ -60,17 +41,21 @@
           <span class="card-title">From</span>
           <div class="balance-item">
             <span class="mr-2 text-secondary">Balance</span>
-            <span>0.00 ETH</span>
+            <span v-if="inputcurrency">{{ inBalance|format1e18Value }} {{ inputcurrency.symbol }}</span>
           </div>
         </div>
         <div class="input-wrapper flex">
           <input
+            v-model="inputAmount"
             type="text"
             class="amount-input"
+            @keyup="inputChange"
           >
           <div class="flex unit">
             <img src="../../assets/img/eth.png">
-            <p>ETH</p>
+            <p v-if="inputcurrency">
+              {{ inputcurrency.symbol }}
+            </p>
           </div>
         </div>
         <div class="result-wrapper">
@@ -88,14 +73,14 @@
       <div
         v-if="isArrow"
         class="arrow-warpper"
-        @click="exchange"
+        @click="Changeparameters"
       >
         <img src="../../assets/img/exchange-32.png">
       </div>
       <div
         v-else
         class="arrow-warpper arrow-active"
-        @click="exchange"
+        @click="Changeparameters"
       >
         <img src="../../assets/img/exchange-32-w.png">
       </div>
@@ -105,17 +90,21 @@
           <span class="card-title">To</span>
           <div class="balance-item">
             <span class="mr-2 text-secondary">Balance</span>
-            <span>0.00 ETH</span>
+            <span v-if="outputcurrency">{{ outBalance|format1e18Value }} {{ outputcurrency.symbol }}</span>
           </div>
         </div>
         <div class="input-wrapper flex">
           <input
+            v-model="coinBValue"
             type="text"
             class="amount-input"
+            readonly
           >
           <div class="flex unit">
             <img src="../../assets/img/eth.png">
-            <p>ETH</p>
+            <p v-if="outputcurrency">
+              {{ outputcurrency.symbol }}
+            </p>
           </div>
         </div>
       </div>
@@ -127,24 +116,56 @@
         </div>
         <div class="details-items">
           <p>Price Tolerance</p>
-          <span>0.1%</span>
+          <span>{{ PriceImpact }}</span>
         </div>
         <div class="details-items">
-          <p>You will receive</p>
-          <span>2384 tLAMB</span>
+          <p>Min receive</p>
+          <span v-if="outputcurrency">{{ Minimumreceived }} {{ outputcurrency.symbol }}</span>
         </div>
       </div>
 
-      <Buttons>Swap Now</Buttons>
+      
+      <Buttons v-if="btnloading">
+        Loading...
+      </Buttons>
+      <div v-else>
+        <Buttons>Swap Now</Buttons>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+import { ChainId, Token, TokenAmount, Fetcher ,
+    Route, Percent, Router,TradeType,
+} from "@webfans/uniswapsdk";
+
+import {readpairpool} from '@/contactLogic/readpairpool.js';
+import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
+
+import {tradeCalculate} from '@/contactLogic/swaplogoc.js';
+import Web3 from 'web3';
+
+
 export default {
   data() {
     return {
       isArrow: true,
+      pairlist:[],
+      selectPairName:'',
+      inputcurrency:null,
+      outputcurrency:null,
+      inputAmount:'',
+      inBalance:'',
+      outBalance:'',
+      selectPairOBJ:null,
+      PriceImpact:'',
+      PriceImpactGreater:false,
+      coinBValue:'',
+      Minimumreceived:'',
+      btnloading:false
     };
   },
   components: {
@@ -154,7 +175,149 @@ export default {
     exchange() {
       this.isArrow = !this.isArrow;
     },
+   async readList(){
+      const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      // const account = this.ethAddress;
+
+      const data = await readpairpool(chainID,library);
+      console.log(data);
+      this.$data.pairlist = data ;
+      if(data){
+        setTimeout(()=>{
+          this.selectPair(data[0]);
+        },1000);
+        
+      }
+      
+
+    },
+   async selectPair(pair){
+      console.log(pair);
+      const chainID = this.ethChainID ;
+      // const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      const account = this.ethAddress;
+
+      this.$data.selectPairOBJ = pair;
+
+      this.$data.selectPairName = pair.pairName;
+
+      this.$data.inputcurrency=pair.Pair.tokenAmounts[1].currency;
+      this.$data.outputcurrency=pair.Pair.tokenAmounts[0].currency;
+      this.isArrow = true;
+      this.showparameters();
+      
+      
+
+    },
+    Changeparameters(){
+      console.log('Changeparameters');
+      if(this.$data.selectPairOBJ){
+        this.isArrow = !this.isArrow;
+        this.$data.inputcurrency=this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow?1:0].currency;
+        this.$data.outputcurrency=this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow?0:1].currency;
+        this.showparameters();
+        this.clearData();
+
+      }
+      
+    },
+   async showparameters(){
+     const chainID = this.ethChainID ;
+     const library = window.ethersprovider; 
+     const account = this.ethAddress;
+     if(account == ''){
+       return;
+     }
+     this.clearData();
+
+      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
+      const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
+
+      const data = await readSwapBalance(chainID,library, account,TokenA,TokenB);
+
+      
+      
+      this.$data.inBalance=data.TokenAamount.toString();
+      this.$data.outBalance=data.TokenBamount.toString();
+
+    },
+   async inputChange(){
+      console.log(this.$data.inputAmount);
+      if(this.inputcheckup()){
+        try {
+          this.$data.btnloading =true;
+           await this.calculationOutPut(this.$data.inputAmount);  
+        } catch (error) {
+          console.log(error);
+        }
+        finally{
+          this.$data.btnloading =false;
+        }
+
+        
+
+      }
+    },
+    inputcheckup(){
+      return true;
+
+    },
+    clearData(){
+      this.$data.inputAmount = '';
+      this.$data.coinBValue = '' ;
+
+    },
+    async calculationOutPut(num){
+      const chainID = this.ethChainID ;
+      const library = window.ethersprovider; 
+      const account = this.ethAddress;
+
+      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
+      const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
+
+      
+
+      const inputAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(num, "ether")) ;
+      
+      const outToken = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei('0', "ether"));
+
+      console.log(inputAmount,outToken);
+      
+      const result = await tradeCalculate(inputAmount,outToken);
+
+      console.log(result);
+      this.$data.PriceImpact=result.PriceImpact;
+      this.$data.PriceImpactGreater=result.PriceImpactGreater;
+      this.$data.coinBValue=result.coinBValue.toSignificant(6);
+      this.$data.Minimumreceived=result.Minimumreceived.toSignificant(6);
+    }
   },
+  computed: {
+    ...mapState(['ethChainID', 'ethAddress']),
+  },
+ async mounted() {
+    if(this.ethChainID){
+     await this.readList();
+
+    }
+    
+  },
+  watch:{
+    ethChainID:function(){
+      if(this.ethChainID){
+       this.readList();
+
+      } 
+     
+    }
+
+  }
 };
 </script>
 
