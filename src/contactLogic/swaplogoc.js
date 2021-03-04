@@ -10,6 +10,14 @@ import getethProvider from '@/contacthelp/getethProvider.js';
 import _ from 'underscore';
 import { basisPointsToPercent } from "@/contacthelp/utils.js";
 
+import { getTime } from "@/contacthelp/ethcom.js";
+import { getGasPrice } from "@/contacthelp/ethusdt.js";
+
+import  buildSwap  from "@/contacthelp/buildSwap.js";
+
+import  SendSwapGas  from "@/contacthelp/SendSwapGas.js";
+
+
 import {
     INITIAL_ALLOWED_SLIPPAGE,
     ONE_BIPS,
@@ -17,6 +25,10 @@ import {
     ONE_HUNDRED_PERCENT,
     BLOCKED_PRICE_IMPACT_NON_EXPERT,
   } from "@/constants/index.js";
+
+  const Web3 = require("web3");
+
+
 
 export async function tradeCalculate(coinATokenAmount,coinBTokenAmount){
      console.log('tradeCalculate');
@@ -100,3 +112,26 @@ export async function tradeCalculate(coinATokenAmount,coinBTokenAmount){
 
 
 }
+
+
+export async function SwapGas(library,account,ChainId,trade) {
+  
+  if (trade == undefined) {
+    return;
+  }
+
+  const blockTime = await getTime();
+
+  const gasPrice = await getGasPrice(library);
+  console.log("gasPrice", gasPrice);
+
+  const data = await buildSwap(account, blockTime, trade, ChainId, library);
+  const gasData = await SendSwapGas(data.data, data.trade, account);
+  console.log("gasData", gasData);
+  const useWEI = gasData.mul(gasPrice);
+
+  const useWei = Web3.utils.fromWei(useWEI.toString());
+
+   return useWei;
+}
+

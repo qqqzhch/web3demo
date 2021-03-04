@@ -7,6 +7,8 @@ export default new vuex.Store({
     token: "ETH",
     ethAddress: "",
     ethChainID: "",
+    web3:null,
+    ethersprovider:null
   },
   mutations: {
     changeToken(state, token) {
@@ -18,6 +20,12 @@ export default new vuex.Store({
 
     changeEthChainID(state, id) {
       state.ethChainID = id;
+    },
+    changeweb3(state,obj){
+      console.log('changeweb3');
+      state.web3=obj.web3;
+      state.ethersprovider=obj.ethersprovider;
+
     }
   },
 });

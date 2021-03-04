@@ -1,137 +1,160 @@
 <template>
-  <div class="content-wapper flex justify-between items-start">
-    <div class="exchanges-wapper">
-      <p class="exchanges-title">
-        Exchanges
-      </p>
-      <div class="list-wapper">
-        <div class="list-title flex">
-          <span class="pair">Pair</span>
-          <span class="price">Price</span>
-          <div class="change-title flex">
-            <span>Change</span>
-            <img src="../../assets/img/problem-16.png">
+  <div>
+    <div class="content-wapper flex justify-between items-start">
+      <div class="exchanges-wapper">
+        <p class="exchanges-title">
+          Exchanges
+        </p>
+        <div class="list-wapper">
+          <div class="list-title flex">
+            <span class="pair">Pair</span>
+            <span class="price">Price</span>
+            <div class="change-title flex">
+              <span>Change</span>
+              <img src="../../assets/img/problem-16.png">
+            </div>
           </div>
+          <div
+            v-for="item in pairlist"
+            :key="item.pairName"
+            :class="selectPairName==item.pairName?'list-item active':'list-item'"
+            @click="selectPair(item)"
+          >
+            <div>
+              <img src="../../assets/img/eth.png">
+              <p>{{ item.pairName }}</p>
+            </div>
+            <p class="price">
+              {{ item.price }}
+            </p>
+            <p class="change">
+              +12.34%
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="swap-wapper">
+        <p class="swap-title">
+          Swap
+        </p>
+        <div class="From-wrapper">
+          <div class="title-content">
+            <span class="card-title">From</span>
+            <div class="balance-item">
+              <span class="mr-2 text-secondary">Balance</span>
+              <span v-if="inputcurrency">{{ inBalance|format1e18Value }} {{ inputcurrency.symbol }}</span>
+            </div>
+          </div>
+          <div class="input-wrapper flex">
+            <input
+              v-model="inputAmount"
+              type="text"
+              class="amount-input"
+              @keyup="inputChange"
+            >
+            <div class="flex unit">
+              <img src="../../assets/img/eth.png">
+              <p v-if="inputcurrency">
+                {{ inputcurrency.symbol }}
+              </p>
+            </div>
+          </div>
+          <div class="result-wrapper">
+            <span class="text-secondary mr-2">1 tLAMB ≈ 12.2343 USD</span>
+          </div>
+        </div>
+
+        <div class="notice-warpper">
+          <div class="notice-content">
+            <img src="../../assets/img/notice-red.png">
+            <p>Input quantity cannot be greater than wallet balance</p>
+          </div>
+        </div>
+
+        <div
+          v-if="isArrow"
+          class="arrow-warpper"
+          @click="Changeparameters"
+        >
+          <img src="../../assets/img/exchange-32.png">
         </div>
         <div
-          v-for="item in pairlist"
-          :key="item.pairName"
-          :class="selectPairName==item.pairName?'list-item active':'list-item'"
-          @click="selectPair(item)"
+          v-else
+          class="arrow-warpper arrow-active"
+          @click="Changeparameters"
         >
-          <div>
-            <img src="../../assets/img/eth.png">
-            <p>{{ item.pairName }}</p>
-          </div>
-          <p class="price">
-            {{ item.price }}
-          </p>
-          <p class="change">
-            +12.34%
-          </p>
+          <img src="../../assets/img/exchange-32-w.png">
         </div>
-      </div>
-    </div>
-    <div class="swap-wapper">
-      <p class="swap-title">
-        Swap
-      </p>
-      <div class="From-wrapper">
-        <div class="title-content">
-          <span class="card-title">From</span>
-          <div class="balance-item">
-            <span class="mr-2 text-secondary">Balance</span>
-            <span v-if="inputcurrency">{{ inBalance|format1e18Value }} {{ inputcurrency.symbol }}</span>
+
+        <div class="To-wapper From-wrapper">
+          <div class="title-content">
+            <span class="card-title">To</span>
+            <div class="balance-item">
+              <span class="mr-2 text-secondary">Balance</span>
+              <span v-if="outputcurrency">{{ outBalance|format1e18Value }} {{ outputcurrency.symbol }}</span>
+            </div>
+          </div>
+          <div class="input-wrapper flex">
+            <input
+              v-model="coinBValue"
+              type="text"
+              class="amount-input"
+              readonly
+            >
+            <div class="flex unit">
+              <img src="../../assets/img/eth.png">
+              <p v-if="outputcurrency">
+                {{ outputcurrency.symbol }}
+              </p>
+            </div>
           </div>
         </div>
-        <div class="input-wrapper flex">
-          <input
-            v-model="inputAmount"
-            type="text"
-            class="amount-input"
-            @keyup="inputChange"
+
+        <div class="details-warpper">
+          <div
+            v-if="needApprove==false"
+            class="details-items"
           >
-          <div class="flex unit">
-            <img src="../../assets/img/eth.png">
-            <p v-if="inputcurrency">
-              {{ inputcurrency.symbol }}
-            </p>
+            <p>Fee</p>
+            <span>{{ gasfee }} HT ≈ $ 0.2</span>
+          </div>
+          <div class="details-items">
+            <p>Price Tolerance</p>
+            <span>{{ PriceImpact }}</span>
+          </div>
+          <div class="details-items">
+            <p>Min receive</p>
+            <span v-if="outputcurrency">{{ Minimumreceived }} {{ outputcurrency.symbol }}</span>
           </div>
         </div>
-        <div class="result-wrapper">
-          <span class="text-secondary mr-2">1 tLAMB ≈ 12.2343 USD</span>
-        </div>
-      </div>
-
-      <div class="notice-warpper">
-        <div class="notice-content">
-          <img src="../../assets/img/notice-red.png">
-          <p>Input quantity cannot be greater than wallet balance</p>
-        </div>
-      </div>
-
-      <div
-        v-if="isArrow"
-        class="arrow-warpper"
-        @click="Changeparameters"
-      >
-        <img src="../../assets/img/exchange-32.png">
-      </div>
-      <div
-        v-else
-        class="arrow-warpper arrow-active"
-        @click="Changeparameters"
-      >
-        <img src="../../assets/img/exchange-32-w.png">
-      </div>
-
-      <div class="To-wapper From-wrapper">
-        <div class="title-content">
-          <span class="card-title">To</span>
-          <div class="balance-item">
-            <span class="mr-2 text-secondary">Balance</span>
-            <span v-if="outputcurrency">{{ outBalance|format1e18Value }} {{ outputcurrency.symbol }}</span>
-          </div>
-        </div>
-        <div class="input-wrapper flex">
-          <input
-            v-model="coinBValue"
-            type="text"
-            class="amount-input"
-            readonly
-          >
-          <div class="flex unit">
-            <img src="../../assets/img/eth.png">
-            <p v-if="outputcurrency">
-              {{ outputcurrency.symbol }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="details-warpper">
-        <div class="details-items">
-          <p>Fee</p>
-          <span>0.01 HT ≈ $ 0.2</span>
-        </div>
-        <div class="details-items">
-          <p>Price Tolerance</p>
-          <span>{{ PriceImpact }}</span>
-        </div>
-        <div class="details-items">
-          <p>Min receive</p>
-          <span v-if="outputcurrency">{{ Minimumreceived }} {{ outputcurrency.symbol }}</span>
-        </div>
-      </div>
 
       
-      <Buttons v-if="btnloading">
-        Loading...
-      </Buttons>
-      <div v-else>
-        <Buttons>Swap Now</Buttons>
+        <Buttons v-if="btnloading">
+          Loading...
+        </Buttons>
+        <div v-else>
+          <Buttons
+            v-if="needApprove==false"
+            @click.native="openconfirmtDialog"
+          >
+            Swap Now
+          </Buttons>
+          <div v-else>
+            <Buttons
+              class="smallbtn"
+              @click.native="makeApprove"
+            >
+              Approve
+            </Buttons>
+            <Buttons class="smallbtn disableBtn">
+              Swap Now
+            </Buttons>
+          </div>
+        </div>
       </div>
     </div>
+  
+    <confirmtDialog ref="confirm" />
   </div>
 </template>
 
@@ -142,11 +165,23 @@ import { ChainId, Token, TokenAmount, Fetcher ,
     Route, Percent, Router,TradeType,
 } from "@webfans/uniswapsdk";
 
+import {
+  INITIAL_ALLOWED_SLIPPAGE,
+  ONE_BIPS,
+  BASE_FEE,
+  ONE_HUNDRED_PERCENT,
+  BLOCKED_PRICE_IMPACT_NON_EXPERT,
+  ROUTER_ADDRESS
+} from "@/constants/index.js";
+
 import {readpairpool} from '@/contactLogic/readpairpool.js';
 import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
-import {tradeCalculate} from '@/contactLogic/swaplogoc.js';
+import {tradeCalculate,SwapGas} from '@/contactLogic/swaplogoc.js';
 import Web3 from 'web3';
+
+import {useNeedApprove} from '@/contacthelp/useNeedApprove.js';
+import {useTokenApprove}  from '@/contacthelp/Approve.js';
 
 
 export default {
@@ -165,11 +200,14 @@ export default {
       PriceImpactGreater:false,
       coinBValue:'',
       Minimumreceived:'',
-      btnloading:false
+      btnloading:false,
+      needApprove:false,
+      gasfee:''
     };
   },
   components: {
     Buttons: () => import("@/components/basic/buttons"),
+    confirmtDialog:() => import("@/views/swap/dialog/confirmDialog")
   },
   methods: {
     exchange() {
@@ -177,7 +215,7 @@ export default {
     },
    async readList(){
       const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       // const account = this.ethAddress;
 
       const data = await readpairpool(chainID,library);
@@ -196,7 +234,7 @@ export default {
       console.log(pair);
       const chainID = this.ethChainID ;
       // const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       const account = this.ethAddress;
 
       this.$data.selectPairOBJ = pair;
@@ -225,7 +263,7 @@ export default {
     },
    async showparameters(){
      const chainID = this.ethChainID ;
-     const library = window.ethersprovider; 
+     const library = this.ethersprovider; 
      const account = this.ethAddress;
      if(account == ''){
        return;
@@ -271,7 +309,7 @@ export default {
     },
     async calculationOutPut(num){
       const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       const account = this.ethAddress;
 
       const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
@@ -291,15 +329,93 @@ export default {
       
       const result = await tradeCalculate(inputAmount,outToken);
 
+      
+
       console.log(result);
+      
       this.$data.PriceImpact=result.PriceImpact;
       this.$data.PriceImpactGreater=result.PriceImpactGreater;
       this.$data.coinBValue=result.coinBValue.toSignificant(6);
       this.$data.Minimumreceived=result.Minimumreceived.toSignificant(6);
+
+      setTimeout(()=>{
+        this.getGasFee(result.trade);
+      },100);
+      
+      
+
+    },
+   async getGasFee(trade){
+
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      
+      console.log(trade);
+      const needApprove =  await useNeedApprove(account, library, trade, INITIAL_ALLOWED_SLIPPAGE);
+      this.$data.needApprove = needApprove;
+
+      console.log(needApprove);
+      if(needApprove==false){
+        const gasfee= await SwapGas(library,account,ChainId,trade);
+        console.log('gasfee',gasfee);
+        this.$data.gasfee = gasfee;
+
+      }
+      
+    },
+    async  makeApprove(){
+      console.log('makeApprove');
+
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const num = this.$data.inputAmount;
+
+      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
+      const  amount = Web3.utils.toWei(num, "ether");
+      const spender = ROUTER_ADDRESS;
+      
+      try {
+        this.btnloading =true;
+        const transaction = await useTokenApprove(
+          library,
+          account,
+          TokenA,
+          spender,
+          amount
+        );
+        console.log(transaction);
+        if(transaction){
+          const waitdata = await transaction.wait([1]);
+          console.log(waitdata);
+          this.$data.needApprove = false;
+          this.calculationOutPut(num);
+
+        }else{
+          //取消授权
+          //需要提示
+        }
+        
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+      finally{
+        this.btnloading =false;
+      }
+     
+
+
+    },
+    openconfirmtDialog(){
+      
+      this.$refs.confirm.open(this.$data);
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
   },
  async mounted() {
     if(this.ethChainID){
@@ -582,6 +698,11 @@ export default {
         font-size: 16px;
       }
     }
+  }
+  .smallbtn{
+    width: 45%;
+    display: inline-block;
+    margin: 2.5%;
   }
 }
 </style>

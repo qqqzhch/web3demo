@@ -20,7 +20,7 @@ export default{
         // 检查是否连接
     async isEthConnect() {
       try {
-        const res = await window.web3.eth.getCoinbase();
+        const res = await this.web3.eth.getCoinbase();
         return res;
       } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ export default{
     // 获取以太坊chainID
     async getEthChainID() {
       try {
-        const res = await window.web3.eth.getChainId();
+        const res = await this.web3.eth.getChainId();
         // if (res !== 256) {
         //   this.$Notice.warning({
         //     title: this.$t('notice.n'),
@@ -51,7 +51,7 @@ export default{
     // 获取当前连接的eth地址
     async getCurrentAccount() {
       try {
-        const res = await window.web3.eth.getAccounts();
+        const res = await this.web3.eth.getAccounts();
         if (res.length < 1) {
           // this.$Notice.warning({
           //   title: this.$t('notice.n'),
@@ -119,9 +119,11 @@ export default{
           // });
           return false;
         }
-        window.web3 = new Web3(web3Provider);
+        const web3 = new Web3(web3Provider);
 
-        window.ethersprovider = new ethers.providers.Web3Provider(web3Provider);
+        const ethersprovider = new ethers.providers.Web3Provider(web3Provider);
+        this.$store.commit('changeweb3', {web3,ethersprovider});
+        
 
         const isConnect = await this.isEthConnect();
 
@@ -137,7 +139,7 @@ export default{
 
           // 初始化合约
           // await this.initContract();
-          // window.ethersprovider = new ethers.providers.Web3Provider(web3Provider);
+          
 
           // 检测状态切换
           this.checkStatus();
@@ -158,7 +160,7 @@ export default{
         
     },
   computed: {
-    ...mapState(['ethAddress']),
+    ...mapState(['ethAddress','web3','ethersprovider']),
   },
 };
 

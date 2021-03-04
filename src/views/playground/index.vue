@@ -101,7 +101,7 @@ export default {
     },
     pairlist(){
       const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       const account = this.ethAddress;
 
       readpairpool(chainID,library, account);
@@ -109,7 +109,7 @@ export default {
     },
    async readswapamount(){
       const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       const account = this.ethAddress;
       const TokenA = getToken('tUSD',chainID);
       const TokenB = getToken('USDT',chainID);
@@ -124,7 +124,7 @@ export default {
     async buildswap(){
      console.log('buildswap');
       const chainID = this.ethChainID ;
-      const library = window.ethersprovider; 
+      const library = this.ethersprovider; 
       const account = this.ethAddress;
       const TokenA = getToken('tUSD',chainID);
       const TokenB = getToken('USDT',chainID);
@@ -154,7 +154,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['ethAddress','ethChainID']),
+    ...mapState(['ethAddress','ethChainID','web3','ethersprovider']),
   }
 };
 </script>

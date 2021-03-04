@@ -517,7 +517,7 @@ export default {
 
           // 初始化合约
           // await this.initContract();
-          // window.ethersprovider = new ethers.providers.Web3Provider(web3Provider);
+          
 
           // 检测状态切换
           this.checkStatus();
