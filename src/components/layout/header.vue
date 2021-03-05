@@ -11,13 +11,23 @@
         class="connect-wrapper"
       >
         <buttons
+          v-if="ethAddress"
           width="140px"
           height="40px"
+        >
+          {{ `${this.ethAddress.slice(0,6)}...${this.ethAddress.slice(-6)}` }}
+        </buttons>
+        <buttons
+          v-else
+          width="140px"
+          height="40px"
+          @click.native="openWalletDialog"
         >
           Connect Wallet
         </buttons>
       </div>
     </nav>
+    <walletdialog ref="wallet" />
   </header>
 </template>
 
@@ -26,11 +36,13 @@ import { mapState } from 'vuex';
 export default {
   components: {
     buttons: () => import('@/components/basic/buttons'),
+    walletdialog: () => import("@/views/transfer/dialog/walletDialog"),
   },
   methods: {
+    openWalletDialog() {
+      this.$refs.wallet.open();
+    }
     // openWalletDialog() {
-
-    // }
   },
     computed: {
     ...mapState(['ethAddress']),

@@ -15,13 +15,23 @@
             </div>
           </div>
           <div
+            v-if="pairlistloading"
+            class="demo-spin-container "
+          >
+            <loading />
+          </div>
+          <div
             v-for="item in pairlist"
+            v-else
             :key="item.pairName"
             :class="selectPairName==item.pairName?'list-item active':'list-item'"
             @click="selectPair(item)"
           >
             <div>
-              <img src="../../assets/img/eth.png">
+              <img
+                width="32"
+                :src="getTokenImg(item.listSymbol)"
+              >
               <p>{{ item.pairName }}</p>
             </div>
             <p class="price">
@@ -49,12 +59,18 @@
             <input
               v-model="inputAmount"
               type="text"
-              class="amount-input"
+              :class="inputnotice==''? 'amount-input': 'amount-input  amount-input-error' "
               @keyup="inputChange"
             >
-            <div class="flex unit">
-              <img src="../../assets/img/eth.png">
-              <p v-if="inputcurrency">
+            <div
+              v-if="inputcurrency"
+              class="flex unit"
+            >
+              <img
+                width="32"
+                :src="getTokenImg(inputcurrency.symbol )"
+              >
+              <p>
                 {{ inputcurrency.symbol }}
               </p>
             </div>
@@ -64,10 +80,13 @@
           </div>
         </div>
 
-        <div class="notice-warpper">
+        <div
+          v-if="inputnotice"
+          class="notice-warpper"
+        >
           <div class="notice-content">
             <img src="../../assets/img/notice-red.png">
-            <p>Input quantity cannot be greater than wallet balance</p>
+            <p>{{ inputnotice }}</p>
           </div>
         </div>
 
@@ -101,9 +120,15 @@
               class="amount-input"
               readonly
             >
-            <div class="flex unit">
-              <img src="../../assets/img/eth.png">
-              <p v-if="outputcurrency">
+            <div
+              v-if="outputcurrency"
+              class="flex unit"
+            >
+              <img
+                width="32"
+                :src="getTokenImg(outputcurrency.symbol)"
+              >
+              <p>
                 {{ outputcurrency.symbol }}
               </p>
             </div>
@@ -175,7 +200,7 @@ import {
 } from "@/constants/index.js";
 
 import {readpairpool} from '@/contactLogic/readpairpool.js';
-import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
+import {readSwapBalance,getToken,getTokenImg} from '@/contactLogic/readbalance.js';
 
 import {tradeCalculate,SwapGas} from '@/contactLogic/swaplogoc.js';
 import Web3 from 'web3';
@@ -183,6 +208,14 @@ import Web3 from 'web3';
 import {useNeedApprove} from '@/contacthelp/useNeedApprove.js';
 import {useTokenApprove}  from '@/contacthelp/Approve.js';
 
+import event from '@/common/js/event';
+
+const debounce = require('debounce');
+
+const BigNumber = require("bignumber.js");
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+
+let nowTrade;
 
 export default {
   data() {
@@ -202,14 +235,21 @@ export default {
       Minimumreceived:'',
       btnloading:false,
       needApprove:false,
-      gasfee:''
+      gasfee:'',
+      pairlistloading:false,
+      inputnotice:''
     };
   },
   components: {
     Buttons: () => import("@/components/basic/buttons"),
-    confirmtDialog:() => import("@/views/swap/dialog/confirmDialog")
+    confirmtDialog:() => import("@/views/swap/dialog/confirmDialog"),
+    loading: () => import("@/components/basic/loading.vue"),
   },
   methods: {
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID ;
+      return getTokenImg(tokensymbol,chainID);
+    },
     exchange() {
       this.isArrow = !this.isArrow;
     },
@@ -217,11 +257,13 @@ export default {
       const chainID = this.ethChainID ;
       const library = this.ethersprovider; 
       // const account = this.ethAddress;
-
+      this.$data.pairlistloading=true;
       const data = await readpairpool(chainID,library);
+      this.$data.pairlistloading=false;
+
       console.log(data);
       this.$data.pairlist = data ;
-      if(data){
+      if(data&&this.selectPairOBJ == null){
         setTimeout(()=>{
           this.selectPair(data[0]);
         },1000);
@@ -281,8 +323,10 @@ export default {
       this.$data.outBalance=data.TokenBamount.toString();
 
     },
-   async inputChange(){
+   inputChange: debounce(async function(){
+     //debounce(
       console.log(this.$data.inputAmount);
+      this.$data.inputnotice =  '';
       if(this.inputcheckup()){
         try {
           this.$data.btnloading =true;
@@ -297,14 +341,36 @@ export default {
         
 
       }
-    },
+    },1000),
     inputcheckup(){
+      try {
+        const num = parseFloat(this.$data.inputAmount) ;
+        if(isNaN(num)){
+          this.$data.inputnotice =  ' 输入值需要是数值 ';
+          return false;
+        } 
+        const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, "ether")) ;
+        if(inamount.isGreaterThan(this.inBalance)){
+          this.$data.inputnotice =  ' 输入值需要小于余额 ';
+          return false;
+
+        }
+        
+      } catch (error) {
+        console.log(error);
+        this.$data.inputnotice =  ' 输入值需要是数值 ';
+      }
+       
+       
+
       return true;
 
     },
     clearData(){
       this.$data.inputAmount = '';
       this.$data.coinBValue = '' ;
+      nowTrade = null ;
+      this.$data.inputnotice =  '';
 
     },
     async calculationOutPut(num){
@@ -337,6 +403,7 @@ export default {
       this.$data.PriceImpactGreater=result.PriceImpactGreater;
       this.$data.coinBValue=result.coinBValue.toSignificant(6);
       this.$data.Minimumreceived=result.Minimumreceived.toSignificant(6);
+      nowTrade=result.trade;
 
       setTimeout(()=>{
         this.getGasFee(result.trade);
@@ -395,11 +462,18 @@ export default {
         }else{
           //取消授权
           //需要提示
+          this.$Notice.error({
+                    title: '授权已取消',  
+                });
         }
         
         
       } catch (error) {
         console.log(error);
+        this.$Notice.error({
+                    title: '程序异常',  
+                    desc:error.message
+                });
         
       }
       finally{
@@ -410,8 +484,11 @@ export default {
 
     },
     openconfirmtDialog(){
+      if(nowTrade){
+        this.$refs.confirm.open(this.$data,nowTrade);
+      }
       
-      this.$refs.confirm.open(this.$data);
+      
     }
   },
   computed: {
@@ -419,9 +496,17 @@ export default {
   },
  async mounted() {
     if(this.ethChainID){
-     await this.readList();
+      this.readList();
+      
+     
 
     }
+    //txsuccess
+    event.$on('txsuccess',()=>{
+      this.readList();
+      this.showparameters();
+
+    });
     
   },
   watch:{
@@ -602,6 +687,12 @@ export default {
             border-radius: 4px;
           }
         }
+        .amount-input-error{
+          &:focus {
+            border: 1px solid #ff3c00;
+            border-radius: 4px;
+          }
+        }
         .unit {
           position: absolute;
           right: 16px;
@@ -705,4 +796,11 @@ export default {
     margin: 2.5%;
   }
 }
+
+  .demo-spin-container{
+    display: inline-block;
+    width: 400px;
+    height: 100px;
+    position: relative;
+  }
 </style>

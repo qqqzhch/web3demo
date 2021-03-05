@@ -30,7 +30,8 @@
               </p>
               <div class="main">
                 <img
-                  src="../../../assets/img/eth48.png"
+                  :src="getTokenImg(tradeData.inputcurrency.symbol)"
+                  width="48"
                   alt="eth48"
                   class="mb-8 mx-auto"
                 >
@@ -53,8 +54,9 @@
               </p>
               <div class="main">
                 <img
-                  src="../../../assets/img/binance48.svg"
+                  :src="getTokenImg(tradeData.outputcurrency.symbol)"
                   alt="binance48"
+                  width="48"
                   class="mb-8 mx-auto"
                 >
                 <div class="net-name netname-2 mx-auto">
@@ -64,17 +66,28 @@
             </div>
           </div>
 
-          <div class="details-warpper">
+          <div
+            v-if="btnloading"
+          >
+            <loading />
+          </div>
+          <div
+            v-else
+            class="details-warpper"
+          >
             <div class="details-items">
               <p>Asset</p>
               <div class="details-items">
-                <img src="../../../assets/img/lamblogo-32.png">
+                <img
+                  width="16"
+                  :src="getTokenImg(tradeData.inputcurrency.symbol)"
+                >
                 <span>{{ tradeData.inputcurrency.symbol }}</span>
               </div>
             </div>
             <div class="details-items">
               <p>Destination</p>
-              <span>{{ ethAddress }}</span>
+              <span>{{ `${this.ethAddress.slice(0,6)}...${this.ethAddress.slice(-6)}` }}</span>
             </div>
             <div class="details-items">
               <p>Network Fee</p>
@@ -88,37 +101,95 @@
               </div>
             </div>
           </div>
+          
 
-          <Buttons>Confirm</Buttons>
+          <Buttons
+            v-if="btnloading"
+            class="disableBtn"
+          >
+            Confirm
+          </Buttons>
+          <Buttons
+            v-else
+            @click.native="Sendtx"
+          >
+            Confirm
+          </Buttons>
         </div>
       </div>
     </Modal>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import {SwapSend} from '@/contactLogic/swaplogoc.js';
+import event from '@/common/js/event';
 
+import {getTokenImg} from '@/contactLogic/readbalance.js';
+
+let nowTrade;
 export default {
   components: {
     Buttons: () => import("@/components/basic/buttons"),
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
+    loading: () => import("@/components/basic/loading.vue"),
   },
   data() {
     return {
       openConfirmDialog: false,
-      tradeData:null
+      tradeData:null,
+      btnloading:false,
     };
   },
   methods: {
-    open(data) {
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID ;
+      return getTokenImg(tokensymbol,chainID);
+    },
+    open(data,Trade) {
       console.log('open');
       
       this.$data.tradeData=data;
       this.openConfirmDialog = true;
+      nowTrade = Trade;
     },
+   async Sendtx(){
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      try {
+        this.$data.btnloading= true;
+      const tx = await SwapSend(library,account,chainID,nowTrade);  
+      console.log(tx);
+      // this.$Notice.success({
+      //               title: '交易已发送',
+      //               desc: tx.base
+      //           });
+      this.$refs.haveSendtx.open(tx.base);          
+      event.$emit('sendtx',[tx.response,{
+        okinfo:tx.base+"成功",
+        failinfo:tx.base+'失败'
+      }]);
+      this.openConfirmDialog = false;
+      } catch (error) {
+        console.log(error);
+        this.$Notice.error({
+                    title: '交易已取消',  
+                });
+        
+      }
+      finally{
+        this.$data.btnloading= false;
+
+      }
+      
+
+    }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
   }
 };
 </script>
@@ -236,5 +307,12 @@ export default {
       }
     }
   }
+   .demo-spin-col{
+        height: 100px;
+        position: relative;
+        // border: 1px solid #eee;
+      
+    }
+    
 }
 </style>

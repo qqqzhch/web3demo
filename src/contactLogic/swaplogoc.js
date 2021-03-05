@@ -17,6 +17,8 @@ import  buildSwap  from "@/contacthelp/buildSwap.js";
 
 import  SendSwapGas  from "@/contacthelp/SendSwapGas.js";
 
+import  SendSwap  from "@/contacthelp/SendSwap.js";
+
 
 import {
     INITIAL_ALLOWED_SLIPPAGE,
@@ -134,4 +136,22 @@ export async function SwapGas(library,account,ChainId,trade) {
 
    return useWei;
 }
+
+export async function SwapSend(library,account,ChainId,trade) {
+  
+  if (trade == undefined) {
+    return;
+  }
+
+  const blockTime = await getTime();
+
+
+  const data = await buildSwap(account, blockTime, trade, ChainId, library);
+  const transaction = await SendSwap(data.data, data.trade, account);
+  return transaction;
+
+  
+}
+
+
 

@@ -28,7 +28,7 @@
             <img src="../../../assets/img/check-blue-24.png">
           </div>
         </div>
-        <div
+        <!-- <div
           class="wallet-content flex items-center justify-between"
           :class="wallet == 'lambda' ? 'wallet-content-active' : ''"
           @click="selectWallet('lambda')"
@@ -41,7 +41,7 @@
           <div class="img-wapper">
             <img src="../../../assets/img/check-blue-24.png">
           </div>
-        </div>
+        </div> -->
         <Buttons @click.native="connectWallet(wallet)">
           Connect Wallet
         </Buttons>

@@ -6,6 +6,7 @@
     </main>
     <initialWallet />
     <layoutFoot />
+    <transactionPool />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import layoutHead from '@/components/layout/header.vue';
 import layoutFoot from '@/components/layout/footer.vue';
 
 import initialWallet from '@/components/basic/initialWallet.vue';
+import transactionPool from '@/components/basic/transactionPool.vue';
 
 export default {
   provide() {
@@ -29,7 +31,8 @@ export default {
   components: {
     layoutHead,
     layoutFoot,
-    initialWallet
+    initialWallet,
+    transactionPool
   },
   methods: {
     reload() {

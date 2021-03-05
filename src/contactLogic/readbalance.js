@@ -35,3 +35,16 @@ export function getToken(tokensymbol,chainID){
     const TokenA = new Token(coinA.chainId,coinA.address,coinA.decimals,coinA.symbol);
     return TokenA;
 }
+
+export function getTokenImg(tokensymbol,chainID){
+    
+    const coinA= _.find(tokens.tokens,{chainId:chainID,symbol:tokensymbol});
+    if(coinA){
+        return coinA.logoURI;
+    }else{
+        return '';
+
+    }
+    
+}
+

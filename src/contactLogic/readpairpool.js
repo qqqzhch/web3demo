@@ -42,7 +42,9 @@ export async function readpairpool(chainID,library){
         dataList.push({
             Pair:element,
             price:price.toSignificant(6),
-            pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`
+            pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`,
+            listSymbol:element.tokenAmounts[1].token.symbol
+
         });
 
     });
