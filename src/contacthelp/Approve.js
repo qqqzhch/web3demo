@@ -1,5 +1,5 @@
 import { Token, TokenAmount } from "@webfans/uniswapsdk";
-
+import { MaxUint256 } from "@ethersproject/constants";
 import { useTokenContract } from "./useContract.js";
 import {
   calculateGasMargin,
@@ -17,6 +17,9 @@ export async function useTokenApprove(
   
     
     let result,gasEstimate;
+
+    //MaxUint256   授权最大值
+
     try {
         gasEstimate = await contract.estimateGas.approve(spender,amount);
         result = await contract.approve(spender,amount,{

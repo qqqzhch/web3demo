@@ -30,6 +30,28 @@
       构造交易对象
     </button>
 
+    <button @click="getreadpairLiquidity">
+      读取交易对提供流动性的信息
+    </button>
+
+    <button @click="getreadpariInfo">
+      根据两个个参数读取交易对
+    </button>
+
+    <button @click="Calculationliquidity">
+      计算提供流动性
+    </button>
+
+    <button @click="howbuildAddliquidityParam">
+      拼接提供流动性参数
+    </button>
+
+    <button @click="getreadpariInfoNuminfo">
+      单个交易对详情
+    </button>
+
+    <!-- howbuildAddliquidityParam -->
+
 
     <div class="modal-wrapper">
       <Modal
@@ -60,7 +82,8 @@ import { ChainId, Token, TokenAmount, Fetcher ,
     Route, Percent, Router,TradeType,
 } from "@webfans/uniswapsdk";
 
-import {readpairpool} from '@/contactLogic/readpairpool.js';
+import {readpairpool,readpairLiquidity,readpariInfo,
+calculationLiquidity,buildAddliquidityParam,checkoutTokenAllowance,readpariInfoNuminfo } from '@/contactLogic/readpairpool.js';
 import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
 import {tradeCalculate} from '@/contactLogic/swaplogoc.js';
@@ -150,6 +173,93 @@ export default {
       // console.log(data);
 
       
+
+    },
+    async getreadpairLiquidity(){
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const  data = await readpairLiquidity(chainID,library,account);
+      console.log(data);
+
+    },
+    async getreadpariInfo(){
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const  tokensymbolA = 'tUSD';
+      const  tokensymbolB = 'USDT';
+      const data = await readpariInfo(chainID,library,tokensymbolA,tokensymbolB) ;
+      
+      console.log(data);
+    },
+    async Calculationliquidity(){
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
+      const TokenA = getToken('tUSD',chainID);
+      const TokenB = getToken('USDT',chainID);
+
+      const num = '1' ;
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(num, "ether")) ;
+      
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei('0', "ether"));
+
+      const istargetBToken =true;
+        
+      const data = await calculationLiquidity(library,chainID,coinATokenAmount,coinBTokenAmount,istargetBToken,account);
+      
+      console.log(data);
+
+    },
+    async howbuildAddliquidityParam(){
+
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const chainID = this.ethChainID ;
+
+      const num = '1' ;
+
+      const TokenA = getToken('tUSD',chainID);
+      const TokenB = getToken('USDT',chainID);
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(num, "ether")) ;
+
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei('2', "ether"));
+
+      const data =await buildAddliquidityParam(coinATokenAmount,coinBTokenAmount,account);
+
+      console.log(data);
+
+      const   result =await checkoutTokenAllowance(TokenA,TokenB,library,chainID,account);
+      
+      console.log(result);
+
+
+    },
+    async getreadpariInfoNuminfo(){
+
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
+      const tokensymbolA = 'tUSD';
+      const tokensymbolB = 'USDT';
+
+      const result = await readpariInfoNuminfo(chainID,library,account,tokensymbolA,tokensymbolB);
+
+      console.log(result);
+
 
     }
   },

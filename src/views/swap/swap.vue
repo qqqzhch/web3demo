@@ -35,7 +35,7 @@
               <p>{{ item.pairName }}</p>
             </div>
             <p class="price">
-              {{ item.price }}
+              {{ item.price|formatNormalValue }}
             </p>
             <p class="change">
               +12.34%

@@ -9,6 +9,17 @@ import { ChainId, Token, TokenAmount, Fetcher ,
 import getethProvider from '@/contacthelp/getethProvider.js';
 import _ from 'underscore';
 
+import { useTokenContractMulticall 
+} from "../contacthelp/useContractMulticall.js";
+import { Contract, Provider } from '@webfans/ethers-multicall';
+import { ethers } from 'ethers';
+import { INITIAL_ALLOWED_SLIPPAGE,ROUTER_ADDRESS } from '@/constants/index.js';
+
+import { calculateSlippageAmount, getRouterContract, calculateGasMargin } from '@/contacthelp/utils.js';
+
+import Web3 from 'web3';
+
+import { getTime } from "@/contacthelp/ethcom.js";
 
 
 export async function readpairpool(chainID,library){
@@ -27,7 +38,7 @@ export async function readpairpool(chainID,library){
     
     });
 
-    console.log(callList);
+    
     const PairList = await Promise.all(callList);
     console.log(PairList);
     const dataList=[];
@@ -56,6 +67,242 @@ export async function readpairpool(chainID,library){
             //   const result = await ethcallProvider.all(callList);
             //   console.log(result);
 }
+
+export async function readpairLiquidity(chainID,library,account){
+    const list =  await readpairpool(chainID,library);
+    const callList=[];
+    list.forEach((element)=>{
+        
+        const TokenContract = useTokenContractMulticall(element.Pair.liquidityToken);
+        
+        
+        callList.push(TokenContract.totalSupply());
+        callList.push(TokenContract.balanceOf(account));
+
+    });
+
+    const ethcallProvider = new Provider(library,chainID);
+    await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+    const listresult  = await ethcallProvider.all(callList);
+    
+    console.log(listresult);
+
+    
+    list.forEach((item,index)=>{
+        const  totalSupply = listresult[index*2];
+        const  balance = listresult[index*2+1];
+
+        const totalSupplyTokenAmount = new TokenAmount(item.Pair.liquidityToken, totalSupply.toString());
+
+        const balanceTokenAmount = new TokenAmount(item.Pair.liquidityToken, balance.toString());
+
+        item.totalSupply = totalSupply.toString() ;
+        item.balance = balance.toString() ;
+        console.log('-------');
+
+        item.aToketotalSupply = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[0].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
+        item.bToketotalSupply = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[1].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
+
+        item.aTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[0].token, totalSupplyTokenAmount, balanceTokenAmount, false);
+        item.bTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
+        
+        
+
+    });
+
+    return list;
+
+    // 读取总量
+    //读物我的余额
+    //根据我的余额和总量关系，换算两个币中分别是多少
+}
+
+export async function  readpariInfo(chainID,library,tokensymbolA,tokensymbolB){
+
+    const tokenList= _.where(token.tokens,{chainId:chainID});
+
+    const coinA = _.find(tokenList,{symbol:tokensymbolA});
+    const coinB = _.find(tokenList,{symbol:tokensymbolB});
+
+    const TokenA = new Token(coinA.chainId,coinA.address,coinA.decimals,coinA.symbol);
+    const TokenB = new Token(coinB.chainId,coinB.address,coinB.decimals,coinB.symbol);
+
+    const  pairInfo = await  Fetcher.fetchPairData(TokenA, TokenB,getethProvider(TokenB));
+
+    return pairInfo ;
+
+
+
+}
+
+export async function  calculationLiquidity(library,chainID,coinATokenAmount,coinBTokenAmount,istargetBToken,account){
+  console.log('calculationLiquidity');
+  
+    const pair = await Fetcher.fetchPairData(
+        coinATokenAmount.token,
+        coinBTokenAmount.token,
+        getethProvider(coinBTokenAmount.token)
+      );
+      // console.log(pair);
+      let route;
+
+      route = new Route([pair], coinATokenAmount.token);
+
+      const price = route.pairs[0].priceOf(coinATokenAmount.token);
+      const invertprice = price.invert();
+
+      let outputNum;
+
+      if(istargetBToken){
+         outputNum = route.pairs[0].priceOf(coinATokenAmount.token).quote(coinATokenAmount);
+      }else{
+         outputNum = route.pairs[0].priceOf(coinBTokenAmount.token).quote(coinBTokenAmount);
+
+      }
+
+      const TokenContract = useTokenContractMulticall(pair.liquidityToken);
+      const callList=[];
+
+      callList.push(TokenContract.totalSupply());
+      callList.push(TokenContract.balanceOf(account));
+
+      const ethcallProvider = new Provider(library,chainID);
+      await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+      const listresult  = await ethcallProvider.all(callList);
+
+      const [pooltotalSupply,mypoolBlance] =  listresult ;
+
+      const pooltotalSupplyTokenAmount = new TokenAmount(
+        pair.liquidityToken,
+        Web3.utils.toWei(pooltotalSupply.toString(), "ether")) ;
+
+      let liquidityMinted;
+
+      if (istargetBToken) {
+        liquidityMinted = pair.getLiquidityMinted(pooltotalSupplyTokenAmount, coinATokenAmount, outputNum);
+      } else {
+        liquidityMinted = pair.getLiquidityMinted(pooltotalSupplyTokenAmount, outputNum, coinBTokenAmount);
+      }
+
+      let poolPercentData = liquidityMinted.divide(pooltotalSupplyTokenAmount.add(liquidityMinted));
+      
+      if (poolPercentData.multiply(10000).lessThan(1)) {
+        poolPercentData = '<0.01';
+      } else {
+        poolPercentData = poolPercentData.multiply(100).toSignificant(4);
+      }
+
+      return {
+        istargetBToken,
+        outputNum,
+        poolPercentData,
+        price,
+        invertprice
+
+      };
+
+
+    //let poolBlance = await this.getTokenbalance(pair.liquidityToken, window.ethersprovider, this.ethAddress);
+    //let poolTotal = await this.getTokenTotalSupply(window.ethersprovider, this.ethAddress, pair.liquidityToken);
+
+
+
+}
+
+export async function buildAddliquidityParam(coinATokenAmount,coinBTokenAmount,account){
+
+  const allowedSlippage = INITIAL_ALLOWED_SLIPPAGE;
+
+  const amountsMin = {
+    CURRENCY_A: calculateSlippageAmount(coinATokenAmount, allowedSlippage)[0],
+    CURRENCY_B: calculateSlippageAmount(coinBTokenAmount, allowedSlippage)[0],
+  };
+  const blockTime = await getTime();
+      // 20 minutes, denominated in seconds
+  const DEFAULT_DEADLINE_FROM_NOW = 60 * 20;
+
+  const deadline = blockTime + DEFAULT_DEADLINE_FROM_NOW;
+
+  const args = [
+    coinATokenAmount.currency.address,
+    coinBTokenAmount.currency.address,
+    coinATokenAmount.raw.toString(),
+    coinBTokenAmount.raw.toString(),
+    amountsMin['CURRENCY_A'].toString(),
+    amountsMin['CURRENCY_B'].toString(),
+    account,
+    Web3.utils.asciiToHex(deadline + ''),
+  ];
+  return args;
+
+}
+
+export async  function checkoutTokenAllowance(tokenA,tokenB,library,chainID,account){
+
+  // ROUTER_ADDRESS
+  
+  const TokenAContract = useTokenContractMulticall(tokenA);
+  const TokenBContract = useTokenContractMulticall(tokenB);
+
+  const callList=[TokenAContract.allowance(account, ROUTER_ADDRESS),
+    TokenBContract.allowance(account, ROUTER_ADDRESS)];
+
+  const ethcallProvider = new Provider(library,chainID);
+  await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+  const listresult  = await ethcallProvider.all(callList);
+
+  const [tokenAallowance,tokenBallowance] =  listresult;
+
+  return  {
+    tokenAallowance,
+    tokenBallowance
+  };
+
+
+
+}
+
+
+export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,tokensymbolB){
+   const  pairInfo = await  readpariInfo(chainID,library,tokensymbolA,tokensymbolB) ;
+
+   const callList = [];
+
+   const TokenContract = useTokenContractMulticall(pairInfo.liquidityToken);
+        
+        
+   callList.push(TokenContract.totalSupply());
+   callList.push(TokenContract.balanceOf(account));
+
+   const ethcallProvider = new Provider(library,chainID);
+   await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+   const listresult  = await ethcallProvider.all(callList);
+   const  totalSupply = listresult[0];
+   const  balance = listresult[1];
+
+
+   const totalSupplyTokenAmount = new TokenAmount(pairInfo.liquidityToken, totalSupply.toString());
+   const balanceTokenAmount = new TokenAmount(pairInfo.liquidityToken, balance.toString());
+
+   const aToketotalSupply = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[0].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
+   const bToketotalSupply = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
+
+   const aTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[0].token, totalSupplyTokenAmount, balanceTokenAmount, false);
+   const bTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
+
+   return {
+    pairInfo,
+    aToketotalSupply,
+    bToketotalSupply,
+    aTokenbalance,
+    bTokenbalance,
+    totalSupply,
+    balance
+   };
+
+}
+
+
 
 /*
 route = new Route([pair], coinATokenAmount.token);

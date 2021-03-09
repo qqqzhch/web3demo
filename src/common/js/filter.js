@@ -35,7 +35,7 @@ const formatNormalValue = (value) => {
   if (!value) {
     return 0;
   }
-  const val = parseFloat(value);
+  const val = String(value);
   const bigValue = new BigNumber(val);
   const returnVal = bigValue.div(1).toNumber();
   if (returnVal < 0.000001) {
