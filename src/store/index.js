@@ -1,8 +1,10 @@
 import Vue from "vue";
 import vuex from "vuex";
+import buildrStore from './buildr';
+
 Vue.use(vuex);
 
-export default new vuex.Store({
+const store = new vuex.Store({
   state: {
     token: "ETH",
     ethAddress: "",
@@ -29,3 +31,7 @@ export default new vuex.Store({
     }
   },
 });
+
+[ buildrStore ].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
+
+export default store;

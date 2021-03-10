@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Synthetix",
+        "address": "0x0fd05b54c5afE47CEF1B5dF06E333FB710e71f7e",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "SynthetixProxy",
+        "address": "0x9754274bDf92ed784e5bDeD0c4d57b609B58Fa96",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "ExchangeRates",
+        "address": "0xf10Bf508F0BcA3b50E742e1b1F64F8c43fEa5Be4",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "SynthetixReward",
+        "address": "0x6b16E0e9e19D827DD4a72FCdFAaf301D85e85801",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "SynthetixState",
+        "address": "0xc08756C6afa15bD05e8EC6b33881a08d1e7433fC",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "proxyActions",
+        "address": "0x8D9dee3C3699Ff709bF549cD3db5cB7a84eA6bd8",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "Collateral",
+        "address": "",
+        "decimals": 18,
+        "chainId": 256
+    }
+
+
+]

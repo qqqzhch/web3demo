@@ -20,6 +20,11 @@ const routes = [
     name: "history",
     component: () => import("@/views/swap/history.vue"),
   },
+  {
+    path: "/buildr",
+    name: "buildr",
+    component: () => import("@/views/buildr/index.vue"),
+  },
 ];
 
 const router = new VueRouter({
