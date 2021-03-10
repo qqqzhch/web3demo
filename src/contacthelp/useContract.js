@@ -48,6 +48,8 @@ import ABI_proxyActions from "../constants/abis/proxyActions.json";
 
 import ABI_rewarder from "../constants/abis/rewarder.json";
 
+import ABI_Proxy from "../constants/abis/Proxy.json";
+
 
 // returns null on errors
 function useContract(
@@ -282,6 +284,22 @@ export function useRewarderCollateralContract(
     account,
     tokenAddress,
     ABI_rewarder,
+    withSignerIfPossible
+  );
+}
+
+export function useProxyContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+  
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_Proxy,
     withSignerIfPossible
   );
 }

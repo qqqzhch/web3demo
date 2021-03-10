@@ -21,3 +21,10 @@ export const getCollateralToken = (chainID) => {
   });
   return token || {};
 };
+
+export const getProxyToActionsToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'ProxyToActions';
+  });
+  return token || {};
+};

@@ -4,6 +4,7 @@ import {
   useCollateralContract,
   useproxyActionsContract,
   useExchangeRatesContract,
+  useProxyContract
 } from "../../contacthelp/useContract.js";
 
 /**
@@ -87,4 +88,33 @@ export async function useExchangeRatesContractRead(
 
   console.log(result, 88888);
   return result;
+}
+
+
+export async function useProxyContractRead(
+  library,
+  account,
+  token,
+  methodName,
+  parameter
+) {
+  const contract = useProxyContract(library, account, token.address, false);
+  let result;
+  try {
+    result = await contract[methodName](...parameter);
+  } catch (error) {
+    console.log(error);
+  }
+  return result;
+}
+
+export  function useProxyActionsContractSigna(
+  library,
+  account,
+  token
+
+) {
+  const contract = useproxyActionsContract(library, account, token.address, true);
+  console.log(contract);
+  return contract;
 }
