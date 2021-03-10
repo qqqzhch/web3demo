@@ -32,7 +32,7 @@ import { abi as IUniswapV2PairABI } from "@uniswap/v2-core/build/IUniswapV2Pair.
 
 import ERC20_ABI_StakingRewards from "../constants/abis/StakingRewards.json";
 
-import ERC20_ABI_Synthetix from "../constants/abis/Synthetix.json";
+// import ERC20_ABI_Synthetix from "../constants/abis/Synthetix.json";
 
 import ABI_SynthetixProxy from "../constants/abis/SynthetixProxy.json";
 
@@ -40,7 +40,7 @@ import ABI_ExchangeRates from "../constants/abis/ExchangeRates.json";
 
 import ABI_SynthetixReward from "../constants/abis/SynthetixReward.json";
 
-import ABI_SynthetixState from "../constants/abis/SynthetixState.json";
+// import ABI_SynthetixState from "../constants/abis/SynthetixState.json";
 
 import ABI_Collateral from "../constants/abis/Collateral.json";
 
@@ -171,21 +171,21 @@ export function useSynthetixProxyContract(
   );
 }
 
-export function useSynthetixContract(
-  library,
-  account,
-  tokenAddress,
-  withSignerIfPossible
-) {
-  console.info("- -useTokenContract");
-  return useContract(
-    library,
-    account,
-    tokenAddress,
-    ERC20_ABI_Synthetix,
-    withSignerIfPossible
-  );
-}
+// export function useSynthetixContract(
+//   library,
+//   account,
+//   tokenAddress,
+//   withSignerIfPossible
+// ) {
+//   console.info("- -useTokenContract");
+//   return useContract(
+//     library,
+//     account,
+//     tokenAddress,
+//     ERC20_ABI_Synthetix,
+//     withSignerIfPossible
+//   );
+// }
 
 
 export function useExchangeRatesContract(
@@ -222,21 +222,21 @@ export function useSynthetixRewardContract(
 
 
 
-export function useSynthetixStateContract(
-  library,
-  account,
-  tokenAddress,
-  withSignerIfPossible
-) {
-  console.info("- -useTokenContract");
-  return useContract(
-    library,
-    account,
-    tokenAddress,
-    ABI_SynthetixState,
-    withSignerIfPossible
-  );
-}
+// export function useSynthetixStateContract(
+//   library,
+//   account,
+//   tokenAddress,
+//   withSignerIfPossible
+// ) {
+//   console.info("- -useTokenContract");
+//   return useContract(
+//     library,
+//     account,
+//     tokenAddress,
+//     ABI_SynthetixState,
+//     withSignerIfPossible
+//   );
+// }
 
 export function useproxyActionsContract(
   library,

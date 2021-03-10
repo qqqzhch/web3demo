@@ -1,10 +1,10 @@
 [
     {
         "chainId": 256,
-        "pair":["tUSD","USDT"]
+        "pair":["scUSD","USDT"]
     },
     {
         "chainId": 256,
-        "pair":["TFI","tUSD"]
+        "pair":["SCASH","scUSD"]
     }
 ]
