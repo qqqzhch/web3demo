@@ -16,9 +16,26 @@ const routes = [
     component: () => import("@/views/playground/index.vue"),
   },
   {
-    path: "/history",
-    name: "history",
-    component: () => import("@/views/swap/history.vue"),
+    path: "/exchange",
+    name: "exchange",
+    component: () => import("@/views/swap/Menu.vue"),
+    children: [
+      {
+        path: "",
+        name: "/swap",
+        component: () => import("@/views/swap/swap.vue"),
+      },
+      {
+        path: "/pool",
+        name: "pool",
+        component: () => import("@/views/swap/liquidityPool.vue"),
+      },
+      {
+        path: "/history",
+        name: "history",
+        component: () => import("@/views/swap/history.vue")
+      },
+    ]
   },
   {
     path: "/buildr",

@@ -49,6 +49,10 @@
     <button @click="getreadpariInfoNuminfo">
       单个交易对详情
     </button>
+    
+    <button @click="getreadpariInfoNuminfo">
+      单个交易对详情
+    </button>
 
     <button @click="Removeliquiditylocalauthorization">
       移除流动性本地授权
