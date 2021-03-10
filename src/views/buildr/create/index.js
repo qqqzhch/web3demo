@@ -15,7 +15,7 @@ export default {
       liquidationRatio: 0,  // 清算抵押率
       feeRate: 0,    //稳定费率
       debtCap: 0,
-    }
+    };
   },
   components: {
     ScInput,
@@ -31,9 +31,9 @@ export default {
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
-      }
+      };
 
-      this.currencyNumber = await fetchTokenBalance(params)
+      this.currencyNumber = await fetchTokenBalance(params);
     },
     async getIndicators() {
       const params = {
@@ -42,7 +42,7 @@ export default {
         library: this.ethersprovider,
         tokenName: this.currency,
         web3: this.web3
-      }
+      };
       const { targetRatio, liquidationRatio, feeRate, debtCap } = await fetchCollateralIndicators(params);
       // console.log(debtCap, 9999)
       this.targetRatio = targetRatio ? 1 / targetRatio : 0;
@@ -57,7 +57,7 @@ export default {
         library: this.ethersprovider,
         tokenName: this.currency,
         web3: this.web3
-      }
+      };
       const { currencyPrice } = await fetchCurrencyPrice(params);
 
       console.log(currencyPrice, 3333);

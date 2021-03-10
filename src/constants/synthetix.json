@@ -8,7 +8,13 @@
     },
     {
         "name": "proxyActions",
-        "address": "0x440ecdCB85682872621106abE690f158CED1f889",
+        "address": "0x0bbEfD7C41C1aDB8705569D0f91Ce191dE8cc2bA",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
+        "name": "ProxyToActions",
+        "address": "0x0bbEfD7C41C1aDB8705569D0f91Ce191dE8cc2bA",
         "decimals": 18,
         "chainId": 256
     },

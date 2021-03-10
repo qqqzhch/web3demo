@@ -8,7 +8,7 @@ export default {
   data() {
     return {
       isExistBalance: false
-    }
+    };
   },
   components: {
     Overview,
