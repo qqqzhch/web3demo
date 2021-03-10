@@ -50,6 +50,21 @@
       单个交易对详情
     </button>
 
+    <button @click="Removeliquiditylocalauthorization">
+      移除流动性本地授权
+    </button>
+
+
+    <button @click="Removeliquiditylocalauthorization">
+      移除流动性本地授权
+    </button>
+
+    <button @click="calculationRemoveliquidity">
+      移除流动性本地计算
+    </button>
+    
+
+
     <!-- howbuildAddliquidityParam -->
 
 
@@ -88,6 +103,10 @@ import {readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
 import {tradeCalculate} from '@/contactLogic/swaplogoc.js';
 import Web3 from 'web3';
+
+import {localApprove} from '@/contactLogic/removeLiquidity.js';
+
+import Bignumber  from 'bignumber.js';
 
 
 
@@ -260,6 +279,47 @@ export default {
 
       console.log(result);
 
+      return result;
+
+
+
+    },
+    async Removeliquiditylocalauthorization(){
+      const chainId = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const  pairinfo = await this.getreadpariInfoNuminfo();
+
+      console.log(pairinfo);
+
+     const ToRemoveAmount = new TokenAmount(
+        pairinfo.pairInfo.liquidityToken,
+        '1'
+      );
+
+     const ApproveData = await  localApprove(library,chainId,account,pairinfo.pairInfo,ToRemoveAmount);
+     
+     console.log(ApproveData);
+
+    },
+    async calculationRemoveliquidity(){
+      const chainId = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const  pairinfo = await this.getreadpariInfoNuminfo();
+      
+      console.log('pairinfo',pairinfo);
+      
+      const percent = new Bignumber(1);
+      const mybalance = new Bignumber( pairinfo.balance.toString());
+
+      const removenum = mybalance.multipliedBy(percent) ;
+      const removenumA = pairinfo.aTokenbalance.multiply(percent);
+      const removenumB = pairinfo.bTokenbalance.multiply(percent);
+
+      console.log(removenum);
+
+     
 
     }
   },

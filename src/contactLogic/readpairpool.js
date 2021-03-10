@@ -22,6 +22,9 @@ import Web3 from 'web3';
 import { getTime } from "@/contacthelp/ethcom.js";
 
 
+import { splitSignature } from "@ethersproject/bytes";
+
+
 export async function readpairpool(chainID,library){
     const list =  _.where(pairlist,{chainId:chainID});
     const tokenList= _.where(token.tokens,{chainId:chainID});
