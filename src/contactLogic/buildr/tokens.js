@@ -10,7 +10,14 @@ export const getTokenBySymbol = (chainID, symbol) => {
 
 export const getProxyActionsToken = (chainID) => {
   const token = synthetixTokens.find((token) => {
-    return chainID === token.chainId && token.name === 'proxyActions';
+    return chainID === token.chainId && token.name === 'ProxyToActions';
+  });
+  return token || {};
+};
+
+export const getExchangeRatesToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'ExchangeRates';
   });
   return token || {};
 };
@@ -22,9 +29,11 @@ export const getCollateralToken = (chainID) => {
   return token || {};
 };
 
-export const getProxyToActionsToken = (chainID) => {
+export const getCollateralStateToken = (chainID) => {
   const token = synthetixTokens.find((token) => {
-    return chainID === token.chainId && token.name === 'ProxyToActions';
+    return chainID === token.chainId && token.name === 'CollateralState';
   });
   return token || {};
 };
+
+

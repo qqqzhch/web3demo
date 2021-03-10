@@ -65,13 +65,13 @@
         <div class="build-grid-2 mrg-b-5">
           <div>SuperCash LAMB价格：</div>
           <div class="text-right">
-            100 USD
+            {{ currencyPrice }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
           <div>清算价格：</div>
           <div class="text-right">
-            24 USD
+            {{ liquidationRatio * stableNumber / pledgeNumber }} USD
           </div>
         </div>
         <div class="line mrg-tb-10" />
@@ -84,7 +84,7 @@
         <div class="build-grid-2 mrg-b-5">
           <div>稳定费用：</div>
           <div class="text-right">
-            {{ pledgeNumber * feeRate }} scUSD
+            {{ stableNumber * feeRate }} scUSD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
@@ -95,7 +95,10 @@
         </div>
         <div class="line mrg-tb-10" />
         <div class="mrg-tb-20">
-          <button class="btn">
+          <button
+            class="btn"
+            @click="onApproveClick"
+          >
             铸造 scUSD 额度
           </button>
         </div>

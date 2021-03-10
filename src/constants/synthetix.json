@@ -1,5 +1,5 @@
 [
-    
+
     {
         "name": "ExchangeRates",
         "address": "0x8e4d75778E56D4De5744f39F45de3625a625B64F",
@@ -23,7 +23,11 @@
         "address": "",
         "decimals": 18,
         "chainId": 256
+    },
+    {
+        "name": "CollateralState",
+        "address": "",
+        "decimals": 18,
+        "chainId": 256
     }
-
-
 ]
