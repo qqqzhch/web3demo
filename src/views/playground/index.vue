@@ -90,7 +90,6 @@
       <succesDialog ref="succes" />
       <walletdialog ref="wallet" />
       <confirmtDialog ref="confirm" />
-      <conTokenDialog ref="confirmToken" />
     </div>
   </div>
 </template>
@@ -123,7 +122,6 @@ export default {
     succesDialog: () => import("@/views/transfer/dialog/succesDialog"),
     walletdialog: () => import("@/views/transfer/dialog/walletDialog"),
     confirmtDialog:() => import("@/views/transfer/dialog/confirmDialog"),
-    conTokenDialog:() => import("@/views/swap/dialog/confirmToken.vue")
   },
   data() {
     return {
@@ -145,9 +143,6 @@ export default {
     },
     openconfirmtDialog(){
       this.$refs.confirm.open();
-    },
-    openconTokenDialog(){
-      this.$refs.confirmToken.open();
     },
     pairlist(){
       const chainID = this.ethChainID ;

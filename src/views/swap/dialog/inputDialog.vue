@@ -6,7 +6,10 @@
       :footer-hide="true"
       :closable="true"
     >
-      <div class="input-content">
+      <div
+        v-if="isShowInput"
+        class="input-content"
+      >
         <p class="title text-center">
           Input
         </p>
@@ -83,11 +86,83 @@
         </div>
 
         <div class="btn-warpper">
-          <Buttons>Next</Buttons>
+          <div @click="showConfirmInput">
+            <Buttons>Next</Buttons>
+          </div>
+          
           <p class="buy">
             Buy scUSD
           </p>
         </div>
+      </div>
+
+      <div
+        v-else
+        class="confirmInput-content"
+      >
+        <div
+          class="arrow-warpper"
+          @click="showInput"
+        >
+          <img
+            src="../../../assets/img/arrow-left.svg"
+            alt="arrow-left"
+          >
+        </div>
+        <p class="title text-center">
+          Confirm
+        </p>
+        <p class="will-receive">
+          You will receive
+        </p>
+
+        <div class="confirm-content">
+          <div class="images-warpper">
+            <img
+              src="../../../assets/img/comp.svg"
+              alt="comp"
+            >
+            <img
+              src="../../../assets/img/comp.svg"
+              alt="comp"
+              class="img2"
+            >
+          </div>
+          <h2>1029.23</h2>
+          <p>scUSD/USDT LP</p>
+          <span>Output is estimated. You will receive at least 11.123 scUSD/USDT
+            LP, or the transaction will revert.</span>
+        </div>
+
+        <div class="price-warpper">
+          <div>
+            <span>scUSD Input </span>
+            <p>1234.21 scUSD</p>
+          </div>
+          <div>
+            <span>USDT Input</span>
+            <p>1234.21 USDT</p>
+          </div>
+          <div>
+            <span>Price</span>
+            <div class="price">
+              <p>1 scUSD = 12USDT</p>
+              <p>12 USDT = 1scUSD</p>
+            </div>
+          </div>
+          <div class="items-center">
+            <span>share of pool</span>
+            <div class="sharePoll">
+              <span>-1.02%</span>
+              <p>to 1.23%</p>
+            </div>
+          </div>
+          <div>
+            <span>Fee</span>
+            <p>0.1 ETH</p>
+          </div>
+        </div>
+        <Buttons>Confirm</Buttons>
       </div>
     </Modal>
   </div>
@@ -123,7 +198,8 @@ export default {
       price:'',
       priceinvert:'',
       aTokenAmount:'',
-      bTokenAmount:''
+      bTokenAmount:'',
+      isShowInput:true,
     };
   },
   methods: {
@@ -221,6 +297,13 @@ export default {
    },1000),
    build(){
 
+   },
+   showConfirmInput(){
+     this.isShowInput = false;
+     console.log(11111111111111111);
+   },
+   showInput(){
+     this.isShowInput = true;
    }
   },
   computed: {
@@ -346,6 +429,123 @@ export default {
         font-weight: 500;
         color: #0058ff;
       }
+    }
+  }
+
+  .confirmInput-content {
+    padding: 0 40px 20px;
+    position: relative;
+    .arrow-warpper {
+      cursor: pointer;
+      position: absolute;
+      left: 24px;
+      top: 0;
+    }
+    .title {
+      height: 28px;
+      font-size: 24px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #14171c;
+      line-height: 28px;
+      margin-bottom: 24px;
+    }
+    .will-receive {
+      text-align: center;
+      margin: 24px 0 32px;
+      height: 19px;
+      font-size: 16px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #14171c;
+      line-height: 19px;
+    }
+
+    .confirm-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      div{
+          width: 60px;
+          height: 48px;
+          position: relative;
+          img{
+              position: absolute;
+              left: -12px;
+              top: 0;
+          }
+          .img2{
+              left: 12px;
+              top: 0;
+          }
+      }
+      h2 {
+        height: 47px;
+        font-size: 40px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 47px;
+        margin: 8px 0;
+      }
+      p {
+        height: 19px;
+        font-size: 16px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 19px;
+      }
+      span {
+        height: 32px;
+        font-size: 14px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #828489;
+        line-height: 16px;
+        text-align: center;
+        margin-top: 8px;
+      }
+    }
+
+    .price-warpper {
+      margin-top: 30px;
+      div {
+        display: flex;
+        justify-content: space-between;
+        .sharePoll {
+          margin: 16px 0;
+          span {
+            color: #00D075;
+            margin-right: 5px;
+          }
+        }
+      }
+      .price {
+        display: block;
+      }
+      span {
+        height: 14px;
+        font-size: 12px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #828489;
+        line-height: 14px;
+      }
+      p {
+        height: 14px;
+        font-size: 12px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 14px;
+        margin-bottom: 8px;
+      }
+    }
+
+    .button-wrapper {
+      margin-top: 24px;
+      height: 48px;
     }
   }
 }
