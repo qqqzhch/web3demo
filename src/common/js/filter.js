@@ -138,7 +138,7 @@ const formatBalance = (value) => {
     return "--";
   }
   const bigValue = new BigNumber(value);
-  return bigValue.toFixed(6);
+  return bigValue.toFixed(2);
 };
 
 const formatBalanceNumber = (value) => {

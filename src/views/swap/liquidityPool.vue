@@ -33,133 +33,58 @@
         You can get liquidity pool token by inputing liquidity to the following
         trading pairs.
       </p>
-      <div class="poolCon">
-        <div class="flex items-center justify-between">
-          <div class="img-warpper flex">
-            <img
-              src="../../assets/img/comp.svg"
-              alt=""
-            >
-            <img
-              src="../../assets/img/comp.svg"
-              class="otherImg"
-            >
-          </div>
-          <div>
-            <p>scUSD-USDT</p>
-            <span>1 scUSD = 123USDT</span>
-          </div>
-        </div>
-        <div>
-          <span>Total Inputed</span>
-          <p>1231242.34</p>
-        </div>
-        <div>
-          <span>Inputed scUSD</span>
-          <span>Inputed USDT</span>
-          <span>My share of pool</span>
-        </div>
-        <div class="number">
-          <span>19847.23</span>
-          <span>2434.24</span>
-          <span>0.2%</span>
-        </div>
-        <div>
-          <div class="input-warpper">
-            <button @click="openInput">
-              Input
-            </button>
-          </div>
-          <div class="remove-warpper">
-            <button @click="openRemove">
-              Remove
-            </button>
-          </div>
-        </div>
+      <div
+        v-if="pairlistloading"
+        class="demo-spin-container "
+      >
+        <loading />
       </div>
-      <div class="poolCon">
+      <div
+        v-for="item in dataList"
+        v-else
+        :key="item.pairName"
+        class="poolCon"
+      >
         <div class="flex items-center justify-between">
           <div class="img-warpper flex">
             <img
-              src="../../assets/img/comp.svg"
+              :src="getTokenImg(item.pairSymbols[0])"
               alt=""
+              width="48"
             >
             <img
-              src="../../assets/img/comp.svg"
+              :src="getTokenImg(item.pairSymbols[1])"
+              width="48"
               class="otherImg"
             >
           </div>
           <div>
-            <p>scUSD-USDT</p>
-            <span>1 scUSD = 123USDT</span>
+            <p>{{ item.pairName }}</p>
+            <span>{{ item.price }} {{ item.pairSymbols[0] }} = 1 {{ item.pairSymbols[1] }}</span>
           </div>
         </div>
         <div>
           <span>Total Inputed</span>
-          <p>1231242.34</p>
+          <p>{{ item.totalSupply|formatBalance }}</p>
         </div>
-        <div>
-          <span>Inputed scUSD</span>
-          <span>Inputed USDT</span>
+        <div class="rightdiv">
+          <span>Inputed {{ item.pairSymbols[1] }}</span>
+          <span>Inputed {{ item.pairSymbols[0] }}</span>
           <span>My share of pool</span>
         </div>
         <div class="number">
-          <span>19847.23</span>
-          <span>2434.24</span>
-          <span>0.2%</span>
+          <span>{{ item.aTokenbalance }}</span>
+          <span>{{ item.bTokenbalance }}</span>
+          <span>{{ Calculatepercentage(item.balance,item.totalSupply) |formatRate }}</span>
         </div>
         <div>
           <div class="input-warpper">
-            <button @click="openInput">
+            <button @click="openInput(item)">
               Input
             </button>
           </div>
           <div class="remove-warpper">
-            <button @click="openRemove">
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="poolCon">
-        <div class="flex items-center justify-between">
-          <div class="img-warpper flex">
-            <img
-              src="../../assets/img/comp.svg"
-              alt=""
-            >
-            <img
-              src="../../assets/img/comp.svg"
-              class="otherImg"
-            >
-          </div>
-          <div>
-            <p>scUSD-USDT</p>
-            <span>1 scUSD = 123USDT</span>
-          </div>
-        </div>
-        <div>
-          <span>Total Inputed</span>
-          <p>1231242.34</p>
-        </div>
-        <div>
-          <span>Inputed scUSD</span>
-          <span>Inputed USDT</span>
-          <span>My share of pool</span>
-        </div>
-        <div class="number">
-          <span>19847.23</span>
-          <span>2434.24</span>
-          <span>0.2%</span>
-        </div>
-        <div>
-          <div class="input-warpper">
-            <button @click="openInput">
-              Input
-            </button>
-          </div>
-          <div class="remove-warpper">
-            <button @click="openRemove">
+            <button @click="openRemove(item)">
               Remove
             </button>
           </div>
@@ -175,22 +100,96 @@
 </template>
 
 <script>
+import  {readpairLiquidity} from '@/contactLogic/readpairpool.js';
+import { mapState } from 'vuex';
+const debounce = require('debounce');
+
+const BigNumber = require("bignumber.js");
+
+import {getTokenImg} from '@/contactLogic/readbalance.js';
+
+
 export default {
   data() {
-    return {};
+    return {
+      dataList:[],
+      pairlistloading:false
+    };
   },
   components: {
     inputDialog: () => import("./dialog/inputDialog.vue"),
     removeDialog: () => import("./dialog/removeDialog.vue"),
+    loading: () => import("@/components/basic/loading.vue"),
+  },
+  mounted() {
+    if(this.ethChainID){
+      this.$data.pairlistloading = true ;
+      this.readList();
+      
+    }
+    
+  },
+  watch:{
+    ethChainID:function(){
+      if(this.ethChainID){
+        this.$data.pairlistloading = true ;
+       this.readList();
+
+      } 
+    },
+    ethAddress:function(){
+      if(this.ethAddress){
+        this.$data.pairlistloading = true ;
+        this.readList();
+      }
+
+    }
+
   },
   methods: {
-    openInput() {
-      this.$refs.input.open();
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID ;
+      return getTokenImg(tokensymbol,chainID);
     },
-    openRemove() {
-      this.$refs.remove.open();
+    Calculatepercentage(balance,totalSupply){
+       const balance_ = new BigNumber(balance);
+       const totalSupply_ = new BigNumber(totalSupply);
+       return balance_.div(totalSupply_).toString() ;
+
+
     },
+    openInput(pairs) {
+      this.$refs.input.open(pairs);
+    },
+    openRemove(pairs) {
+      this.$refs.remove.open(pairs);
+    },
+   readList:debounce(async function(){
+       console.log('readList');
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      try {
+        
+        const list = await readpairLiquidity(chainID,library,account);
+        console.log(list);
+        this.$data.dataList = list;
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+      finally{
+        this.$data.pairlistloading = false ;
+      }
+      
+      
+      
+      },1000),
   },
+  computed: {
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+  }
 };
 </script>
 
@@ -362,5 +361,18 @@ export default {
       }
     }
   }
+
+  .rightdiv{
+    span{
+      text-align: right;
+    }
+  }
 }
+.demo-spin-container{
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    position: relative;
+    margin-top: 100px;
+  }
 </style>

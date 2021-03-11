@@ -15,7 +15,7 @@
             <span class="card-title">Input</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">Balance</span>
-              <span>0.00 scUSD</span>
+              <span v-if="tokenA">{{ tokenABalance |formatNormalValue }} {{ tokenA.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
@@ -23,12 +23,15 @@
               type="text"
               class="amount-input"
             >
-            <div class="flex unit">
+            <div
+              v-if="tokenA"
+              class="flex unit"
+            >
               <img
                 width="32"
-                src="../../../assets/img/eth.png"
+                :src="getTokenImg(tokenA.symbol)"
               >
-              <p>scUSD</p>
+              <p>{{ tokenA.symbol }}</p>
             </div>
           </div>
         </div>
@@ -43,7 +46,7 @@
             <span class="card-title">Input</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">Balance</span>
-              <span>0.00 USDT</span>
+              <span v-if="tokenB">{{ tokenBBalance|formatNormalValue }} {{ tokenB.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
@@ -51,12 +54,15 @@
               type="text"
               class="amount-input amount-input-error"
             >
-            <div class="flex unit">
+            <div
+              v-if="tokenB"
+              class="flex unit"
+            >
               <img
                 width="32"
-                src="../../../assets/img/eth.png"
+                :src="getTokenImg(tokenB.symbol)"
               >
-              <p>USDT</p>
+              <p>{{ tokenB.symbol }}</p>
             </div>
           </div>
         </div>
@@ -80,6 +86,15 @@
 </template>
 
 <script>
+
+import {readpariInfoNuminfo}  from '@/contactLogic/readpairpool.js';
+import { mapState } from 'vuex';
+import {getTokenImg,readSwapBalance} from '@/contactLogic/readbalance.js';
+
+import Web3 from 'web3';
+
+
+
 export default {
   components: {
     Buttons: () => import("@/components/basic/buttons"),
@@ -87,13 +102,51 @@ export default {
   data() {
     return {
       openInputDialog: false,
+      tokenA:null,
+      tokenB:null,
+      tokenABalance:'',
+      tokenBBalance:''
     };
   },
   methods: {
-    open() {
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID ;
+      return getTokenImg(tokensymbol,chainID);
+   },
+   async open(pairs) {
+
+       console.log('open');
+
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
       this.openInputDialog = true;
+
+      console.log(pairs);
+
+      
+
+      this.$data.tokenA = pairs.Pair.tokenAmounts[0].token;
+      this.$data.tokenB = pairs.Pair.tokenAmounts[1].token;
+
+      // const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
+      // const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
+
+      const data = await readSwapBalance(chainID,library, account,this.$data.tokenA,this.$data.tokenB);
+      console.log(data);
+      this.$data.tokenABalance =Web3.utils.fromWei(data.TokenAamount.toString(), "ether") ;
+      this.$data.tokenBBalance =Web3.utils.fromWei(data.TokenBamount.toString(), "ether") ;
+
+      // const [tokensymbolA,tokensymbolB] = pairs.pairSymbols;
+      // const  data = await readpariInfoNuminfo(chainID,library,account,tokensymbolA,tokensymbolB);
+      // console.log(data);
+
+
     },
   },
+  computed: {
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+  }
 };
 </script>
 

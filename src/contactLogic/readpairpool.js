@@ -57,7 +57,9 @@ export async function readpairpool(chainID,library){
             Pair:element,
             price:price.toSignificant(6),
             pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`,
-            listSymbol:element.tokenAmounts[1].token.symbol
+            listSymbol:element.tokenAmounts[1].token.symbol,
+            pairSymbols:[element.tokenAmounts[1].token.symbol,element.tokenAmounts[0].token.symbol]
+
 
         });
 
@@ -80,7 +82,10 @@ export async function readpairLiquidity(chainID,library,account){
         
         
         callList.push(TokenContract.totalSupply());
-        callList.push(TokenContract.balanceOf(account));
+        if(account!=""){
+          callList.push(TokenContract.balanceOf(account));
+        }
+      
 
     });
 
@@ -92,22 +97,29 @@ export async function readpairLiquidity(chainID,library,account){
 
     
     list.forEach((item,index)=>{
-        const  totalSupply = listresult[index*2];
-        const  balance = listresult[index*2+1];
+        
+        let balance ='0',totalSupply='';
+        if(account!=''){
+           totalSupply = listresult[index*2];
+           balance = listresult[index*2+1];
+        }else{
+          totalSupply = listresult[index];
+        }
+        
 
         const totalSupplyTokenAmount = new TokenAmount(item.Pair.liquidityToken, totalSupply.toString());
 
         const balanceTokenAmount = new TokenAmount(item.Pair.liquidityToken, balance.toString());
 
-        item.totalSupply = totalSupply.toString() ;
-        item.balance = balance.toString() ;
+        item.totalSupply = Web3.utils.fromWei(totalSupply.toString())  ;
+        item.balance = Web3.utils.fromWei(balance.toString()) ;
         console.log('-------');
 
         item.aToketotalSupply = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[0].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
         item.bToketotalSupply = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[1].token, totalSupplyTokenAmount, totalSupplyTokenAmount, false);
 
-        item.aTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[0].token, totalSupplyTokenAmount, balanceTokenAmount, false);
-        item.bTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
+        item.aTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[0].token, totalSupplyTokenAmount, balanceTokenAmount, false).toSignificant(3);
+        item.bTokenbalance = item.Pair.getLiquidityValue(item.Pair.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false).toSignificant(3);
         
         
 
