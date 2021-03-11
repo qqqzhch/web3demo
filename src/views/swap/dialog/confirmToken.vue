@@ -4,37 +4,45 @@
       v-model="openconTokenDialog"
       class-name="remove-modal"
       :footer-hide="true"
-      :closable="true"
     >
       <div class="remove-content">
+        <div class="arrow-warpper">
+          <img
+            src="../../../assets/img/arrow-left.svg"
+            alt="arrow-left"
+          >
+        </div>
         <p class="title text-center">
-          Remove
+          Confirm
         </p>
-        <div class="remove-wrapper">
-          <div class="title-content">
-            <span class="card-title">Amount</span>
-            <div class="balance-item">
-              <span class="mr-2 text-secondary">scUSd/USDT LP Balance</span>
-              <span>{{ balance }} scUSD</span>
-            </div>
-          </div>
-          <div class="input-wrapper flex">
-            <input
-              v-model="Amount"
-              type="text"
-              class="amount-input"
+        <p class="will-receive">
+          You will receive
+        </p>
+        <div class="token-swap flex items-center justify-between">
+          <div class="token-item">
+            <img
+              src="../../../assets/img/comp.svg"
+              alt="copm"
             >
+            <p>1029.23</p>
+            <span>scUSD</span>
+          </div>
+          <div class="add-warpper">
+            <img
+              src="../../../assets/img/add.svg"
+              alt="add"
+            >
+          </div>
+          <div class="token-item">
+            <img
+              src="../../../assets/img/comp.svg"
+              alt="copm"
+            >
+            <p>1029.23</p>
+            <span>USDT</span>
           </div>
         </div>
         <div class="price-warpper">
-          <div>
-            <span>You will receive scUSD</span>
-            <p>1234.21 scUSD</p>
-          </div>
-          <div>
-            <span>You will receive USDT</span>
-            <p>1234.21 USDT</p>
-          </div>
           <div>
             <span>Price</span>
             <div class="price">
@@ -42,8 +50,19 @@
               <p>12 USDT = 1scUSD</p>
             </div>
           </div>
+          <div class=" items-center">
+            <span>share of pool</span>
+            <div class="sharePoll">
+              <span>-1.02%</span>
+              <p>to 1.23%</p>
+            </div>
+          </div>
+          <div>
+            <span>Fee</span>
+            <p>0.1 ETH</p>
+          </div>
         </div>
-        <Buttons>Next</Buttons>
+        <Buttons>Confirm</Buttons>
       </div>
     </Modal>
   </div>
@@ -76,6 +95,13 @@ export default {
   border-radius: 12px;
   .remove-content {
     padding: 0 44px 20px;
+    position: relative;
+    .arrow-warpper {
+      cursor: pointer;
+      position: absolute;
+      left: 24px;
+      top: 0;
+    }
     .title {
       height: 28px;
       font-size: 24px;
@@ -85,81 +111,56 @@ export default {
       line-height: 28px;
       margin-bottom: 24px;
     }
-    .remove-wrapper {
-      .title-content {
-        overflow: hidden;
-        margin: 16px 0 8px;
-        span {
-          float: left;
-        }
-        .balance-item {
-          float: right;
-          font-size: 12px;
+    .will-receive {
+      text-align: center;
+      margin: 24px 0 32px;
+      height: 19px;
+      font-size: 16px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #14171c;
+      line-height: 19px;
+    }
+    .token-swap {
+        padding:0 50px 18px;
+      .token-item {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        p {
+          height: 28px;
+          font-size: 24px;
+          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
-          line-height: 14px;
-        }
-      }
-      .input-wrapper {
-        width: 100%;
-        height: 72px;
-        background: #f7f8f9;
-        border-radius: 6px;
-        position: relative;
-        .amount-input {
-          width: 100%;
-          height: 100%;
-          outline: none;
-          border: none;
-          background: #f7f8f9;
-          font-size: 40px;
-          line-height: 47px;
           color: #14171c;
-          padding: 16px;
-          caret-color: #0058ff;
-          &:focus {
-            border: 1px solid #0058ff;
-            border-radius: 4px;
-          }
+          line-height: 28px;
+          margin: 8px 0 4px;
         }
-        .amount-input-error {
-          &:focus {
-            border: 1px solid #ff3c00;
-            border-radius: 4px;
-          }
+        span {
+          font-size: 14px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 16px;
         }
       }
     }
-    .percentage {
-      margin-top: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      div {
-        cursor: pointer;
-        width: 23%;
-        height: 36px;
-        border-radius: 6px;
-        border: 1px solid rgba(0, 0, 0, 0.06);
-        font-size: 14px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #828489;
-        line-height: 36px;
-        text-align: center;
-      }
-      :hover {
-        border-color: #0058ff;
-        color: #0058ff;
-      }
-    }
+
     .price-warpper {
       margin-top: 30px;
-      div{
+      div {
         display: flex;
         justify-content: space-between;
+        .sharePoll{
+            margin: 16px 0;
+            span{
+                color: #FF3C00;
+                margin-right: 5px;
+            }
+        }
       }
-      .price{
-          display: block;
+      .price {
+        display: block;
       }
       span {
         height: 14px;
@@ -181,7 +182,7 @@ export default {
     }
 
     .button-wrapper {
-      margin-top: 16px;
+      margin-top: 24px;
       height: 48px;
     }
   }
