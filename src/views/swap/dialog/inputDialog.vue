@@ -20,8 +20,10 @@
           </div>
           <div class="input-wrapper flex">
             <input
+              v-model="aTokenAmount"
               type="text"
               class="amount-input"
+              @keyup="aTokenChange"
             >
             <div
               v-if="tokenA"
@@ -51,8 +53,10 @@
           </div>
           <div class="input-wrapper flex">
             <input
+              v-model="bTokenAmount"
               type="text"
               class="amount-input amount-input-error"
+              @keyup="bTokenChange"
             >
             <div
               v-if="tokenB"
@@ -69,8 +73,12 @@
         <div class="price-warpper flex justify-between">
           <span>Price</span>
           <div>
-            <p>1 scUSD = 12USDT</p>
-            <p>12 USDT = 1scUSD</p>
+            <p v-if="tokenB&&tokenA&&price">
+              {{ price }} {{ tokenB.symbol }} = 1 {{ tokenA.symbol }}
+            </p>
+            <p v-if="tokenB&&tokenA&&price">
+              {{ priceinvert }} {{ tokenA.symbol }} = 1 {{ tokenB.symbol }}
+            </p>
           </div>
         </div>
 
@@ -87,11 +95,17 @@
 
 <script>
 
-import {readpariInfoNuminfo}  from '@/contactLogic/readpairpool.js';
+import {readpariInfoNuminfo,calculationLiquidity}  from '@/contactLogic/readpairpool.js';
 import { mapState } from 'vuex';
-import {getTokenImg,readSwapBalance} from '@/contactLogic/readbalance.js';
+import {getTokenImg,readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
 import Web3 from 'web3';
+
+import { ChainId, Token, TokenAmount, Fetcher ,
+    Route, Percent, Router,TradeType,
+} from "@webfans/uniswapsdk";
+
+const debounce = require('debounce');
 
 
 
@@ -105,7 +119,11 @@ export default {
       tokenA:null,
       tokenB:null,
       tokenABalance:'',
-      tokenBBalance:''
+      tokenBBalance:'',
+      price:'',
+      priceinvert:'',
+      aTokenAmount:'',
+      bTokenAmount:''
     };
   },
   methods: {
@@ -138,11 +156,72 @@ export default {
       this.$data.tokenBBalance =Web3.utils.fromWei(data.TokenBamount.toString(), "ether") ;
 
       // const [tokensymbolA,tokensymbolB] = pairs.pairSymbols;
-      // const  data = await readpariInfoNuminfo(chainID,library,account,tokensymbolA,tokensymbolB);
-      // console.log(data);
+      const  dataPrise = await readpariInfoNuminfo(chainID,library,account, this.$data.tokenA.symbol,this.$data.tokenB.symbol);
+      console.log('dataPrise',dataPrise);
+      this.$data.price = dataPrise.price.toSignificant(6);
+      this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
 
 
     },
+    aTokenChange  : debounce(async function (){
+     console.log('aTokenChange');
+     const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
+      const TokenA = getToken(this.$data.tokenA.symbol,chainID);
+      const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+      const num = this.$data.aTokenAmount ;
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(num, "ether")) ;
+      
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei('0', "ether"));
+
+      const istargetBToken =true;
+
+
+      const  data = await calculationLiquidity(library,chainID,coinATokenAmount,coinBTokenAmount,istargetBToken,account);
+      
+      console.log(data);
+      this.$data.bTokenAmount = data.outputNum.toSignificant(6) ;
+
+   },1000),
+    bTokenChange: debounce(async function () {
+     console.log('bTokenChange');
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
+      const TokenA = getToken(this.$data.tokenA.symbol,chainID);
+      const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+      const num = this.$data.bTokenAmount ;
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei('0', "ether")) ;
+      
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei(num, "ether"));
+
+      const istargetBToken =false;
+
+
+      const  data = await calculationLiquidity(library,chainID,coinATokenAmount,coinBTokenAmount,istargetBToken,account);
+      
+      console.log(data);
+      this.$data.aTokenAmount = data.outputNum.toSignificant(6) ;
+
+   },1000),
+   build(){
+
+   }
   },
   computed: {
     ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),

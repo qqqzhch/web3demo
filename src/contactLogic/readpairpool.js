@@ -305,6 +305,9 @@ export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,
    const aTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[0].token, totalSupplyTokenAmount, balanceTokenAmount, false);
    const bTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
 
+   const route = new Route([pairInfo], pairInfo.tokenAmounts[0].token);
+   const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
+
    return {
     pairInfo,
     aToketotalSupply,
@@ -312,7 +315,9 @@ export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,
     aTokenbalance,
     bTokenbalance,
     totalSupply,
-    balance
+    balance,
+    price,
+    priceinvert:price.invert()
    };
 
 }
