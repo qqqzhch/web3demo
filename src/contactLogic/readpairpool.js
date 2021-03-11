@@ -25,6 +25,7 @@ import { getTime } from "@/contacthelp/ethcom.js";
 import { splitSignature } from "@ethersproject/bytes";
 
 
+
 export async function readpairpool(chainID,library){
     const list =  _.where(pairlist,{chainId:chainID});
     const tokenList= _.where(token.tokens,{chainId:chainID});
@@ -189,7 +190,7 @@ export async function  calculationLiquidity(library,chainID,coinATokenAmount,coi
 
       const pooltotalSupplyTokenAmount = new TokenAmount(
         pair.liquidityToken,
-        Web3.utils.toWei(pooltotalSupply.toString(), "ether")) ;
+        pooltotalSupply.toString()) ;
 
       let liquidityMinted;
 
@@ -212,7 +213,8 @@ export async function  calculationLiquidity(library,chainID,coinATokenAmount,coi
         outputNum,
         poolPercentData,
         price,
-        invertprice
+        invertprice,
+        liquidityMinted
 
       };
 
@@ -319,6 +321,37 @@ export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,
     price,
     priceinvert:price.invert()
    };
+
+}
+
+
+export async function checkApprove(chainID,library,account,coinATokenAmount,coinBTokenAmount){
+
+  //coinATokenAmount.token
+  const TokenAContract = useTokenContractMulticall(coinATokenAmount.token);
+  const TokenBContract = useTokenContractMulticall(coinBTokenAmount.token);
+
+  const  spender = ROUTER_ADDRESS  ;
+  const callList=[];
+
+  callList.push(TokenAContract.allowance(account, spender));
+  callList.push(TokenBContract.allowance(account, spender));
+
+  const ethcallProvider = new Provider(library,chainID);
+  await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+  const listresult  = await ethcallProvider.all(callList);
+  const  [Aallowance,Ballowance] =  listresult;
+
+  console.log(Aallowance,Ballowance);
+  
+  // const tokenAnotNeed = coinATokenAmount.isLessThanOrEqualTo(Aallowance.toString());
+
+  // const tokenBnotNeed = coinBTokenAmount.isLessThanOrEqualTo(Ballowance.toString());
+  // return {
+  //   tokenAnotNeed,
+  //   tokenBnotNeed
+  // };
+
 
 }
 

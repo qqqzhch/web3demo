@@ -50,6 +50,9 @@ import ABI_rewarder from "../constants/abis/rewarder.json";
 
 import ABI_Proxy from "../constants/abis/Proxy.json";
 
+import ABI_CollateralState from "../constants/abis/CollateralState.json";
+
+
 
 // returns null on errors
 function useContract(
@@ -303,6 +306,23 @@ export function useProxyContract(
     withSignerIfPossible
   );
 }
+
+export function useCollateralStateContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+  
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_CollateralState,
+    withSignerIfPossible
+  );
+}
+
 
 
 //ABI_rewarder

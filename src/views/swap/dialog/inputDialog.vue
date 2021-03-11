@@ -170,7 +170,7 @@
 
 <script>
 
-import {readpariInfoNuminfo,calculationLiquidity}  from '@/contactLogic/readpairpool.js';
+import {readpariInfoNuminfo,calculationLiquidity,checkApprove}  from '@/contactLogic/readpairpool.js';
 import { mapState } from 'vuex';
 import {getTokenImg,readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
@@ -200,6 +200,8 @@ export default {
       aTokenAmount:'',
       bTokenAmount:'',
       isShowInput:true,
+      LiquidityInfo:{}
+
     };
   },
   methods: {
@@ -265,6 +267,14 @@ export default {
       
       console.log(data);
       this.$data.bTokenAmount = data.outputNum.toSignificant(6) ;
+      const liquidityMinted = data.liquidityMinted.toSignificant(6);
+      this.$data.LiquidityInfo ={
+        aTokenAmount:this.$data.aTokenAmount,
+        bTokenAmount:this.$data.bTokenAmount,
+        liquidityMinted
+      };
+
+      this.checkeAprove();
 
    },1000),
     bTokenChange: debounce(async function () {
@@ -294,6 +304,14 @@ export default {
       console.log(data);
       this.$data.aTokenAmount = data.outputNum.toSignificant(6) ;
 
+      const liquidityMinted = data.liquidityMinted.toSignificant(6);
+      this.$data.LiquidityInfo ={
+        aTokenAmount:this.$data.aTokenAmount,
+        bTokenAmount:this.$data.bTokenAmount,
+        liquidityMinted
+      };
+      this.checkeAprove();
+
    },1000),
    build(){
 
@@ -304,6 +322,30 @@ export default {
    },
    showInput(){
      this.isShowInput = true;
+   },
+  async checkeAprove(){
+     const chainID = this.ethChainID ;
+     const library = this.ethersprovider; 
+     const account = this.ethAddress;
+     const TokenA = getToken(this.$data.tokenA.symbol,chainID);
+      const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+      const numa = this.$data.aTokenAmount ;
+      const numb = this.$data.bTokenAmount ;
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(numa, "ether")) ;
+      
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei(numb, "ether"));
+
+     const  result = await checkApprove(chainID,library,account,coinATokenAmount,coinBTokenAmount);
+
+     console.log(result);
+
+
    }
   },
   computed: {
