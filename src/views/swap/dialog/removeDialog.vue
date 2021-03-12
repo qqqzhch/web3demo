@@ -28,6 +28,16 @@
               class="amount-input"
             >
           </div>
+
+          <div
+            v-if="removeAmount"
+            class="notice-warpper"
+          >
+            <div class="notice-content">
+              <img src="../../../assets/img/notice-red.png">
+              <p>1111111111</p>
+            </div>
+          </div>
         </div>
         <div class="percentage">
           <div @click="percentage(0.25)">
@@ -145,6 +155,7 @@ export default {
       balance: "10000",
       Amount: "",
       isShowRemove: true,
+      removeAmount:'',
     };
   },
   methods: {
@@ -222,6 +233,30 @@ export default {
           &:focus {
             border: 1px solid #ff3c00;
             border-radius: 4px;
+          }
+        }
+      }
+      .notice-warpper {
+        margin-top: 10px;
+        .notice-content {
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 40px;
+          background: rgba(255, 60, 0, 0.1);
+          border-radius: 4px;
+          img {
+            margin-right: 10px;
+          }
+          p {
+            width: 100%;
+            height: 14px;
+            font-size: 12px;
+            font-family: Gilroy-Medium, Gilroy;
+            font-weight: 500;
+            color: #ff3c00;
+            line-height: 14px;
           }
         }
       }
