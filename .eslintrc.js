@@ -30,8 +30,8 @@ module.exports = {
     "no-var": 1, //不允许 var
     "prefer-arrow-callback": 1, //回调函数使用箭头函数
     "prefer-const": 1, //使用 const 声明那些声明后不再被修改的变量
-    "max-len" : [1,{ "code": 120 }],
-    "vue/order-in-components": 0  //按顺讯书写vue option
+    "vue/order-in-components": 0,  //按顺讯书写vue option
+    "vue/max-attributes-per-line": [1,{"singleline": 5}]  //每行最多5个属性，超过5个就换行
 
   },
   parserOptions: {

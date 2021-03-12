@@ -254,14 +254,7 @@ import {
 import Web3 from "web3";
 
 import {
-  ChainId,
-  Token,
   TokenAmount,
-  Fetcher,
-  Route,
-  Percent,
-  Router,
-  TradeType,
 } from "@webfans/uniswapsdk";
 
 const debounce = require("debounce");
@@ -422,7 +415,7 @@ export default {
 
       const num = this.$data.bTokenAmount;
 
-      
+
 
       if(this.inputcheckupB()==false){
         return ;
@@ -562,7 +555,7 @@ export default {
       this.$data.inputnoticeB = "";
       const a = this.inputcheckupA();
       const b = this.inputcheckupB();
-      if (a == false || b == false) {
+      if (a === false || b === false) {
         return true;
       } else {
         return false;
@@ -578,7 +571,7 @@ export default {
         if(isNaN(num)){
           this.$data.inputnoticeA =  ' 输入值需要是数值 ';
           return false;
-        } 
+        }
         const inamount = new BigNumber(this.$data.aTokenAmount) ;
         if(inamount.isGreaterThan(this.tokenABalance)||inamount.isLessThanOrEqualTo('0')){
           this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
@@ -593,13 +586,13 @@ export default {
       try {
         // if(this.$data.bTokenAmount == ''){
         //   // this.$data.aTokenAmount = '';
-        //   return; 
+        //   return;
         // }
         const num = parseFloat( this.$data.bTokenAmount ) ;
         if(isNaN(num)){
           this.$data.inputnoticeB =  ' 输入值需要是数值 ';
           return false;
-        } 
+        }
         const inamount = new BigNumber(this.$data.bTokenAmount) ;
         if(inamount.isGreaterThan(this.tokenBBalance)||inamount.isLessThanOrEqualTo('0')){
           this.$data.inputnoticeB =  ' 输入值需要小于余额 并且大于0';
@@ -700,7 +693,7 @@ export default {
 
       this.$data.btnloading = true;
       try {
-        var tx = await sendaddliquidity(chainID, library, account, parameters);
+        const tx = await sendaddliquidity(chainID, library, account, parameters);
         const baseTip = `add ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol}LP `;
         this.$refs.haveSendtx.open(baseTip);
         event.$emit("sendtx", [
@@ -712,7 +705,6 @@ export default {
         ]);
         this.$data.openInputDialog = false;
       } catch (error) {
-        console.log(tx);
         this.$Notice.error({
           title: "交易已取消",
         });

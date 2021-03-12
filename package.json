@@ -56,7 +56,8 @@
   },
   "lint-staged": {
     "src/**/*.vue": [
-      "vue-cli-service lint --fix"
+      "vue-cli-service lint --fix",
+      "git add ."
     ]
   },
   "browserslist": [

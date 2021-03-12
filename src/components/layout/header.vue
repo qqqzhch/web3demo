@@ -2,54 +2,28 @@
   <header class="header-wrapper">
     <nav class="nav-wrapper container mx-auto flex justify-between items-center">
       <div class="left-wrapper flex items-center">
-        <img
-          src="../../assets/logo.svg"
-          alt="logo"
-        >
+        <img src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
-          <a
-            class="menu-item"
-            href="/"
-          >Buildr</a>
-          <button
-            class="btn menu-item exchange-active"
-            href="/"
-          >
+          <a class="menu-item" href="/">Buildr</a>
+          <button class="btn menu-item exchange-active" href="/">
             Exchange
           </button>
-          <a
-            class="menu-item"
-            href="/"
-          >Earn</a>
-          <a class="menu-item">
-            Bridge
-          </a>
+          <router-link class="menu-item" to="/earn">
+            Earn
+          </router-link>
+          <a class="menu-item">Bridge</a>
         </div>
       </div>
 
       <div class="connect-wrapper">
-        <buttons
-          v-if="!ethAddress"
-          width="140px"
-          height="40px"
-          @click.native="openWalletDialog"
-        >
+        <buttons v-if="!ethAddress" width="140px" height="40px" @click.native="openWalletDialog">
           Connect Wallet
         </buttons>
 
-        <div
-          v-else
-          class="connected-content flex justify-between items-center"
-        >
-          <img
-            src="../../assets/img/metamask18.svg"
-            alt="metamask"
-          >
+        <div v-else class="connected-content flex justify-between items-center">
+          <img src="../../assets/img/metamask18.svg" alt="metamask">
           <span>{{ getShortAddress }}</span>
-          <button
-            class="btn changeBtn"
-            @click="openWalletDialog"
-          >
+          <button class="btn changeBtn" @click="openWalletDialog">
             Change Wallet
           </button>
         </div>
@@ -64,15 +38,15 @@ import { mapState } from 'vuex';
 export default {
   components: {
     buttons: () => import('@/components/basic/buttons'),
-    walletdialog: () => import("@/views/transfer/dialog/walletDialog"),
+    walletdialog: () => import('@/views/transfer/dialog/walletDialog'),
   },
   methods: {
     openWalletDialog() {
       this.$refs.wallet.open();
-    }
+    },
     // openWalletDialog() {
   },
-    computed: {
+  computed: {
     ...mapState(['ethAddress']),
     getShortAddress() {
       return `${this.ethAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
@@ -114,29 +88,29 @@ export default {
     }
 
     .connect-wrapper {
-    .connected-content {
-      img {
-        max-width: 14px;
-        margin-right: 8px;
-      }
-      span {
-        font-size: 12px;
-        font-weight: 500;
-        color: #14171c;
-        line-height: 14px;
-        margin-right: 16px;
-      }
-      .changeBtn {
-        width: 148px;
-        height: 40px;
-        border: 1px solid #0058ff;
-        font-size: 16px;
-        font-weight: 500;
-        color: #14171c;
-        line-height: 19px;
+      .connected-content {
+        img {
+          max-width: 14px;
+          margin-right: 8px;
+        }
+        span {
+          font-size: 12px;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 14px;
+          margin-right: 16px;
+        }
+        .changeBtn {
+          width: 148px;
+          height: 40px;
+          border: 1px solid #0058ff;
+          font-size: 16px;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 19px;
+        }
       }
     }
-  }
   }
 }
 </style>

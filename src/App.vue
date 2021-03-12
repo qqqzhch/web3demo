@@ -4,9 +4,8 @@
     <main class="main-wrapper container mx-auto">
       <router-view v-if="isRouterAlive" />
     </main>
-    <initialWallet />
+    <!-- <initialWallet /> -->
     <layoutFoot />
-    <transactionPool />
   </div>
 </template>
 
@@ -18,6 +17,7 @@ import initialWallet from '@/components/basic/initialWallet.vue';
 import transactionPool from '@/components/basic/transactionPool.vue';
 
 export default {
+  mixins: [initialWallet, transactionPool],
   provide() {
     return {
       reload: this.reload,
@@ -31,8 +31,6 @@ export default {
   components: {
     layoutHead,
     layoutFoot,
-    initialWallet,
-    transactionPool
   },
   methods: {
     reload() {
@@ -46,8 +44,8 @@ export default {
 #app {
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  .main-wrapper {
+    min-height: 700px;
+  }
 }
 </style>

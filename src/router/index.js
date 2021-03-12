@@ -22,7 +22,7 @@ const routes = [
     children: [
       {
         path: "",
-        name: "/swap",
+        name: "swap",
         component: () => import("@/views/swap/swap.vue"),
       },
       {
@@ -37,6 +37,29 @@ const routes = [
       },
     ]
   },
+  {
+    path: "/earn",
+    name: "earn",
+    component: () => import("@/views/earn/index.vue"),
+    children: [
+      {
+        path: "",
+        name: "rewardMine",
+        component: () => import("@/views/earn/rewardMine/index.vue"),
+      },
+      {
+        path: "myMine",
+        name: "myMine",
+        component: () => import("@/views/earn/myMine/index.vue"),
+      },
+      {
+        path: "history",
+        name: "history",
+        component: () => import("@/views/earn/history/index.vue")
+      },
+    ]
+  },
+
   {
     path: "/buildr",
     name: "buildr",

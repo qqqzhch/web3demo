@@ -1,23 +1,17 @@
-<template>
-  <div />
-</template>
 <script>
 import Web3 from 'web3';
 import { mapState } from 'vuex';
 import { ethers } from 'ethers';
 
-
-export default{
-    data() {
-        return {
-            
-        };
-    },
-    mounted() {
-     this.initEth();
-    },
-    methods: {
-        // 检查是否连接
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    this.initEth();
+  },
+  methods: {
+    // 检查是否连接
     async isEthConnect() {
       try {
         const res = await this.web3.eth.getCoinbase();
@@ -122,8 +116,7 @@ export default{
         const web3 = new Web3(web3Provider);
 
         const ethersprovider = new ethers.providers.Web3Provider(web3Provider);
-        this.$store.commit('changeweb3', {web3,ethersprovider});
-        
+        this.$store.commit('changeweb3', { web3, ethersprovider });
 
         const isConnect = await this.isEthConnect();
 
@@ -139,7 +132,6 @@ export default{
 
           // 初始化合约
           // await this.initContract();
-          
 
           // 检测状态切换
           this.checkStatus();
@@ -157,11 +149,9 @@ export default{
         // });
       }
     },
-        
-    },
+  },
   computed: {
-    ...mapState(['ethAddress','web3','ethersprovider']),
+    ...mapState(['ethAddress', 'web3', 'ethersprovider']),
   },
 };
-
 </script>
