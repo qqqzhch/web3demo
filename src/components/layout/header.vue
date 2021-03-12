@@ -1,12 +1,32 @@
 <template>
   <header class="header-wrapper">
     <nav class="nav-wrapper container mx-auto flex justify-between items-center">
-      <div class="logo-wrapper">
+      <div class="left-wrapper flex items-center">
         <img
           src="../../assets/logo.svg"
           alt="logo"
         >
+        <div class="menu-wrapper">
+          <a
+            class="menu-item"
+            href="/"
+          >Buildr</a>
+          <button
+            class="btn menu-item exchange-active"
+            href="/"
+          >
+            Exchange
+          </button>
+          <a
+            class="menu-item"
+            href="/"
+          >Earn</a>
+          <a class="menu-item">
+            Bridge
+          </a>
+        </div>
       </div>
+
       <div
         class="connect-wrapper"
       >
@@ -57,10 +77,28 @@ export default {
   background-color: #ffffff;
   .nav-wrapper {
     height: 100%;
-    .logo-wrapper {
-      width: 150px;
-      img {
-        max-width: 100%;
+    .left-wrapper {
+      height: 100%;
+      .menu-wrapper {
+        margin-left: 80px;
+        .menu-item {
+          margin-right: 56px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #14171c;
+          // line-height: 19px;
+        }
+        .exchange-active {
+          display: inline-block;
+          width: 88px;
+          height: 28px;
+          background: #0058ff;
+          border-radius: 14px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #ffffff;
+          line-height: 19px;
+        }
       }
     }
   }
