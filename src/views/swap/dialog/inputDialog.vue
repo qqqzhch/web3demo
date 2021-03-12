@@ -39,6 +39,15 @@
               <p>{{ tokenA.symbol }}</p>
             </div>
           </div>
+          <div
+            v-if="inputnoticeA"
+            class="notice-warpper"
+          >
+            <div class="notice-content">
+              <img src="../../../assets/img/notice-red.png">
+              <p>{{ inputnoticeA }}</p>
+            </div>
+          </div>
         </div>
         <div class="add-warpper">
           <img
@@ -72,6 +81,15 @@
               <p>{{ tokenB.symbol }}</p>
             </div>
           </div>
+          <div
+            v-if="inputnoticeB"
+            class="notice-warpper"
+          >
+            <div class="notice-content">
+              <img src="../../../assets/img/notice-red.png">
+              <p>{{ inputnoticeB }}</p>
+            </div>
+          </div>
         </div>
         <div class="price-warpper flex justify-between">
           <span>Price</span>
@@ -86,91 +104,130 @@
         </div>
 
         <div class="btn-warpper">
-          <div @click="showConfirmInput">
-            <Buttons>Next</Buttons>
+          <div v-if="btnloading">
+            <Buttons>loading</Buttons>
           </div>
-          
-          <p class="buy">
-            Buy scUSD
-          </p>
+          <div v-else>
+            <div v-if="tokenAnotNeed==false||tokenBnotNeed==false">
+              <Buttons
+                v-if="tokenAnotNeed==false"
+                @click.native="approveA"
+              >
+                {{ tokenA.symbol }} Approve
+              </Buttons>
+              <Buttons
+                v-if="tokenBnotNeed==false"
+                @click.native="approveB"
+              >
+                {{ tokenB.symbol }} Approve
+              </Buttons>
+            </div>
+
+            <div
+              v-else
+              @click="showConfirmInput"
+            >
+              <Buttons>Next</Buttons>
+            </div>
+            <p class="buy">
+              Buy scUSD
+            </p>
+          </div>
         </div>
       </div>
-
-      <div
-        v-else
-        class="confirmInput-content"
-      >
+      <div v-else>
         <div
-          class="arrow-warpper"
-          @click="showInput"
+        
+          v-if="LiquidityInfo"
+          class="confirmInput-content"
         >
-          <img
-            src="../../../assets/img/arrow-left.svg"
-            alt="arrow-left"
+          <div
+            class="arrow-warpper"
+            @click="showInput"
           >
-        </div>
-        <p class="title text-center">
-          Confirm
-        </p>
-        <p class="will-receive">
-          You will receive
-        </p>
-
-        <div class="confirm-content">
-          <div class="images-warpper">
             <img
-              src="../../../assets/img/comp.svg"
-              alt="comp"
-            >
-            <img
-              src="../../../assets/img/comp.svg"
-              alt="comp"
-              class="img2"
+              src="../../../assets/img/arrow-left.svg"
+              alt="arrow-left"
             >
           </div>
-          <h2>1029.23</h2>
-          <p>scUSD/USDT LP</p>
-          <span>Output is estimated. You will receive at least 11.123 scUSD/USDT
-            LP, or the transaction will revert.</span>
-        </div>
+          <p class="title text-center">
+            Confirm
+          </p>
+          <p class="will-receive">
+            You will receive
+          </p>
 
-        <div class="price-warpper">
-          <div>
-            <span>scUSD Input </span>
-            <p>1234.21 scUSD</p>
-          </div>
-          <div>
-            <span>USDT Input</span>
-            <p>1234.21 USDT</p>
-          </div>
-          <div>
-            <span>Price</span>
-            <div class="price">
-              <p>1 scUSD = 12USDT</p>
-              <p>12 USDT = 1scUSD</p>
+          <div class="confirm-content">
+            <div class="images-warpper">
+              <img
+                src="../../../assets/img/comp.svg"
+                alt="comp"
+              >
+              <img
+                src="../../../assets/img/comp.svg"
+                alt="comp"
+                class="img2"
+              >
             </div>
+            <h2> {{ LiquidityInfo.liquidityMinted }} </h2>
+            <p>{{ tokenA.symbol }}/{{ tokenB.symbol }} LP</p>
+            <span>Output is estimated. You will receive at least {{ LiquidityInfo.liquidityMinted }} {{ tokenA.symbol }}/{{ tokenB.symbol }}
+              LP, or the transaction will revert.</span>
           </div>
-          <div class="items-center">
-            <span>share of pool</span>
-            <div class="sharePoll">
-              <span>-1.02%</span>
-              <p>to 1.23%</p>
+          <div
+            v-if="btnloading"
+            class="demo-spin-container "
+          >
+            <loading />
+          </div>
+          <div v-else>
+            <div class="price-warpper">
+              <div>
+                <span>{{ tokenA.symbol }} Input </span>
+                <p>{{ aTokenAmount }} {{ tokenA.symbol }}</p>
+              </div>
+              <div>
+                <span>{{ tokenB.symbol }} Input</span>
+                <p>{{ bTokenAmount }} {{ tokenB.symbol }}</p>
+              </div>
+              <div>
+                <span>Price</span>
+                <div class="price">
+                  <p v-if="tokenB&&tokenA&&price">
+                    {{ price }} {{ tokenB.symbol }} = 1 {{ tokenA.symbol }}
+                  </p>
+                  <p v-if="tokenB&&tokenA&&price">
+                    {{ priceinvert }} {{ tokenA.symbol }} = 1 {{ tokenB.symbol }}
+                  </p>
+                </div>
+              </div>
+              <div class="items-center">
+                <span>share of pool</span>
+                <div class="sharePoll">
+                  <span>+{{ LiquidityInfo.poolPercentData|formatRate }}</span>
+                  <p>to {{ poolPercentData|formatRate }}</p>
+                </div>
+              </div>
+              <div>
+                <span>Fee</span>
+                <p>{{ fee }} HT</p>
+              </div>
             </div>
-          </div>
-          <div>
-            <span>Fee</span>
-            <p>0.1 ETH</p>
+            <Buttons @click.native="sendTX">
+              Confirm
+            </Buttons>
           </div>
         </div>
-        <Buttons>Confirm</Buttons>
       </div>
     </Modal>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
 
-import {readpariInfoNuminfo,calculationLiquidity,checkApprove}  from '@/contactLogic/readpairpool.js';
+import {readpariInfoNuminfo,calculationLiquidity,checkApprove,buildAddliquidityParam,
+addliquidityGas,sendaddliquidity}  from '@/contactLogic/readpairpool.js';
 import { mapState } from 'vuex';
 import {getTokenImg,readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
 
@@ -182,11 +239,20 @@ import { ChainId, Token, TokenAmount, Fetcher ,
 
 const debounce = require('debounce');
 
+import {useTokenApprove}  from '@/contacthelp/Approve.js';
+
+import { ROUTER_ADDRESS } from '@/constants/index.js';
+
+import event from '@/common/js/event';
+const BigNumber = require("bignumber.js");
+
 
 
 export default {
   components: {
     Buttons: () => import("@/components/basic/buttons"),
+    loading: () => import("@/components/basic/loading.vue"),
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
   },
   data() {
     return {
@@ -200,7 +266,15 @@ export default {
       aTokenAmount:'',
       bTokenAmount:'',
       isShowInput:true,
-      LiquidityInfo:{}
+      LiquidityInfo:null,
+      tokenAnotNeed:true,
+      tokenBnotNeed:true,
+      btnloading:false,
+      fee:'',
+      poolPercentData:'',
+      parameters:[],
+      inputnoticeA:'',
+      inputnoticeB:''
 
     };
   },
@@ -217,6 +291,7 @@ export default {
       const library = this.ethersprovider; 
       const account = this.ethAddress;
       this.openInputDialog = true;
+      this.isShowInput = true;
 
       console.log(pairs);
 
@@ -232,12 +307,14 @@ export default {
       console.log(data);
       this.$data.tokenABalance =Web3.utils.fromWei(data.TokenAamount.toString(), "ether") ;
       this.$data.tokenBBalance =Web3.utils.fromWei(data.TokenBamount.toString(), "ether") ;
+      
 
       // const [tokensymbolA,tokensymbolB] = pairs.pairSymbols;
       const  dataPrise = await readpariInfoNuminfo(chainID,library,account, this.$data.tokenA.symbol,this.$data.tokenB.symbol);
       console.log('dataPrise',dataPrise);
       this.$data.price = dataPrise.price.toSignificant(6);
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
+      this.$data.poolPercentData = dataPrise.poolPercentData;
 
 
     },
@@ -246,11 +323,16 @@ export default {
      const chainID = this.ethChainID ;
       const library = this.ethersprovider; 
       const account = this.ethAddress;
+      this.$data.btnloading = true;
 
       const TokenA = getToken(this.$data.tokenA.symbol,chainID);
       const TokenB = getToken(this.$data.tokenB.symbol,chainID);
 
       const num = this.$data.aTokenAmount ;
+
+      if(this.checkAmount()){
+        return ;
+      } 
 
       const coinATokenAmount = new TokenAmount(
         TokenA,
@@ -271,10 +353,12 @@ export default {
       this.$data.LiquidityInfo ={
         aTokenAmount:this.$data.aTokenAmount,
         bTokenAmount:this.$data.bTokenAmount,
-        liquidityMinted
+        liquidityMinted,
+        poolPercentData:data.poolPercentData
       };
 
-      this.checkeAprove();
+      await this.checkeAprove();
+      this.$data.btnloading = false;
 
    },1000),
     bTokenChange: debounce(async function () {
@@ -283,11 +367,20 @@ export default {
       const library = this.ethersprovider; 
       const account = this.ethAddress;
 
+      
+
       const TokenA = getToken(this.$data.tokenA.symbol,chainID);
       const TokenB = getToken(this.$data.tokenB.symbol,chainID);
 
       const num = this.$data.bTokenAmount ;
 
+      if(this.checkAmount()){
+        return ;
+      }
+
+
+
+      this.$data.btnloading = true;
       const coinATokenAmount = new TokenAmount(
         TokenA,
         Web3.utils.toWei('0', "ether")) ;
@@ -308,17 +401,63 @@ export default {
       this.$data.LiquidityInfo ={
         aTokenAmount:this.$data.aTokenAmount,
         bTokenAmount:this.$data.bTokenAmount,
-        liquidityMinted
+        liquidityMinted,
+        poolPercentData:data.poolPercentData
       };
-      this.checkeAprove();
+      await this.checkeAprove();
+      this.$data.btnloading = false;
 
    },1000),
    build(){
 
    },
-   showConfirmInput(){
+  async showConfirmInput(){
+     //构造参数计算手续费
+
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      
+      console.log(this.checkAmount());
+      if(this.checkAmount()){
+        return ;
+      }
+
+      const TokenA = getToken(this.$data.tokenA.symbol,chainID);
+      const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+      const numa = this.$data.aTokenAmount ;
+      const numb = this.$data.bTokenAmount ;
+
+      const coinATokenAmount = new TokenAmount(
+        TokenA,
+        Web3.utils.toWei(numa, "ether")) ;
+      
+      const coinBTokenAmount = new TokenAmount(
+        TokenB,
+        Web3.utils.toWei(numb, "ether"));
+
+    this.$data.btnloading = true;
+    try {
+      const parameters =  await buildAddliquidityParam(coinATokenAmount,coinBTokenAmount,account);
+     console.log(parameters);
+     this.$data.parameters = parameters ;
+
+     const fee = await addliquidityGas(chainID,library,account,parameters);
+
+     console.log(fee);
+
+     this.$data.fee = fee ;
      this.isShowInput = false;
-     console.log(11111111111111111);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    this.$data.btnloading =false;
+
+     
+     
    },
    showInput(){
      this.isShowInput = true;
@@ -328,7 +467,11 @@ export default {
      const library = this.ethersprovider; 
      const account = this.ethAddress;
      const TokenA = getToken(this.$data.tokenA.symbol,chainID);
-      const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+     const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+     if(this.checkAmount()){
+        return ;
+      }
 
       const numa = this.$data.aTokenAmount ;
       const numb = this.$data.bTokenAmount ;
@@ -344,9 +487,193 @@ export default {
      const  result = await checkApprove(chainID,library,account,coinATokenAmount,coinBTokenAmount);
 
      console.log(result);
+     this.$data.tokenAnotNeed = result.tokenAnotNeed;
+     this.$data.tokenBnotNeed = result.tokenBnotNeed;
 
+
+
+   },
+   checkAmount(){
+
+     this.$data.inputnoticeA =  '';
+     this.$data.inputnoticeB =  '';
+     const a =this.inputcheckupA();
+     const b =this.inputcheckupB();
+     if(a==false||b==false){
+      return true;
+     }else{
+       return false;
+     }
+     
+   },
+   inputcheckupA(){
+      try {
+        if(this.$data.aTokenAmount == ''){
+          // this.$data.bTokenAmount = '';
+          return ;
+        }
+        const num = parseFloat( this.$data.aTokenAmount ) ;
+        if(isNaN(num)){
+          this.$data.inputnoticeA =  ' 输入值需要是数值 ';
+          return false;
+        } 
+        const inamount = new BigNumber(this.$data.aTokenAmount) ;
+        if(inamount.isGreaterThan(this.tokenABalance)&&inamount.isGreaterThan('0')){
+          this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
+          return false;
+
+        }
+        
+      } catch (error) {
+        console.log(error);
+        this.$data.inputnoticeA =  ' 输入值需要是数值 ';
+      }
+      
+   },
+   inputcheckupB(){
+      try {
+        if(this.$data.bTokenAmount == ''){
+          // this.$data.aTokenAmount = '';
+          return; 
+        }
+        const num = parseFloat( this.$data.bTokenAmount ) ;
+        if(isNaN(num)){
+          this.$data.inputnoticeB =  ' 输入值需要是数值 ';
+          return false;
+        } 
+        const inamount = new BigNumber(this.$data.bTokenAmount) ;
+        if(inamount.isGreaterThan(this.tokenBBalance)&&inamount.isGreaterThan('0')){
+          this.$data.inputnoticeB =  ' 输入值需要小于余额 并且大于0';
+          return false;
+
+        }
+        
+      } catch (error) {
+        console.log(error);
+        this.$data.inputnoticeB =  ' 输入值需要是数值 ';
+      }
+   },
+  async approveA(){
+
+     const chainID = this.ethChainID ;
+     const library = this.ethersprovider; 
+     const account = this.ethAddress;
+     const TokenA = getToken(this.$data.tokenA.symbol,chainID);
+
+     const numa = this.$data.aTokenAmount ;
+     const amount = Web3.utils.toWei(numa);
+
+     if(this.checkAmount()){
+        return ;
+      }
+
+     const spender=ROUTER_ADDRESS;
+     this.$data.btnloading = true;
+
+     const transaction = await useTokenApprove(
+          library,
+          account,
+          TokenA,
+          spender,
+          amount
+        );
+        console.log(transaction);
+        if(transaction){
+          const waitdata = await transaction.wait([1]);
+          console.log(waitdata);
+          this.$data.tokenAnotNeed = true;
+          
+        }else{
+          //取消授权
+          //需要提示
+          this.$Notice.error({
+                    title: '授权已取消',  
+                });
+        }
+    this.$data.btnloading = false;
+      
+
+   },
+  async approveB(){
+     const chainID = this.ethChainID ;
+     const library = this.ethersprovider; 
+     const account = this.ethAddress;
+
+     if(this.checkAmount()){
+        return ;
+      }
+
+
+     const TokenB = getToken(this.$data.tokenB.symbol,chainID);
+
+     const numb = this.$data.bTokenAmount ;
+
+     const amount = Web3.utils.toWei(numb);
+
+     const spender = ROUTER_ADDRESS;
+
+     this.$data.btnloading = true;
+
+     const transaction = await useTokenApprove(
+          library,
+          account,
+          TokenB,
+          spender,
+          amount
+        );
+        console.log(transaction);
+        if(transaction){
+          const waitdata = await transaction.wait([1]);
+          console.log(waitdata);
+          this.$data.tokenAnotNeed = true;
+          
+        }else{
+          //取消授权
+          //需要提示
+          this.$Notice.error({
+                    title: '授权已取消',  
+                });
+        }
+    this.$data.btnloading = false;
+
+   },
+  async sendTX(){
+     const chainID = this.ethChainID ;
+     const library = this.ethersprovider; 
+     const account = this.ethAddress;
+
+     const  parameters = this.$data.parameters;
+
+     if(this.checkAmount()){
+        return ;
+      }
+
+
+     this.$data.btnloading = true;
+     try {
+      var tx = await sendaddliquidity(chainID,library,account,parameters);  
+      const baseTip = `add ${ this.$data.LiquidityInfo.liquidityMinted } ${ this.$data.tokenA.symbol }/${ this.$data.tokenB.symbol }LP `;
+      this.$refs.haveSendtx.open(baseTip);   
+      event.$emit('sendtx',[tx,{
+        okinfo:baseTip+"成功",
+        failinfo:baseTip+'失败'
+      }]);
+      this.$data.openInputDialog = false;
+
+
+     } catch (error) {
+       console.log(tx);
+       this.$Notice.error({
+                    title: '交易已取消',  
+                });
+       
+     }
+     this.$data.btnloading = false;
+     
 
    }
+
+
   },
   computed: {
     ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
@@ -591,4 +918,11 @@ export default {
     }
   }
 }
+
+.demo-spin-container{
+    display: inline-block;
+    width: 400px;
+    height: 200px;
+    position: relative;
+  }
 </style>

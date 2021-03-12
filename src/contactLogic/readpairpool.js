@@ -23,8 +23,17 @@ import { getTime } from "@/contacthelp/ethcom.js";
 
 
 import { splitSignature } from "@ethersproject/bytes";
+import {  getGasPrice } from '@/contacthelp/ethusdt.js';
+// import bignumber from  "bignumber.js"
+const BigNumber = require("bignumber.js");
+
+function  Calculatepercentage(balance,totalSupply){
+  const balance_ = new BigNumber(balance);
+  const totalSupply_ = new BigNumber(totalSupply);
+  return balance_.div(totalSupply_) ;
 
 
+}
 
 export async function readpairpool(chainID,library){
     const list =  _.where(pairlist,{chainId:chainID});
@@ -201,12 +210,13 @@ export async function  calculationLiquidity(library,chainID,coinATokenAmount,coi
       }
 
       let poolPercentData = liquidityMinted.divide(pooltotalSupplyTokenAmount.add(liquidityMinted));
+        poolPercentData = poolPercentData.toSignificant(4);
       
-      if (poolPercentData.multiply(10000).lessThan(1)) {
-        poolPercentData = '<0.01';
-      } else {
-        poolPercentData = poolPercentData.multiply(100).toSignificant(4);
-      }
+      // if (poolPercentData.multiply(10000).lessThan(1)) {
+      //   poolPercentData = '<0.01';
+      // } else {
+      //   poolPercentData = poolPercentData.multiply(100).toSignificant(4);
+      // }
 
       return {
         istargetBToken,
@@ -281,6 +291,7 @@ export async  function checkoutTokenAllowance(tokenA,tokenB,library,chainID,acco
 
 
 export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,tokensymbolB){
+  console.log('readpariInfoNuminfo');
    const  pairInfo = await  readpariInfo(chainID,library,tokensymbolA,tokensymbolB) ;
 
    const callList = [];
@@ -310,6 +321,15 @@ export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,
    const route = new Route([pairInfo], pairInfo.tokenAmounts[0].token);
    const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
 
+   let poolPercentData = Calculatepercentage(balance.toString(),totalSupply.toString()) ;
+     poolPercentData = poolPercentData.toString();
+
+  //  if (poolPercentData.times(10000).isLessThan(1)) {
+  //   poolPercentData = '<0.01';
+  // } else {
+  //   poolPercentData = poolPercentData.times(100).toString();
+  // }
+
    return {
     pairInfo,
     aToketotalSupply,
@@ -319,7 +339,8 @@ export async function  readpariInfoNuminfo(chainID,library,account,tokensymbolA,
     totalSupply,
     balance,
     price,
-    priceinvert:price.invert()
+    priceinvert:price.invert(),
+    poolPercentData
    };
 
 }
@@ -343,15 +364,50 @@ export async function checkApprove(chainID,library,account,coinATokenAmount,coin
   const  [Aallowance,Ballowance] =  listresult;
 
   console.log(Aallowance,Ballowance);
+  let tokenAnotNeed =false,tokenBnotNeed = false;
+
+  if(coinATokenAmount.lessThan(Aallowance.toString())||coinATokenAmount.equalTo(Aallowance.toString())){
+    tokenAnotNeed = true;
+  }
+
+  if(coinBTokenAmount.lessThan(Ballowance.toString())||coinBTokenAmount.equalTo(Ballowance.toString())){
+    tokenBnotNeed = true;
+  }
   
   // const tokenAnotNeed = coinATokenAmount.isLessThanOrEqualTo(Aallowance.toString());
 
   // const tokenBnotNeed = coinBTokenAmount.isLessThanOrEqualTo(Ballowance.toString());
-  // return {
-  //   tokenAnotNeed,
-  //   tokenBnotNeed
-  // };
 
+  return {
+    tokenAnotNeed,
+    tokenBnotNeed
+  };
+
+
+}
+
+export async function  addliquidityGas (chainID,library,account,parameters){
+  const contract = getRouterContract(chainID, library, account);
+
+  const estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
+  const gasPrice = await getGasPrice(library);
+
+  const useWEI = estimatedGasLimit.mul(gasPrice);
+  const fee = Web3.utils.fromWei(useWEI.toString());
+
+  return fee;
+}
+
+export async function sendaddliquidity(chainID,library,account,parameters){
+
+  const contract = getRouterContract(chainID, library, account);
+  const estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
+    
+  const result = await contract.addLiquidity(...parameters, {
+          ...{},
+          gasLimit: calculateGasMargin(estimatedGasLimit),
+        });
+  return result;
 
 }
 
