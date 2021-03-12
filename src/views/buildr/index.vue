@@ -73,7 +73,7 @@
       border-radius: 12px;
     }
     .tab {
-      margin: 24px 0px;
+      margin: 24px 0px 24px 100px;
       .tab-item {
         position: relative;
         display: inline-block;

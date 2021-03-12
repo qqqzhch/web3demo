@@ -528,7 +528,7 @@ export default {
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  margin: 20px auto 100px;
+  margin: 20px 0 100px 100px;
   padding: 44px;
   .exchanges-wapper {
     .exchanges-title {

@@ -197,7 +197,7 @@ export default {
 .pool-warpper {
   .rewards-warpper {
     width: 1000px;
-    margin: auto;
+    margin-left: 100px;
     display: flex;
     justify-content: space-between;
     .rewards-item {
@@ -259,7 +259,7 @@ export default {
     }
   }
   .liquidityPool {
-    margin: 44px auto;
+    margin: 44px 0 0 100px;
     padding: 32px 44px;
     width: 1000px;
     height: 559px;

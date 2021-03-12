@@ -28,6 +28,7 @@
 
 <style lang="less" scoped>
   .overview-warp {
+    margin-left: 100px;
     .title {
       font-size: 20px;
       font-weight: 500;

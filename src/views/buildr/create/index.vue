@@ -121,6 +121,7 @@
     border-bottom: 1px dashed #EAEAEA;
   }
   .create {
+    margin-left: 100px;
     .title {
       font-size: 20px;
       color: #14171c;

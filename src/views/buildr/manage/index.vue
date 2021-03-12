@@ -103,6 +103,7 @@
 
 <style lang="less" scoped>
   .manage {
+    margin-left: 100px;
     .content {
       margin-top: 24px;
       padding-bottom: 24px;

@@ -1,23 +1,31 @@
 <template>
   <header class="header-wrapper">
-    <nav class="nav-wrapper container mx-auto flex justify-between items-center">
+    <nav
+      class="nav-wrapper container mx-auto flex justify-between items-center"
+    >
       <div class="left-wrapper flex items-center">
         <img src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
           <router-link class="menu-item" to="/buildr" active-class="active">
             Buildr
           </router-link>
-          <router-link class="menu-item" to="/exchange" active-class="active">
+          <router-link
+            :class="isExchange ? 'menu-item active' : 'menu-item'"
+            to="/exchange"
+            active-class="active"
+          >
             Exchange
           </router-link>
-          Exchange
-          </button> -->
           <router-link class="menu-item" to="/earn" active-class="active">
             Earn
           </router-link>
-          <router-link class="menu-item" to="/bridge" active-class="active">
+          <a
+            href="http://47.94.197.75:8087/#/"
+            class="menu-item"
+            target="_blank"
+          >
             Bridge
-          </router-link>
+          </a>
         </div>
       </div>
 
@@ -40,15 +48,39 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 export default {
   components: {
-    buttons: () => import('@/components/basic/buttons'),
-    walletdialog: () => import('@/views/transfer/dialog/walletDialog'),
+    buttons: () => import("@/components/basic/buttons"),
+    walletdialog: () => import("@/views/transfer/dialog/walletDialog"),
+  },
+  data() {
+    return {
+      isExchange: false,
+    };
+  },
+  mounted() {
+    this.routerUrl();
+  },
+  watch: {
+    $route: {
+      handler: function (val) {
+        if(val=='/'){
+          this.isExchange = true;
+        }else{
+          this.isExchange = false;
+        }
+      },
+    },
   },
   methods: {
     openWalletDialog() {
       this.$refs.wallet.open();
+    },
+    routerUrl() {
+      if (this.$route.path == "/") {
+        this.isExchange = true;
+      }
     },
     // openWalletDialog() {
   },
