@@ -4,14 +4,20 @@
       <div class="left-wrapper flex items-center">
         <img src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
-          <a class="menu-item" href="/">Buildr</a>
-          <button class="btn menu-item exchange-active" href="/">
+          <router-link class="menu-item" to="/buildr" active-class="active">
+            Buildr
+          </router-link>
+          <router-link class="menu-item" to="/exchange" active-class="active">
             Exchange
-          </button>
-          <router-link class="menu-item" to="/earn">
+          </router-link>
+          Exchange
+          </button> -->
+          <router-link class="menu-item" to="/earn" active-class="active">
             Earn
           </router-link>
-          <a class="menu-item">Bridge</a>
+          <router-link class="menu-item" to="/bridge" active-class="active">
+            Bridge
+          </router-link>
         </div>
       </div>
 
@@ -73,16 +79,17 @@ export default {
           color: #14171c;
           // line-height: 19px;
         }
-        .exchange-active {
+        .active {
           display: inline-block;
           width: 88px;
           height: 28px;
+          text-align: center;
           background: #0058ff;
           border-radius: 14px;
           font-size: 16px;
           font-weight: 500;
           color: #ffffff;
-          line-height: 19px;
+          line-height: 28px;
         }
       }
     }
