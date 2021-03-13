@@ -34,12 +34,12 @@
           </div>
 
           <div
-            v-if="removeAmount"
+            v-if="inputnoticeA"
             class="notice-warpper"
           >
             <div class="notice-content">
               <img src="../../../assets/img/notice-red.png">
-              <p>1111111111</p>
+              <p>{{ inputnoticeA }}</p>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
         </div>
         
         <div v-if="btnLoading">
-          <Buttons> loading </Buttons>
+          <Buttons> loading... </Buttons>
         </div>
         <div
           v-else
@@ -111,7 +111,8 @@
         <div class="token-swap flex items-center justify-between">
           <div class="token-item">
             <img
-              src="../../../assets/img/comp.svg"
+              :src="getTokenImg(tokenA.symbol)"
+              width="48"
               alt="copm"
             >
             <p>{{ AmountA }}</p>
@@ -125,7 +126,8 @@
           </div>
           <div class="token-item">
             <img
-              src="../../../assets/img/comp.svg"
+              :src="getTokenImg(tokenB.symbol)"
+              width="48"
               alt="copm"
             >
             <p>{{ AmountB }}</p>
@@ -133,31 +135,40 @@
           </div>
         </div>
         <div
-          v-if="tokenA&&tokenB"
-          class="price-warpper"
+          v-if="btnLoading"
+          class="demo-spin-container"
         >
-          <div>
-            <span>Price</span>
-            <div class="price">
-              <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
-              <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
-            </div>
-          </div>
-          <div class="items-center">
-            <span>share of pool</span>
-            <div class="sharePoll">
-              <span>-1.02%</span>
-              <p>to 1.23%</p>
-            </div>
-          </div>
-          <div>
-            <span>Fee</span>
-            <p>{{ fee }} HT</p>
-          </div>
+          <loading />
         </div>
-        <Buttons @click.native="RemoveConfirm">
-          Confirm
-        </Buttons>
+        <div v-else>   
+          <div
+            v-if="tokenA&&tokenB"
+            class="price-warpper"
+          >
+            <div>
+              <span>Price</span>
+              <div class="price">
+                <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
+                <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
+              </div>
+            </div>
+            <div class="items-center">
+              <span>share of pool</span>
+              <div class="sharePoll">
+                <span>-{{ Reduceliquidit|formatRate }}</span>
+                <p>to {{ Residualliquidity|formatRate }}</p>
+              </div>
+            </div>
+            <div>
+              <span>Fee</span>
+              <p>{{ fee }} HT</p>
+            </div>
+          </div>
+          <Buttons @click.native="RemoveConfirm">
+            Confirm
+          </Buttons>
+          <div />
+        </div>
       </div>
     </Modal>
 
@@ -197,6 +208,7 @@ export default {
   components: {
     Buttons: () => import("@/components/basic/buttons"),
     haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
+    loading: () => import("@/components/basic/loading.vue"),
   },
   data() {
     return {
@@ -217,18 +229,55 @@ export default {
       priceinvert:'',
       btnLoading:false,
       fee:'',
-      parameter:[]
+      parameter:[],
+      totalSupply:'',
+      inputnoticeA:''
       
     };
   },
   methods: {
-  async open(pairs) {
+    clearData(){
+      this.$data.Amount = '';
+      this.$data.parameter = [];
+      this.$data.SignatureData = '';
+      this.$data.AmountA ='--';
+      this.$data.AmountB ='--';
+      this.$data.inputnoticeA = '';
+      
+
+    },
+    inputcheckupA() {
+      try {
+        this.$data.inputnoticeA =  '';
+        const num = parseFloat( this.$data.Amount ) ;
+        if(isNaN(num)){
+          this.$data.inputnoticeA =  ' 输入值需要是数值 ';
+          return false;
+        } 
+        const inamount = new BigNumber(this.$data.Amount) ;
+        if(inamount.isGreaterThan(this.balance)||inamount.isLessThanOrEqualTo('0')){
+          this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+        this.$data.inputnoticeA = " 输入值需要是数值 ";
+      }
+    },
+    getTokenImg(tokensymbol) {
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol, chainID);
+    },
+    async open(pairs) {
       const chainID = this.ethChainID ;
       const library = this.ethersprovider; 
       const account = this.ethAddress;
 
+      this.clearData();
+
       this.openRemoveDialog = true;
       this.$data.btnLoading =true;
+      this.$data.isShowRemove = true;
 
       console.log('open');
       
@@ -248,14 +297,20 @@ export default {
 
       this.$data.price = dataPrise.price.toSignificant(6);
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
+      this.$data.totalSupply = dataPrise.totalSupply.toString();
       
 
       console.log(dataPrise);
       this.$data.btnLoading =false;
 
 
+
     },
     percentage(i,cus) {
+      if(this.$data.btnLoading == true){
+        return ;
+      }
+
       if(cus==undefined){
         this.Amount = new  BigNumber(this.$data.balanceWei).div(1e18).times(i).toFixed(6);
       }
@@ -278,6 +333,11 @@ export default {
       const num = this.$data.Amount ;
       const numA = this.$data.AmountA ;
       const numB = this.$data.AmountB ;
+
+      if(this.inputcheckupA()== false){
+        return;
+
+      }
 
       this.$data.btnLoading = true ;
 
@@ -352,6 +412,9 @@ export default {
         
       } catch (error) {
         console.log(error);
+        this.$Notice.error({
+          title: "交易已取消",
+        });
       }
 
       this.$data.btnLoading = false ;
@@ -361,7 +424,10 @@ export default {
     },
     numchange:debounce(function(){
       
-      
+      if(this.inputcheckupA()== false){
+        return;
+
+      }
 
       const num = this.$data.Amount ;
       const result = this.$data.Amount /this.$data.balance ;
@@ -374,6 +440,31 @@ export default {
   },
   computed: {
     ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+    Reduceliquidit(){
+      
+      const  num = new  BigNumber(this.$data.Amount).times(1e18).div(this.$data.totalSupply).toFixed(6);
+      return num;
+
+    },
+    Residualliquidity(){
+      
+      const b1 =  new  BigNumber(Web3.utils.toWei(this.$data.balance));
+      const a1 =  new  BigNumber(Web3.utils.toWei(this.$data.Amount));
+      const s1 =  new  BigNumber(this.$data.totalSupply);
+        
+      const  num = (b1.minus(a1)).div(s1.minus(a1)).toFixed(6);
+      return num;
+
+    }
+  },
+  watch:{
+    balance:function(){
+      if(this.$data.Amount  !=''){
+        this.numchange();
+      }
+      
+
+    }
   }
 };
 </script>
@@ -614,5 +705,11 @@ export default {
       height: 48px;
     }
   }
+}
+.demo-spin-container {
+  display: inline-block;
+  width: 400px;
+  height: 200px;
+  position: relative;
 }
 </style>

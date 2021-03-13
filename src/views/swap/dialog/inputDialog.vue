@@ -165,11 +165,13 @@
           <div class="confirm-content">
             <div class="images-warpper">
               <img
-                src="../../../assets/img/comp.svg"
+                :src="getTokenImg(tokenB.symbol)"
+                width="48"
                 alt="comp"
               >
               <img
-                src="../../../assets/img/comp.svg"
+                :src="getTokenImg(tokenA.symbol)"
+                width="48"
                 alt="comp"
                 class="img2"
               >
@@ -301,12 +303,19 @@ export default {
     };
   },
   methods: {
+    clearData(){
+      this.$data.aTokenAmount = '';
+      this.$data.bTokenAmount = '';
+      this.$data.parameters =[];
+
+    },
     getTokenImg(tokensymbol) {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol, chainID);
     },
     async open(pairs) {
       console.log("open");
+      this.clearData();
 
       const chainID = this.ethChainID;
       const library = this.ethersprovider;
