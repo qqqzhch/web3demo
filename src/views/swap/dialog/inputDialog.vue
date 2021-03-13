@@ -28,7 +28,7 @@
             <input
               v-model="aTokenAmount"
               type="text"
-              class="amount-input"
+              :class="inputnoticeA? 'amount-input amount-input-error':'amount-input'"
               @keyup="aTokenChange"
             >
             <div
@@ -73,7 +73,7 @@
             <input
               v-model="bTokenAmount"
               type="text"
-              class="amount-input amount-input-error"
+              :class="inputnoticeB? 'amount-input amount-input-error':'amount-input'"
               @keyup="bTokenChange"
             >
             <div
@@ -364,8 +364,8 @@ export default {
 
       const num = this.$data.aTokenAmount;
 
-      if (this.checkAmount()) {
-        return;
+      if(this.inputcheckupA()==false){
+        return ;
       }
 
       const coinATokenAmount = new TokenAmount(
@@ -413,8 +413,10 @@ export default {
 
       const num = this.$data.bTokenAmount;
 
-      if (this.checkAmount()) {
-        return;
+      
+
+      if(this.inputcheckupB()==false){
+        return ;
       }
 
       this.$data.btnloading = true;
@@ -559,21 +561,18 @@ export default {
     },
     inputcheckupA() {
       try {
-        if (this.$data.aTokenAmount == "") {
-          // this.$data.bTokenAmount = '';
-          return;
-        }
-        const num = parseFloat(this.$data.aTokenAmount);
-        if (isNaN(num)) {
-          this.$data.inputnoticeA = " 输入值需要是数值 ";
+        // if(this.$data.aTokenAmount == ''){
+        //   // this.$data.bTokenAmount = '';
+        //   return ;
+        // }
+        const num = parseFloat( this.$data.aTokenAmount ) ;
+        if(isNaN(num)){
+          this.$data.inputnoticeA =  ' 输入值需要是数值 ';
           return false;
-        }
-        const inamount = new BigNumber(this.$data.aTokenAmount);
-        if (
-          inamount.isGreaterThan(this.tokenABalance) &&
-          inamount.isGreaterThan("0")
-        ) {
-          this.$data.inputnoticeA = " 输入值需要小于余额并且大于0 ";
+        } 
+        const inamount = new BigNumber(this.$data.aTokenAmount) ;
+        if(inamount.isGreaterThan(this.tokenABalance)||inamount.isLessThanOrEqualTo('0')){
+          this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
           return false;
         }
       } catch (error) {
@@ -583,21 +582,18 @@ export default {
     },
     inputcheckupB() {
       try {
-        if (this.$data.bTokenAmount == "") {
-          // this.$data.aTokenAmount = '';
-          return;
-        }
-        const num = parseFloat(this.$data.bTokenAmount);
-        if (isNaN(num)) {
-          this.$data.inputnoticeB = " 输入值需要是数值 ";
+        // if(this.$data.bTokenAmount == ''){
+        //   // this.$data.aTokenAmount = '';
+        //   return; 
+        // }
+        const num = parseFloat( this.$data.bTokenAmount ) ;
+        if(isNaN(num)){
+          this.$data.inputnoticeB =  ' 输入值需要是数值 ';
           return false;
-        }
-        const inamount = new BigNumber(this.$data.bTokenAmount);
-        if (
-          inamount.isGreaterThan(this.tokenBBalance) &&
-          inamount.isGreaterThan("0")
-        ) {
-          this.$data.inputnoticeB = " 输入值需要小于余额 并且大于0";
+        } 
+        const inamount = new BigNumber(this.$data.bTokenAmount) ;
+        if(inamount.isGreaterThan(this.tokenBBalance)||inamount.isLessThanOrEqualTo('0')){
+          this.$data.inputnoticeB =  ' 输入值需要小于余额 并且大于0';
           return false;
         }
       } catch (error) {

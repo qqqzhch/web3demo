@@ -11,10 +11,11 @@ import { INITIAL_ALLOWED_SLIPPAGE,ROUTER_ADDRESS } from '@/constants/index.js';
 import { splitSignature } from "@ethersproject/bytes";
 
 import {
-  // calculateGasMargin,
-  // getRouterContract,
+  calculateGasMargin,
+  getRouterContract,
   calculateSlippageAmount,
 } from "@/contacthelp/utils.js";
+import {  getGasPrice } from '@/contacthelp/ethusdt.js';
 
 
 export async function localApprove(library,chainId,account,pair,ToRemoveAmount){
@@ -52,7 +53,7 @@ export async function localApprove(library,chainId,account,pair,ToRemoveAmount){
 
      const liquidityAmount = new TokenAmount(
         pair.liquidityToken,
-        ToRemoveAmount.quotient
+        ToRemoveAmount.raw.toString()
       );
 
 
@@ -105,10 +106,11 @@ export async function localApprove(library,chainId,account,pair,ToRemoveAmount){
 export async function buildremoveparameter({library,chainId,account,pair,
   signatureData,ToRemoveAmount,currencyAmountA,currencyAmountB}){
 
+  console.log('buildremoveparameter');
 
   const liquidityAmount = new TokenAmount(
     pair.liquidityToken,
-    ToRemoveAmount.quotient
+    ToRemoveAmount.raw.toString()
   );
 
   /*
@@ -152,5 +154,32 @@ export async function buildremoveparameter({library,chainId,account,pair,
   return args;
 
 
+
+}
+
+
+export async function  removeliquidityGas (chainID,library,account,parameters){
+  const contract = getRouterContract(chainID, library, account);
+
+  const estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
+  const gasPrice = await getGasPrice(library);
+
+  const useWEI = estimatedGasLimit.mul(gasPrice);
+  const fee = Web3.utils.fromWei(useWEI.toString());
+
+  return fee;
+}
+
+export async function sendremoveliquidity(chainID,library,account,parameters){
+
+  const contract = getRouterContract(chainID, library, account);
+  const estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
+    
+  const result = await contract.removeLiquidityWithPermit(...parameters, {
+          ...{},
+          gasLimit: calculateGasMargin(estimatedGasLimit),
+        });
+        
+  return result;
 
 }

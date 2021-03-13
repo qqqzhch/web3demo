@@ -16,9 +16,12 @@
         <div class="remove-wrapper">
           <div class="title-content">
             <span class="card-title">Amount</span>
-            <div class="balance-item">
-              <span class="mr-2 text-secondary">scUSd/USDT LP Balance</span>
-              <span>{{ balance }} scUSD</span>
+            <div
+              v-if="tokenA&&tokenB"
+              class="balance-item"
+            >
+              <span class="mr-2 text-secondary">{{ tokenB.symbol }}/{{ tokenA.symbol }} LP Balance</span>
+              <span>{{ balance|formatNormalValue }} </span>
             </div>
           </div>
           <div class="input-wrapper flex">
@@ -26,6 +29,7 @@
               v-model="Amount"
               type="text"
               class="amount-input"
+              @keyup="numchange"
             >
           </div>
 
@@ -53,25 +57,35 @@
             MAX
           </div>
         </div>
-        <div class="price-warpper">
+        <div
+          v-if="tokenA&&tokenB"
+          class="price-warpper"
+        >
           <div>
-            <span>You will receive scUSD</span>
-            <p>1234.21 scUSD</p>
+            <span>You will receive {{ tokenA.symbol }}</span>
+            <p>{{ AmountA }} {{ tokenA.symbol }}</p>
           </div>
           <div>
-            <span>You will receive USDT</span>
-            <p>1234.21 USDT</p>
+            <span>You will receive {{ tokenB.symbol }}</span>
+            <p>{{ AmountB }} {{ tokenB.symbol }}</p>
           </div>
           <div>
             <span>Price</span>
             <div class="price">
-              <p>1 scUSD = 12USDT</p>
-              <p>12 USDT = 1scUSD</p>
+              <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
+              <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
             </div>
           </div>
         </div>
-        <div @click="showConfirmRemove">
-          <Buttons> Next </Buttons>
+        
+        <div v-if="btnLoading">
+          <Buttons> loading </Buttons>
+        </div>
+        <div
+          v-else
+          @click="showConfirmRemove"
+        >
+          <Buttons> Approve </Buttons>
         </div>
       </div>
 
@@ -100,8 +114,8 @@
               src="../../../assets/img/comp.svg"
               alt="copm"
             >
-            <p>1029.23</p>
-            <span>scUSD</span>
+            <p>{{ AmountA }}</p>
+            <span>{{ tokenA.symbol }}</span>
           </div>
           <div class="add-warpper">
             <img
@@ -114,16 +128,19 @@
               src="../../../assets/img/comp.svg"
               alt="copm"
             >
-            <p>1029.23</p>
-            <span>USDT</span>
+            <p>{{ AmountB }}</p>
+            <span>{{ tokenB.symbol }}</span>
           </div>
         </div>
-        <div class="price-warpper">
+        <div
+          v-if="tokenA&&tokenB"
+          class="price-warpper"
+        >
           <div>
             <span>Price</span>
             <div class="price">
-              <p>1 scUSD = 12USDT</p>
-              <p>12 USDT = 1scUSD</p>
+              <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
+              <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
             </div>
           </div>
           <div class="items-center">
@@ -135,43 +152,229 @@
           </div>
           <div>
             <span>Fee</span>
-            <p>0.1 ETH</p>
+            <p>{{ fee }} HT</p>
           </div>
         </div>
-        <Buttons> Confirm </Buttons>
+        <Buttons @click.native="RemoveConfirm">
+          Confirm
+        </Buttons>
       </div>
     </Modal>
+
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import {getTokenImg,readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
+
+import Web3 from 'web3';
+
+import { ChainId, Token, TokenAmount, Fetcher ,
+    Route, Percent, Router,TradeType,
+} from "@webfans/uniswapsdk";
+
+const debounce = require('debounce');
+
+import {useTokenApprove}  from '@/contacthelp/Approve.js';
+
+import { ROUTER_ADDRESS } from '@/constants/index.js';
+
+import event from '@/common/js/event';
+const BigNumber = require("bignumber.js");
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+
+import {readpariInfoNuminfo}  from '@/contactLogic/readpairpool.js';
+import {localApprove,buildremoveparameter,removeliquidityGas,
+sendremoveliquidity}  from '@/contactLogic/removeLiquidity.js';
+
+
+
+let pariInfo;
+
 export default {
   components: {
     Buttons: () => import("@/components/basic/buttons"),
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
   },
   data() {
     return {
       openRemoveDialog: false,
-      balance: "10000",
+      balance: "",
       Amount: "",
       isShowRemove: true,
       removeAmount:'',
+      tokenB:null,
+      tokenA:null,
+      liquidityToken:null,
+      tokenAAmountWei:'',
+      tokenBAmountWei:'',
+      AmountA:'--',
+      AmountB:'--',
+      SignatureData:'',
+      price:'',
+      priceinvert:'',
+      btnLoading:false,
+      fee:'',
+      parameter:[]
+      
     };
   },
   methods: {
-    open() {
+  async open(pairs) {
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
       this.openRemoveDialog = true;
+      this.$data.btnLoading =true;
+
+      console.log('open');
+      
+      this.$data.tokenA = pairs.Pair.tokenAmounts[0].token;
+      this.$data.tokenB = pairs.Pair.tokenAmounts[1].token;
+
+      const  dataPrise = await readpariInfoNuminfo(chainID,library,account, this.$data.tokenA.symbol,this.$data.tokenB.symbol);
+      
+      this.$data.balance = Web3.utils.fromWei(dataPrise.balance.toString(),'ether');
+      this.$data.balanceWei = dataPrise.balance.toString();
+      this.$data.liquidityToken = dataPrise.pairInfo.liquidityToken;
+
+      this.$data.tokenAAmountWei = dataPrise.aTokenbalance.raw.toString();
+      this.$data.tokenBAmountWei = dataPrise.bTokenbalance.raw.toString();
+
+      pariInfo = dataPrise.pairInfo;
+
+      this.$data.price = dataPrise.price.toSignificant(6);
+      this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
+      
+
+      console.log(dataPrise);
+      this.$data.btnLoading =false;
+
+
     },
-    percentage(i) {
-      this.Amount = this.balance * i;
+    percentage(i,cus) {
+      if(cus==undefined){
+        this.Amount = new  BigNumber(this.$data.balanceWei).div(1e18).times(i).toFixed(6);
+      }
+      
+
+      this.AmountA = new  BigNumber(this.$data.tokenAAmountWei).div(1e18).times(i).toFixed(6);
+      this.AmountB = new  BigNumber(this.$data.tokenBAmountWei).div(1e18).times(i).toFixed(6);
+
+      // this.Amount = new  BigNumber(this.balance * i).toFixed(6) ;
     },
     showRemove() {
       this.isShowRemove = true;
     },
-    showConfirmRemove() {
+   async showConfirmRemove() {
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+
+      
+      const num = this.$data.Amount ;
+      const numA = this.$data.AmountA ;
+      const numB = this.$data.AmountB ;
+
+      this.$data.btnLoading = true ;
+
+      
+
+      const ToRemoveAmount = new TokenAmount(
+        this.$data.liquidityToken,
+        Web3.utils.toWei(num, "ether")) ;
+     
+     try {
+      const   SignatureData  = await localApprove(library,chainID,account,pariInfo,ToRemoveAmount); 
+    
+      this.$data.SignatureData = SignatureData ;
+
+      const chainId = chainID;
+      const pair = pariInfo;
+      const signatureData = SignatureData ;
+
+      const currencyAmountA = new TokenAmount(
+        this.$data.tokenA,
+        Web3.utils.toWei(numA, "ether")) ;
+
+      
+      const currencyAmountB =  new TokenAmount(
+        this.$data.tokenB,
+        Web3.utils.toWei(numB, "ether")) ;
+
+      const parameter =  await buildremoveparameter({library,chainId,account,pair,
+  signatureData,ToRemoveAmount,currencyAmountA,currencyAmountB});
+  
+        console.log(parameter);
+        this.$data.parameter = parameter;
+       const  fee =  await  removeliquidityGas (chainID,library,account,parameter)  ;
+
+       this.$data.fee = fee ;
+
+
       this.isShowRemove = false;
+
+
+
+     } catch (error) {
+        console.log(error);
+       
+     }
+
+     this.$data.btnLoading = false ;
+      
+
+      
     },
+    async RemoveConfirm(){
+      const chainID = this.ethChainID ;
+      const library = this.ethersprovider; 
+      const account = this.ethAddress;
+      const  parameters = this.$data.parameter ;
+      
+      
+      try {
+        this.$data.btnLoading = true ;
+
+        const tx = await sendremoveliquidity(chainID,library,account,parameters) ;
+        const baseTip = `remove ${ this.$data.Amount } ${ this.$data.tokenA.symbol }/${ this.$data.tokenB.symbol } LP `;
+
+        this.$refs.haveSendtx.open(baseTip);  
+        this.openRemoveDialog = false;
+
+        event.$emit('sendtx',[tx,{
+          okinfo:baseTip+"成功",
+          failinfo:baseTip+'失败'
+        }]);
+        
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.$data.btnLoading = false ;
+
+
+      
+    },
+    numchange:debounce(function(){
+      
+      
+
+      const num = this.$data.Amount ;
+      const result = this.$data.Amount /this.$data.balance ;
+      
+      this.percentage(result,true);
+
+
+    
+    },1000)
   },
+  computed: {
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+  }
 };
 </script>
 
