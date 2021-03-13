@@ -137,7 +137,7 @@ export default {
           this.checkStatus();
 
           // 获取当前账号地址
-          await this.getCurrentAccount();
+          this.getCurrentAccount();
 
           // 获取tlamb余额
           // this.getTlambBalance();
