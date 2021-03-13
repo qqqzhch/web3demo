@@ -27,24 +27,32 @@
         </div>
       </div>
 
-      <div
-        class="connect-wrapper"
-      >
+      <div class="connect-wrapper">
         <buttons
-          v-if="ethAddress"
-          width="140px"
-          height="40px"
-        >
-          {{ `${this.ethAddress.slice(0,6)}...${this.ethAddress.slice(-6)}` }}
-        </buttons>
-        <buttons
-          v-else
+          v-if="!ethAddress"
           width="140px"
           height="40px"
           @click.native="openWalletDialog"
         >
           Connect Wallet
         </buttons>
+
+        <div
+          v-else
+          class="connected-content flex justify-between items-center"
+        >
+          <img
+            src="../../assets/img/metamask18.svg"
+            alt="metamask"
+          >
+          <span>{{ getShortAddress }}</span>
+          <button
+            class="btn changeBtn"
+            @click="openWalletDialog"
+          >
+            Change Wallet
+          </button>
+        </div>
       </div>
     </nav>
     <walletdialog ref="wallet" />
@@ -66,6 +74,9 @@ export default {
   },
     computed: {
     ...mapState(['ethAddress']),
+    getShortAddress() {
+      return `${this.ethAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
+    },
   },
 };
 </script>
@@ -101,6 +112,31 @@ export default {
         }
       }
     }
+
+    .connect-wrapper {
+    .connected-content {
+      img {
+        max-width: 14px;
+        margin-right: 8px;
+      }
+      span {
+        font-size: 12px;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 14px;
+        margin-right: 16px;
+      }
+      .changeBtn {
+        width: 148px;
+        height: 40px;
+        border: 1px solid #0058ff;
+        font-size: 16px;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 19px;
+      }
+    }
+  }
   }
 }
 </style>
