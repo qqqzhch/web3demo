@@ -28,15 +28,15 @@ export default {
       menuList: [
         {
           id: 'rewardMine',
-          name: '收益挖矿',
+          name: 'Earn',
         },
         {
           id: 'myMine',
-          name: '我的挖矿',
+          name: 'My Page',
         },
         {
           id: 'history',
-          name: '历史记录',
+          name: 'History',
         },
       ],
     };
