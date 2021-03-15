@@ -6,7 +6,7 @@
       :footer-hide="true"
       :closable="true"
     >
-      <div class="pledge-content">
+      <div v-if="isShowPledge" class="pledge-content">
         <p class="title text-center">
           Stake scUSD-USDT LP
         </p>
@@ -56,11 +56,74 @@
           </div>
         </div>
 
-        <div class="btn-warpper">
+        <div class="btn-warpper" @click="showConfirnDialog">
           <Buttons>Next</Buttons>
           <p class="buy">
             Buy scUSD
           </p>
+        </div>
+      </div>
+
+      <div v-else>
+        <div class="confirmPledge-content">
+          <div class="arrow-warpper" @click="showPledgeDialog">
+            <img src="../../../../assets/img/arrow-left.svg" alt="arrow-left">
+          </div>
+          <p class="title text-center">
+            Confirm
+          </p>
+          <div class="confirm-content">
+            <div class="images-warpper items-center">
+              <img
+                src="../../../../assets/img/comp.svg"
+                width="48"
+                alt="comp"
+              >
+              <img
+                src="../../../../assets/img/comp.svg"
+                width="48"
+                alt="comp"
+                class="img2"
+              >
+            </div>
+            <h2>1029.23</h2>
+            <p>scUSD/USDT LP</p>
+            <span>will be staked to mine</span>
+          </div>
+          <div class="price-warpper">
+            <div>
+              <span>Asset</span>
+              <div>
+                <div class="images-warpper">
+                  <img
+                    src="../../../../assets/img/comp.svg"
+                    width="14"
+                    alt="comp"
+                  >
+                  <img
+                    src="../../../../assets/img/comp.svg"
+                    width="14"
+                    alt="comp"
+                    class="img2"
+                  >
+                </div>
+                <p>scUSD/USDT LP</p>
+              </div>
+            </div>
+            <div>
+              <span>You will stake</span>
+              <p>11.123 scUSD/USDT LP</p>
+            </div>
+            <div>
+              <span>share of pool</span>
+              <p>1.23%</p>
+            </div>
+            <div>
+              <span>Fee</span>
+              <p>0.1 ETH</p>
+            </div>
+          </div>
+          <Buttons> Confirm </Buttons>
         </div>
       </div>
     </Modal>
@@ -75,15 +138,22 @@ export default {
   data() {
     return {
       openPledgeDialog: false,
-      balance:10000,
-      pledgeAmount:'',
+      isShowPledge: true,
+      balance: 10000,
+      pledgeAmount: "",
     };
   },
   methods: {
-    percentage(i){
-      const val= this.balance*i;
+    percentage(i) {
+      const val = this.balance * i;
       this.pledgeAmount = val;
-    }
+    },
+    showConfirnDialog() {
+      this.isShowPledge = false;
+    },
+    showPledgeDialog() {
+      this.isShowPledge = true;
+    },
   },
   computed: {},
 };
@@ -97,7 +167,7 @@ export default {
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
   .pledge-content {
-    padding:14px 28px;
+    padding: 14px 28px;
     .title {
       height: 28px;
       font-size: 24px;
@@ -181,8 +251,8 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .sharePool{
-          color: #00D075;
+        .sharePool {
+          color: #00d075;
         }
       }
       span {
@@ -217,6 +287,120 @@ export default {
         font-weight: 500;
         color: #0058ff;
       }
+    }
+  }
+
+  .confirmPledge-content {
+    padding: 16px 28px;
+    position: relative;
+    .arrow-warpper {
+      cursor: pointer;
+      position: absolute;
+      left: 24px;
+      top: 0;
+    }
+    .title {
+      height: 28px;
+      font-size: 24px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #14171c;
+      line-height: 28px;
+      margin-bottom: 40px;
+    }
+
+    .confirm-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      div {
+        width: 60px;
+        height: 48px;
+        position: relative;
+        img {
+          position: absolute;
+          left: -12px;
+          top: 0;
+        }
+        .img2 {
+          left: 12px;
+          top: 0;
+        }
+      }
+      h2 {
+        height: 47px;
+        font-size: 40px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 47px;
+        margin: 8px 0;
+      }
+      p {
+        height: 19px;
+        font-size: 16px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 19px;
+      }
+      span {
+        height: 32px;
+        font-size: 14px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #828489;
+        line-height: 16px;
+        text-align: center;
+        margin-top: 8px;
+      }
+    }
+
+    .price-warpper {
+      margin-top: 56px;
+      div {
+        display: flex;
+        justify-content: space-between;
+        .images-warpper {
+          width: 22px;
+          height: 14px;
+          position: relative;
+          margin-right: 8px;
+          img {
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+          .img2 {
+            left: 6px;
+            top: 0;
+            z-index: 3;
+          }
+        }
+      }
+
+      span {
+        height: 14px;
+        font-size: 14px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #828489;
+        line-height: 16px;
+      }
+      p {
+        height: 14px;
+        font-size: 14px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 16px;
+        margin-bottom: 16px;
+      }
+    }
+
+    .button-wrapper {
+      margin-top: 24px;
+      height: 48px;
     }
   }
 }
