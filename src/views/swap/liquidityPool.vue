@@ -105,6 +105,8 @@ import { mapState } from 'vuex';
 const debounce = require('debounce');
 
 const BigNumber = require("bignumber.js");
+import event from "@/common/js/event";
+
 
 import {getTokenImg} from '@/contactLogic/readbalance.js';
 
@@ -122,6 +124,11 @@ export default {
     loading: () => import("@/components/basic/loading.vue"),
   },
   mounted() {
+    //txsuccess
+    event.$on('txsuccess',()=>{
+      this.readList();
+
+    });
     if(this.ethChainID){
       this.$data.pairlistloading = true ;
       this.readList();

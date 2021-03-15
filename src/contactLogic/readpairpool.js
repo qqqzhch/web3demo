@@ -365,12 +365,14 @@ export async function checkApprove(chainID,library,account,coinATokenAmount,coin
 
   console.log(Aallowance,Ballowance);
   let tokenAnotNeed =false,tokenBnotNeed = false;
+  const aUserin = new BigNumber(coinATokenAmount.raw.toString());
+  const bUserin = new BigNumber(coinBTokenAmount.raw.toString());
 
-  if(coinATokenAmount.lessThan(Aallowance.toString())||coinATokenAmount.equalTo(Aallowance.toString())){
+  if(aUserin.lt(Aallowance.toString())||aUserin.eq(Aallowance.toString())){
     tokenAnotNeed = true;
   }
 
-  if(coinBTokenAmount.lessThan(Ballowance.toString())||coinBTokenAmount.equalTo(Ballowance.toString())){
+  if(bUserin.lt(Ballowance.toString())||bUserin.eq(Ballowance.toString())){
     tokenBnotNeed = true;
   }
   

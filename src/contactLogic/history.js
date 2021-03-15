@@ -1,7 +1,9 @@
 
-import {swapHistory} from "@/constants/apiconfig.js";
+import {swapHistory,pledgeHistory} from "@/constants/apiconfig.js";
 import _ from 'underscore';
 import tokens from "@/constants/token.json";
+
+import LPtoken from "@/constants/minertoken.json";
 
 export  async function readSwapHistory(chainID,account,pageNum,showNum){
     const data = await swapHistory(account,pageNum,showNum);
@@ -27,8 +29,46 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
 
 }
 
+export  async function readPledgeHistory(chainID,account,pageNum,showNum){
+    const data = await pledgeHistory(account,pageNum,showNum);
+    //['stake','exit','getReward']
+    
+    data.data.forEach((item)=>{
+        if(item.method_name == 'stake'){
+            item.show = stakeformat(item.txs,chainID);
+        }else if( item.method_name == 'exit'){
+            item.show = exitformat(item.txs,chainID);
+        }else if(item.method_name == 'getReward'){
+            item.show = getRewardformat(item.txs,chainID);
+
+        }
+        
+
+    });
+
+
+
+    console.log(data);
+    return data;
+
+}
+
 function tokenNameByaddress(address,chainID){
     const coinA= _.find(tokens.tokens,(item)=>{
+        if(item.chainId==chainID&&item.address.toLowerCase()==address.toLowerCase()){
+            return item;
+        }
+        // {chainId:chainID,address:address}
+    });
+    if(coinA==undefined){
+        return '';
+    }
+    return coinA.symbol;
+
+}
+
+function tokenNameByaddressStack(address,chainID){
+    const coinA= _.find(LPtoken.tokens,(item)=>{
         if(item.chainId==chainID&&item.address.toLowerCase()==address.toLowerCase()){
             return item;
         }
@@ -89,6 +129,60 @@ function addLiquidityformat(item,chainID){
         outamount:amountLP,
         tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
         tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
+    };
+
+}
+
+
+function stakeformat(item,chainID){
+    const inamount = item[0].amount;
+    
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    const  poolADDRESS = item[0].to ;
+
+    return {
+        inamount:inamount,
+        poolADDRESS,
+        tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
+    
+    };
+
+}
+
+function exitformat(item,chainID){
+    const outamountA = item[0].amount;
+    const outamountB = item[1].amount;
+    
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    const  tokenADDRESSB = item[1].amount_token_address ;
+
+    const  poolADDRESS = item[1].from ;
+
+    return {
+        outamountA,
+        outamountB,
+        poolADDRESS,
+        tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
+        tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
+    
+    };
+
+}
+
+function getRewardformat(item,chainID){
+    const inamount = item[0].amount;
+    
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    const  poolADDRESS = item[0].from ;
+
+    return {
+        outamount:inamount,
+        poolADDRESS,
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+    
     };
 
 }

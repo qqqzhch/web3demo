@@ -1,0 +1,23 @@
+{
+	"name": "stacke  Default List",
+	"tokens": [
+		{
+
+			"name": "USDT/scUSD",
+			"address": "0xd615665674Ae6e597B9D1758B5d0afB5e0601703",
+			"symbol": "USDT/scUSD",
+			"decimals": 18,
+			"chainId": 256,
+			"logoURI": "/tokenlogo/eth48.png"
+		},
+        {
+
+			"name": "scUSD",
+			"address": "0x0824f6b54027Fc44954E8CF2824344d8D54F3290",
+			"symbol": "scUSD",
+			"decimals": 18,
+			"chainId": 256,
+			"logoURI": "/tokenlogo/eth48.png"
+		}
+	]
+}

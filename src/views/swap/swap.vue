@@ -141,7 +141,7 @@
             class="details-items"
           >
             <p>Fee</p>
-            <span>{{ gasfee }} HT ≈ $ 0.2</span>
+            <span>{{ gasfee }} HT ≈ $ --</span>
           </div>
           <div class="details-items">
             <p>Price Tolerance</p>

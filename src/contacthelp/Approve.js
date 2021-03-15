@@ -5,6 +5,7 @@ import {
   calculateGasMargin,
 
 } from "./utils.js";
+const BigNumber = require("bignumber.js");
 
 export async function useTokenApprove(
     library,
@@ -18,11 +19,13 @@ export async function useTokenApprove(
     
     let result,gasEstimate;
 
-    //MaxUint256   授权最大值
+    //MaxUint256   
+    const bigAmount = new BigNumber(amount);
+    const approveAmount = bigAmount.times('1.1').toString();
 
     try {
-        gasEstimate = await contract.estimateGas.approve(spender,amount);
-        result = await contract.approve(spender,amount,{
+        gasEstimate = await contract.estimateGas.approve(spender,approveAmount);
+        result = await contract.approve(spender,approveAmount,{
           gasLimit: calculateGasMargin(gasEstimate)
         });
     } catch (error) {

@@ -115,18 +115,23 @@
           </div>
           <div v-else>
             <div v-if="tokenAnotNeed == false || tokenBnotNeed == false">
-              <Buttons
-                v-if="tokenAnotNeed == false"
-                @click.native="approveA"
-              >
-                {{ tokenA.symbol }} Approve
-              </Buttons>
-              <Buttons
-                v-if="tokenBnotNeed == false"
-                @click.native="approveB"
-              >
-                {{ tokenB.symbol }} Approve
-              </Buttons>
+              <div>
+                <Buttons
+                  v-if="tokenAnotNeed == false"
+                  @click.native="approveA"
+                >
+                  {{ tokenA.symbol }} Approve
+                </Buttons>
+              </div>
+              <br>
+              <div>
+                <Buttons
+                  v-if="tokenBnotNeed == false"
+                  @click.native="approveB"
+                >
+                  {{ tokenB.symbol }} Approve
+                </Buttons>
+              </div>
             </div>
 
             <div
@@ -508,6 +513,9 @@ export default {
         this.isShowInput = false;
       } catch (error) {
         console.log(error);
+        this.$Notice.error({
+          title: "获取手续费失败或逻辑异常",
+        });
       }
       this.$data.btnloading = false;
     },
@@ -670,7 +678,7 @@ export default {
       if (transaction) {
         const waitdata = await transaction.wait([1]);
         console.log(waitdata);
-        this.$data.tokenAnotNeed = true;
+        this.$data.tokenBnotNeed = true;
       } else {
         //取消授权
         //需要提示
