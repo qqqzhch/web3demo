@@ -125,12 +125,12 @@ const formatRate = (value) => {
   }
 };
 
-const formatRateWeek = (value) => {
+const formatReward = (value,days) => {
   if (!value) {
     return "0";
   }
 
-  return numeral(value * (60 * 60 * 24 * 7)).format("0,0");
+  return numeral(value * (60 * 60 * 24 * days)).format("0,0");
 };
 
 const formatBalance = (value) => {
@@ -158,6 +158,6 @@ export default {
   formatAmount,
   formatNormalValue,
   formatRate,
-  formatRateWeek,
+  formatReward,
   formatBalanceNumber,
 };
