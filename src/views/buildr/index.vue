@@ -1,24 +1,41 @@
 <template>
   <div class="buildr-warp">
     <div class="tab">
-      <div class="tab-item tab-active">
+      <div
+        class="tab-item tab-active"
+        @click="onChangeNav(2)"
+      >
         管理金库
       </div>
-      <div class="tab-item">
+      <div
+        class="tab-item"
+        @click="onChangeNav(3)"
+      >
         历史记录
       </div>
+      <div>
+        <button
+          class="btn"
+          @click="onChangeNav(1)"
+        >
+          创建金库
+        </button>
+      </div>
     </div>
-    <div v-if="isExistBalance">
+    <div v-if="pageIndex === 1">
+      <CreateView />
+    </div>
+    <div v-if="pageIndex === 2">
       <div class="manage-content box-shadow">
         <Overview />
       </div>
       <div><BalanceView /></div>
-      <div class="manage-content box-shadow mrg-tb-40">
-        <ManageView />
-      </div>
+      <!--<div class="manage-content box-shadow mrg-tb-40">-->
+      <!--<ManageView />-->
+      <!--</div>-->
     </div>
-    <div v-else>
-      <CreateView />
+    <div v-if="pageIndex === 3">
+      <TransactionHistory />
     </div>
   </div>
 </template>

@@ -1,7 +1,12 @@
 import { mapState } from 'vuex';
 import ScInput from '../components/ScInput.vue';
 import ScSelect from '../components/ScSelect.vue';
-import { fetchTokenBalance, fetchCollateralIndicators, fetchCurrencyPrice } from '@/contactLogic/buildr/create';
+import {
+  fetchTokenBalance,
+  fetchCollateralIndicators,
+  fetchCurrencyPrice,
+  fetchApprove
+} from '@/contactLogic/buildr/create';
 
 export default {
   name: 'create',
@@ -13,8 +18,9 @@ export default {
       stableNumber: 0,   // 稳定币数量
       targetRatio: 0,          // 抵押率
       liquidationRatio: 0,  // 清算抵押率
-      feeRate: 0,    //稳定费率
-      debtCap: 0,
+      feeRate: 0,    // 稳定费率
+      debtCap: 0,    // 全球scUSD债务上限
+      currencyPrice: 0,
     };
   },
   components: {
@@ -25,49 +31,46 @@ export default {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress'])
   },
   methods: {
-    async getCurrencyNumber() {
-      const params = {
-        currency: this.currency,
+    getParmas() {
+      return {
+        tokenName: this.currency,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
+        web3: this.web3,
       };
-
+    },
+    async getCurrencyNumber() {
+      const params = this.getParmas();
       this.currencyNumber = await fetchTokenBalance(params);
     },
     async getIndicators() {
-      const params = {
-        chainID: this.ethChainID,
-        account:  this.ethAddress,
-        library: this.ethersprovider,
-        tokenName: this.currency,
-        web3: this.web3
-      };
+      const params = this.getParmas();
       const { targetRatio, liquidationRatio, feeRate, debtCap } = await fetchCollateralIndicators(params);
-      // console.log(debtCap, 9999)
+
       this.targetRatio = targetRatio ? 1 / targetRatio : 0;
       this.liquidationRatio = liquidationRatio ? 1 / liquidationRatio : 0;
       this.feeRate = feeRate;
       this.debtCap = debtCap;
     },
     async getCurrencyPrice() {
-      const params = {
-        chainID: this.ethChainID,
-        account:  this.ethAddress,
-        library: this.ethersprovider,
-        tokenName: this.currency,
-        web3: this.web3
-      };
+      const params = this.getParmas();
       const { currencyPrice } = await fetchCurrencyPrice(params);
 
-      console.log(currencyPrice, 3333);
-
+      this.currencyPrice = currencyPrice;
     },
     onChangePledgeNumber(val) {
       this.pledgeNumber = val;
-      this.stableNumber = val / this.targetRatio;
-
-      this.getCurrencyPrice();
+      this.stableNumber = val  * this.currencyPrice / this.targetRatio;
+    },
+    async onApproveClick() {
+      const params = Object.assign({}, this.getParmas(), {
+        pledgeNumber: this.pledgeNumber,
+      });
+      const result = await fetchApprove(params);
+      if (result && result.hash) {
+        this.$parent.onChangeNav(2);
+      }
     }
   },
   created() {
