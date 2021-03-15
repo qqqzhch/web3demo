@@ -40,8 +40,7 @@ const routes = [
   {
     path: "/earn",
     name: "earn",
-    // component: () => import("@/views/earn/index.vue"),
-    component: () => import("../views/earn/myMine/dialog/extractReward.vue"),
+    component: () => import("@/views/earn/index.vue"),
     children: [
       {
         path: "",

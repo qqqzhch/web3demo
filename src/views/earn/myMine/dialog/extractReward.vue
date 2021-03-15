@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      openClaimDialog: true,
+      openClaimDialog: false,
       cashBalance:10000,
       claimAmount: "",
     };
