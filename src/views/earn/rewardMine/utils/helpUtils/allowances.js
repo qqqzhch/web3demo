@@ -1,6 +1,6 @@
 
 import { useStakingRewardsContract } from "./useContract.js";
-import { TokenAmount } from "@uniswap/sdk";
+import { TokenAmount } from "@webfans/uniswapsdk";
 
 export async function useStakingRewardsbalance(library, account, token) {
   let result;
