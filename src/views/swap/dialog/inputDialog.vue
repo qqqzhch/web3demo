@@ -715,6 +715,9 @@ export default {
   computed: {
     ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider"]),
   },
+  watch:{
+    
+  }
 };
 </script>
 

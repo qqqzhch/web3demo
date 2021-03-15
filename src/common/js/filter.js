@@ -31,6 +31,19 @@ const format1e18Value = (value) => {
   return returnVal;
 };
 
+const format1e18ValueList = (value) => {
+  if (!value) {
+    return 0;
+  }
+  const val = String(value);
+  const bigValue = new BigNumber(val);
+  const returnVal = bigValue.div("1e18").toFixed(2);
+  if (returnVal < 0.000001) {
+    return "<0.000001";
+  }
+  return returnVal;
+};
+
 const formatNormalValue = (value) => {
   if (!value) {
     return 0;
@@ -160,4 +173,5 @@ export default {
   formatRate,
   formatRateWeek,
   formatBalanceNumber,
+  format1e18ValueList
 };
