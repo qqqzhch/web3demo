@@ -44,9 +44,9 @@ export default {
       if (name === 'swap') {
         this.$router.push('/exchange');
       } else if(name === 'pool') {
-        this.$router.push('/pool');
+        this.$router.push('/exchange/pool');
       }else{
-          this.$router.push('/history');
+          this.$router.push('/exchange/history');
       }
     },
   },
