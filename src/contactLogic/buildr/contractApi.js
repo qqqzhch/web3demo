@@ -4,8 +4,10 @@ import {
   useCollateralContract,
   useproxyActionsContract,
   useExchangeRatesContract,
-  useProxyContract
+  useProxyContract,
+  useCollateralStateContract
 } from "../../contacthelp/useContract.js";
+import { calculateGasMargin } from "../../contacthelp/utils";
 
 /**
  *  获取某个币的数量
@@ -85,11 +87,8 @@ export async function useExchangeRatesContractRead(
   } catch (error) {
     console.log(error);
   }
-
-  console.log(result, 88888);
   return result;
 }
-
 
 export async function useProxyContractRead(
   library,
@@ -108,7 +107,24 @@ export async function useProxyContractRead(
   return result;
 }
 
-export  function useProxyActionsContractSigna(
+export async function useCollateralStateRead(
+  library,
+  account,
+  token,
+  methodName,
+  parameter
+) {
+  const contract = useCollateralStateContract(library, account, token.address, false);
+  let result;
+  try {
+    result = await contract[methodName](...parameter);
+  } catch (error) {
+    console.log(error);
+  }
+  return result;
+}
+
+export function useProxyActionsContractSigna(
   library,
   account,
   token

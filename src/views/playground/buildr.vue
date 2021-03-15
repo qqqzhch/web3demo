@@ -21,6 +21,9 @@
     <br>
     <button @click="tokenExit('LAMB')">
       取出LAMB
+    </button><br>
+    <button @click="readHistory">
+      读取历史记录
     </button>
   </div>
 </template>
@@ -37,6 +40,8 @@ import {getTokenBySymbol,getProxyActionsToken,getProxyToActionsToken,
 getCollateralToken}  from '@/contactLogic/buildr/tokens.js';
 
 import {useTokenApprove} from '@/contacthelp/Approve.js';
+
+import {readSwapHistory} from '@/contactLogic/history.js';
 
 
 import Web3 from 'web3';
@@ -212,6 +217,13 @@ export default {
         // this.$store.commit('changeTUSDBalance', tUSDBalance);
         console.log('tUSDBalance',tUSDBalance);
       }
+    },
+    async readHistory(){
+      const library = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainID = this.ethChainID;
+
+      readSwapHistory(chainID,account,1,10);
     }
      
   },

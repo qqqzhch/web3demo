@@ -38,7 +38,7 @@
               {{ item.price|formatNormalValue }}
             </p>
             <p class="change">
-              +12.34%
+              +--%
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@
             </div>
           </div>
           <div class="result-wrapper">
-            <span class="text-secondary mr-2">1 tLAMB ≈ 12.2343 USD</span>
+            <!-- <span class="text-secondary mr-2">1 tLAMB ≈ 12.2343 USD</span> -->
           </div>
         </div>
 
