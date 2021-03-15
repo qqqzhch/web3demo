@@ -1,1 +1,1 @@
-export const GET_COIN_NUM = 'GET_COIN_NUM';
+export const SET_POOLS_BALANCE_DATA = 'SET_POOLS_BALANCE_DATA';

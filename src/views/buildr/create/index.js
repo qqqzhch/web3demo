@@ -1,6 +1,6 @@
 import { mapState } from 'vuex';
 import ScInput from '../components/ScInput.vue';
-import ScSelect from '../components/ScSelect.vue';
+import { collateralPools } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
@@ -8,11 +8,11 @@ import {
   fetchApprove
 } from '@/contactLogic/buildr/create';
 
+
 export default {
   name: 'create',
   data() {
     return {
-      currency: 'LAMB',
       currencyNumber: 0, // 资产数量
       pledgeNumber: 0,   // 质押币数量
       stableNumber: 0,   // 稳定币数量
@@ -21,11 +21,12 @@ export default {
       feeRate: 0,    // 稳定费率
       debtCap: 0,    // 全球scUSD债务上限
       currencyPrice: 0,
+      collateralPools: collateralPools,
+      defaultPoolToken: collateralPools[0].token,
     };
   },
   components: {
     ScInput,
-    ScSelect
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress'])
@@ -33,7 +34,7 @@ export default {
   methods: {
     getParmas() {
       return {
-        tokenName: this.currency,
+        tokenName: this.defaultPoolToken,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
@@ -71,6 +72,13 @@ export default {
       if (result && result.hash) {
         this.$parent.onChangeNav(2);
       }
+    }
+  },
+  watch: {
+    defaultPoolToken() {
+      this.getCurrencyNumber();
+      this.getIndicators();
+      this.getCurrencyPrice();
     }
   },
   created() {

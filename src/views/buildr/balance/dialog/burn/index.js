@@ -13,7 +13,7 @@ export default {
       currPledgeRatio: 0,   // 当前抵押率
       currLiquidationPrice: 0, // 当前清算价格
       currFee: 0,
-      parentData: {},  // 父组件的数据
+      poolData: {},  // 父组件传过来的数据
     };
   },
   components: {
@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     // 打开弹窗
-    open() {
-      this.parentData = this.$parent.$data;
+    open(poolData) {
+      this.poolData = poolData;
       this.isOpen = true;
       this.step = 1;
       this.coinAmount = 0;
@@ -36,10 +36,10 @@ export default {
     },
     onMintClick() {
       this.isOpen = false;
-      this.$parent.openMintDialog();
+      this.$parent.openMintDialog(this.poolData);
     },
     onChangeValue(value) {
-      const { pledgeNumber, existingDebt, liquidationRatio, feeRate } = this.parentData;
+      const { pledgeNumber, existingDebt, liquidationRatio, feeRate } = this.poolData;
       // 销毁的scUSD
       this.coinAmount = value;
       // 计算手续费
@@ -57,7 +57,7 @@ export default {
     async onBurnClick() {
       const params = {
         type: 'burn',
-        tokenName: this.parentData.currency,
+        tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,

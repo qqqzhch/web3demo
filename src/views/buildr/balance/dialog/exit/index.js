@@ -12,7 +12,7 @@ export default {
       currMaxMintable: 0,   // 当前获取的授信scUSD额度
       currPledgeRatio: 0,   // 当前抵押率
       currLiquidationPrice: 0, // 当前清算价格
-      parentData: {},  // 父组件的数据
+      poolData: {},  // 父组件传过来的数据
     };
   },
   components: {
@@ -23,8 +23,8 @@ export default {
   },
   methods: {
     // 打开弹窗
-    open() {
-      this.parentData = this.$parent.$data;
+    open(poolData) {
+      this.poolData = poolData;
       this.isOpen = true;
       this.step = 1;
       this.coinAmount = 0;
@@ -34,10 +34,10 @@ export default {
     },
     onJoinClick () {
       this.isOpen = false;
-      this.$parent.openJoinDialog();
+      this.$parent.openJoinDialog(this.poolData);
     },
     onChangeValue(value) {
-      const { pledgeNumber, existingDebt, liquidationRatio } = this.parentData;
+      const { pledgeNumber, existingDebt, liquidationRatio } = this.poolData;
       // 减少资产
       this.coinAmount = value;
       // 总资产
@@ -53,7 +53,7 @@ export default {
     async onExitClick() {
       const params = {
         type: 'exit',
-        tokenName: this.parentData.currency,
+        tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,

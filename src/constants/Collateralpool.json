@@ -1,0 +1,23 @@
+[
+    {
+        "name":"LAMB",
+        "title":"LAMB pool1",
+        "titlei18":"LAMB_pool1",
+        "token":"LAMB",
+        "state":true
+    },
+    {
+        "name":"LAMB2",
+        "title":"LAMB pool2",
+        "titlei18":"LAMB_pool2",
+        "token":"LAMB",
+        "state":true
+    },
+    {
+        "name":"HT",
+        "title":"HT pool2",
+        "titlei18":"HT_pool2",
+        "token":"HT",
+        "state":false
+    }
+]

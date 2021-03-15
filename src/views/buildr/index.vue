@@ -29,6 +29,9 @@
       <div class="manage-content box-shadow">
         <Overview />
       </div>
+      <div class="title mrg-tb-20">
+        我的金库
+      </div>
       <div><BalanceView /></div>
       <!--<div class="manage-content box-shadow mrg-tb-40">-->
       <!--<ManageView />-->
@@ -88,6 +91,12 @@
       padding: 32px;
       box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
       border-radius: 12px;
+    }
+    .title{
+      font-size: 20px;
+      font-weight: 500;
+      color: #14171C;
+      line-height: 24px;
     }
     .tab {
       margin: 24px 0px 24px 100px;

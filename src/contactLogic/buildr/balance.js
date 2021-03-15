@@ -1,5 +1,6 @@
-import { getNameHex } from './create';
+import collPools from '@/constants/Collateralpool.json';
 import {getCollateralStateToken, getCollateralToken, getProxyActionsToken} from "./tokens";
+import { getNameHex } from './create';
 import {
   useCollateralContractRead,
   useCollateralStateRead,
@@ -7,6 +8,14 @@ import {
   useProxyActionsContractSigna,
 } from "./contractApi";
 import {calculateGasMargin} from "../../contacthelp/utils";
+
+/**
+ *  合约池列表
+ *  state: true 启用，false 未启用
+ * */
+
+export const collateralPools = collPools.filter(v => v.state);
+
 
 /**
  *  获取抵押资产

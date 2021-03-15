@@ -36,7 +36,7 @@
           <div class="grid-2">
             <div>数量</div>
             <div>
-              余额：{{ parentData.unlockedCollateral }} LAMB
+              余额：{{ poolData.unlockedCollateral }} LAMB
             </div>
           </div>
           <div>
@@ -72,7 +72,7 @@
           </ul>
           <ul class="grid-2">
             <li>抵押率</li>
-            <li><span class="f-green">{{ parentData.collateralisationRatio }}%</span>至{{ currPledgeRatio }} %</li>
+            <li><span class="f-green">{{ poolData.collateralisationRatio }}%</span>至{{ currPledgeRatio }} %</li>
           </ul>
           <ul class="grid-2">
             <li>清算价格</li>

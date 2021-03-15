@@ -1,41 +1,40 @@
 <template>
   <div class="balance">
-    <div class="title">
-      我的金库
-    </div>
     <div class="content">
       <div
-        class="build-item"
+        v-for="poolItem in poolsData"
+        :key="poolItem.tokenName"
+        class="build-item mrg-tb-20"
       >
         <div class="build-grid-1">
           <div>
-            <div>{{ currency }}</div>
-            <div>目标抵押率：{{ targetRatio * 100 }}%</div>
+            <div>{{ poolItem.tokenTitle }}</div>
+            <div>目标抵押率：{{ poolItem.targetRatio }}%</div>
           </div>
           <div class="build-grid-2">
             <div>
-              <div>清算价格：{{ liquidationPrice }} USD</div>
-              <div>抵押资产：{{ pledgeNumber }} LAMB</div>
-              <div>当前债务：{{ currentDebt }} scUSD</div>
-              <div>可释放LAMB：{{ unlockedCollateral }} LAMB</div>
-              <div>可提取授信的scUSD：{{ maxMintable }} scUSD</div>
-              <div>当前抵押率：{{ collateralisationRatio * 100 }}%</div>
+              <div>清算价格：{{ poolItem.liquidationPrice }} USD</div>
+              <div>抵押资产：{{ poolItem.pledgeNumber }} LAMB</div>
+              <div>当前债务：{{ poolItem.currentDebt }} scUSD</div>
+              <div>可释放LAMB：{{ poolItem.unlockedCollateral }} LAMB</div>
+              <div>可提取授信的scUSD：{{ poolItem.maxMintable }} scUSD</div>
+              <div>当前抵押率：{{ poolItem.collateralisationRatio }}%</div>
             </div>
             <div>
               <div>
                 <button
                   class="btn"
-                  @click="openJoinDialog"
+                  @click="openJoinDialog(poolItem)"
                 >
-                  抵押 & 提取 LAMB
+                  抵押/提取资产
                 </button>
               </div>
               <div class="mrg-tb-20">
                 <button
                   class="btn"
-                  @click="openMintDialog"
+                  @click="openMintDialog(poolItem)"
                 >
-                  铸造 & 偿还 scUSD
+                  铸造/偿还债务
                 </button>
               </div>
             </div>

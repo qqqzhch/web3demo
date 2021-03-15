@@ -11,9 +11,19 @@
     <div class="grid-2 mrg-tb-20">
       <div class="content-left">
         <div class="select-coins">
-          <ScSelect
-            title="LAMB"
-          />
+          <Select
+            v-model="defaultPoolToken"
+            class="input-inner"
+          >
+            <Option
+              v-for="item in collateralPools"
+              :key="item.name"
+              :value="item.token"
+              :selected="item.name === defaultPoolToken"
+            >
+              {{ item.name }}
+            </Option>
+          </Select>
         </div>
         <div class="grid-2 mrg-t-20 mrg-b-5">
           <div>

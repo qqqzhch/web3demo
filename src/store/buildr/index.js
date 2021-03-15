@@ -4,16 +4,16 @@ export default {
   namespaced: true,
   moduleName: 'buildr',
   state: {
-    coinNum: 0,
+    poolsData: [],
   },
   mutations: {
-    [types.GET_COIN_NUM] (state, { coinNum }) {
-      state.coinNum = coinNum;
+    [types.SET_POOLS_BALANCE_DATA] (state, poolsData) {
+      state.poolsData = poolsData;
     },
   },
   actions: {
-    setCompanyBasicInfo({ commit, state }, { coinNum }){
-      commit(types.GET_COIN_NUM, { coinNum });
+    setPoolsData({ commit }, poolsData){
+      commit(types.SET_POOLS_BALANCE_DATA, poolsData);
     }
   }
 };
