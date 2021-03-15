@@ -1,6 +1,6 @@
 import multiSymbolData from "./mineList/list.json";
 import tokenlist from "@/constants/token.json";
-import { TokenAmount } from "@uniswap/sdk";
+import { TokenAmount } from "@webfans/uniswapsdk";
 
 import _ from 'underscore';
 

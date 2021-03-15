@@ -47,6 +47,8 @@
 </template>
 
 <script>
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 export default {
   props: {
     data: {
@@ -57,8 +59,25 @@ export default {
     openStake(data) {
       this.$emit('openStake', data);
     },
-    getAPY(item) {
-      console.log(item);
+    getAPY(val) {
+      console.log(val);
+      let share;
+      const totalSupplyShare = new BigNumber(val.totalSupplyShare);
+      const totalAsset = new BigNumber(val.totalAssert);
+      const newReward = new BigNumber(val.newReward);
+      const big0 = new BigNumber('0');
+
+      if (totalSupplyShare.isEqualTo(big0) || totalAsset.isEqualTo(big0)) {
+        share = new BigNumber('1');
+      } else {
+        share = totalSupplyShare.div(totalAsset);
+      }
+
+      const rewards = totalAsset.plus(1).plus(newReward.div(1e18));
+      const allShares = totalSupplyShare.plus(share);
+
+      const apy = share.multipliedBy(rewards).div(allShares).minus(1).multipliedBy(365);
+      return apy;
     },
   },
 };
