@@ -1,25 +1,26 @@
 <template>
   <div class="pledge-dialog">
-    <Modal
-      v-model="openPledgeDialog"
-      class-name="pledge-modal"
-      :footer-hide="true"
-      :closable="true"
-    >
+    <Modal v-model="openPledgeDialog" class-name="pledge-modal" :footer-hide="true" :closable="true">
       <div v-if="isShowPledge" class="pledge-content">
         <p class="title text-center">
-          Stake scUSD-USDT LP
+          Stake {{ data.name }}
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
             <span class="card-title">Amount</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">scUSD/USDT LP Balance</span>
-              <span>{{ balance }} scUSD</span>
+              <span class="mr-2 text-secondary">{{ data.name }} Balance</span>
+              <span>{{ data.data && data.data.LPTokenbalance }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
-            <input v-model="pledgeAmount" type="text" class="amount-input">
+            <input
+              v-model.number="pledgeAmount"
+              type="number"
+              class="amount-input"
+              @keyup="checkApprove"
+              @input="handleInput"
+            >
           </div>
 
           <div class="percentage">
@@ -40,24 +41,41 @@
         <div class="price-warpper">
           <div class="price-item">
             <span>Total staked LP of pool</span>
-            <p>1234566 scUSD/USDT LP</p>
+            <p>{{ data.data && data.data.totalSupply }} {{ data.name }}</p>
           </div>
           <div class="price-item">
             <span>Yield</span>
-            <p>1000%</p>
+            <p>{{ data.data && data.data.rewardRate | formatRate }}</p>
           </div>
           <div class="price-item">
             <span>You will stake</span>
-            <p>1 scUSD/USDT LP</p>
+            <p>{{ pledgeAmount || 0 }} {{ data.name }}</p>
           </div>
           <div class="price-item">
             <span>share of pool</span>
-            <p><span class="sharePool">+1.02%</span> to 1.23%</p>
+            <p>
+              <span class="sharePool">{{ increaseRate }}</span>
+              to {{ totalRate }}
+            </p>
           </div>
         </div>
 
-        <div class="btn-warpper" @click="showConfirnDialog">
-          <Buttons>Next</Buttons>
+        <div class="btn-warpper">
+          <template v-if="needApprove">
+            <Buttons v-if="approveLoading" class="dialogBtn">
+              loading...
+            </Buttons>
+            <Buttons v-else class="dialogBtn" @click.native="approveTx">
+              Approve
+            </Buttons>
+          </template>
+
+          <template v-if="!needApprove">
+            <Buttons @click.native="showConfirnDialog">
+              Next
+            </Buttons>
+          </template>
+
           <p class="buy">
             Buy scUSD
           </p>
@@ -74,17 +92,8 @@
           </p>
           <div class="confirm-content">
             <div class="images-warpper items-center">
-              <img
-                src="../../../../assets/img/comp.svg"
-                width="48"
-                alt="comp"
-              >
-              <img
-                src="../../../../assets/img/comp.svg"
-                width="48"
-                alt="comp"
-                class="img2"
-              >
+              <img src="../../../../assets/img/comp.svg" width="48" alt="comp">
+              <img src="../../../../assets/img/comp.svg" width="48" alt="comp" class="img2">
             </div>
             <h2>1029.23</h2>
             <p>scUSD/USDT LP</p>
@@ -95,17 +104,8 @@
               <span>Asset</span>
               <div>
                 <div class="images-warpper">
-                  <img
-                    src="../../../../assets/img/comp.svg"
-                    width="14"
-                    alt="comp"
-                  >
-                  <img
-                    src="../../../../assets/img/comp.svg"
-                    width="14"
-                    alt="comp"
-                    class="img2"
-                  >
+                  <img src="../../../../assets/img/comp.svg" width="14" alt="comp">
+                  <img src="../../../../assets/img/comp.svg" width="14" alt="comp" class="img2">
                 </div>
                 <p>scUSD/USDT LP</p>
               </div>
@@ -123,7 +123,7 @@
               <p>0.1 ETH</p>
             </div>
           </div>
-          <Buttons> Confirm </Buttons>
+          <Buttons>Confirm</Buttons>
         </div>
       </div>
     </Modal>
@@ -131,31 +131,191 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import numeral from 'numeral';
+import { debounce } from 'debounce';
+import { TokenAmount, Token } from '@webfans/uniswapsdk';
+import { useNeedApproveInput } from '@/contacthelp/useNeedApprove.js';
+import { useApproveCallback } from '@/contacthelp/useApproveCallback.js';
+// import { useTokenApprove } from '@/contacthelp/Approve.js';
 export default {
   components: {
-    Buttons: () => import("@/components/basic/buttons"),
+    Buttons: () => import('@/components/basic/buttons'),
   },
   data() {
     return {
       openPledgeDialog: false,
       isShowPledge: true,
-      balance: 10000,
-      pledgeAmount: "",
+      pledgeAmount: '',
+      data: {},
+      needApprove: false,
+      approveLoading: false,
+      previousData: '',
+      tokenObj: {},
+      amountApproveObj: {},
     };
   },
-  methods: {
-    percentage(i) {
-      const val = this.balance * i;
-      this.pledgeAmount = val;
+  computed: {
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3']),
+    increaseRate() {
+      const inputAmount = new BigNumber(this.pledgeAmount);
+      const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
+      const rate = inputAmount.div(amountStake.plus(inputAmount)).decimalPlaces(6).toNumber();
+      // console.log({rate});
+      return numeral(rate).format('0.[0000]%');
     },
+    totalRate() {
+      const inputAmount = new BigNumber(this.pledgeAmount);
+      const balanceAmount = new BigNumber(this.data && this.data.data && this.data.data.LPTokenbalance);
+      const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
+      const rate = inputAmount.div(balanceAmount.plus(amountStake).plus(inputAmount)).decimalPlaces(6).toNumber();
+      // console.log({rate});
+      return numeral(rate).format('0.[0000]%');
+    },
+  },
+  methods: {
     showConfirnDialog() {
       this.isShowPledge = false;
     },
     showPledgeDialog() {
       this.isShowPledge = true;
     },
+    confirm() {
+      console.log('aa');
+    },
+    open(data) {
+      console.log(data);
+      this.data = data;
+      this.openPledgeDialog = true;
+    },
+    percentage(val) {
+      const balance = new BigNumber(this.data.data.LPTokenbalance);
+      const percent = new BigNumber(val);
+      this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+    },
+
+    // 限制Input输入小数点的长度
+    handleInput(e) {
+      const stringValue = e.target.value.toString();
+      const regex = /^\d*(\.\d{1,6})?$/;
+      if (!stringValue.match(regex) && this.pledgeAmount !== '') {
+        this.pledgeAmount = this.previousData;
+      }
+      this.previousData = this.pledgeAmount;
+    },
+
+    // 检查授权
+    checkApprove: debounce(async function () {
+      try {
+        const BN = this.web3.utils.BN;
+        const chainId = this.ethChainID;
+        const address = this.data && this.data.data && this.data.data.LPTokenAddress;
+        const decimals = this.data && this.data.decimals;
+        const symbol = this.data && this.data.symbol;
+        const tokenData = new Token(chainId, address, decimals, symbol);
+
+        // 需要将数据转为web3支持的BN
+        const amount = new BN(this.pledgeAmount);
+        const amountToApprove = new TokenAmount(tokenData, this.web3.utils.toWei(amount, 'ether'));
+
+        this.tokenObj.dataAddress = this.data && this.data.address;
+        this.tokenObj.amountToApprove = amountToApprove;
+
+        // 检查授权
+        this.needApprove = await useNeedApproveInput(
+          this.ethAddress,
+          this.ethersprovider,
+          amountToApprove,
+          this.tokenObj.dataAddress
+        );
+        console.log(this.needApprove);
+      } catch (error) {
+        console.log(error);
+      }
+    }, 800),
+
+    // 授权操作
+    async approveTx() {
+      if (!this.checkData()) {
+        return false;
+      }
+      try {
+        this.approveLoading = true;
+        const result = await useApproveCallback(
+          this.ethAddress,
+          this.ethersprovider,
+          this.tokenObj.amountToApprove,
+          this.tokenObj.dataAddress
+        );
+        const txInfo = await this.getTransaction(result.hash);
+
+        if (txInfo.status === false) {
+          this.approveLoading = false;
+          throw new Error('发送交易失败');
+        } else {
+          const timer = setTimeout(() => {
+            this.approveLoading = false;
+            this.needApprove = false;
+            clearTimeout(timer);
+          }, 1000);
+        }
+      } catch (error) {
+        this.approveLoading = false;
+        console.log(error);
+      }
+    },
+
+    // 检验数据是否合法
+    checkData() {
+      if (this.pledgeAmount == '') {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n30'),
+        });
+        return false;
+      }
+      if (parseFloat(this.pledgeAmount) <= 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n31'),
+        });
+        return false;
+      }
+
+      return true;
+    },
+
+    getTx(hash) {
+      return new Promise((resolve, reject) => {
+        this.web3.eth.getTransactionReceipt(hash, (error, data) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(data);
+        });
+      });
+    },
+
+    getTransaction(hash) {
+      let timeid;
+      return new Promise((resolve) => {
+        timeid = setInterval(async () => {
+          const data = await this.getTx(hash);
+          if (data && data.blockNumber != null) {
+            clearInterval(timeid);
+            resolve(data);
+          }
+        }, 1000 * 10);
+      });
+    },
   },
-  computed: {},
+  watch: {
+    pledgeAmount() {
+      this.checkApprove();
+    },
+  },
 };
 </script>
 
