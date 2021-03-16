@@ -4,7 +4,7 @@ import { TokenAmount } from "@webfans/uniswapsdk";
 
 import _ from 'underscore';
 
-import { useStakingRewardsbalance, useStakingRewardstotalSupply, useStakingRewardsRead } from "./helpUtils/allowances.js";
+import { useStakingRewardsbalance, useStakingRewardstotalSupply, useStakingRewardsRead } from "../../utils/helpUtils/allowances.js";
 
 function getTokenInfo(chainID, address) {
   let result;

@@ -26,12 +26,6 @@ export default {
       this.loadData();
     });
   },
-  mounted() {
-    //txsuccess
-    event.$on('txsuccess',()=>{
-      this.loadData();
-    });
-  },
   methods: {
     ...mapActions('buildr', ['setPoolsData']),
     getParmas(item) {
