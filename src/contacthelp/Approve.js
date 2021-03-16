@@ -21,7 +21,7 @@ export async function useTokenApprove(
 
     //MaxUint256   
     const bigAmount = new BigNumber(amount);
-    const approveAmount = bigAmount.times('1.1').toString();
+    const approveAmount = bigAmount.times('1.1').toFixed(0);
 
     try {
         gasEstimate = await contract.estimateGas.approve(spender,approveAmount);
