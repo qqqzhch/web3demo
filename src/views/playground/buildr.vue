@@ -24,6 +24,10 @@
     </button><br>
     <button @click="readHistory">
       读取历史记录
+    </button><br>
+    <button @click="htPrise">
+      <br>
+      读取ht价格
     </button>
   </div>
 </template>
@@ -45,6 +49,8 @@ import {readSwapHistory,readPledgeHistory} from '@/contactLogic/history.js';
 
 
 import Web3 from 'web3';
+
+import   {gethtPrise} from '@/contactLogic/tokenPrice.js';
 
 
 export default {
@@ -225,6 +231,13 @@ export default {
 
       // readSwapHistory(chainID,account,1,10);
       readPledgeHistory(chainID,account,1,10);
+    },
+   async htPrise(){
+
+     const data = await gethtPrise();
+
+     console.log(data);
+
     }
      
   },

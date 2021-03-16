@@ -125,6 +125,7 @@ export default {
   },
   mounted() {
     //txsuccess
+    console.log('- -');
     event.$on('txsuccess',()=>{
       this.readList();
 

@@ -10,7 +10,8 @@ const store = new vuex.Store({
     ethAddress: "",
     ethChainID: "",
     web3:null,
-    ethersprovider:null
+    ethersprovider:null,
+    htPrise:''
   },
   mutations: {
     changeToken(state, token) {
@@ -28,6 +29,11 @@ const store = new vuex.Store({
       state.web3=obj.web3;
       state.ethersprovider=obj.ethersprovider;
 
+    },
+    htprise(state,prise){
+      
+      state.htPrise=prise;
+      
     }
   },
 });

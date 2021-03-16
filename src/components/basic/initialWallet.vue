@@ -3,14 +3,26 @@ import Web3 from 'web3';
 import { mapState } from 'vuex';
 import { ethers } from 'ethers';
 
+import   {gethtPrise} from '@/contactLogic/tokenPrice.js';
+
 export default {
   data() {
     return {};
   },
   mounted() {
     this.initEth();
+    this.htPrise();
   },
   methods: {
+   async htPrise(){
+
+     const data = await gethtPrise();
+     this.$store.commit('htprise', data);
+     console.log('ht 价格',data);
+
+     
+
+    },
     // 检查是否连接
     async isEthConnect() {
       try {
@@ -99,6 +111,7 @@ export default {
     // eth初始化
     async initEth() {
       try {
+        console.log('initEth');
         let web3Provider;
 
         if (window.ethereum) {
@@ -111,6 +124,7 @@ export default {
           //   title: this.$t('notice.n'),
           //   desc: this.$t('notice.n11'),
           // });
+          
           return false;
         }
         const web3 = new Web3(web3Provider);
@@ -120,15 +134,18 @@ export default {
 
         const isConnect = await this.isEthConnect();
 
+        await this.getEthChainID();
+
         if (!isConnect) {
           // this.$Notice.warning({
           //   title: this.$t('notice.n'),
           //   desc: this.$t('notice.n1'),
           // });
+          
           return false;
         } else {
           // 获取当前chainId
-          await this.getEthChainID();
+          
 
           // 初始化合约
           // await this.initContract();

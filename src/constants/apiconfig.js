@@ -43,3 +43,12 @@ export  async function pledgeHistory(account,pageNum=1,showNum=10){
 
 
 }
+
+export async function coinohlc(id){
+  const data =  await  axios.get(`https://api.coingecko.com/api/v3/coins/${id}/ohlc?vs_currency=usd&days=1`);
+
+ console.log(data);
+ return data.data;
+
+
+}

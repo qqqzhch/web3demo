@@ -161,7 +161,7 @@
             </div>
             <div>
               <span>Fee</span>
-              <p>{{ fee }} HT</p>
+              <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrise*fee |formatBalanceNumber }}</p>
             </div>
           </div>
           <Buttons @click.native="RemoveConfirm">
@@ -439,7 +439,7 @@ export default {
     },1000)
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrise']),
     Reduceliquidit(){
       
       const  num = new  BigNumber(this.$data.Amount).times(1e18).div(this.$data.totalSupply).toFixed(6);

@@ -141,7 +141,7 @@
             class="details-items"
           >
             <p>Fee</p>
-            <span>{{ gasfee }} HT ≈ $ --</span>
+            <span>{{ gasfee|formatBalanceNumber }} HT ≈ $ {{ htPrise*gasfee |formatBalanceNumber }}</span>
           </div>
           <div class="details-items">
             <p>Price Tolerance</p>
@@ -492,7 +492,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrise']),
   },
  async mounted() {
     if(this.ethChainID){
