@@ -6,8 +6,8 @@
     <p class="subTitle">
       Designated mining, users can enjoy lower risk mining with a super high yield.
     </p>
-
     <card :data="data" @openStake="openStake" />
+    <pledgeDialog ref="pledge" />
   </div>
 </template>
 
@@ -20,11 +20,12 @@ export default {
   },
   methods: {
     openStake(data) {
-      console.log(data);
-    }
+      this.$refs.pledge.open(data);
+    },
   },
   components: {
     card: () => import('./earnCard.vue'),
+    pledgeDialog: () => import('../dialog/pledgeDialog.vue'),
   },
 };
 </script>

@@ -119,8 +119,13 @@
               <p>0.1 ETH</p>
             </div>
           </div>
-          <Buttons @click.native="confirmSendTx">
+
+          <Buttons v-if="sendLoading === false" @click.native="confirmSendTx">
             Confirm
+          </Buttons>
+
+          <Buttons v-else>
+            loading...
           </Buttons>
         </div>
       </div>
@@ -138,8 +143,10 @@ import { TokenAmount, Token } from '@webfans/uniswapsdk';
 import { useNeedApproveInput } from '@/contacthelp/useNeedApprove.js';
 import { useApproveCallback } from '@/contacthelp/useApproveCallback.js';
 import { useStakingRewardsContractSigna } from '../utils/helpUtils/allowances.js';
-// import { useTokenApprove } from '@/contacthelp/Approve.js';
+import getTx from '../utils/getTx.vue';
 export default {
+  mixins: [getTx],
+  inject: ['reload'],
   components: {
     Buttons: () => import('@/components/basic/buttons'),
   },
@@ -154,6 +161,7 @@ export default {
       previousData: '',
       tokenObj: {},
       amountApproveObj: {},
+      sendLoading: false
     };
   },
   computed: {
@@ -205,15 +213,14 @@ export default {
     // 检查授权
     checkApprove: debounce(async function () {
       try {
-        const BN = this.web3.utils.BN;
         const chainId = this.ethChainID;
         const address = this.data && this.data.data && this.data.data.LPTokenAddress;
         const decimals = this.data && this.data.decimals;
         const symbol = this.data && this.data.symbol;
         const tokenData = new Token(chainId, address, decimals, symbol);
 
-        // 需要将数据转为web3支持的BN
-        const amount = new BN(this.pledgeAmount);
+        // 需要将数据转为字符串格式
+        const amount = this.pledgeAmount.toString();
         const amountToApprove = new TokenAmount(tokenData, this.web3.utils.toWei(amount, 'ether'));
 
         this.tokenObj.dataAddress = this.data && this.data.address;
@@ -283,41 +290,15 @@ export default {
       return true;
     },
 
-    getTx(hash) {
-      return new Promise((resolve, reject) => {
-        this.web3.eth.getTransactionReceipt(hash, (error, data) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(data);
-        });
-      });
-    },
-
-    getTransaction(hash) {
-      let timeid;
-      return new Promise((resolve) => {
-        timeid = setInterval(async () => {
-          const data = await this.getTx(hash);
-          if (data && data.blockNumber !== null) {
-            clearInterval(timeid);
-            resolve(data);
-          }
-        }, 1000 * 10);
-      });
-    },
-
+    // 质押操作
     async confirmSendTx() {
       if (!this.checkData()) {
         return false;
       }
       this.sendLoading = true;
-      const BN = this.web3.utils.BN;
-      const num = new BN(this.pledgeAmount);
+      const num = this.pledgeAmount.toString();
       const amount = this.web3.utils.toWei(num, 'ether');
-      console.log(amount);
       const tokenJson = this.data;
-      console.log(tokenJson);
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
         const result = await stakingRewardsContract.stake(amount, { gasLimit: 350000 });
@@ -327,17 +308,20 @@ export default {
         if (txInfo.status === false) {
           // console.log('status', txInfo);
           this.$Notice.error({
-            title:this.$t('notice.n32'),
+            title: this.$t('notice.n32'),
           });
         } else {
+          this.reload();
           this.$Notice.success({
             title: this.$t('notice.n33'),
           });
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.sendLoading = false;
       }
-    }
+    },
   },
   watch: {
     pledgeAmount() {
