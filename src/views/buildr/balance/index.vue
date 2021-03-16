@@ -48,6 +48,7 @@
       <BurnDialog ref="tokenBurn" />
       <ExitDialog ref="tokenExit" />
     </div>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 

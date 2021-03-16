@@ -58,16 +58,8 @@
         </div>
         <div>
           <ul class="grid-2">
-            <li>提取授信资产：</li>
-            <li>scUSD</li>
-          </ul>
-          <ul class="grid-2">
-            <li>提取数量：</li>
-            <li><span>{{ coinAmount }}</span> scUSD</li>
-          </ul>
-          <ul class="grid-2">
-            <li>可提取授信的scUSD：</li>
-            <li><span>{{ currMaxMintable }}scUSD</span>至<span>{{ currMaxMintable - coinAmount }}</span> </li>
+            <li>铸造资产：</li>
+            <li><span>{{ poolData.existingDebt }}scUSD</span>至<span>{{ poolData.existingDebt + coinAmount }}</span> </li>
           </ul>
           <ul class="grid-2">
             <li>抵押率</li>

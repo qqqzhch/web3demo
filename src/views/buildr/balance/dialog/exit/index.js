@@ -51,6 +51,7 @@ export default {
       this.step = 2;
     },
     async onExitClick() {
+      this.isOpen = false;
       const params = {
         type: 'exit',
         tokenName: this.poolData.tokenName,
@@ -59,9 +60,10 @@ export default {
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-      }
-      await fetchBalanaceChange(params);
-      this.isOpen = false;
+        unit: this.poolData.tokenName,
+      };
+      const tx = await fetchBalanaceChange(params);
+      this.$parent.sendtx(tx);
     }
   },
 };

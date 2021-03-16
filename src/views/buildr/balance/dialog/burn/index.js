@@ -14,10 +14,11 @@ export default {
       currLiquidationPrice: 0, // 当前清算价格
       currFee: 0,
       poolData: {},  // 父组件传过来的数据
+      unit: 'scUSD',
     };
   },
   components: {
-    ScInput
+    ScInput,
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress'])
@@ -32,7 +33,7 @@ export default {
       this.currMaxMintable = 0;
       this.currPledgeRatio = 0;
       this.currLiquidationPrice = 0;
-      this.currFee = 0
+      this.currFee = 0;
     },
     onMintClick() {
       this.isOpen = false;
@@ -55,6 +56,7 @@ export default {
       this.step = 2;
     },
     async onBurnClick() {
+      this.isOpen = false;
       const params = {
         type: 'burn',
         tokenName: this.poolData.tokenName,
@@ -63,9 +65,10 @@ export default {
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-      }
-      await fetchBalanaceChange(params);
-      this.isOpen = false;
+        unit: this.unit,
+      };
+      const tx = await fetchBalanaceChange(params);
+      this.$parent.sendtx(tx);
     }
   },
 };

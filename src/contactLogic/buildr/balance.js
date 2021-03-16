@@ -67,7 +67,7 @@ export async function contractEstimateGas(contract, methodName, parameters) {
  *
  * */
 
-export const fetchBalanaceChange = async ({ type, web3, chainID, account, library, tokenName, coinAmount}) => {
+export const fetchBalanaceChange = async ({ type, web3, chainID, account, library, tokenName, coinAmount, unit}) => {
   const token = getProxyActionsToken(chainID);
   const ProxyActionsContract = useProxyActionsContractSigna(library, account, token);
   const currencyKey = getNameHex(web3, tokenName);
@@ -76,29 +76,30 @@ export const fetchBalanaceChange = async ({ type, web3, chainID, account, librar
   // console.log(type, web3, chainID, account, library, tokenName, coinAmount, currencyKey, amount, 9999);
 
   try {
-    let result;
+    let response;
     switch (type) {
       case 'join':
-        result = await contractEstimateGas(ProxyActionsContract, 'join', [currencyKey, amount]);
+        response = await contractEstimateGas(ProxyActionsContract, 'join', [currencyKey, amount]);
         break;
       case 'exit':
-        result = await contractEstimateGas(ProxyActionsContract, 'exit', [currencyKey, amount]);
+        response = await contractEstimateGas(ProxyActionsContract, 'exit', [currencyKey, amount]);
         break;
       case 'mint':
-        result = await contractEstimateGas(ProxyActionsContract, 'mint', [currencyKey, amount]);
+        response = await contractEstimateGas(ProxyActionsContract, 'mint', [currencyKey, amount]);
         break;
       case 'burn':
-        result = await contractEstimateGas(ProxyActionsContract, 'burn', [currencyKey, amount]);
+        response = await contractEstimateGas(ProxyActionsContract, 'burn', [currencyKey, amount]);
         break;
     }
-    console.log(result);
+    // console.log(result);
+    return {
+      base: `${type.toUpperCase()} ${coinAmount} ${unit}`,
+      hash: response.hash,
+      response: response,
+    };
   } catch (error) {
     console.log(error);
   }
 };
 
-
-/**
-
- * */
 

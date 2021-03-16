@@ -1,4 +1,5 @@
 import { mapState, mapActions } from "vuex";
+import event from '@/common/js/event';
 import { collateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
@@ -30,6 +31,12 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     }
+  },
+  mounted() {
+    //txsuccess
+    event.$on('txsuccess',()=>{
+      this.loadData();
+    });
   },
   methods: {
     ...mapActions('buildr', ['setPoolsData']),
@@ -93,6 +100,13 @@ export default {
     },
     openExitDialog(poolData) {
       this.$refs.tokenExit.open(poolData);
+    },
+    sendtx(tx) {
+      this.$refs.haveSendtx.open(tx.base);
+      event.$emit('sendtx',[tx.response, {
+        okinfo: tx.base+"成功",
+        failinfo: tx.base+'失败'
+      }]);
     }
   },
   watch: {
@@ -110,7 +124,8 @@ export default {
     JoinDialog: () => import('./dialog/join/index.vue'),
     MintDialog: () => import('./dialog/mint/index.vue'),
     BurnDialog: () => import('./dialog/burn/index.vue'),
-    ExitDialog: () => import('./dialog/exit/index.vue')
+    ExitDialog: () => import('./dialog/exit/index.vue'),
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
   },
   created() {
     if(this.isReady) {

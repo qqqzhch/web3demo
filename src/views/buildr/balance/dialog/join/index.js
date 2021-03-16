@@ -49,9 +49,11 @@ export default {
       // 新增资产
       this.coinAmount = value;
       // 总资产 = 已有资产 + 新增资产
-      const totalPledgeNumber = pledgeNumber + this.currPledgeNumber;
+      const totalPledgeNumber = pledgeNumber + this.coinAmount;
       // 新的抵押率 = 总资产 / 总负债
       this.currPledgeRatio = totalPledgeNumber / existingDebt;
+
+      this.currPledgeRatio > targetRatio;
       // 清算价格：
       this.currLiquidationPrice = totalPledgeNumber ? liquidationRatio * existingDebt / totalPledgeNumber : 0;
     },
@@ -59,6 +61,7 @@ export default {
       this.step = 2;
     },
     async onJoinClick() {
+      this.isOpen = false;
       const params = {
         type: this.type,
         tokenName: this.poolData.tokenName,
@@ -67,9 +70,10 @@ export default {
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-      }
-      await fetchBalanaceChange(params);
-      this.isOpen = false;
+        unit: this.poolData.tokenName,
+      };
+      const tx = await fetchBalanaceChange(params);
+      this.$parent.sendtx(tx);
     }
   },
 };

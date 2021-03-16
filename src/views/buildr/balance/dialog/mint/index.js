@@ -12,6 +12,7 @@ export default {
       currMaxMintable: 0, // 可铸造的scUSD
       currLiquidationPrice: 0, // 当前清算价格
       poolData: {},  // 父组件传过来的数据
+      unit: 'scUSD',
     };
   },
   components: {
@@ -49,6 +50,7 @@ export default {
       this.step = 2;
     },
     async onMintClick() {
+      this.isOpen = false;
       const params = {
         type: 'mint',
         tokenName: this.poolData.tokenName,
@@ -57,10 +59,11 @@ export default {
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-      }
+        unit: this.unit,
+      };
 
-      await fetchBalanaceChange(params);
-      this.isOpen = false;
+      const tx = await fetchBalanaceChange(params);
+      this.$parent.sendtx(tx);
     }
   },
 };
