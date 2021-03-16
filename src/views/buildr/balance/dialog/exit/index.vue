@@ -18,14 +18,14 @@
               class="btn"
               @click="onJoinClick"
             >
-              抵押LAMB
+              抵押{{ poolData.tokenName }}
             </button>
           </div>
           <div>
             <button
               class="btn btn-disabled"
             >
-              释放LAMB
+              释放{{ poolData.tokenName }}
             </button>
           </div>
         </div>
@@ -36,13 +36,13 @@
           <div class="grid-2">
             <div>数量</div>
             <div>
-              余额：{{ poolData.unlockedCollateral }} LAMB
+              余额：{{ unlockedCollateral }} {{ poolData.tokenName }}
             </div>
           </div>
           <div>
             <ScInput
               title=""
-              unit="LAMB"
+              :unit="poolData.tokenName"
               placetext="请输入数量"
               :on-change="onChangeValue"
             />
@@ -54,29 +54,21 @@
         >
           <div>确认</div>
           <div>{{ coinAmount }}</div>
-          <div>LOGO LAMB</div>
+          <div>LOGO {{ poolData.tokenName }}</div>
           <div>将发送到您的账户中</div>
         </div>
         <div>
           <ul class="grid-2">
-            <li>释放资产：</li>
-            <li>LAMB</li>
-          </ul>
-          <ul class="grid-2">
-            <li>释放数量：</li>
-            <li><span>{{ coinAmount }}</span> LAMB </li>
-          </ul>
-          <ul class="grid-2">
-            <li>可提取授信的scUSD：</li>
-            <li><span>{{ currMaxMintable }}</span>scUSD 至 <span>{{ currMaxMintable }}</span>scUSD</li>
+            <li>铸造额度：</li>
+            <li><span>{{ maxMintable }}</span></li>
           </ul>
           <ul class="grid-2">
             <li>抵押率？</li>
-            <li><span class="f-green">{{ poolData.collateralisationRatio }}%</span>至{{ currPledgeRatio }} %</li>
+            <li><span>{{ collRatio }}</span></li>
           </ul>
           <ul class="grid-2">
             <li>清算价格</li>
-            <li><span>{{ currLiquidationPrice }}</span> USD</li>
+            <li><span>{{ liquidationPrice }}</span></li>
           </ul>
         </div>
         <div>

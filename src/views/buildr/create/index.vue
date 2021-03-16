@@ -68,20 +68,20 @@
         <div class="build-grid-2 mrg-b-5">
           <div>抵押率：</div>
           <div class="text-right">
-            {{ targetRatio * 100 }}%
+            {{ BigNumber(targetRX).times(100) }}%
           </div>
         </div>
         <div class="line mrg-tb-10" />
         <div class="build-grid-2 mrg-b-5">
           <div>SuperCash LAMB价格：</div>
           <div class="text-right">
-            {{ currencyPrice }} USD
+            {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
           <div>清算价格：</div>
           <div class="text-right">
-            {{ liquidationRatio * stableNumber / pledgeNumber }} USD
+            {{ pledgeNumber ? BigNumber(liquidationRatio).times(stableNumber).div(pledgeNumber) : 0 }} USD
           </div>
         </div>
         <div class="line mrg-tb-10" />
@@ -94,7 +94,7 @@
         <div class="build-grid-2 mrg-b-5">
           <div>稳定费用：</div>
           <div class="text-right">
-            {{ stableNumber * feeRate }} scUSD
+            {{ BigNumber(feeRate).times(100) }} %
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">

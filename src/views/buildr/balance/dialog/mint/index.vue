@@ -58,16 +58,24 @@
         </div>
         <div>
           <ul class="grid-2">
-            <li>铸造资产：</li>
-            <li><span>{{ poolData.existingDebt }}scUSD</span>至<span>{{ poolData.existingDebt + coinAmount }}</span> </li>
+            <li>债务：</li>
+            <li><span>{{ existingDebt }}</span>至<span>{{ newDebt }}</span> scUSD</li>
+          </ul>
+          <ul class="grid-2">
+            <li>铸造额度：</li>
+            <li><span>{{ maxMintable }}</span></li>
           </ul>
           <ul class="grid-2">
             <li>抵押率</li>
-            <li><span class="f-green">{{ poolData.collateralisationRatio }}%</span>至{{ currPledgeRatio }} %</li>
+            <li><span>{{ collRatio }}</span></li>
           </ul>
           <ul class="grid-2">
             <li>清算价格</li>
-            <li><span>{{ currLiquidationPrice }}</span> USD</li>
+            <li><span>{{ liquidationPrice }}</span></li>
+          </ul>
+          <ul class="grid-2">
+            <li>稳定费率</li>
+            <li><span>{{ feeRate }}</span></li>
           </ul>
         </div>
         <div>

@@ -9,16 +9,17 @@
         <div class="build-grid-1">
           <div>
             <div>{{ poolItem.tokenTitle }}</div>
-            <div>目标抵押率：{{ poolItem.targetRatio }}%</div>
+            <div>目标抵押率：{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</div>
+            <div>当前价格：{{ BigNumber(poolItem.currencyPrice) }} USD</div>
           </div>
           <div class="build-grid-2">
             <div>
-              <div>清算价格：{{ poolItem.liquidationPrice }} USD</div>
-              <div>抵押资产：{{ poolItem.pledgeNumber }} LAMB</div>
-              <div>当前债务：{{ poolItem.currentDebt }} scUSD</div>
-              <div>可释放LAMB：{{ poolItem.unlockedCollateral }} LAMB</div>
-              <div>可提取授信的scUSD：{{ poolItem.maxMintable }} scUSD</div>
-              <div>当前抵押率：{{ poolItem.collateralisationRatio }}%</div>
+              <div>清算价格：{{ getLiquidationPrice(poolItem) }} USD</div>
+              <div>抵押资产：{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</div>
+              <div>当前债务：{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</div>
+              <div>可释放LAMB：{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</div>
+              <div>可铸造额度：{{ BigNumber(poolItem.maxMintable) }} scUSD</div>
+              <div>当前抵押率：{{ BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</div>
             </div>
             <div>
               <div>

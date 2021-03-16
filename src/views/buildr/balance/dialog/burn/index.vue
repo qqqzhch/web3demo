@@ -53,25 +53,25 @@
         >
           <div>确认</div>
           <div>{{ coinAmount }}</div>
-          <div>LOGO LAMB</div>
-          <div>将偿还债务</div>
+          <div>LOGO {{ poolData.tokenName }}</div>
+          <div>将被偿还</div>
         </div>
         <div>
           <ul class="grid-2">
-            <li>偿还资产：</li>
-            <li>scUSD</li>
+            <li>债务：</li>
+            <li><span>{{ existingDebt }}</span>至<span>{{ newDebt }}</span> scUSD</li>
           </ul>
           <ul class="grid-2">
-            <li>偿还数量：</li>
-            <li><span>{{ coinAmount }}</span> scUSD </li>
+            <li>铸造额度：</li>
+            <li><span>{{ maxMintable }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>抵押率？</li>
-            <li><span class="f-green">{{ poolData.collateralisationRatio }}%</span>至{{ currPledgeRatio }} %</li>
+            <li>抵押率</li>
+            <li><span>{{ collRatio }}</span></li>
           </ul>
           <ul class="grid-2">
             <li>清算价格</li>
-            <li><span>{{ currLiquidationPrice }}</span> USD</li>
+            <li><span>{{ liquidationPrice }}</span></li>
           </ul>
           <ul
             v-if="step===2"
@@ -94,7 +94,7 @@
             class="btn"
             @click="onBurnClick"
           >
-            确定
+            确认
           </button>
         </div>
       </div>

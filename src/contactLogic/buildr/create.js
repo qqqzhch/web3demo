@@ -75,8 +75,6 @@ export const fetchCollateralIndicators = async ({ web3, chainID, account, librar
 
   const [unlockedCollateral, collateralisation, isRewardClaimable, targetRatio, liquidationRatio, feeRate, debtCap, remainingDebt] = await Promise.all(loadList);
 
-  console.log(remainingDebt, 3333);
-
   return {
     isRewardClaimable,
     targetRatio: web3.utils.fromWei(targetRatio.toString()),

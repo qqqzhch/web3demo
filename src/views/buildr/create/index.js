@@ -1,6 +1,7 @@
 import { mapState } from 'vuex';
 import ScInput from '../components/ScInput.vue';
 import { collateralPools } from '@//contactLogic/buildr/balance';
+import BigNumber from "bignumber.js";
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
@@ -16,13 +17,14 @@ export default {
       currencyNumber: 0, // 资产数量
       pledgeNumber: 0,   // 质押币数量
       stableNumber: 0,   // 稳定币数量
-      targetRatio: 0,          // 抵押率
+      targetRX: 0,          // 抵押率（倍数）
       liquidationRatio: 0,  // 清算抵押率
       feeRate: 0,    // 稳定费率
       debtCap: 0,    // 全球scUSD债务上限
       currencyPrice: 0,
       collateralPools: collateralPools,
       defaultPoolToken: collateralPools[0].token,
+      BigNumber,
     };
   },
   components: {
@@ -49,8 +51,8 @@ export default {
       const params = this.getParmas();
       const { targetRatio, liquidationRatio, feeRate, debtCap } = await fetchCollateralIndicators(params);
 
-      this.targetRatio = targetRatio ? 1 / targetRatio : 0;
-      this.liquidationRatio = liquidationRatio ? 1 / liquidationRatio : 0;
+      this.targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
+      this.liquidationRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
       this.feeRate = feeRate;
       this.debtCap = debtCap;
     },
@@ -62,7 +64,7 @@ export default {
     },
     onChangePledgeNumber(val) {
       this.pledgeNumber = val;
-      this.stableNumber = val  * this.currencyPrice / this.targetRatio;
+      this.stableNumber = BigNumber(val).times(this.currencyPrice).div(this.targetRX);
     },
     async onApproveClick() {
       const params = Object.assign({}, this.getParmas(), {

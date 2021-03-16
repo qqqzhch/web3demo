@@ -1,36 +1,30 @@
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { collateralPools } from '@//contactLogic/buildr/balance';
-import { fetchCollateralIndicators } from '@/contactLogic/buildr/create';
+import { fetchCollateralIndicators, fetchCurrencyPrice } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
-
+import BigNumber from "bignumber.js";
 
 export default {
   name: 'balance',
   data() {
     return {
-      // currency: 'LAMB',
-      // targetRatio: 0,  // targetRatio
-      // collateralisationRatio: 0, // 当前抵押率
-      // unlockedCollateral: 0,  // 可释放LAMB
-      // liquidationRatio: 0, // 清算抵押率
-      // liquidationPrice: 0, // 清算价格
-      // currentDebt: 0, // 当前债务
-      // stableNumber: 0, // 授信的稳定币数量scUSD
-      // pledgeNumber: 0, // 抵押资产,
-      // feeRate: 0,
       collateralPools,
       poolsData: [],
+      BigNumber,
     };
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    // liquidationPrice() {
-    //   return this.pledgeNumber ? this.liquidationRatio * this.maxMintable / this.pledgeNumber : 0;
-    // },
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
-    }
+    },
+  },
+  mounted() {
+    //txsuccess
+    event.$on('txsuccess',()=>{
+      this.loadData();
+    });
   },
   mounted() {
     //txsuccess
@@ -49,30 +43,18 @@ export default {
         web3: this.web3,
       };
     },
-    // async getPledgeNumber() {
-    //   const params = this.getParmas();
-    //   const { pledgeNumber } = await fetchPledgeNumber(params);
-    //   this.pledgeNumber = pledgeNumber;
-    // },
-    // async getIndicators() {
-    //   const params = this.getParmas();
-    //   const { unlockedCollateral, targetRatio, collateralisationRatio,
-    //     currentDebt, maxMintable, liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
-    //
-    //   this.targetRatio = targetRatio ? 1 / targetRatio : 0;
-    //   this.collateralisationRatio = Number(collateralisationRatio) ? 1 / Number(collateralisationRatio) : 0;
-    //   this.currentDebt = currentDebt;
-    //   this.maxMintable = maxMintable;
-    //   this.unlockedCollateral = unlockedCollateral;
-    //   this.liquidationRatio = liquidationRatio;
-    //   this.feeRate = feeRate;
-    // },
+    getLiquidationPrice(poolData){
+      const { liquidationRatio, pledgeNumber, currentDebt } = poolData;
+      const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
+      return BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(currentDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
+    },
     loadData() {
       collateralPools.forEach(async (item) => {
         const params = this.getParmas(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
           liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
         const { pledgeNumber } = await fetchPledgeNumber(params);
+        const { currencyPrice } = await fetchCurrencyPrice(params);
 
         const itemData = {
           tokenName: item.token,
@@ -84,7 +66,8 @@ export default {
           maxMintable,
           liquidationRatio,
           feeRate,
-          pledgeNumber
+          pledgeNumber,
+          currencyPrice,
         };
         this.poolsData = this.poolsData.concat(itemData);
       });

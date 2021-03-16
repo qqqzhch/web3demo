@@ -1,6 +1,7 @@
 import ScInput from '../../../components/ScInput.vue';
 import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
 import {mapState} from "vuex";
+import BigNumber from "bignumber.js";
 
 export default {
   inject: ['reload'],
@@ -9,17 +10,55 @@ export default {
       step: 1,
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
-      currMaxMintable: 0,   // 当前获取的授信scUSD额度
-      currPledgeRatio: 0,   // 当前抵押率
-      currLiquidationPrice: 0, // 当前清算价格
       poolData: {},  // 父组件传过来的数据
+      unit: 'scUSD'
     };
   },
   components: {
     ScInput
   },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress'])
+    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    // 可用额度
+    unlockedCollateral() {
+      return BigNumber(this.poolData.unlockedCollateral).toFixed(6);
+    },
+    // 铸造额度
+    maxMintable() {
+      const { maxMintable, targetRatio } = this.poolData;
+
+      const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
+      const currMaxMintable = BigNumber(maxMintable).minus(this.coinAmount).times(targetRX);
+
+      return `${maxMintable} 至 ${currMaxMintable} ${this.unit}`;
+    },
+    // 已有债务
+    existingDebt() {
+      return BigNumber(this.poolData.currentDebt);
+    },
+    // 抵押率
+    collRatio() {
+      const { collateralisationRatio, pledgeNumber, currencyPrice } = this.poolData;
+
+      const collRX = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio);
+      const existingDebt = BigNumber(this.existingDebt).isZero() ? 0 : this.existingDebt;
+      return existingDebt
+        ? `${BigNumber(collRX).times(100).toFixed(6)}%` +
+          `至 ${BigNumber(pledgeNumber).minus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
+        : `0% 至 0%`;
+    },
+    // 清算价格
+    liquidationPrice() {
+      const { liquidationRatio, pledgeNumber } = this.poolData;
+
+      const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
+
+      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
+      const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).minus(this.coinAmount))
+        ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(BigNumber(pledgeNumber).minus(this.coinAmount)).toFixed(6);
+
+      return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+    }
   },
   methods: {
     // 打开弹窗
@@ -28,24 +67,13 @@ export default {
       this.isOpen = true;
       this.step = 1;
       this.coinAmount = 0;
-      this.currMaxMintable = 0;
-      this.currPledgeRatio = 0;
-      this.currLiquidationPrice = 0;
     },
     onJoinClick () {
       this.isOpen = false;
       this.$parent.openJoinDialog(this.poolData);
     },
     onChangeValue(value) {
-      const { pledgeNumber, existingDebt, liquidationRatio } = this.poolData;
-      // 减少资产
       this.coinAmount = value;
-      // 总资产
-      const totalPledgeNumber = pledgeNumber - this.coinAmount;
-      // 当前抵押率 = 总资产 / 总授信
-      this.currPledgeRatio = totalPledgeNumber / existingDebt;
-      // 清算价格：
-      this.currLiquidationPrice = totalPledgeNumber ? liquidationRatio * existingDebt / totalPledgeNumber : 0;
     },
     onNextClick() {
       this.step = 2;
