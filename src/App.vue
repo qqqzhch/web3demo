@@ -45,7 +45,7 @@ export default {
   width: 100%;
   height: 100vh;
   .main-wrapper {
-    min-height: 700px;
+    min-height: 800px;
   }
 }
 </style>

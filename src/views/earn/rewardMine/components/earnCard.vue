@@ -2,7 +2,7 @@
   <div class="list-wrapper">
     <div class="list-item-wrapper">
       <div v-for="(item, index) in data" :key="index" class="list-item">
-        <div class="name flex justify-between items-center">
+        <div class="name flex justify-start items-center">
           <img src="../../../../assets/img/susd48.svg" alt="susd">
           <div class="right">
             <p class="coin">
@@ -17,7 +17,7 @@
         <div class="apy">
           <h4>APY</h4>
           <p class="percent">
-            {{ getAPY(item) }}
+            {{ item.data && item.data.rewardRate | formatReward(365) }}
           </p>
         </div>
 
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 export default {
   props: {
     data: {
@@ -56,9 +58,6 @@ export default {
   methods: {
     openStake(data) {
       this.$emit('openStake', data);
-    },
-    getAPY(item) {
-      console.log(item);
     },
   },
 };
@@ -74,10 +73,14 @@ export default {
     padding: 32px 24px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 16px;
     .name {
+      margin-right: 24px;
+      word-break: break-all;
+      width: 28%;
       .right {
         margin-left: 28px;
         .coin {
@@ -94,6 +97,9 @@ export default {
       }
     }
     .apy {
+      width: 22%;
+      word-break: break-all;
+      margin-right: 24px;
       h4 {
         font-size: 14px;
         color: #828489;
@@ -106,6 +112,7 @@ export default {
       }
     }
     .balance {
+      width: 28%;
       .balance-item {
         margin-bottom: 4px;
         overflow: hidden;
@@ -125,6 +132,7 @@ export default {
       }
     }
     .btn-item {
+      margin-left: 50px;
       .stakeBtn {
         background: #0058ff;
         border-radius: 6px;

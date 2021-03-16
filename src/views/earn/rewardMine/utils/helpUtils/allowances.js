@@ -38,3 +38,14 @@ export async function useStakingRewardsRead(library, account, token, methodName,
   }
   return result;
 }
+
+export  function useStakingRewardsContractSigna(
+  library,
+  account,
+  token
+) {
+  const contract = useStakingRewardsContract(library, account, token.address, true);
+
+  // console.log(contract);
+  return contract;
+}

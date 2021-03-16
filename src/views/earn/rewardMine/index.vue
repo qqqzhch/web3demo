@@ -1,5 +1,6 @@
 <template>
   <div class="rewardMine-wrapper">
+    <Spin v-if="showLoading" size="large" fix class="spin-container" />
     <singeMineList :data="designatedData" />
     <multiMineList :data="liquidityData" />
   </div>
@@ -13,6 +14,7 @@ export default {
     return {
       designatedData: [],
       liquidityData: [],
+      showLoading: false,
     };
   },
   components: {
@@ -21,6 +23,7 @@ export default {
   },
   methods: {
     async getListData() {
+      this.showLoading = true;
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
         this.liquidityData = data.filter((item) => item.kind === 'multi');
@@ -29,6 +32,8 @@ export default {
         // console.log(this.designatedData);
       } catch (error) {
         console.log(error);
+      } finally {
+        this.showLoading = false;
       }
     },
   },
@@ -44,4 +49,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.rewardMine-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+}
 </style>

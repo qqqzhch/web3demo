@@ -14,8 +14,22 @@ export default {
       },
     });
 
+    Vue.directive("debounce", {
+      inserted: function (el, binding) {
+        let timer;
+        el.addEventListener('keyup', () => {
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => {
+            binding.value();
+          }, 1000);
+        });
+      },
+    });
+
     Vue.directive("clickoutside", {
-      bind: function(el, binding) {
+      bind: function (el, binding) {
         function documentHandler(e) {
           if (el.contains(e.target)) {
             return false;
@@ -27,7 +41,7 @@ export default {
         el.__vueClickOutSide__ = documentHandler;
         document.addEventListener("click", documentHandler);
       },
-      unbind: function(el) {
+      unbind: function (el) {
         document.removeEventListener("click", el.__vueClickOutSide__);
         delete el.__vueClickOutSide__;
       },

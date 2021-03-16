@@ -1,24 +1,13 @@
 [
   {
     "name": "scUSD/USDT LP",
-    "address": "0x333a3Eeda8f8c6961c59CC3EC2dA2c8d012C437d",
+    "address": "0x38dd887F143FD584d3Bed130472b4857E56B2Ca8",
     "decimals": 18,
     "chainId": 256,
     "kind": "multi",
     "symbol": [
       "scUSD",
       "USDT"
-    ]
-  },
-  {
-    "name": "SCCASH/scUSD LP",
-    "address": "0x23F6Fef65fF4c17b8449d6b860db8c79865756Be",
-    "decimals": 18,
-    "chainId": 256,
-    "kind": "multi",
-    "symbol": [
-      "SCCASH",
-      "scUSD"
     ]
   },
   {

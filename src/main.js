@@ -7,7 +7,7 @@ import "normalize.css";
 import "./common/css/index.less";
 import view from "./config/iview.js";
 import util from "./common/js/util.js";
-
+import i18n from "./i18n/index.js";
 import filters from "./common/js/filter.js";
 
 // 按需加载view-design组件
@@ -23,6 +23,7 @@ Object.keys(filters).forEach((key) => {
 
 
 new Vue({
+  i18n,
   router,
   store,
   render: (h) => h(App),
