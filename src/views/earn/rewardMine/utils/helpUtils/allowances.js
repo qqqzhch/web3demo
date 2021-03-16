@@ -1,6 +1,6 @@
 
 import { useStakingRewardsContract } from "./useContract.js";
-import { TokenAmount } from "@uniswap/sdk";
+import { TokenAmount } from "@webfans/uniswapsdk";
 
 export async function useStakingRewardsbalance(library, account, token) {
   let result;
@@ -37,4 +37,15 @@ export async function useStakingRewardsRead(library, account, token, methodName,
     console.log(error);
   }
   return result;
+}
+
+export  function useStakingRewardsContractSigna(
+  library,
+  account,
+  token
+) {
+  const contract = useStakingRewardsContract(library, account, token.address, true);
+
+  // console.log(contract);
+  return contract;
 }

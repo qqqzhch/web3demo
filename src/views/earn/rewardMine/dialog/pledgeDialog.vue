@@ -95,8 +95,8 @@
               <img src="../../../../assets/img/comp.svg" width="48" alt="comp">
               <img src="../../../../assets/img/comp.svg" width="48" alt="comp" class="img2">
             </div>
-            <h2>1029.23</h2>
-            <p>scUSD/USDT LP</p>
+            <h2>{{ pledgeAmount }}</h2>
+            <p>{{ data.name }}</p>
             <span>will be staked to mine</span>
           </div>
           <div class="price-warpper">
@@ -107,23 +107,21 @@
                   <img src="../../../../assets/img/comp.svg" width="14" alt="comp">
                   <img src="../../../../assets/img/comp.svg" width="14" alt="comp" class="img2">
                 </div>
-                <p>scUSD/USDT LP</p>
+                <p>{{ data.name }}</p>
               </div>
             </div>
             <div>
-              <span>You will stake</span>
-              <p>11.123 scUSD/USDT LP</p>
-            </div>
-            <div>
               <span>share of pool</span>
-              <p>1.23%</p>
+              <p>{{ increaseRate }}</p>
             </div>
             <div>
               <span>Fee</span>
               <p>0.1 ETH</p>
             </div>
           </div>
-          <Buttons>Confirm</Buttons>
+          <Buttons @click.native="confirmSendTx">
+            Confirm
+          </Buttons>
         </div>
       </div>
     </Modal>
@@ -139,6 +137,7 @@ import { debounce } from 'debounce';
 import { TokenAmount, Token } from '@webfans/uniswapsdk';
 import { useNeedApproveInput } from '@/contacthelp/useNeedApprove.js';
 import { useApproveCallback } from '@/contacthelp/useApproveCallback.js';
+import { useStakingRewardsContractSigna } from '../utils/helpUtils/allowances.js';
 // import { useTokenApprove } from '@/contacthelp/Approve.js';
 export default {
   components: {
@@ -181,9 +180,6 @@ export default {
     },
     showPledgeDialog() {
       this.isShowPledge = true;
-    },
-    confirm() {
-      console.log('aa');
     },
     open(data) {
       console.log(data);
@@ -269,7 +265,7 @@ export default {
 
     // 检验数据是否合法
     checkData() {
-      if (this.pledgeAmount == '') {
+      if (this.pledgeAmount === '') {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n30'),
@@ -303,13 +299,45 @@ export default {
       return new Promise((resolve) => {
         timeid = setInterval(async () => {
           const data = await this.getTx(hash);
-          if (data && data.blockNumber != null) {
+          if (data && data.blockNumber !== null) {
             clearInterval(timeid);
             resolve(data);
           }
         }, 1000 * 10);
       });
     },
+
+    async confirmSendTx() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.sendLoading = true;
+      const BN = this.web3.utils.BN;
+      const num = new BN(this.pledgeAmount);
+      const amount = this.web3.utils.toWei(num, 'ether');
+      console.log(amount);
+      const tokenJson = this.data;
+      console.log(tokenJson);
+      try {
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const result = await stakingRewardsContract.stake(amount, { gasLimit: 350000 });
+        console.log('返回结果', result);
+        const txInfo = await this.getTransaction(result.hash);
+        console.log(txInfo);
+        if (txInfo.status === false) {
+          // console.log('status', txInfo);
+          this.$Notice.error({
+            title:this.$t('notice.n32'),
+          });
+        } else {
+          this.$Notice.success({
+            title: this.$t('notice.n33'),
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   watch: {
     pledgeAmount() {
