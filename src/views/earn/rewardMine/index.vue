@@ -1,14 +1,18 @@
 <template>
   <div class="rewardMine-wrapper">
-    <Spin v-if="showLoading" size="large" fix class="spin-container" />
-    <singeMineList :data="designatedData" />
-    <multiMineList :data="liquidityData" />
+    <div v-if="showLoading">
+      <loading />
+    </div>
+    <template v-else>
+      <singeMineList :data="designatedData" />
+      <multiMineList :data="liquidityData" />
+    </template>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { StakingRewardList } from './utils/mineUtilFunc.js';
+import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 export default {
   data() {
     return {
@@ -20,6 +24,7 @@ export default {
   components: {
     singeMineList: () => import('./components/singleMineList.vue'),
     multiMineList: () => import('./components/multiMineList.vue'),
+    loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
     async getListData() {
@@ -41,6 +46,7 @@ export default {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
   },
   mounted() {
+    this.showLoading = true;
     setTimeout(() => {
       this.getListData();
     }, 500);
