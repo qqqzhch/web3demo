@@ -3,7 +3,22 @@
     <h2 claas="pageTitle">
       My Page
     </h2>
-    <Table class="myPage-table-wrapper" :columns="columns1" :data="data1" />
+    <Table class="myPage-table-wrapper" :columns="columns" :data="data">
+      <template slot="pool" slot-scope="{ row }">
+        {{ row.name }}
+      </template>
+
+      <template slot="apy" slot-scope="{ row }">
+        {{ row.name }}
+      </template>
+      <template slot="stake" slot-scope="{ row }">
+        {{ row.name }}
+      </template>
+
+      <template slot="operation" slot-scope="{ row }">
+        {{ row.name }}
+      </template>
+    </Table>
   </div>
 </template>
 
@@ -11,47 +26,35 @@
 export default {
   data() {
     return {
-      columns1: [
+      columns: [
         {
-          title: 'Name',
-          key: 'name',
+          title: 'Pool',
+          slot: 'pool'
         },
         {
-          title: 'Age',
-          key: 'age',
+          title: 'APY',
+          slot: 'apy',
         },
         {
-          title: 'Address',
-          key: 'address',
-        },
-      ],
-      data1: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03',
+          title: 'Staked',
+          slot: 'stake',
         },
         {
-          name: 'Jim Green',
-          age: 24,
-          address: 'London No. 1 Lake Park',
-          date: '2016-10-01',
+          title: 'Unclaimed',
+          slot: 'earned',
         },
         {
-          name: 'Joe Black',
-          age: 30,
-          address: 'Sydney No. 1 Lake Park',
-          date: '2016-10-02',
-        },
-        {
-          name: 'Jon Snow',
-          age: 26,
-          address: 'Ottawa No. 2 Lake Park',
-          date: '2016-10-04',
+          title: 'Function',
+          slot: 'operation',
         },
       ],
+      data: [],
     };
+  },
+  methods: {
+    name() {
+
+    }
   },
 };
 </script>
@@ -69,7 +72,7 @@ export default {
     color: #14171c;
     line-height: 24px;
   }
-  .myPage-table-wrapper{
+  .myPage-table-wrapper {
     margin-top: 8px;
   }
 }
