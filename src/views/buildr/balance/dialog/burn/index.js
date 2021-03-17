@@ -24,8 +24,8 @@ export default {
       return `${ this.coinAmount * Number(feeRate)} csUSD`;
     },
     // 当前额度
-    currMaxMintable() {
-      return BigNumber(this.poolData.maxMintable).toFixed(6);
+    scUSDNumber() {
+      return BigNumber(this.poolData.scUSDNumber).toFixed(6);
     },
     // 扣掉手续费后数量
     netAmount() {

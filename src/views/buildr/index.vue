@@ -3,42 +3,27 @@
     <div class="tab">
       <div
         class="tab-item tab-active"
-        @click="onChangeNav(2)"
+        @click="toPage('balance')"
       >
         管理金库
       </div>
       <div
         class="tab-item"
-        @click="onChangeNav(3)"
+        @click="toPage('history')"
       >
         历史记录
       </div>
       <div>
         <button
           class="btn"
-          @click="onChangeNav(1)"
+          @click="toPage('create')"
         >
           创建金库
         </button>
       </div>
     </div>
-    <div v-if="pageIndex === 1">
-      <CreateView />
-    </div>
-    <div v-if="pageIndex === 2">
-      <div class="manage-content box-shadow">
-        <Overview />
-      </div>
-      <div class="title mrg-tb-20">
-        我的金库
-      </div>
-      <div><BalanceView /></div>
-      <!--<div class="manage-content box-shadow mrg-tb-40">-->
-      <!--<ManageView />-->
-      <!--</div>-->
-    </div>
-    <div v-if="pageIndex === 3">
-      <TransactionHistory />
+    <div class="buildr-content">
+      <router-view />
     </div>
   </div>
 </template>

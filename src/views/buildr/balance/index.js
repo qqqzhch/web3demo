@@ -1,7 +1,8 @@
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
+import Overview from './overview/index.vue';
 import { collateralPools } from '@//contactLogic/buildr/balance';
-import { fetchCollateralIndicators, fetchCurrencyPrice } from '@/contactLogic/buildr/create';
+import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
 import BigNumber from "bignumber.js";
 
@@ -49,10 +50,20 @@ export default {
           liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
         const { pledgeNumber } = await fetchPledgeNumber(params);
         const { currencyPrice } = await fetchCurrencyPrice(params);
+        const currencyNumber = await fetchTokenBalance(params);
+        const { allowanceAmount } = await fetchAllowanceAmount(params);
+
+        // 读钱包中scUSD的余额
+        const scashParams = {
+          ...params,
+          tokenName: 'scUSD'
+        };
+        const scUSDNumber = await fetchTokenBalance(scashParams);
 
         const itemData = {
           tokenName: item.token,
           tokenTitle: item.title,
+          currencyNumber,
           unlockedCollateral,
           targetRatio,
           collateralisationRatio,
@@ -62,6 +73,8 @@ export default {
           feeRate,
           pledgeNumber,
           currencyPrice,
+          scUSDNumber,
+          allowanceAmount,
         };
         this.poolsData = this.poolsData.concat(itemData);
       });
@@ -98,6 +111,7 @@ export default {
     }
   },
   components: {
+    Overview,
     JoinDialog: () => import('./dialog/join/index.vue'),
     MintDialog: () => import('./dialog/mint/index.vue'),
     BurnDialog: () => import('./dialog/burn/index.vue'),

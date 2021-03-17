@@ -6,19 +6,19 @@
     <div class="content">
       <ul>
         <li>总抵押物价值</li>
-        <li><span>{{ totalValue }}</span> $</li>
+        <li><span>{{ BigNumber(totalValue).toFixed(6) }}</span> scUSD</li>
       </ul>
       <ul>
         <li>总负债</li>
-        <li><span>-{{ totalDebt }}</span> scUSD </li>
+        <li><span>-{{ BigNumber(totalDebt).toFixed(6) }}</span> scUSD </li>
       </ul>
       <ul>
         <li>授信的CUSD</li>
-        <li><span>{{ totalMaxMintable }}</span> scUSD </li>
+        <li><span>{{ BigNumber(totalMaxMintable).toFixed(6) }}</span> scUSD </li>
       </ul>
       <ul>
         <li>稳定费</li>
-        <li><span>{{ totalFee }}</span> scUSD</li>
+        <li><span>{{ BigNumber(totalFee).toFixed(6) }}</span> scUSD</li>
       </ul>
     </div>
   </div>

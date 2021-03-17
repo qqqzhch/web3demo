@@ -3,6 +3,11 @@ import BigNumber from "bignumber.js";
 
 export default {
   name: 'overview',
+  data() {
+    return {
+      BigNumber
+    };
+  },
   components: {
   },
   computed: {

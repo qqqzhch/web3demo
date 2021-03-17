@@ -1,5 +1,5 @@
 export default {
-  name: 'transaction-history',
+  name: 'history',
   components: {
   },
   methods: {}

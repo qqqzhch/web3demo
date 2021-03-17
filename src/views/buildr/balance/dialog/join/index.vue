@@ -36,7 +36,7 @@
           <div class="grid-2">
             <div>数量</div>
             <div>
-              余额：{{ unlockedCollateral }} {{ poolData.tokenName }}
+              余额：{{ currencyNumber }} {{ poolData.tokenName }}
             </div>
           </div>
           <div>

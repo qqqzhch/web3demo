@@ -64,6 +64,23 @@ const routes = [
     path: "/buildr",
     name: "buildr",
     component: () => import("@/views/buildr/index.vue"),
+    children: [
+      {
+        path: "balance",
+        name: "balance",
+        component: () => import("@/views/buildr/balance/index.vue"),
+      },
+      {
+        path: "create",
+        name: "create",
+        component: () => import("@/views/buildr/create/index.vue"),
+      },
+      {
+        path: "history",
+        name: "history",
+        component: () => import("@/views/buildr/history/index.vue")
+      },
+    ]
   },
   {
     path: "/buildrtest",

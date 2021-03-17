@@ -1,5 +1,8 @@
 <template>
   <div class="balance">
+    <div class="box-shadow">
+      <Overview />
+    </div>
     <div class="content">
       <div
         v-for="poolItem in poolsData"
@@ -10,7 +13,7 @@
           <div>
             <div>{{ poolItem.tokenTitle }}</div>
             <div>目标抵押率：{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</div>
-            <div>当前价格：{{ BigNumber(poolItem.currencyPrice) }} USD</div>
+            <div>当前价格：{{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD</div>
           </div>
           <div class="build-grid-2">
             <div>
@@ -18,7 +21,7 @@
               <div>抵押资产：{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</div>
               <div>当前债务：{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</div>
               <div>可释放LAMB：{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</div>
-              <div>可铸造额度：{{ BigNumber(poolItem.maxMintable) }} scUSD</div>
+              <div>可铸造额度：{{ BigNumber(poolItem.maxMintable).toFixed(6) }} scUSD</div>
               <div>当前抵押率：{{ BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</div>
             </div>
             <div>

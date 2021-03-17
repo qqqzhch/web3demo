@@ -36,7 +36,7 @@
           <div class="grid-2">
             <div>数量</div>
             <div>
-              余额：{{ currMaxMintable }} scUSD
+              余额：{{ scUSDNumber }} scUSD
             </div>
           </div>
           <div>

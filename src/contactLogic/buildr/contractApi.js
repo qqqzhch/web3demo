@@ -8,6 +8,7 @@ import {
   useCollateralStateContract
 } from "../../contacthelp/useContract.js";
 import { calculateGasMargin } from "../../contacthelp/utils";
+import { useTokenAllowance } from "../../contacthelp/Allowances";
 
 /**
  *  获取某个币的数量
@@ -133,4 +134,21 @@ export function useProxyActionsContractSigna(
   const contract = useproxyActionsContract(library, account, token.address, true);
   console.log(contract);
   return contract;
+}
+
+export async function useNeedApproveInput(
+  library,
+  account,
+  token,
+  spender
+) {
+  const currentAllowance = await useTokenAllowance(
+    library,
+    account,
+    token,
+    account ?? undefined,  // 当前账户
+    spender   // 授权地址
+  );
+  console.log(currentAllowance);
+  return currentAllowance;
 }

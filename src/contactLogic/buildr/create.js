@@ -10,6 +10,7 @@ import {
   useProxyActionsContractRead,
   useCollateralContractRead,
   useExchangeRatesContractRead,
+  useNeedApproveInput,
 } from './contractApi';
 import { useTokenApprove } from '../../contacthelp/Approve.js';
 
@@ -22,7 +23,7 @@ export const fetchTokenBalance = async ({tokenName, chainID, library, account}) 
   const token = getTokenBySymbol(chainID, tokenName);
   const result = await useTokenbalance(library, account, token);
 
-  return result.toSignificant(6);
+  return result.toSignificant(18);
 };
 
 /**
@@ -75,6 +76,7 @@ export const fetchCollateralIndicators = async ({ web3, chainID, account, librar
 
   const [unlockedCollateral, collateralisation, isRewardClaimable, targetRatio, liquidationRatio, feeRate, debtCap, remainingDebt] = await Promise.all(loadList);
 
+
   return {
     isRewardClaimable,
     targetRatio: web3.utils.fromWei(targetRatio.toString()),
@@ -122,9 +124,29 @@ export const fetchApprove = async ({ web3, chainID, account, library, tokenName,
   const targetToken = await useProxyContractRead(library, account, proxyActionsToken, methodName, parameter);
 
   const mytoken = getTokenBySymbol(chainID, tokenName);
-  const spender = targetToken;
   const amount = web3.utils.toWei(pledgeNumber);
 
-  const result = await useTokenApprove(library, account, mytoken, spender, amount);
+  const result = await useTokenApprove(library, account, mytoken, targetToken, amount);
   return result;
+};
+
+/**
+ *  获取已授信的额度
+ *  Allowance 限额
+ * */
+
+
+export const fetchAllowanceAmount = async ({ chainID, account, library, tokenName }) => {
+  const mytoken = getTokenBySymbol(chainID, tokenName);
+
+  const proxyActionsToken = getProxyActionsToken(chainID);
+  const methodName  = 'target' ;
+  const parameter  = [] ;
+  const targetToken = await useProxyContractRead(library, account, proxyActionsToken, methodName, parameter);
+
+  const result = await useNeedApproveInput(library, account, mytoken, targetToken);
+
+  return {
+    allowanceAmount: result.toSignificant(18)
+  };
 };

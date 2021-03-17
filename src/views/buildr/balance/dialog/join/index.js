@@ -20,8 +20,8 @@ export default {
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
     // 可用额度
-    unlockedCollateral() {
-      return BigNumber(this.poolData.unlockedCollateral).toFixed(6);
+    currencyNumber() {
+      return BigNumber(this.poolData.currencyNumber).toFixed(6);
     },
     // 已有债务
     existingDebt() {
