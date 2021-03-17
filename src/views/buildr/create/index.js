@@ -70,8 +70,8 @@ export default {
       this.currencyPrice = currencyPrice;
     },
     onChangePledgeNumber(val) {
-      this.pledgeNumber = val;
-      this.stableNumber = BigNumber(val).times(this.currencyPrice).div(this.targetRX);
+      this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
+      this.stableNumber = BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX);
     },
     async onApproveClick() {
       const params = Object.assign({}, this.getParams(), {

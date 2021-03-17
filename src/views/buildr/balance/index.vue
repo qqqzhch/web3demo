@@ -3,16 +3,6 @@
     <div class="overview-warpper">
       <Overview />
     </div>
-<<<<<<< HEAD
-    <div class="content">
-      <div
-        v-for="poolItem in poolsData"
-        :key="poolItem.tokenTitle"
-        class="build-item mrg-tb-20"
-      >
-        <div class="build-grid-1">
-          <div>
-=======
     <div class="CDP-content">
       <div class="title">
         My CDPs
@@ -21,7 +11,6 @@
         <div class="CDP-item">
           <div class="small-item flex flex-col items-center">
             <img src="../../../assets/img/lambda48.svg" alt="lambda">
->>>>>>> b5a03be (buildr页面样式)
             <div>{{ poolItem.tokenTitle }}</div>
           </div>
           <div class="small-item">
