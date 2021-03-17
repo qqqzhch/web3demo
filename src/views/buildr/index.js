@@ -1,11 +1,13 @@
 export default {
   name: 'Buildr',
   data() {
-    return {};
+    return {
+      nav: ''
+    };
   },
   methods: {
     toPage(name) {
-      this.name = name;
+      this.nav = name;
       switch (name) {
         case 'balance':
           this.$router.push(`/buildr/balance`);

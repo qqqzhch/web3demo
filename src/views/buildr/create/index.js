@@ -115,12 +115,13 @@ export default {
     },
   },
   watch: {
-    defaultPoolToken() {
-      this.loadData();
-    }
+    isReady(value) {
+      if (value) {
+        this.loadData();
+      }
+    },
   },
   created() {
-    console.log(this.isReady, 8888);
     if(this.isReady) {
       this.loadData();
     }

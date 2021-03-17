@@ -7,20 +7,20 @@
       <div class="content">
         <div class="total-warpper">
           <h2>总抵押物价值</h2>
-          <p><span>{{ BigNumber(totalValue).toFixed(6) }}</span> scUSD</p>
+          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> scUSD</p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
             <h2>总负债</h2>
-            <p><span>-{{ BigNumber(totalDebt).toFixed(6) }}</span> scUSD </p>
+            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
-            <h2>授信的CUSD</h2>
-            <p><span>{{ BigNumber(totalMaxMintable).toFixed(6) }}</span> scUSD </p>
+            <h2>授信的scUSD</h2>
+            <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
             <h2>稳定费</h2>
-            <p><span>{{ BigNumber(totalFee).toFixed(6) }}</span> scUSD</p>
+            <p><span>{{ BigNumber(totalFee).toFixed(2) }}</span> scUSD</p>
           </div>
         </div>
         <div class="refresh">

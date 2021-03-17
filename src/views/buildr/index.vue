@@ -2,20 +2,20 @@
   <div class="buildr-warp">
     <div class="tab">
       <div
-        class="tab-item tab-active"
+        :class="{'tab-item': true, 'tab-active': nav === 'balance'}"
         @click="toPage('balance')"
       >
         管理金库
       </div>
       <div
-        class="tab-item"
+        :class="{'tab-item': true, 'tab-active': nav === 'history'}"
         @click="toPage('history')"
       >
         历史记录
       </div>
       <div>
         <button
-          class="btn"
+          class="btn create-btn"
           @click="toPage('create')"
         >
           创建金库
@@ -84,6 +84,7 @@
       line-height: 24px;
     }
     .tab {
+      position: relative;
       margin: 24px 0px 24px 100px;
       .tab-item {
         position: relative;
@@ -109,10 +110,19 @@
         height: 2px;
         background: #0058FF;
       }
-    }
-    .manage-content {
-      width: 100%;
-      border-top-left-radius: 0px;
+      .create-btn {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 100px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #FFFFFF;
+        background: #0058FF;
+        border-radius: 6px;
+      }
     }
   }
 </style>
