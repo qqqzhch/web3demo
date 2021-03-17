@@ -170,8 +170,8 @@ export default {
 
 <style lang="less" scoped>
 .content-wapper {
-  height: 749px;
-  width: 980px;
+  // height: 749px;
+  // width: 980px;
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
@@ -192,7 +192,7 @@ export default {
         display: flex;
         justify-content: space-between;
         span {
-          width: 30%;
+          width: 25%;
           height: 14px;
           font-size: 12px;
           font-family: Gilroy-Medium, Gilroy;
@@ -210,8 +210,6 @@ export default {
         align-items: center;
         flex-direction: row;
         cursor: pointer;
-        width: 860px;
-        height: 56px;
         box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
         padding: 16px;
         position: relative;

@@ -188,8 +188,6 @@ export default {
 
 <style lang="less" scoped>
 .content-wapper {
-  height: 549px;
-  width: 980px;
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
