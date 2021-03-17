@@ -226,7 +226,7 @@
               </div>
               <div>
                 <span>Fee</span>
-                <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrise*fee |formatBalanceNumber }}</p>
+                <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrice*fee |formatBalanceNumber }}</p>
               </div>
             </div>
             <Buttons @click.native="sendTX">
@@ -721,10 +721,10 @@ export default {
     },
   },
   computed: {
-    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'htPrise']),
+    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'htPrice']),
   },
   watch:{
-    
+
   }
 };
 </script>

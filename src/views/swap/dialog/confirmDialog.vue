@@ -91,7 +91,7 @@
             </div>
             <div class="details-items">
               <p>Network Fee</p>
-              <span>{{ tradeData.gasfee |formatBalanceNumber }} HT ≈ $ {{ htPrise * tradeData.gasfee | formatBalanceNumber }}</span>
+              <span>{{ tradeData.gasfee |formatBalanceNumber }} HT ≈ $ {{ htPrice * tradeData.gasfee | formatBalanceNumber }}</span>
             </div>
             <div class="details-items">
               <p>You will receive</p>
@@ -101,7 +101,7 @@
               </div>
             </div>
           </div>
-          
+
 
           <Buttons
             v-if="btnloading"
@@ -150,24 +150,24 @@ export default {
     },
     open(data,Trade) {
       console.log('open');
-      
+
       this.$data.tradeData=data;
       this.openConfirmDialog = true;
       nowTrade = Trade;
     },
    async Sendtx(){
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       try {
         this.$data.btnloading= true;
-      const tx = await SwapSend(library,account,chainID,nowTrade);  
+      const tx = await SwapSend(library,account,chainID,nowTrade);
       console.log(tx);
       // this.$Notice.success({
       //               title: '交易已发送',
       //               desc: tx.base
       //           });
-      this.$refs.haveSendtx.open(tx.base);          
+      this.$refs.haveSendtx.open(tx.base);
       event.$emit('sendtx',[tx.response,{
         okinfo:tx.base+"成功",
         failinfo:tx.base+'失败'
@@ -176,20 +176,20 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: '交易已取消',  
+                    title: '交易已取消',
                 });
-        
+
       }
       finally{
         this.$data.btnloading= false;
 
       }
-      
+
 
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrise']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrice']),
   }
 };
 </script>
@@ -311,8 +311,8 @@ export default {
         height: 100px;
         position: relative;
         // border: 1px solid #eee;
-      
+
     }
-    
+
 }
 </style>

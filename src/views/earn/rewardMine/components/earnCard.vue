@@ -9,7 +9,7 @@
               {{ item.name }}
             </p>
             <p class="price">
-              1 scUSD = 123USD
+              --
             </p>
           </div>
         </div>
@@ -28,11 +28,11 @@
           </div>
           <div class="balance-item">
             <span class="title">Total Value of Pool</span>
-            <span class="value">1245 scUSD</span>
+            <span class="value">--</span>
           </div>
           <div class="balance-item">
             <span class="title">Output</span>
-            <span class="value">1245 scUSD</span>
+            <span class="value">--</span>
           </div>
         </div>
 

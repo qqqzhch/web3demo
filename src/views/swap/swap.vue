@@ -141,7 +141,7 @@
             class="details-items"
           >
             <p>Fee</p>
-            <span>{{ gasfee|formatBalanceNumber }} HT ≈ $ {{ htPrise*gasfee |formatBalanceNumber }}</span>
+            <span>{{ gasfee|formatBalanceNumber }} HT ≈ $ {{ htPrice*gasfee |formatBalanceNumber }}</span>
           </div>
           <div class="details-items">
             <p>Price Tolerance</p>
@@ -153,7 +153,7 @@
           </div>
         </div>
 
-      
+
         <Buttons v-if="btnloading">
           Loading...
         </Buttons>
@@ -178,7 +178,7 @@
         </div>
       </div>
     </div>
-  
+
     <confirmtDialog ref="confirm" />
   </div>
 </template>
@@ -255,7 +255,7 @@ export default {
     },
    async readList(){
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       // const account = this.ethAddress;
       this.$data.pairlistloading=true;
       const data = await readpairpool(chainID,library);
@@ -267,16 +267,16 @@ export default {
         setTimeout(()=>{
           this.selectPair(data[0]);
         },1000);
-        
+
       }
-      
+
 
     },
    async selectPair(pair){
       console.log(pair);
       const chainID = this.ethChainID ;
       // const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
 
       this.$data.selectPairOBJ = pair;
@@ -287,8 +287,8 @@ export default {
       this.$data.outputcurrency=pair.Pair.tokenAmounts[0].currency;
       this.isArrow = true;
       this.showparameters();
-      
-      
+
+
 
     },
     Changeparameters(){
@@ -301,11 +301,11 @@ export default {
         this.clearData();
 
       }
-      
+
     },
    async showparameters(){
      const chainID = this.ethChainID ;
-     const library = this.ethersprovider; 
+     const library = this.ethersprovider;
      const account = this.ethAddress;
      if(account == ''){
        return;
@@ -317,8 +317,8 @@ export default {
 
       const data = await readSwapBalance(chainID,library, account,TokenA,TokenB);
 
-      
-      
+
+
       this.$data.inBalance=data.TokenAamount.toString();
       this.$data.outBalance=data.TokenBamount.toString();
 
@@ -330,7 +330,7 @@ export default {
       if(this.inputcheckup()){
         try {
           this.$data.btnloading =true;
-           await this.calculationOutPut(this.$data.inputAmount);  
+           await this.calculationOutPut(this.$data.inputAmount);
         } catch (error) {
           console.log(error);
         }
@@ -338,7 +338,7 @@ export default {
           this.$data.btnloading =false;
         }
 
-        
+
 
       }
     },1000),
@@ -348,20 +348,20 @@ export default {
         if(isNaN(num)){
           this.$data.inputnotice =  ' 输入值需要是数值 ';
           return false;
-        } 
+        }
         const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, "ether")) ;
         if(inamount.isGreaterThan(this.inBalance)){
           this.$data.inputnotice =  ' 输入值需要小于余额 ';
           return false;
 
         }
-        
+
       } catch (error) {
         console.log(error);
         this.$data.inputnotice =  ' 输入值需要是数值 ';
       }
-       
-       
+
+
 
       return true;
 
@@ -375,30 +375,30 @@ export default {
     },
     async calculationOutPut(num){
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
 
       const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
       const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
 
-      
+
 
       const inputAmount = new TokenAmount(
         TokenA,
         Web3.utils.toWei(num, "ether")) ;
-      
+
       const outToken = new TokenAmount(
         TokenB,
         Web3.utils.toWei('0', "ether"));
 
       console.log(inputAmount,outToken);
-      
+
       const result = await tradeCalculate(inputAmount,outToken);
 
-      
+
 
       console.log(result);
-      
+
       this.$data.PriceImpact=result.PriceImpact;
       this.$data.PriceImpactGreater=result.PriceImpactGreater;
       this.$data.coinBValue=result.coinBValue.toSignificant(6);
@@ -408,16 +408,16 @@ export default {
       setTimeout(()=>{
         this.getGasFee(result.trade);
       },100);
-      
-      
+
+
 
     },
    async getGasFee(trade){
 
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
-      
+
       console.log(trade);
       const needApprove =  await useNeedApprove(account, library, trade, INITIAL_ALLOWED_SLIPPAGE);
       this.$data.needApprove = needApprove;
@@ -429,20 +429,20 @@ export default {
         this.$data.gasfee = gasfee;
 
       }
-      
+
     },
     async  makeApprove(){
       console.log('makeApprove');
 
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       const num = this.$data.inputAmount;
 
       const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
       const  amount = Web3.utils.toWei(num, "ether");
       const spender = ROUTER_ADDRESS;
-      
+
       try {
         this.btnloading =true;
         const transaction = await useTokenApprove(
@@ -463,23 +463,23 @@ export default {
           //取消授权
           //需要提示
           this.$Notice.error({
-                    title: '授权已取消',  
+                    title: '授权已取消',
                 });
         }
-        
-        
+
+
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: '程序异常',  
+                    title: '程序异常',
                     desc:error.message
                 });
-        
+
       }
       finally{
         this.btnloading =false;
       }
-     
+
 
 
     },
@@ -487,18 +487,18 @@ export default {
       if(nowTrade){
         this.$refs.confirm.open(this.$data,nowTrade);
       }
-      
-      
+
+
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrise']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrice']),
   },
  async mounted() {
     if(this.ethChainID){
       this.readList();
-      
-     
+
+
 
     }
     //txsuccess
@@ -507,15 +507,15 @@ export default {
       this.showparameters();
 
     });
-    
+
   },
   watch:{
     ethChainID:function(){
       if(this.ethChainID){
        this.readList();
 
-      } 
-     
+      }
+
     }
 
   }

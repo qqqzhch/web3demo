@@ -14,7 +14,7 @@
 
         <template slot="apy" slot-scope="{ row }">
           <span class="text-success">
-            {{ row.data && row.data.rewardRate | formatRate }}
+            {{ row.data && row.data.rewardRate | formatReward(365) }}
           </span>
         </template>
         <template slot="stake" slot-scope="{ row }">
@@ -30,7 +30,7 @@
               Claim
             </button>
             <button class="table-btn stake" @click="openUnstake(row)">
-              Unstake LP
+              Unstake <span v-if="row.kind === 'multi'" class="ml-1">LP</span>
             </button>
           </div>
         </template>
@@ -46,6 +46,7 @@
 <script>
 import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
+import event from '@/common/js/event';
 export default {
   data() {
     return {
@@ -102,12 +103,26 @@ export default {
   },
   computed: {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
+    isReady() {
+      return this.ethersprovider && this.ethChainID && this.ethAddress;
+    },
+  },
+  watch: {
+    isReady(value) {
+      if (value) {
+        this.getListData();
+      }
+    },
+  },
+  created() {
+    if (this.isReady) {
+      this.getListData();
+    }
   },
   mounted() {
-    this.showLoading = true;
-    setTimeout(() => {
+    event.$on('txsuccess', () => {
       this.getListData();
-    }, 500);
+    });
   },
 };
 </script>

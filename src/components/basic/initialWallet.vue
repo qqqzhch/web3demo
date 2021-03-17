@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import { mapState } from 'vuex';
 import { ethers } from 'ethers';
 
-import   {gethtPrise} from '@/contactLogic/tokenPrice.js';
+import   {getHTPrice} from '@/contactLogic/tokenPrice.js';
 
 export default {
   data() {
@@ -11,13 +11,13 @@ export default {
   },
   mounted() {
     this.initEth();
-    this.htPrise();
+    this.htPrice();
   },
   methods: {
-   async htPrise(){
+   async htPrice(){
 
-     const data = await gethtPrise();
-     this.$store.commit('htprise', data);
+     const data = await getHTPrice();
+     this.$store.commit('htPrice', data);
     //  console.log('ht 价格',data);
 
 

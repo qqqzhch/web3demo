@@ -7,10 +7,8 @@ import { TokenAmount, Token } from '@webfans/uniswapsdk';
 import { useNeedApproveInput } from '@/contacthelp/useNeedApprove.js';
 import { useApproveCallback } from '@/contacthelp/useApproveCallback.js';
 import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances';
-import getTx from '../../utils/getTx';
+import event from '@/common/js/event';
 export default {
-  mixins: [getTx],
-  inject: ['reload'],
   components: {
     Buttons: () => import('@/components/basic/buttons'),
   },
@@ -54,6 +52,7 @@ export default {
       this.isShowPledge = true;
     },
     open(data) {
+      console.log(data);
       this.data = data;
       this.openPledgeDialog = true;
     },
@@ -135,6 +134,9 @@ export default {
 
     // 检验数据是否合法
     checkData() {
+      const balance = this.data && this.data.data.LPTokenbalance;
+      const bigBalance = new BigNumber(balance);
+      const amount = new BigNumber(this.pledgeAmount);
       if (this.pledgeAmount === '') {
         this.$Notice.warning({
           title: this.$t('notice.n'),
@@ -146,6 +148,14 @@ export default {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
+        });
+        return false;
+      }
+      // console.log(amount.toNumber(),bigBalance.toNumber(),amount.isGreaterThan(bigBalance));
+      if (amount.isGreaterThan(bigBalance)) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n29'),
         });
         return false;
       }
@@ -164,24 +174,25 @@ export default {
       const tokenJson = this.data;
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const result = await stakingRewardsContract.stake(amount, { gasLimit: 350000 });
-        console.log('返回结果', result);
-        const txInfo = await this.getTransaction(result.hash);
-        console.log(txInfo);
-        if (txInfo.status === false) {
-          // console.log('status', txInfo);
-          this.$Notice.error({
-            title: this.$t('notice.n32'),
-          });
-        } else {
-          this.reload();
-          this.$Notice.success({
-            title: this.$t('notice.n33'),
-          });
-        }
+        const esGas = await stakingRewardsContract.estimateGas.stake(amount);
+        const result = await stakingRewardsContract.stake(amount,{
+          gasLimit: esGas
+        });
+        const name = this.data && this.data.name;
+        this.$Notice.success({
+          title: '发送交易成功',
+        });
+        event.$emit('sendtx', [
+          result,
+          {
+            okinfo: `Stake ${this.pledgeAmount} ${name} success`,
+            failinfo: `Stake ${this.pledgeAmount} ${name} fail`,
+          },
+        ]);
       } catch (error) {
         console.log(error);
       } finally {
+        this.openPledgeDialog = false;
         this.sendLoading = false;
       }
     },

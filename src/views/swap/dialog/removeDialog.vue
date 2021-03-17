@@ -77,7 +77,7 @@
             </div>
           </div>
         </div>
-        
+
         <div v-if="btnLoading">
           <Buttons> loading... </Buttons>
         </div>
@@ -140,7 +140,7 @@
         >
           <loading />
         </div>
-        <div v-else>   
+        <div v-else>
           <div
             v-if="tokenA&&tokenB"
             class="price-warpper"
@@ -161,7 +161,7 @@
             </div>
             <div>
               <span>Fee</span>
-              <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrise*fee |formatBalanceNumber }}</p>
+              <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrice*fee |formatBalanceNumber }}</p>
             </div>
           </div>
           <Buttons @click.native="RemoveConfirm">
@@ -232,7 +232,7 @@ export default {
       parameter:[],
       totalSupply:'',
       inputnoticeA:''
-      
+
     };
   },
   methods: {
@@ -243,7 +243,7 @@ export default {
       this.$data.AmountA ='--';
       this.$data.AmountB ='--';
       this.$data.inputnoticeA = '';
-      
+
 
     },
     inputcheckupA() {
@@ -253,7 +253,7 @@ export default {
         if(isNaN(num)){
           this.$data.inputnoticeA =  ' 输入值需要是数值 ';
           return false;
-        } 
+        }
         const inamount = new BigNumber(this.$data.Amount) ;
         if(inamount.isGreaterThan(this.balance)||inamount.isLessThanOrEqualTo('0')){
           this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
@@ -270,7 +270,7 @@ export default {
     },
     async open(pairs) {
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
 
       this.clearData();
@@ -280,12 +280,12 @@ export default {
       this.$data.isShowRemove = true;
 
       console.log('open');
-      
+
       this.$data.tokenA = pairs.Pair.tokenAmounts[0].token;
       this.$data.tokenB = pairs.Pair.tokenAmounts[1].token;
 
       const  dataPrise = await readpariInfoNuminfo(chainID,library,account, this.$data.tokenA.symbol,this.$data.tokenB.symbol);
-      
+
       this.$data.balance = Web3.utils.fromWei(dataPrise.balance.toString(),'ether');
       this.$data.balanceWei = dataPrise.balance.toString();
       this.$data.liquidityToken = dataPrise.pairInfo.liquidityToken;
@@ -298,7 +298,7 @@ export default {
       this.$data.price = dataPrise.price.toSignificant(6);
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
       this.$data.totalSupply = dataPrise.totalSupply.toString();
-      
+
 
       console.log(dataPrise);
       this.$data.btnLoading =false;
@@ -314,7 +314,7 @@ export default {
       if(cus==undefined){
         this.Amount = new  BigNumber(this.$data.balanceWei).div(1e18).times(i).toFixed(6);
       }
-      
+
 
       this.AmountA = new  BigNumber(this.$data.tokenAAmountWei).div(1e18).times(i).toFixed(6);
       this.AmountB = new  BigNumber(this.$data.tokenBAmountWei).div(1e18).times(i).toFixed(6);
@@ -326,10 +326,10 @@ export default {
     },
    async showConfirmRemove() {
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
 
-      
+
       const num = this.$data.Amount ;
       const numA = this.$data.AmountA ;
       const numB = this.$data.AmountB ;
@@ -341,15 +341,15 @@ export default {
 
       this.$data.btnLoading = true ;
 
-      
+
 
       const ToRemoveAmount = new TokenAmount(
         this.$data.liquidityToken,
         Web3.utils.toWei(num, "ether")) ;
-     
+
      try {
-      const   SignatureData  = await localApprove(library,chainID,account,pariInfo,ToRemoveAmount); 
-    
+      const   SignatureData  = await localApprove(library,chainID,account,pariInfo,ToRemoveAmount);
+
       this.$data.SignatureData = SignatureData ;
 
       const chainId = chainID;
@@ -360,14 +360,14 @@ export default {
         this.$data.tokenA,
         Web3.utils.toWei(numA, "ether")) ;
 
-      
+
       const currencyAmountB =  new TokenAmount(
         this.$data.tokenB,
         Web3.utils.toWei(numB, "ether")) ;
 
       const parameter =  await buildremoveparameter({library,chainId,account,pair,
   signatureData,ToRemoveAmount,currencyAmountA,currencyAmountB});
-  
+
         console.log(parameter);
         this.$data.parameter = parameter;
        const  fee =  await  removeliquidityGas (chainID,library,account,parameter)  ;
@@ -381,35 +381,35 @@ export default {
 
      } catch (error) {
         console.log(error);
-       
+
      }
 
      this.$data.btnLoading = false ;
-      
 
-      
+
+
     },
     async RemoveConfirm(){
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       const  parameters = this.$data.parameter ;
-      
-      
+
+
       try {
         this.$data.btnLoading = true ;
 
         const tx = await sendremoveliquidity(chainID,library,account,parameters) ;
         const baseTip = `remove ${ this.$data.Amount } ${ this.$data.tokenA.symbol }/${ this.$data.tokenB.symbol } LP `;
 
-        this.$refs.haveSendtx.open(baseTip);  
+        this.$refs.haveSendtx.open(baseTip);
         this.openRemoveDialog = false;
 
         event.$emit('sendtx',[tx,{
           okinfo:baseTip+"成功",
           failinfo:baseTip+'失败'
         }]);
-        
+
       } catch (error) {
         console.log(error);
         this.$Notice.error({
@@ -420,10 +420,10 @@ export default {
       this.$data.btnLoading = false ;
 
 
-      
+
     },
     numchange:debounce(function(){
-      
+
       if(this.inputcheckupA()== false){
         return;
 
@@ -431,27 +431,27 @@ export default {
 
       const num = this.$data.Amount ;
       const result = this.$data.Amount /this.$data.balance ;
-      
+
       this.percentage(result,true);
 
 
-    
+
     },1000)
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrise']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrice']),
     Reduceliquidit(){
-      
+
       const  num = new  BigNumber(this.$data.Amount).times(1e18).div(this.$data.totalSupply).toFixed(6);
       return num;
 
     },
     Residualliquidity(){
-      
+
       const b1 =  new  BigNumber(Web3.utils.toWei(this.$data.balance));
       const a1 =  new  BigNumber(Web3.utils.toWei(this.$data.Amount));
       const s1 =  new  BigNumber(this.$data.totalSupply);
-        
+
       const  num = (b1.minus(a1)).div(s1.minus(a1)).toFixed(6);
       return num;
 
@@ -462,7 +462,7 @@ export default {
       if(this.$data.Amount  !=''){
         this.numchange();
       }
-      
+
 
     }
   }

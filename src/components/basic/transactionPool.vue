@@ -21,6 +21,7 @@ export default {
         this.$Notice.success({
           title: '交易成功',
           desc: tx.info.okinfo,
+          duration: 0
         });
         event.$emit('txsuccess');
       } else {

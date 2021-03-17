@@ -13,6 +13,7 @@
 <script>
 import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
+import event from '@/common/js/event';
 export default {
   data() {
     return {
@@ -42,12 +43,26 @@ export default {
   },
   computed: {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
+    isReady() {
+      return this.ethersprovider && this.ethChainID && this.ethAddress;
+    },
+  },
+  watch: {
+    isReady(value) {
+      if (value) {
+        this.getListData();
+      }
+    },
+  },
+  created() {
+    if (this.isReady) {
+      this.getListData();
+    }
   },
   mounted() {
-    this.showLoading = true;
-    setTimeout(() => {
+    event.$on('txsuccess', () => {
       this.getListData();
-    }, 500);
+    });
   },
 };
 </script>

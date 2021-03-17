@@ -25,7 +25,7 @@
         </div>
 
         <div class="btn-warpper">
-          <Buttons v-if="!takeLoading" @click.native="submitData">
+          <Buttons v-if="!takeLoading" @click.native="sendTakeout">
             Confirm
           </Buttons>
           <Buttons v-else>
@@ -38,19 +38,18 @@
 </template>
 
 <script>
-import getTx from '../../utils/getTx.vue';
 import { mapState } from 'vuex';
 import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
+import event from '@/common/js/event';
 export default {
   inject: ['reload'],
-  mixins: [getTx],
   data() {
     return {
       openRemoveDialog: false,
       data: {},
       coinName: '',
       stakeVal: '',
-      takeLoading: false
+      takeLoading: false,
     };
   },
   methods: {
@@ -60,37 +59,48 @@ export default {
       this.coinName = data && data.name;
       this.openRemoveDialog = true;
     },
+    checkData() {
+      if (this.stakeVal <= 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: '输入的值必须大于0',
+        });
+        return false;
+      }
+      return true;
+    },
 
-    async submitData() {
+    // 取出LP
+    async sendTakeout() {
+      if (!this.checkData()) {
+        return false;
+      }
       this.takeLoading = true;
       const tokenJson = this.data;
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const result = await stakingRewardsContract.exit({ gasLimit: 350000 });
-        // console.log('返回结果', result);
-        const txInfo = await this.getTransaction(result.hash);
-        // console.log(txInfo);
-        if (txInfo.status === false) {
-          // console.log('status', txInfo);
-          this.$Notice.error({
-            title: '发送交易失败',
-          });
-        } else {
-          this.$Notice.success({
-            title: '发送交易成功',
-          });
-        }
+        const esGas = await stakingRewardsContract.estimateGas.exit();
+        const result = await stakingRewardsContract.exit({ gasLimit: esGas });
+
+        this.$Notice.success({
+          title: '发送交易成功',
+        });
+
+        event.$emit('sendtx', [
+          result,
+          {
+            okinfo: `Unstake ${this.stakeVal} ${this.coinName} success`,
+            failinfo: `Unstake ${this.stakeVal} ${this.coinName} fail`,
+          },
+        ]);
       } catch (error) {
         console.log(error);
         this.$Notice.error({
           title: '发送交易失败',
         });
       } finally {
-        const timer = setTimeout(() => {
-          this.takeLoading = false;
-          this.reload();
-          clearTimeout(timer);
-        }, 1000);
+        this.openRemoveDialog = false;
+        this.takeLoading = false;
       }
     },
   },
@@ -114,12 +124,13 @@ export default {
     .title {
       height: 28px;
       font-size: 24px;
-      font-family: Gilroy-Medium, Gilroy;
+
       font-weight: 500;
       color: #14171c;
       line-height: 28px;
       margin-bottom: 24px;
     }
+
     .remove-wrapper {
       .title-content {
         overflow: hidden;
@@ -134,12 +145,6 @@ export default {
           line-height: 14px;
         }
       }
-      .remove-wrapper {
-        width: 100%;
-        height: 72px;
-        background: #f7f8f9;
-        border-radius: 6px;
-        position: relative;
         .amount-input {
           width: 100%;
           height: 100%;
@@ -157,7 +162,7 @@ export default {
           }
         }
       }
-    }
+
     .price-warpper {
       margin-top: 30px;
       .price-item {
@@ -168,7 +173,7 @@ export default {
       span {
         height: 14px;
         font-size: 12px;
-        font-family: Gilroy-Medium, Gilroy;
+
         font-weight: 500;
         color: #828489;
         line-height: 14px;
@@ -176,7 +181,7 @@ export default {
       p {
         height: 14px;
         font-size: 12px;
-        font-family: Gilroy-Medium, Gilroy;
+
         font-weight: 500;
         color: #14171c;
         line-height: 14px;
@@ -190,136 +195,5 @@ export default {
       }
     }
   }
-
-  .confirmRemove-content {
-    padding: 16px 28px;
-    position: relative;
-    .arrow-warpper {
-      cursor: pointer;
-      position: absolute;
-      left: 24px;
-      top: 0;
-    }
-    .title {
-      height: 28px;
-      font-size: 24px;
-      font-family: Gilroy-Medium, Gilroy;
-      font-weight: 500;
-      color: #14171c;
-      line-height: 28px;
-      margin-bottom: 24px;
-    }
-    .will-remove {
-      text-align: center;
-      margin: 24px 0 32px;
-      height: 19px;
-      font-size: 16px;
-      font-family: Gilroy-Medium, Gilroy;
-      font-weight: 500;
-      color: #14171c;
-      line-height: 19px;
-    }
-
-    .confirm-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      div {
-        width: 60px;
-        height: 48px;
-        position: relative;
-        img {
-          position: absolute;
-          left: -12px;
-          top: 0;
-        }
-        .img2 {
-          left: 12px;
-          top: 0;
-        }
-      }
-      h2 {
-        height: 47px;
-        font-size: 40px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #14171c;
-        line-height: 47px;
-        margin: 8px 0;
-      }
-      p {
-        height: 19px;
-        font-size: 16px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #14171c;
-        line-height: 19px;
-      }
-      span {
-        height: 32px;
-        font-size: 14px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #828489;
-        line-height: 16px;
-        text-align: center;
-        margin-top: 8px;
-      }
-    }
-
-    .price-warpper {
-      margin-top: 32px;
-      div {
-        display: flex;
-        justify-content: space-between;
-        .images-warpper {
-          width: 22px;
-          height: 14px;
-          position: relative;
-          margin-right: 8px;
-          img {
-            position: absolute;
-            left: 0;
-            top: 0;
-          }
-          .img2 {
-            left: 6px;
-            top: 0;
-            z-index: 3;
-          }
-        }
-      }
-
-      span {
-        height: 14px;
-        font-size: 14px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #828489;
-        line-height: 16px;
-      }
-      p {
-        height: 14px;
-        font-size: 14px;
-        font-family: Gilroy-Medium, Gilroy;
-        font-weight: 500;
-        color: #14171c;
-        line-height: 16px;
-        margin-bottom: 16px;
-      }
-    }
-
-    .button-wrapper {
-      margin-top: 24px;
-      height: 48px;
-    }
-  }
-}
-
-.demo-spin-container {
-  display: inline-block;
-  width: 400px;
-  height: 200px;
-  position: relative;
 }
 </style>

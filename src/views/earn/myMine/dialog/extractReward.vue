@@ -24,16 +24,16 @@
           </div>
           <div class="price-item">
             <span>Price</span>
-            <p>1 CASH = 0.12 USDT</p>
+            <p>--</p>
           </div>
           <div class="price-item">
             <span>Fee</span>
-            <p>0.1 ETH</p>
+            <p>${{ fee }}</p>
           </div>
         </div>
 
         <div class="btn-warpper">
-          <Buttons v-if="!extractLoading" @click.native="submitData">
+          <Buttons v-if="!extractLoading" @click.native="sendExtract">
             Confirm
           </Buttons>
           <Buttons v-else>
@@ -46,19 +46,21 @@
 </template>
 
 <script>
-import getTx from '../../utils/getTx.vue';
 import { mapState } from 'vuex';
 import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
+import event from '@/common/js/event';
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import {  getGasPrice } from '@/contacthelp/ethusdt.js';
 export default {
-  inject: ['reload'],
-  mixins: [getTx],
   data() {
     return {
       openClaimDialog: false,
       claimAmount: '',
       data: {},
       coinName: '',
-      extractLoading: false
+      extractLoading: false,
+      fee: '',
     };
   },
   methods: {
@@ -66,24 +68,57 @@ export default {
       this.data = data;
       this.coinName = data && data.name;
       this.claimAmount = data && data.data && data.data.earned;
+      this.getFee();
       this.openClaimDialog = true;
     },
-    async submitData() {
+    checkData() {
+      if (this.claimAmount <= 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: '输入的值必须大于0',
+        });
+        return false;
+      }
+      return true;
+    },
+    // 获取手续费
+    async getFee() {
+      const tokenJson = this.data;
+      const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+      const esGas = await stakingRewardsContract.estimateGas.getReward();
+      const gasPrice = await getGasPrice(this.ethersprovider);
+      const bigGasPrice = new BigNumber(gasPrice);
+      const bigGas = new BigNumber(esGas.toString());
+      const bigHTPrice = new BigNumber(this.htPrice);
+      const fee = bigGas.times(bigHTPrice).times(bigGasPrice).div('1e18');
+      this.fee = fee.decimalPlaces(6).toNumber();
+    },
+
+    // 提取收益
+    async sendExtract() {
+      if (!this.checkData()) {
+        return false;
+      }
       this.extractLoading = true;
       const tokenJson = this.data;
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const result = await stakingRewardsContract.getReward({ gasLimit: 350000 });
-        const txInfo = await this.getTransaction(result.hash);
-        if (txInfo.status === false) {
-          this.$Notice.error({
-            title: this.$t('notice.n32'),
-          });
-        } else {
-          this.$Notice.success({
-            title: this.$t('notice.n33'),
-          });
-        }
+
+        const esGas = await stakingRewardsContract.estimateGas.getReward();
+
+        const result = await stakingRewardsContract.getReward({ gasLimit: esGas });
+
+        this.$Notice.success({
+          title: '发送交易成功',
+        });
+
+        event.$emit('sendtx', [
+          result,
+          {
+            okinfo: `Claim ${this.claimAmount} ${this.coinName} success`,
+            failinfo: `Claim ${this.claimAmount} ${this.coinName} fail`,
+          },
+        ]);
       } catch (error) {
         console.log(error);
         this.$Notice.error({
@@ -91,8 +126,7 @@ export default {
         });
       } finally {
         const timer = setTimeout(() => {
-          this.extractLoading = false;
-          this.reload();
+          (this.openClaimDialog = false), (this.extractLoading = false);
           clearTimeout(timer);
         }, 1000);
       }
@@ -102,7 +136,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethAddress', 'htPrice', 'web3']),
   },
 };
 </script>
@@ -165,21 +199,6 @@ export default {
           position: absolute;
           right: 16px;
           top: 28px;
-          .MAX {
-            width: 29px;
-            height: 16px;
-            font-size: 14px;
-            font-family: Gilroy-Medium, Gilroy;
-            font-weight: 500;
-            color: #0058ff;
-            line-height: 16px;
-          }
-        }
-        .amount-input-error {
-          &:focus {
-            border: 1px solid #ff3c00;
-            border-radius: 4px;
-          }
         }
       }
     }
@@ -215,12 +234,5 @@ export default {
       }
     }
   }
-}
-
-.demo-spin-container {
-  display: inline-block;
-  width: 400px;
-  height: 200px;
-  position: relative;
 }
 </style>
