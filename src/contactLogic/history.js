@@ -1,5 +1,5 @@
 
-import {swapHistory,pledgeHistory} from "@/constants/apiconfig.js";
+import {swapHistory,pledgeHistory,buildrHistory} from "@/constants/apiconfig.js";
 import _ from 'underscore';
 import tokens from "@/constants/token.json";
 
@@ -42,6 +42,38 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
             item.show = getRewardformat(item.txs,chainID);
 
         }
+        
+
+    });
+
+
+
+    console.log(data);
+    return data;
+
+}
+
+export  async function readbuildrHistory(chainID,account,pageNum,showNum){
+    const data = await buildrHistory(account,pageNum,showNum);
+    //['stake','exit','getReward']
+    
+    data.data.forEach((item)=>{
+        item.show = proxyformat(item.txs,chainID);
+
+        // if(item.method_name == 'proxyMinted'){
+        //     item.show = proxyformat(item.txs,chainID);
+        // }else if( item.method_name == 'proxyBurned'){
+        //     // item.show = exitformat(item.txs,chainID);
+        // }else if(item.method_name == 'proxyJoined'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }else if(item.method_name == 'proxyExited'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }else if(item.method_name == 'approval'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }
         
 
     });
@@ -186,3 +218,29 @@ function getRewardformat(item,chainID){
     };
 
 }
+
+
+function proxyBurnedformat(item,chainID){
+    const inamount = item[0].amount;
+    
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    
+    return {
+        amount:inamount,
+        tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
+    
+    };
+}
+
+function proxyformat(item,chainID){
+    const inamount = item[0].amount;
+    
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    
+    return {
+        amount:inamount,
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+    
+    };
+}
+

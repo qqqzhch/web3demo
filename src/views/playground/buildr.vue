@@ -45,7 +45,7 @@ getCollateralToken}  from '@/contactLogic/buildr/tokens.js';
 
 import {useTokenApprove} from '@/contacthelp/Approve.js';
 
-import {readSwapHistory,readPledgeHistory} from '@/contactLogic/history.js';
+import {readSwapHistory,readPledgeHistory,readbuildrHistory} from '@/contactLogic/history.js';
 
 
 import Web3 from 'web3';
@@ -230,7 +230,8 @@ export default {
       const chainID = this.ethChainID;
 
       // readSwapHistory(chainID,account,1,10);
-      readPledgeHistory(chainID,account,1,10);
+      // readPledgeHistory(chainID,account,1,10);
+      readbuildrHistory(chainID,account,1,10);
     },
    async htPrise(){
 
