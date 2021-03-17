@@ -42,6 +42,7 @@
           <div>
             <ScInput
               title=""
+              :default-value="coinAmount"
               :unit="poolData.tokenName"
               placetext="请输入数量"
               :on-change="onChangeValue"

@@ -80,6 +80,11 @@ const routes = [
         name: "history",
         component: () => import("@/views/buildr/history/index.vue")
       },
+      {
+        path: "guide",
+        name: "guide",
+        component: () => import("@/views/buildr/guide/index.vue")
+      },
     ]
   },
   {
