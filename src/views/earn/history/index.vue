@@ -4,14 +4,10 @@
       <p class="earn-title">
         History
       </p>
-      <Scroll
-        :loading-text="'loading....'"
-        :on-reach-bottom="onreachbottom"
-        :height="400"
-      >
+      <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
           <Table :columns="getHistory" :data="list">
-            <template slot="Pool" slot-scope="{ row}">
+            <template slot="Pool" slot-scope="{ row }">
               <div class="Pool">
                 <!-- <div v-if="row.method_name==='exit'" class="imgages-warpper">
                 <img :src="getTokenImg(row.show.tokenA)" class="imgLeft">
@@ -25,34 +21,34 @@
                 </p>
               </div>
             </template>
-            <template slot="Action" slot-scope="{ row}">
+            <template slot="Action" slot-scope="{ row }">
               <div class="Action">
                 <p class="action">
                   {{ row.method_name }}
                 </p>
               </div>
             </template>
-            <template slot="Amount" slot-scope="{ row}">
-              <div v-if="row.method_name==='exit'" class="Amount">
+            <template slot="Amount" slot-scope="{ row }">
+              <div v-if="row.method_name === 'exit'" class="Amount">
                 <p class="amout">
-                  {{ row.show.outamountA|format1e18ValueList }} {{ row.show.tokenA }}
+                  {{ row.show.outamountA | format1e18ValueList }} {{ row.show.tokenA }}
                 </p>
                 <p class="amout">
-                  {{ row.show.outamountB|format1e18ValueList }} {{ row.show.tokenB }}
-                </p>
-              </div>
-              <div v-if="row.method_name==='getReward'" class="Amount">
-                <p class="amout">
-                  {{ row.show.outamount|format1e18ValueList }} {{ row.show.tokenA }}
+                  {{ row.show.outamountB | format1e18ValueList }} {{ row.show.tokenB }}
                 </p>
               </div>
-              <div v-if="row.method_name==='stake'" class="Amount">
+              <div v-if="row.method_name === 'getReward'" class="Amount">
                 <p class="amout">
-                  {{ row.show.inamount|format1e18ValueList }} {{ row.show.tokenA }}
+                  {{ row.show.outamount | format1e18ValueList }} {{ row.show.tokenA }}
+                </p>
+              </div>
+              <div v-if="row.method_name === 'stake'" class="Amount">
+                <p class="amout">
+                  {{ row.show.inamount | format1e18ValueList }} {{ row.show.tokenA }}
                 </p>
               </div>
             </template>
-            <template slot="Status" slot-scope="{ row}">
+            <template slot="Status" slot-scope="{ row }">
               <div class="Status">
                 <p v-if="row.tx_status === 1" class="status success">
                   Success
@@ -70,10 +66,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { readPledgeHistory } from "@/contactLogic/history.js";
-import { getTokenImg } from "@/contactLogic/readbalance.js";
-import tokenList from "@/constants/earnList.json";
+import { mapState } from 'vuex';
+import { readPledgeHistory } from '@/contactLogic/history.js';
+import { getTokenImg } from '@/contactLogic/readbalance.js';
+import tokenList from '@/constants/earnList.json';
 
 export default {
   data() {
@@ -82,7 +78,7 @@ export default {
       pageIndex: 1,
       pageNum: 1,
       pairloading: false,
-      addressName: "",
+      addressName: '',
     };
   },
   // components:{
@@ -99,12 +95,7 @@ export default {
       const account = this.ethAddress;
       const chainID = this.ethChainID;
 
-      const data = await readPledgeHistory(
-        chainID,
-        account,
-        this.$data.pageIndex,
-        10
-      );
+      const data = await readPledgeHistory(chainID, account, this.$data.pageIndex, 10);
 
       this.list = this.$data.list.concat(data.data);
 
@@ -118,27 +109,23 @@ export default {
       this.$data.pairloading = false;
     },
     selectAddress(val) {
-      
       const token = tokenList.filter((item) => {
         return item.address === val;
       });
       return token[0].name;
     },
-    onreachbottom(){
-      console.log('onreachbottom',this.$data.pageIndex);
-      const  _this = this;
+    onreachbottom() {
+      console.log('onreachbottom', this.$data.pageIndex);
+      const _this = this;
 
-      return new Promise( resolve => {
-           setTimeout(async () => {
-             _this.$data.pageIndex+=1;
-             await _this.getreadPledgeHistory();
-             resolve({})   ;
-
-           },1);
-
-          });
-
-    }
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          _this.$data.pageIndex += 1;
+          await _this.getreadPledgeHistory();
+          resolve({});
+        }, 1);
+      });
+    },
   },
   mounted() {
     this.$data.pageIndex = 1;
@@ -158,30 +145,30 @@ export default {
     getHistory() {
       const columns = [
         {
-          title: "Pool",
-          slot: "Pool",
+          title: 'Pool',
+          slot: 'Pool',
           minWidth: 200,
         },
         {
-          title: "Action",
-          slot: "Action",
+          title: 'Action',
+          slot: 'Action',
           minWidth: 100,
         },
         {
-          title: "Amount",
-          slot: "Amount",
+          title: 'Amount',
+          slot: 'Amount',
           minWidth: 120,
         },
         {
-          title: "Status",
-          slot: "Status",
+          title: 'Status',
+          slot: 'Status',
           minWidth: 100,
         },
       ];
       return columns;
     },
 
-    ...mapState(["ethAddress", "ethChainID", "web3", "ethersprovider"]),
+    ...mapState(['ethAddress', 'ethChainID', 'web3', 'ethersprovider']),
   },
 };
 </script>

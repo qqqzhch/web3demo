@@ -44,7 +44,7 @@ export default {
   computed: {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
     isReady() {
-      return this.ethersprovider && this.ethChainID && this.ethAddress;
+      return this.ethChainID;
     },
   },
   watch: {

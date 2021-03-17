@@ -24,7 +24,7 @@
         <div class="balance">
           <div class="balance-item">
             <span class="title">Total Staked</span>
-            <span class="value">{{ item.data && item.data.totalSupply }}</span>
+            <span class="value">{{ item.data && item.data.totalSupply || 0 }}</span>
           </div>
           <div class="balance-item">
             <span class="title">Total Value of Pool</span>
@@ -37,9 +37,12 @@
         </div>
 
         <div class="btn-item">
-          <button class="stakeBtn" @click="openStake(item)">
+          <button v-if="ethAddress" class="stakeBtn" @click="openStake(item)">
             Stake
           </button>
+          <Buttons v-else width="100px" height="30px" class="disableBtn">
+            Stake
+          </Buttons>
         </div>
       </div>
     </div>
@@ -47,6 +50,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 export default {
@@ -59,6 +63,12 @@ export default {
     openStake(data) {
       this.$emit('openStake', data);
     },
+  },
+  components: {
+    Buttons: () => import('@/components/basic/buttons.vue'),
+  },
+  computed: {
+    ...mapState(['ethAddress']),
   },
 };
 </script>
