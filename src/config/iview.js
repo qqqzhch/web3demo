@@ -7,6 +7,7 @@ export default function(Vue) {
   Vue.component("Spin", Spin);
   Vue.component("Icon", Icon);
   Vue.component("Scroll", Scroll);
+  Vue.component("Table", Table);
   Vue.component("Select", Select);
   Vue.component("Option", Option);
   Vue.component("Table", Table);

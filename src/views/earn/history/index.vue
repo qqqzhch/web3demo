@@ -5,74 +5,180 @@
         History
       </p>
       <div class="list-wapper">
-        <div class="list-title flex">
-          <span class="Pool">Pool</span>
-          <span class="Action">Action</span>
-          <span class="amount">Amount</span>
-          <span class="status">Status</span>
-        </div>
-        <div class="list-item">
-          <div>
-            <div class="imgages-warpper">
-              <img src="../../../assets/img/comp.svg" class="imgLeft">
-              <img src="../../../assets/img/comp.svg" class="imgRight">
+        <Table :columns="getHistory" :data="list">
+          <template slot="Pool" slot-scope="{ row}">
+            <div class="Pool">
+              <!-- <div v-if="row.method_name==='exit'" class="imgages-warpper">
+                <img :src="getTokenImg(row.show.tokenA)" class="imgLeft">
+                <img :src="getTokenImg(row.show.tokenB)" class="imgRight">
+              </div>
+              <div v-else class="imgages-warpper">
+                <img :src="getTokenImg(row.show.tokenA)" class="images">
+              </div> -->
+              <p>
+                {{ selectAddress(row.show.poolADDRESS) }}
+              </p>
             </div>
-            <p>scUSD-USDT LP</p>
-          </div>
-          <p class="action">
-            Stake scUSD/USDT LP
-          </p>
-          <p class="amout">
-            1234 
-          </p>
-          <p class="status success">
-            Success
-          </p>
-        </div>
-        <div class="list-item">
-          <div>
-            <div class="imgages-warpper">
-              <img src="../../../assets/img/comp.svg" class="imgLeft">
-              <img src="../../../assets/img/comp.svg" class="imgRight">
+          </template>
+          <template slot="Action" slot-scope="{ row}">
+            <div class="Action">
+              <p class="action">
+                {{ row.method_name }}
+              </p>
             </div>
-            <p>scUSD-USDT LP</p>
-          </div>
-          <p class="action">
-            Stake scUSD/USDT LP
-          </p>
-          <p class="amout">
-            1234 
-          </p>
-          <p class="status success">
-            Success
-          </p>
-        </div>
-        <div class="list-item">
-          <div>
-            <div class="imgages-warpper">
-              <img src="../../../assets/img/comp.svg">
+          </template>
+          <template slot="Amount" slot-scope="{ row}">
+            <div v-if="row.method_name==='exit'" class="Amount">
+              <p class="amout">
+                {{ row.show.outamountA|format1e18ValueList }} {{ row.show.tokenA }}
+              </p>
+              <p class="amout">
+                {{ row.show.outamountB|format1e18ValueList }} {{ row.show.tokenB }}
+              </p>
             </div>
-            <p>scUSD</p>
-          </div>
-          <p class="action">
-            Stake scUSD
-          </p>
-          <p class="amout">
-            1234 
-          </p>
-          <p class="status success">
-            Success
-          </p>
-        </div>
+            <div v-if="row.method_name==='getReward'" class="Amount">
+              <p class="amout">
+                {{ row.show.outamount|format1e18ValueList }} {{ row.show.tokenA }}
+              </p>
+            </div>
+            <div v-if="row.method_name==='stake'" class="Amount">
+              <p class="amout">
+                {{ row.show.inamount|format1e18ValueList }} {{ row.show.tokenA }}
+              </p>
+            </div>
+          </template>
+          <template slot="Status" slot-scope="{ row}">
+            <div class="Status">
+              <p v-if="row.tx_status === 1" class="status success">
+                Success
+              </p>
+              <p v-else class="fail">
+                Fail
+              </p>
+            </div>
+          </template>
+        </Table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { readPledgeHistory } from "@/contactLogic/history.js";
+import { getTokenImg } from "@/contactLogic/readbalance.js";
+import tokenList from "../rewardMine/utils/mineList/list.json";
+
 export default {
   data() {
-    return {};
+    return {
+      list: [],
+      pageIndex: 1,
+      pageNum: 1,
+      pairloading: false,
+      addressName: "",
+    };
+  },
+  // components:{
+  //   loading: () => import("@/components/basic/loading.vue"),
+
+  // },
+  methods: {
+    getTokenImg(tokensymbol) {
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol, chainID);
+    },
+    async getreadPledgeHistory() {
+      const library = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainID = this.ethChainID;
+
+      const data = await readPledgeHistory(
+        chainID,
+        account,
+        this.$data.pageIndex,
+        10
+      );
+
+      this.list = this.$data.list.concat(data.data);
+
+      console.log(this.list);
+
+      if (data.count % 10 == 0) {
+        this.$data.pageNum = data.count / 10;
+      } else {
+        this.$data.pageNum = (data.count - (data.count % 10)) / 10 + 1;
+      }
+      this.$data.pairloading = false;
+    },
+    selectAddress(val) {
+      
+      const token = tokenList.filter((item) => {
+        return item.address === val;
+      });
+      return token[0].name;
+    },
+    // onreachbottom(){
+    //   console.log('onreachbottom',this.$data.pageIndex);
+    //   if(this.$data.pageIndex<this.$data.pageNum)
+    //   this.$data.pairloading = true ;
+
+    //   const  _this = this;
+
+    //   return new Promise( resolve => {
+    //        setTimeout(async () => {
+    //          _this.$data.pageIndex+=1;
+    //          await _this.getreadPledgeHistory();
+    //          resolve({})   ;
+
+    //        },1);
+
+    //       });
+
+    // }
+  },
+  mounted() {
+    this.$data.pageIndex = 1;
+    this.$data.list = [];
+    if (this.ethAddress) {
+      this.getreadPledgeHistory();
+    }
+  },
+  watch: {
+    ethAddress: function () {
+      if (this.ethAddress) {
+        this.getreadPledgeHistory();
+      }
+    },
+  },
+  computed: {
+    getHistory() {
+      const columns = [
+        {
+          title: "Pool",
+          slot: "Pool",
+          minWidth: 200,
+        },
+        {
+          title: "Action",
+          slot: "Action",
+          minWidth: 100,
+        },
+        {
+          title: "Amount",
+          slot: "Amount",
+          minWidth: 120,
+        },
+        {
+          title: "Status",
+          slot: "Status",
+          minWidth: 100,
+        },
+      ];
+      return columns;
+    },
+
+    ...mapState(["ethAddress", "ethChainID", "web3", "ethersprovider"]),
   },
 };
 </script>
@@ -94,99 +200,53 @@ export default {
       font-weight: 500;
       color: #14171c;
       line-height: 24px;
+      margin-bottom: 5px;
     }
     .list-wapper {
-      .list-title {
-        margin: 16px 0;
-        padding: 0 16px;
-        display: flex;
-        justify-content: space-between;
-        span {
-          width: 30%;
-          height: 14px;
-          font-size: 12px;
-          font-family: Gilroy-Medium, Gilroy;
-          font-weight: 500;
-          color: #828489;
-          line-height: 14px;
-        }
-        .status{
-          width: 10%;
-        }
+      p {
+        height: 19px;
+        font-size: 16px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #14171c;
+        line-height: 19px;
+        margin: 10px;
       }
-      .list-item {
+      .Pool {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        flex-direction: row;
-        cursor: pointer;
-        width: 892px;
-        height: 56px;
-        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
-        padding: 16px;
-        position: relative;
-        div {
+        .imgages-warpper {
           display: flex;
-          width: 30%;
-          img {
-            margin: auto;
+          margin-right: 12px;
+          width: 40px;
+          height: 24px;
+          position: relative;
+          .images {
             width: 24px;
-            p {
-              height: 80px;
-              font-size: 16px;
-              font-family: Gilroy-Medium, Gilroy;
-              font-weight: 500;
-              color: #14171c;
-              line-height: 19px;
-            }
+            margin: auto;
           }
-          .imgages-warpper{
-            margin-right: 12px;
-            width: 40px;
-            height: 24px;
-            position: relative;
-            .imgLeft{
-              position: absolute;
-              left: 0;
-              top: 0;
-            }
-            .imgRight{
-              position: absolute;
-              left: 16px;
-              top: 0;
-              z-index: 5;
-            }
+          .imgLeft {
+            width: 24px;
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+          .imgRight {
+            width: 24px;
+            position: absolute;
+            left: 16px;
+            top: 0;
+            z-index: 5;
           }
         }
-        .action {
-          width: 30%;
-          height: 19px;
-          font-size: 16px;
-          font-family: Gilroy-Medium, Gilroy;
-          font-weight: 500;
-          color: #14171c;
-          line-height: 19px;
-        }
-        .amout{
-          width: 30%;
-        }
-        .status{
-          width: 10%;
-        }
-        .success{
-          color: #00D075;
-        }
-
       }
-      .list-item::before {
-        content: "";
-        height: 56px;
-        width: 2px;
-        background: #0058ff;
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: none;
+      .Status {
+        .status {
+          color: #00d075;
+        }
+        .fail {
+          color: #ff3c00;
+        }
       }
     }
   }
