@@ -7,7 +7,7 @@
       <Scroll
         :loading-text="'loading....'"
         :on-reach-bottom="onreachbottom"
-        :height="550"
+        :height="400"
       >
         <div class="list-wapper">
           <Table :columns="getHistory" :data="list">
@@ -124,24 +124,21 @@ export default {
       });
       return token[0].name;
     },
-    // onreachbottom(){
-    //   console.log('onreachbottom',this.$data.pageIndex);
-    //   if(this.$data.pageIndex<this.$data.pageNum)
-    //   this.$data.pairloading = true ;
+    onreachbottom(){
+      console.log('onreachbottom',this.$data.pageIndex);
+      const  _this = this;
 
-    //   const  _this = this;
+      return new Promise( resolve => {
+           setTimeout(async () => {
+             _this.$data.pageIndex+=1;
+             await _this.getreadPledgeHistory();
+             resolve({})   ;
 
-    //   return new Promise( resolve => {
-    //        setTimeout(async () => {
-    //          _this.$data.pageIndex+=1;
-    //          await _this.getreadPledgeHistory();
-    //          resolve({})   ;
+           },1);
 
-    //        },1);
+          });
 
-    //       });
-
-    // }
+    }
   },
   mounted() {
     this.$data.pageIndex = 1;
