@@ -4,61 +4,67 @@
       <p class="earn-title">
         History
       </p>
-      <div class="list-wapper">
-        <Table :columns="getHistory" :data="list">
-          <template slot="Pool" slot-scope="{ row}">
-            <div class="Pool">
-              <!-- <div v-if="row.method_name==='exit'" class="imgages-warpper">
+      <Scroll
+        :loading-text="'loading....'"
+        :on-reach-bottom="onreachbottom"
+        :height="550"
+      >
+        <div class="list-wapper">
+          <Table :columns="getHistory" :data="list">
+            <template slot="Pool" slot-scope="{ row}">
+              <div class="Pool">
+                <!-- <div v-if="row.method_name==='exit'" class="imgages-warpper">
                 <img :src="getTokenImg(row.show.tokenA)" class="imgLeft">
                 <img :src="getTokenImg(row.show.tokenB)" class="imgRight">
               </div>
               <div v-else class="imgages-warpper">
                 <img :src="getTokenImg(row.show.tokenA)" class="images">
               </div> -->
-              <p>
-                {{ selectAddress(row.show.poolADDRESS) }}
-              </p>
-            </div>
-          </template>
-          <template slot="Action" slot-scope="{ row}">
-            <div class="Action">
-              <p class="action">
-                {{ row.method_name }}
-              </p>
-            </div>
-          </template>
-          <template slot="Amount" slot-scope="{ row}">
-            <div v-if="row.method_name==='exit'" class="Amount">
-              <p class="amout">
-                {{ row.show.outamountA|format1e18ValueList }} {{ row.show.tokenA }}
-              </p>
-              <p class="amout">
-                {{ row.show.outamountB|format1e18ValueList }} {{ row.show.tokenB }}
-              </p>
-            </div>
-            <div v-if="row.method_name==='getReward'" class="Amount">
-              <p class="amout">
-                {{ row.show.outamount|format1e18ValueList }} {{ row.show.tokenA }}
-              </p>
-            </div>
-            <div v-if="row.method_name==='stake'" class="Amount">
-              <p class="amout">
-                {{ row.show.inamount|format1e18ValueList }} {{ row.show.tokenA }}
-              </p>
-            </div>
-          </template>
-          <template slot="Status" slot-scope="{ row}">
-            <div class="Status">
-              <p v-if="row.tx_status === 1" class="status success">
-                Success
-              </p>
-              <p v-else class="fail">
-                Fail
-              </p>
-            </div>
-          </template>
-        </Table>
-      </div>
+                <p>
+                  {{ selectAddress(row.show.poolADDRESS) }}
+                </p>
+              </div>
+            </template>
+            <template slot="Action" slot-scope="{ row}">
+              <div class="Action">
+                <p class="action">
+                  {{ row.method_name }}
+                </p>
+              </div>
+            </template>
+            <template slot="Amount" slot-scope="{ row}">
+              <div v-if="row.method_name==='exit'" class="Amount">
+                <p class="amout">
+                  {{ row.show.outamountA|format1e18ValueList }} {{ row.show.tokenA }}
+                </p>
+                <p class="amout">
+                  {{ row.show.outamountB|format1e18ValueList }} {{ row.show.tokenB }}
+                </p>
+              </div>
+              <div v-if="row.method_name==='getReward'" class="Amount">
+                <p class="amout">
+                  {{ row.show.outamount|format1e18ValueList }} {{ row.show.tokenA }}
+                </p>
+              </div>
+              <div v-if="row.method_name==='stake'" class="Amount">
+                <p class="amout">
+                  {{ row.show.inamount|format1e18ValueList }} {{ row.show.tokenA }}
+                </p>
+              </div>
+            </template>
+            <template slot="Status" slot-scope="{ row}">
+              <div class="Status">
+                <p v-if="row.tx_status === 1" class="status success">
+                  Success
+                </p>
+                <p v-else class="fail">
+                  Fail
+                </p>
+              </div>
+            </template>
+          </Table>
+        </div>
+      </Scroll>
     </div>
   </div>
 </template>
@@ -67,7 +73,7 @@
 import { mapState } from "vuex";
 import { readPledgeHistory } from "@/contactLogic/history.js";
 import { getTokenImg } from "@/contactLogic/readbalance.js";
-import tokenList from "../rewardMine/utils/mineList/list.json";
+import tokenList from "@/constants/earnList.json";
 
 export default {
   data() {
