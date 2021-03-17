@@ -1,8 +1,9 @@
 <template>
   <div class="balance">
-    <div class="box-shadow">
+    <div class="overview-warpper">
       <Overview />
     </div>
+<<<<<<< HEAD
     <div class="content">
       <div
         v-for="poolItem in poolsData"
@@ -11,36 +12,68 @@
       >
         <div class="build-grid-1">
           <div>
+=======
+    <div class="CDP-content">
+      <div class="title">
+        My CDPs
+      </div>
+      <div v-for="poolItem in poolsData" :key="poolItem.tokenName">
+        <div class="CDP-item">
+          <div class="small-item flex flex-col items-center">
+            <img src="../../../assets/img/lambda48.svg" alt="lambda">
+>>>>>>> b5a03be (buildr页面样式)
             <div>{{ poolItem.tokenTitle }}</div>
-            <div>目标抵押率：{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</div>
-            <div>当前价格：{{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD</div>
           </div>
-          <div class="build-grid-2">
+          <div class="small-item">
             <div>
-              <div>清算价格：{{ getLiquidationPrice(poolItem) }} USD</div>
-              <div>抵押资产：{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</div>
-              <div>当前债务：{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</div>
-              <div>可释放LAMB：{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</div>
-              <div>可铸造额度：{{ BigNumber(poolItem.maxMintable).toFixed(6) }} scUSD</div>
-              <div>当前抵押率：{{ BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</div>
+              <span>目标抵押率</span>
+              <p>{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</p>
             </div>
+            <div class="mrg-tb-20">
+              <span>当前价格</span>
+              <p>{{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD</p>
+            </div>
+          </div>
+          <div class="small-item">
             <div>
-              <div>
-                <button
-                  class="btn"
-                  @click="openJoinDialog(poolItem)"
-                >
-                  抵押/提取资产
-                </button>
-              </div>
-              <div class="mrg-tb-20">
-                <button
-                  class="btn"
-                  @click="openMintDialog(poolItem)"
-                >
-                  铸造/偿还债务
-                </button>
-              </div>
+              <span>抵押资产</span>
+              <p>{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</p>
+            </div>
+            <div class="mrg-tb-20">
+              <span>当前债务</span>
+              <p>{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</p>
+            </div>
+          </div>
+          <div class="small-item">
+            <div>
+              <span>可释放LAMB</span>
+              <p>{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</p>
+            </div>
+            <div class="mrg-tb-20">
+              <span>可铸造额度</span>
+              <p>{{ BigNumber(poolItem.maxMintable).toFixed(6) }} scUSD</p>
+            </div>
+          </div>
+          <div class="small-item">
+            <div>
+              <span>当前抵押率</span>
+              <p>{{ BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</p>
+            </div>
+            <div class="mrg-tb-20">
+              <span>清算价格</span>
+              <p>{{ getLiquidationPrice(poolItem) }} USD</p>
+            </div>
+          </div>
+          <div class="btn-warpper">
+            <div>
+              <button class="btn" @click="openJoinDialog(poolItem)">
+                抵押/提取资产
+              </button>
+            </div>
+            <div class="mrg-tb-20">
+              <button class="btn" @click="openMintDialog(poolItem)">
+                铸造/偿还债务
+              </button>
             </div>
           </div>
         </div>
@@ -58,52 +91,57 @@
 
 <script src="./index.js" ></script>
 <style lang="less" scoped>
-  .balance {
+.balance {
+  margin: 24px 0 0 100px;
+  .title {
     margin-top: 24px;
-      .title {
-          font-size: 20px;
-          font-weight: 500;
-          color: #14171C;
-          line-height: 24px;
-      }
-      .content {
-          position: relative;
-          z-index: 100;
-          margin-top: 20px;
-          .build-item {
-            position: relative;
-            display: inline-block;
-            padding: 20px;
-            width: 100%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.06);
-            border-radius: 6px;
-          }
-
-          .build-grid-1{
-            display: grid;
-            grid-template-columns: 30% 70%;
-            justify-content: space-between;
-          }
-          .build-grid-2{
-            display: grid;
-            grid-template-columns: 70% 30%;
-            justify-content: space-between;
-          }
-          .pull-right {
-              position: absolute;
-              top: 30px;
-              right: 20px;
-              color: #14171c66;
-          }
-          .btn{
-              line-height: 40px;
-              height: 40px;
-              padding: 0px 20px;
-              background-color: #0058FF;
-              color: rgb(255, 255, 255);
-          }
-      }
+    height: 24px;
+    font-size: 20px;
+    font-family: Gilroy-Medium, Gilroy;
+    font-weight: 500;
+    color: #14171c;
+    line-height: 24px;
   }
+  .CDP-item {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    margin-top: 24px;
+    .small-item {
+      margin:0 50px;
+      div {
+        span {
+          height: 16px;
+          font-size: 14px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #828489;
+          line-height: 16px;
+        }
+        p {
+          height: 19px;
+          font-size: 16px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 19px;
+          margin-top: 5px;
+        }
+      }
+    }
+    .btn-warpper {
+      flex: 1;
+      .btn {
+        width: 100%;
+        line-height: 40px;
+        height: 40px;
+        padding: 0px 20px;
+        background-color: #0058ff;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+}
 </style>

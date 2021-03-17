@@ -198,7 +198,7 @@ export default {
         font-weight: 500;
         color: #14171c;
         line-height: 19px;
-        margin: 10px;
+        margin: 10px 0;
       }
       .Pool {
         display: flex;
