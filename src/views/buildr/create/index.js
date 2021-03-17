@@ -94,7 +94,6 @@ export default {
         okinfo: tx.base+"成功",
         failinfo: tx.base+'失败'
       }]);
-      setTimeout(() => this.$router.push(`/buildr/balance`), 3000);
     },
     // Join
     async onJoinClick() {

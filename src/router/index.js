@@ -66,6 +66,11 @@ const routes = [
     component: () => import("@/views/buildr/index.vue"),
     children: [
       {
+        path: "",
+        name: "balance",
+        component: () => import("@/views/buildr/balance/index.vue"),
+      },
+      {
         path: "balance",
         name: "balance",
         component: () => import("@/views/buildr/balance/index.vue"),
