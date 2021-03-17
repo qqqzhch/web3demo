@@ -37,8 +37,8 @@
             <p class="price">
               {{ item.price|formatNormalValue }}
             </p>
-            <p class="change">
-              +--%
+            <p :class="item.change=='+'? 'change':'change decline'">
+              {{ item.change }} {{ item.prisechange|formatRate }}
             </p>
           </div>
         </div>

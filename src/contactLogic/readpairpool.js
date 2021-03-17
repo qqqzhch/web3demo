@@ -27,6 +27,12 @@ import {  getGasPrice } from '@/contacthelp/ethusdt.js';
 // import bignumber from  "bignumber.js"
 const BigNumber = require("bignumber.js");
 
+import {pairPrice} from '@/constants/apiconfig.js';
+
+import {swapExactTokensForTokensformat} from './history.js';
+
+
+
 function  Calculatepercentage(balance,totalSupply){
   const balance_ = new BigNumber(balance);
   const totalSupply_ = new BigNumber(totalSupply);
@@ -59,9 +65,15 @@ export async function readpairpool(chainID,library){
     this.$data.price = price.toSignificant(6);
     this.$data.invertprice = price.invert().toSignificant(6);
     */
+   const PricePromiseList  = [];
     PairList.forEach(async element=>{
         const route = new Route([element], element.tokenAmounts[0].token);
         const price = route.pairs[0].priceOf(element.tokenAmounts[0].token);
+        const  tokenA = element.tokenAmounts[0].token;
+        const  tokenB = element.tokenAmounts[1].token;
+        const pairaddress = element.liquidityToken.address;
+
+        PricePromiseList.push(getpairPrice(pairaddress,chainID,tokenB.symbol,tokenA.symbol));  
 
         dataList.push({
             Pair:element,
@@ -74,6 +86,37 @@ export async function readpairpool(chainID,library){
         });
 
     });
+
+    const PriceList = await Promise.all(PricePromiseList);
+    console.log('PriceList',PriceList);
+    dataList.forEach((item)=>{
+      
+    const   prise24 =  _.find(PriceList,(one)=>{
+        if(one[item.pairName]){
+          return one;
+
+        } 
+
+      });
+      if(prise24){
+        item.prise24=prise24[item.pairName];
+        if(item.price - item.prise24>0){
+          item.change='+';  
+        }else{
+          item.change='-';
+        }
+        item.prisechange=Math.abs((item.price - item.prise24)/item.prise24);
+        
+
+
+      }else{
+        item.prisechange='';
+      }
+      
+
+      
+    });
+
     console.log(dataList);
     return dataList;
 
@@ -410,6 +453,35 @@ export async function sendaddliquidity(chainID,library,account,parameters){
           gasLimit: calculateGasMargin(estimatedGasLimit),
         });
   return result;
+
+}
+
+export async  function getpairPrice(pairaddress,chainID,tokenA,tokenB){
+  const data = await pairPrice(pairaddress);
+  if(data == ''){
+    return null;
+  }
+  const PriceInfo = swapExactTokensForTokensformat(data.Data.txs,chainID,tokenA,tokenB) ;
+  // inamount: "1000000000000000000"
+  // outamount: "187379656538552111"
+  // tokenA: "USDT"
+  // tokenB: "scUSD"
+  if(!PriceInfo ){
+    return null;
+  }
+  
+
+  const innum = new  BigNumber(PriceInfo.inamount);
+  const outnum = new  BigNumber(PriceInfo.outamount); 
+
+  const infoData = {
+    [PriceInfo.tokenA+"/"+PriceInfo.tokenB]:innum.div(outnum).toFixed(3),
+    [PriceInfo.tokenB+"/"+PriceInfo.tokenA]:outnum.div(innum).toFixed(3),
+  };
+  const obj={};
+  obj[tokenA+'/'+tokenB] =infoData[tokenA+'/'+tokenB];
+  return obj;
+
 
 }
 

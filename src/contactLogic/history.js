@@ -130,7 +130,7 @@ function removeLiquidityWithPermitformat(item,chainID){
 
 }
 
-function swapExactTokensForTokensformat(item,chainID){
+export  function swapExactTokensForTokensformat(item,chainID){
     const inamount = item[0].amount;
     const outamount = item[1].amount;
 

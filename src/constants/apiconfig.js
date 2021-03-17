@@ -62,3 +62,13 @@ export async function coinohlc(id){
 
 
 }
+
+
+export async function pairPrice(pair_address){
+  const data =  await  axios.get(`${baseUrl}api/24h_price_info?pair_address=${pair_address}`);
+
+ console.log(data);
+ return data.data;
+
+
+}
