@@ -1,12 +1,14 @@
 import { mapState } from 'vuex';
-import ScInput from '../components/ScInput.vue';
-import { collateralPools } from '@//contactLogic/buildr/balance';
 import BigNumber from "bignumber.js";
+import event from '@/common/js/event';
+import ScInput from '../components/ScInput.vue';
+import { collateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
   fetchCurrencyPrice,
-  fetchApprove
+  fetchApprove,
+  fetchAllowanceAmount,
 } from '@/contactLogic/buildr/create';
 
 
@@ -21,6 +23,7 @@ export default {
       liquidationRatio: 0,  // 清算抵押率
       feeRate: 0,    // 稳定费率
       debtCap: 0,    // 全球scUSD债务上限
+      allowanceAmount: 0, //限额
       currencyPrice: 0,
       collateralPools: collateralPools,
       defaultPoolToken: collateralPools[0].token,
@@ -29,12 +32,16 @@ export default {
   },
   components: {
     ScInput,
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
   },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress'])
+    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    isReady() {
+      return this.ethersprovider && this.ethChainID && this.ethAddress;
+    },
   },
   methods: {
-    getParmas() {
+    getParams() {
       return {
         tokenName: this.defaultPoolToken,
         chainID: this.ethChainID,
@@ -44,11 +51,11 @@ export default {
       };
     },
     async getCurrencyNumber() {
-      const params = this.getParmas();
+      const params = this.getParams();
       this.currencyNumber = await fetchTokenBalance(params);
     },
     async getIndicators() {
-      const params = this.getParmas();
+      const params = this.getParams();
       const { targetRatio, liquidationRatio, feeRate, debtCap } = await fetchCollateralIndicators(params);
 
       this.targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
@@ -57,7 +64,7 @@ export default {
       this.debtCap = debtCap;
     },
     async getCurrencyPrice() {
-      const params = this.getParmas();
+      const params = this.getParams();
       const { currencyPrice } = await fetchCurrencyPrice(params);
 
       this.currencyPrice = currencyPrice;
@@ -67,25 +74,56 @@ export default {
       this.stableNumber = BigNumber(val).times(this.currencyPrice).div(this.targetRX);
     },
     async onApproveClick() {
-      const params = Object.assign({}, this.getParmas(), {
+      const params = Object.assign({}, this.getParams(), {
         pledgeNumber: this.pledgeNumber,
       });
       const result = await fetchApprove(params);
       if (result && result.hash) {
-        this.$parent.onChangeNav(2);
+        // this.$parent.onChangeNav(2);
+        this.getAllowanceAmount();
       }
-    }
-  },
-  watch: {
-    defaultPoolToken() {
+    },
+    async getAllowanceAmount(){
+      const params = this.getParams();
+      const { allowanceAmount } = await fetchAllowanceAmount(params);
+      this.allowanceAmount = allowanceAmount;
+    },
+    sendtx(tx) {
+      this.$refs.haveSendtx.open(tx.base);
+      event.$emit('sendtx',[tx.response, {
+        okinfo: tx.base+"成功",
+        failinfo: tx.base+'失败'
+      }]);
+      setTimeout(() => this.$router.push(`/buildr/balance`), 3000);
+    },
+    // Join
+    async onJoinClick() {
+      const params = this.getParams();
+      const joinParams = {
+        ...params,
+        type: 'join',
+        coinAmount: this.pledgeNumber,
+        unit: this.defaultPoolToken,
+      };
+      const tx = await fetchBalanaceChange(joinParams);
+      this.sendtx(tx);
+    },
+    loadData() {
       this.getCurrencyNumber();
       this.getIndicators();
       this.getCurrencyPrice();
+      this.getAllowanceAmount();
+    },
+  },
+  watch: {
+    defaultPoolToken() {
+      this.loadData();
     }
   },
   created() {
-    this.getCurrencyNumber();
-    this.getIndicators();
-    this.getCurrencyPrice();
+    console.log(this.isReady, 8888);
+    if(this.isReady) {
+      this.loadData();
+    }
   }
 };

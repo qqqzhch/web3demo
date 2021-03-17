@@ -48,6 +48,12 @@
               :on-change="onChangeValue"
             />
           </div>
+          <div v-if="checkValue==='overMaxValue'">
+            超过最大值
+          </div>
+          <div v-if="checkValue==='isNaN'">
+            不是有效数值
+          </div>
         </div>
         <div
           v-if="step === 2"
@@ -74,9 +80,15 @@
         </div>
         <div>
           <button
-            v-if="step === 1"
+            v-if="step === 1 && !checkValue"
             class="btn"
             @click="onNextClick"
+          >
+            下一步
+          </button>
+          <button
+            v-if="step === 1 && checkValue"
+            class="btn btn-disabled"
           >
             下一步
           </button>

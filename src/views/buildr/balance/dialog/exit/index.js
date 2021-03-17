@@ -30,7 +30,7 @@ export default {
       const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
       const currMaxMintable = BigNumber(maxMintable).minus(this.coinAmount).times(targetRX);
 
-      return `${maxMintable} 至 ${currMaxMintable} ${this.unit}`;
+      return `${BigNumber(maxMintable).toFixed(6)} 至 ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
     },
     // 已有债务
     existingDebt() {
@@ -58,6 +58,16 @@ export default {
         ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(BigNumber(pledgeNumber).minus(this.coinAmount)).toFixed(6);
 
       return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+    },
+    // 验证输入值
+    checkValue() {
+      if(BigNumber(this.coinAmount).gt(this.unlockedCollateral)) {
+        return 'overMaxValue';
+      } else if (BigNumber(this.coinAmount).isLessThanOrEqualTo(0)) {
+        return 'isZero';
+      } else {
+        return false;
+      }
     }
   },
   methods: {
@@ -73,7 +83,7 @@ export default {
       this.$parent.openJoinDialog(this.poolData);
     },
     onChangeValue(value) {
-      this.coinAmount = value;
+      this.coinAmount = (BigNumber(value).isZero() || BigNumber(value).isNaN()) ? 0 : value;
     },
     onNextClick() {
       this.step = 2;

@@ -6,7 +6,7 @@
     <div class="content">
       <div
         v-for="poolItem in poolsData"
-        :key="poolItem.tokenName"
+        :key="poolItem.tokenTitle"
         class="build-item mrg-tb-20"
       >
         <div class="build-grid-1">

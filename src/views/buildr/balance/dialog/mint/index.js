@@ -54,6 +54,16 @@ export default {
       const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
 
       return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+    },
+    // 验证输入值
+    checkValue() {
+      if(BigNumber(this.coinAmount).gt(this.currMaxMintable)) {
+        return 'overMaxValue';
+      } else if (BigNumber(this.coinAmount).isLessThanOrEqualTo(0)) {
+        return 'isZero';
+      } else {
+        return false;
+      }
     }
   },
   methods: {
@@ -68,7 +78,7 @@ export default {
       this.$parent.openBurnDialog(this.poolData);
     },
     onChangeValue(value) {
-      this.coinAmount = value;
+      this.coinAmount = (BigNumber(value).isZero() || BigNumber(value).isNaN()) ? 0 : value;
     },
     onNextClick() {
       this.step = 2;

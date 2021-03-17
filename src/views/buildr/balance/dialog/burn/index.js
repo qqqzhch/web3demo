@@ -64,6 +64,18 @@ export default {
       const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
 
       return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+    },
+    // 验证输入值
+    checkValue() {
+      const minVal = BigNumber(this.existingDebt).isLessThan(this.scUSDNumber) ? this.existingDebt : this.scUSDNumber;
+
+      if(BigNumber(this.coinAmount).gt(minVal)) {
+        return 'overMaxValue';
+      } else if (BigNumber(this.coinAmount).isLessThanOrEqualTo(0)) {
+        return 'isZero';
+      } else {
+        return false;
+      }
     }
   },
   methods: {
@@ -80,7 +92,7 @@ export default {
     },
     onChangeValue(value) {
       // 销毁的scUSD
-      this.coinAmount = value;
+      this.coinAmount = (BigNumber(value).isZero() || BigNumber(value).isNaN()) ? 0 : value;
     },
     onNextClick() {
       this.step = 2;

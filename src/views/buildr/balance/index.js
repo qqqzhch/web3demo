@@ -44,6 +44,7 @@ export default {
       return BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(currentDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
     },
     loadData() {
+      const poolsData = [];
       collateralPools.forEach(async (item) => {
         const params = this.getParmas(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
@@ -76,8 +77,11 @@ export default {
           scUSDNumber,
           allowanceAmount,
         };
-        this.poolsData = this.poolsData.concat(itemData);
+        if(pledgeNumber) {
+          poolsData.push(itemData);
+        }
       });
+      this.poolsData = poolsData;
     },
     openJoinDialog(poolData) {
       this.$refs.tokenJoin.open(poolData);
