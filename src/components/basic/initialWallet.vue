@@ -18,9 +18,9 @@ export default {
 
      const data = await gethtPrise();
      this.$store.commit('htprise', data);
-     console.log('ht 价格',data);
+    //  console.log('ht 价格',data);
 
-     
+
 
     },
     // 检查是否连接
@@ -111,7 +111,7 @@ export default {
     // eth初始化
     async initEth() {
       try {
-        console.log('initEth');
+        // console.log('initEth');
         let web3Provider;
 
         if (window.ethereum) {
@@ -124,7 +124,7 @@ export default {
           //   title: this.$t('notice.n'),
           //   desc: this.$t('notice.n11'),
           // });
-          
+
           return false;
         }
         const web3 = new Web3(web3Provider);
@@ -141,11 +141,11 @@ export default {
           //   title: this.$t('notice.n'),
           //   desc: this.$t('notice.n1'),
           // });
-          
+
           return false;
         } else {
           // 获取当前chainId
-          
+
 
           // 初始化合约
           // await this.initContract();

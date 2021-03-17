@@ -13,21 +13,33 @@
         </template>
 
         <template slot="apy" slot-scope="{ row }">
-          {{ row.data && row.data.rewardRate | formatRate }}
+          <span class="text-success">
+            {{ row.data && row.data.rewardRate | formatRate }}
+          </span>
         </template>
         <template slot="stake" slot-scope="{ row }">
-          {{ row.data && row.data.totalSupply }}
+          {{ row.data && row.data.balance }}
         </template>
         <template slot="earned" slot-scope="{ row }">
           {{ row.data && row.data.earned }}
         </template>
 
         <template slot="operation" slot-scope="{ row }">
-          <button>Claim</button>
-          <button>Unstake LP</button>
+          <div class="btn-wrapper flex justify-start items-center">
+            <button class="table-btn claim" @click="openClaim(row)">
+              Claim
+            </button>
+            <button class="table-btn stake" @click="openUnstake(row)">
+              Unstake LP
+            </button>
+          </div>
         </template>
       </Table>
     </template>
+    <div class="modal-wrapper">
+      <takeDialog ref="take" />
+      <extractDialog ref="extract" />
+    </div>
   </div>
 </template>
 
@@ -57,6 +69,7 @@ export default {
         {
           title: 'Function',
           slot: 'operation',
+          minWidth: 140,
         },
       ],
       data: [],
@@ -65,19 +78,26 @@ export default {
   },
   components: {
     loading: () => import('@/components/basic/loading.vue'),
+    takeDialog: () => import('./dialog/takeoutDialog.vue'),
+    extractDialog: () => import('./dialog/extractReward.vue'),
   },
   methods: {
     async getListData() {
       this.showLoading = true;
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
-        console.log(data);
         this.data = data;
       } catch (error) {
         console.log(error);
       } finally {
         this.showLoading = false;
       }
+    },
+    openClaim(data) {
+      this.$refs.extract.open(data);
+    },
+    openUnstake(data) {
+      this.$refs.take.open(data);
     },
   },
   computed: {
@@ -107,6 +127,25 @@ export default {
   }
   .myPage-table-wrapper {
     margin-top: 8px;
+    .table-btn {
+      width: 100px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 16px;
+    }
+    .claim {
+      margin-right: 12px;
+      color: #fff;
+      background: #0058ff;
+    }
+    .stake {
+      border: 1px solid #0058ff;
+      color: #0058ff;
+    }
   }
 }
 </style>

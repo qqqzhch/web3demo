@@ -16,7 +16,8 @@ module.exports = {
       secondary: '#828489',
       bgColor: '#F7F8F9',
       warning: '#FFB500',
-      error: '#FF3C00'
+      error: '#FF3C00',
+      success: '#00D075',
     },
   },
   variants: {

@@ -35,8 +35,7 @@
 
 import { mapState } from 'vuex';
 
-import  {useProxyActionsContractRead,useProxyContractRead,
-useproxyActionsContract,useProxyActionsContractSigna,
+import  {useProxyActionsContractRead,useProxyContractRead,useProxyActionsContractSigna,
 useTokenbalance,
 useCollateralContractRead}  from '@/contactLogic/buildr/contractApi.js';
 
@@ -58,7 +57,7 @@ export default {
    async approve(){
       console.log('- -');
       const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       const token = getProxyActionsToken(chainID);
 
@@ -72,12 +71,12 @@ export default {
           methodName,
           parameter
         );
-      //target 需要操作lamb 授权的地址 
+      //target 需要操作lamb 授权的地址
 
       console.log(target);
 
       const  lambToken =  getTokenBySymbol(chainID,'LAMB');
-      const  spender =target; 
+      const  spender =target;
       const  amount = Web3.utils.toWei('1000000');
 
       const  tx = await useTokenApprove(library,
@@ -85,7 +84,7 @@ export default {
           lambToken,
           spender,
           amount);
-      
+
       console.log(tx);
 
 
@@ -93,9 +92,9 @@ export default {
    },
    async join (){
      const tokenName ='LAMB';
-     
+
      const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       const token = getProxyToActionsToken(chainID);
 
@@ -106,13 +105,13 @@ export default {
       const amount = Web3.utils.toWei('1000000');
       try {
       const result = await ProxyActionsContract.join(currencyKey, amount);
-      console.log(result);  
+      console.log(result);
       } catch (error) {
         console.log(error);
-        
+
       }
 
-      
+
 
       //
 
@@ -152,7 +151,7 @@ export default {
       currencyKey = Web3.utils.rightPad(currencyKey, 64) ;
       const amount = Web3.utils.toWei('10');
       try {
-       const result = await ProxyActionsContract.mint(currencyKey, amount);
+      //  const result = await ProxyActionsContract.mint(currencyKey, amount);
       // result.on('receipt',(receipt)=>{
       //   console.log(receipt)
       // }).on('transactionHash', function(hash){
@@ -160,11 +159,11 @@ export default {
       // })
       // .on('confirmation', function(confirmationNumber, receipt){
       //   console.log(confirmation)
-    
+
       // })
-      
+
       } catch (error) {
-        console.log(error);  
+        console.log(error);
       }
     },
     async tokenBurn(tokenName){
@@ -178,7 +177,7 @@ export default {
       currencyKey = Web3.utils.rightPad(currencyKey, 64) ;
       const amount = Web3.utils.toWei('1');
       try {
-       const result = await ProxyActionsContract.burn(currencyKey, amount);
+      //  const result = await ProxyActionsContract.burn(currencyKey, amount);
       // result.on('receipt',(receipt)=>{
       //   console.log(receipt)
       // }).on('transactionHash', function(hash){
@@ -186,11 +185,11 @@ export default {
       // })
       // .on('confirmation', function(confirmationNumber, receipt){
       //   console.log(confirmation)
-    
+
       // })
-      
+
       } catch (error) {
-        console.log(error);  
+        console.log(error);
       }
     },
       async tokenExit(tokenName){
@@ -205,10 +204,10 @@ export default {
       const amount = Web3.utils.toWei('1');
       try {
       const result = await ProxyActionsContract.exit(currencyKey, amount);
-      console.log(result);  
+      console.log(result);
       } catch (error) {
         console.log(error);
-        
+
       }
     },
     async getSCusdt() {
@@ -225,7 +224,7 @@ export default {
       }
     },
     async readHistory(){
-      const library = this.ethersprovider;
+      // const library = this.ethersprovider;
       const account = this.ethAddress;
       const chainID = this.ethChainID;
 
@@ -240,12 +239,12 @@ export default {
      console.log(data);
 
     }
-     
+
   },
   computed: {
     ...mapState(['ethAddress','ethChainID','web3','ethersprovider']),
   }
-    
+
 };
 </script>
 <style lang="less" scoped>

@@ -1,4 +1,4 @@
-import multiSymbolData from "../../rewardMine/utils/mineList/list.json";
+import multiSymbolData from "@/constants/earnList.json";
 import tokenlist from "@/constants/token.json";
 import { TokenAmount } from "@webfans/uniswapsdk";
 

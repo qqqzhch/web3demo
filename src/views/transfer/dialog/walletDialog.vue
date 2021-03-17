@@ -54,6 +54,7 @@
 
 <script>
 export default {
+  inject: ['reload'],
   components: {
     Buttons: () => import('@/components/basic/buttons'),
   },
@@ -82,6 +83,7 @@ export default {
         this.$store.commit('changeEthAddress', res[0]);
         // await this.initEth();
         this.openWalletDialog = false;
+        this.reload();
       } catch (error) {
         console.log(error);
       }
@@ -89,7 +91,7 @@ export default {
 
     getLambAuth() {
       console.log('lambda');
-    }
+    },
   },
 };
 </script>

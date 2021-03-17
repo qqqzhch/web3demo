@@ -1,11 +1,6 @@
 <template>
   <div class="claim-dialog">
-    <Modal
-      v-model="openClaimDialog"
-      class-name="claim-modal"
-      :footer-hide="true"
-      :closable="true"
-    >
+    <Modal v-model="openClaimDialog" class-name="claim-modal" :footer-hide="true" :closable="true">
       <div class="claim-content">
         <p class="title text-center">
           Claim
@@ -14,23 +9,18 @@
           <div class="title-content">
             <span class="card-title">Amount</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Unclaimed CASH</span>
-              <span>{{ cashBalance }} CASH</span>
+              <span class="mr-2 text-secondary">Unclaimed {{ coinName }}</span>
+              <span>{{ claimAmount }}</span>
             </div>
           </div>
           <div class="claim-wrapper">
-            <input v-model="claimAmount" type="text" class="amount-input">
-            <div class="unit">
-              <p class="MAX" @click="maxAmount">
-                MAX
-              </p>
-            </div>
+            <input v-model="claimAmount" readonly type="text" class="amount-input">
           </div>
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>You will receive SCASH</span>
-            <p>1234.21 SCASH</p>
+            <span>You will receive {{ coinName }}</span>
+            <p>1234.21 {{ coinName }}</p>
           </div>
           <div class="price-item">
             <span>Price</span>
@@ -43,7 +33,12 @@
         </div>
 
         <div class="btn-warpper">
-          <Buttons>Next</Buttons>
+          <Buttons v-if="!extractLoading" @click.native="submitData">
+            Confirm
+          </Buttons>
+          <Buttons v-else>
+            loading...
+          </Buttons>
         </div>
       </div>
     </Modal>
@@ -51,23 +46,64 @@
 </template>
 
 <script>
+import getTx from '../../utils/getTx.vue';
+import { mapState } from 'vuex';
+import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
 export default {
-  components: {
-    Buttons: () => import("@/components/basic/buttons"),
-  },
+  inject: ['reload'],
+  mixins: [getTx],
   data() {
     return {
       openClaimDialog: false,
-      cashBalance:10000,
-      claimAmount: "",
+      claimAmount: '',
+      data: {},
+      coinName: '',
+      extractLoading: false
     };
   },
   methods: {
-      maxAmount(){
-          this.claimAmount = this.cashBalance;
+    open(data) {
+      this.data = data;
+      this.coinName = data && data.name;
+      this.claimAmount = data && data.data && data.data.earned;
+      this.openClaimDialog = true;
+    },
+    async submitData() {
+      this.extractLoading = true;
+      const tokenJson = this.data;
+      try {
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const result = await stakingRewardsContract.getReward({ gasLimit: 350000 });
+        const txInfo = await this.getTransaction(result.hash);
+        if (txInfo.status === false) {
+          this.$Notice.error({
+            title: this.$t('notice.n32'),
+          });
+        } else {
+          this.$Notice.success({
+            title: this.$t('notice.n33'),
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        this.$Notice.error({
+          title: this.$t('notice.n32'),
+        });
+      } finally {
+        const timer = setTimeout(() => {
+          this.extractLoading = false;
+          this.reload();
+          clearTimeout(timer);
+        }, 1000);
       }
+    },
   },
-  computed: {},
+  components: {
+    Buttons: () => import('@/components/basic/buttons'),
+  },
+  computed: {
+    ...mapState(['ethersprovider', 'ethAddress']),
+  },
 };
 </script>
 
