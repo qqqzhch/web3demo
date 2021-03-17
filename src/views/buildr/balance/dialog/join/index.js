@@ -85,6 +85,9 @@ export default {
       this.$parent.openExitDialog(this.poolData);
     },
     onChangeValue(value) {
+      value = BigNumber(value).isZero() ? 0 : value;
+      value = BigNumber(value).gt(this.currencyNumber) ? BigNumber(this.currencyNumber) : value;
+
       this.coinAmount = value;
     },
     onNextClick() {
