@@ -85,6 +85,7 @@ export default {
         pledgeNumber: this.pledgeNumber,
       });
       const result = await fetchApprove(params);
+
       if (result && result.hash) {
         // this.$parent.onChangeNav(2);
         this.getAllowanceAmount();

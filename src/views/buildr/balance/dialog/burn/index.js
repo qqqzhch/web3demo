@@ -21,7 +21,7 @@ export default {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
     currFee() { // 稳定费
       const { feeRate } = this.poolData;
-      return `${ this.coinAmount * Number(feeRate)} csUSD`;
+      return `${ BigNumber(this.coinAmount).times(feeRate)} csUSD`;
     },
     // 当前额度
     scUSDNumber() {
@@ -63,13 +63,16 @@ export default {
       const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
       const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
 
-      return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+      return `1LAMB = ${liquPrice} USD to ${newLiquPrice} USD`;
     },
-    // 验证输入值
+    // 验证输入值, 输入的最大值是min[现有债务，当前额度]-fee
     checkValue() {
-      const minVal = BigNumber(this.existingDebt).isLessThan(this.scUSDNumber) ? this.existingDebt : this.scUSDNumber;
+      const debt = BigNumber(this.existingDebt).isLessThan(this.scUSDNumber) ? this.existingDebt : this.scUSDNumber;
 
-      if(BigNumber(this.coinAmount).gt(minVal)) {
+      const fee = BigNumber(this.coinAmount).times(this.poolData.feeRate);
+      const netDebt = BigNumber(debt).plus(fee);
+
+      if(BigNumber(this.coinAmount).gt(netDebt)) {
         return 'overMaxValue';
       } else if (BigNumber(this.coinAmount).isLessThanOrEqualTo(0)) {
         return 'isZero';
