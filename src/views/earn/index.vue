@@ -35,7 +35,7 @@ export default {
           name: 'My Page',
         },
         {
-          id: 'history',
+          id: 'earn-history',
           name: 'History',
         },
       ],
@@ -58,7 +58,7 @@ export default {
           break;
 
         default:
-          this.$router.push(`/earn/rewardMine`);
+          this.$router.push(`/earn`);
           break;
       }
     },
