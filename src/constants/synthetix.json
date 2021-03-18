@@ -2,19 +2,19 @@
 
     {
         "name": "ExchangeRates",
-        "address": "0x8e4d75778E56D4De5744f39F45de3625a625B64F",
+        "address": "0x17148c65204c05efD3d75726edE110b8c6eb82cA",
         "decimals": 18,
         "chainId": 256
     },
     {
         "name": "proxyActions",
-        "address": "0x0bbEfD7C41C1aDB8705569D0f91Ce191dE8cc2bA",
+        "address": "0xb5B08477cF24F25561a07452122A83177fbCC430",
         "decimals": 18,
         "chainId": 256
     },
     {
         "name": "ProxyToActions",
-        "address": "0x0bbEfD7C41C1aDB8705569D0f91Ce191dE8cc2bA",
+        "address": "0xb5B08477cF24F25561a07452122A83177fbCC430",
         "decimals": 18,
         "chainId": 256
     },

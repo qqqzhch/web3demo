@@ -85,34 +85,6 @@ export async function readpairpool(chainID, library) {
       pairSymbols: [element.tokenAmounts[1].token.symbol, element.tokenAmounts[0].token.symbol]
 
     });
-    const PairList = await Promise.all(callList);
-    console.log(PairList);
-    const dataList=[];
-    /*
-    this.$data.price = price.toSignificant(6);
-    this.$data.invertprice = price.invert().toSignificant(6);
-    */
-   const PricePromiseList  = [];
-    PairList.forEach(async element=>{
-        const route = new Route([element], element.tokenAmounts[0].token);
-        const price = route.pairs[0].priceOf(element.tokenAmounts[0].token);
-        const  tokenA = element.tokenAmounts[0].token;
-        const  tokenB = element.tokenAmounts[1].token;
-        const pairaddress = element.liquidityToken.address;
-
-        PricePromiseList.push(getpairPrice(pairaddress,chainID,tokenA.symbol,tokenB.symbol));
-
-        dataList.push({
-            Pair:element,
-            price:price.toSignificant(6),
-            pairName:`${element.tokenAmounts[0].token.symbol}/${element.tokenAmounts[1].token.symbol}`,
-            listSymbol:element.tokenAmounts[1].token.symbol,
-            pairSymbols:[element.tokenAmounts[0].token.symbol,element.tokenAmounts[1].token.symbol]
-
-
-        });
-
-    });
 
   });
 

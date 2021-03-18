@@ -1,7 +1,7 @@
 [
   {
     "name": "scUSD/USDT LP",
-    "address": "0x38dd887F143FD584d3Bed130472b4857E56B2Ca8",
+    "address": "0x2E4644128032FB3CD402F91a663A8d5a233efAe5",
     "decimals": 18,
     "chainId": 256,
     "kind": "multi",
@@ -12,7 +12,7 @@
   },
   {
     "name": "scUSD",
-    "address": "0x7dF5563AF2F32E30bb05A01c7344960DcF2aDe74",
+    "address": "0xAED82BD6a8657cfa0Ee966b6D431AF6E2CbcAbF5",
     "decimals": 18,
     "chainId": 256,
     "kind": "single",
