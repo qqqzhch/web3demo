@@ -36,7 +36,7 @@ export default {
 
       let currMaxMintable = 0;
       if(BigNumber(collRX).gt(targetRX)) {
-        currMaxMintable = BigNumber(maxMintable).plus(this.coinAmount).times(targetRatio);
+        currMaxMintable = BigNumber(this.coinAmount).times(targetRatio).plus(maxMintable);
       } else {
         // 达到目标抵押率需要的数量,如果coinAmount> targetAmount 增加额度，否则增加额度为0;
         const targetAmount = BigNumber(this.existingDebt).times(targetRX).div(currencyPrice).minus(pledgeNumber);
