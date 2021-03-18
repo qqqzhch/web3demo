@@ -17,10 +17,8 @@
           <div class="connect flex justify-between items-center">
             <div class="icon-wrapper flex justify-start items-center">
               <template>
-                <img v-if="token === 'ETH'" src="../../../assets/img/eth.png" alt="eth" class="mr-2">
-                <img v-if="token === 'USDT'" src="../../../assets/img/usdt.png" alt="eth" class="mr-2">
                 <img v-if="token === 'LAMB'" src="../../../assets/img/lamblogo-32.png" alt="eth" class="mr-2">
-                <img v-if="token === 'mLAMB'" src="../../../assets/img/mlamb48.svg" alt="eth" class="mr-2">
+                <img v-if="token === 'HT'" src="../../../assets/img/lamblogo-32.png" alt="HT" class="mr-2">
                 <!-- <img v-if="token === 'tLAMB'" src="../../assets/img/tlamb48.svg" alt="eth" class="mr-2"> -->
               </template>
               <span>{{ token }}</span>
@@ -58,59 +56,59 @@
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
-          <p>抵押物：</p>
+          <p>Collateral：</p>
           <div class="text-right">
             {{ pledgeNumber }} LAMB
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>获得铸造scUSD授信额度：</p>
+          <p>Received scUSD：</p>
           <div class="text-right">
             {{ stableNumber }} scUSD
           </div>
         </div>
         <!--<div class="build-grid-2 mrg-b-5">-->
-        <!--<div>抵押率：</div>-->
+        <!--<div>Coll. Ratio：</div>-->
         <!--<div class="text-right">-->
         <!--{{ BigNumber(targetRX).times(100) }}%-->
         <!--</div>-->
         <!--</div>-->
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>SuperCash {{ defaultPoolToken }}价格：</p>
+          <p>SuperCash {{ defaultPoolToken }}Price：</p>
           <div class="text-right">
             {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>清算价格：</p>
+          <p>Liquidation Price：</p>
           <div class="text-right">
             {{ pledgeNumber ? BigNumber(liquidationRatio).times(stableNumber).div(pledgeNumber) : 0 }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>清算抵押率：</p>
+          <p>Liquidation Ratio：</p>
           <div class="text-right">
             {{ liquidationRatio * 100 }}%
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>稳定费率：</p>
+          <p>Stability Ratio：</p>
           <div class="text-right">
             {{ BigNumber(feeRate).times(100) }} %
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>全球scUSD债务上限：</p>
+          <p>Global scUSD Debt Ceiling：</p>
           <div class="text-right">
             {{ debtCap }} scUSD
           </div>
         </div>
         <div>
-          <button v-if="allowanceAmount === 0" class="btn" @click="onApproveClick">
-            授权额度
+          <button v-if="BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
+            Approve
           </button>
           <button else class="btn" @click="onJoinClick">
-            铸造 scUSD 额度
+            Create and generate scUSD
           </button>
         </div>
       </div>
