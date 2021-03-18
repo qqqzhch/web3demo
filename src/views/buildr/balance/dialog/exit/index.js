@@ -30,7 +30,7 @@ export default {
       const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
       const currMaxMintable = BigNumber(maxMintable).minus(this.coinAmount).times(targetRX);
 
-      return `${BigNumber(maxMintable).toFixed(6)} 至 ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
+      return `${BigNumber(maxMintable).toFixed(6)} to ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
     },
     // 已有债务
     existingDebt() {
@@ -44,8 +44,8 @@ export default {
       const existingDebt = BigNumber(this.existingDebt).isZero() ? 0 : this.existingDebt;
       return existingDebt
         ? `${BigNumber(collRX).times(100).toFixed(6)}%` +
-          `至 ${BigNumber(pledgeNumber).minus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
-        : `0% 至 0%`;
+          `to ${BigNumber(pledgeNumber).minus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
+        : `0% to 0%`;
     },
     // 清算价格
     liquidationPrice() {
@@ -57,7 +57,7 @@ export default {
       const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).minus(this.coinAmount))
         ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(BigNumber(pledgeNumber).minus(this.coinAmount)).toFixed(6);
 
-      return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+      return `1LAMB = ${liquPrice} USD to ${newLiquPrice} USD`;
     },
     // 验证输入值
     checkValue() {

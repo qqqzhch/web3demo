@@ -17,7 +17,7 @@
             <button
               class="btn btn-disabled"
             >
-              铸造
+              Generate
             </button>
           </div>
           <div>
@@ -25,7 +25,7 @@
               class="btn"
               @click="onBurnClick"
             >
-              偿还
+              Payback
             </button>
           </div>
         </div>
@@ -34,9 +34,9 @@
           class="step-one"
         >
           <div class="grid-2">
-            <div>数量</div>
+            <div>Amount</div>
             <div>
-              余额：{{ currMaxMintable }} scUSD
+              Balance：{{ currMaxMintable }} scUSD
             </div>
           </div>
           <div>
@@ -57,30 +57,30 @@
           v-if="step === 2"
           class="step-two"
         >
-          <div>确认</div>
+          <div>Confirm</div>
           <div>{{ coinAmount }}</div>
           <div>LOGO scUSD</div>
-          <div>将发送到您到账户中</div>
+          <div>will send to your wallet address</div>
         </div>
         <div>
           <ul class="grid-2">
-            <li>债务：</li>
+            <li>Debt：</li>
             <li><span>{{ existingDebt }}</span>至<span>{{ newDebt }}</span> scUSD</li>
           </ul>
           <ul class="grid-2">
-            <li>铸造额度：</li>
+            <li>Generating：</li>
             <li><span>{{ maxMintable }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>抵押率</li>
+            <li>Collateral Ratio</li>
             <li><span>{{ collRatio }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>清算价格</li>
+            <li>Liquidation Price</li>
             <li><span>{{ liquidationPrice }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>稳定费率</li>
+            <li>Stability Ratio</li>
             <li><span>{{ feeRate }}</span></li>
           </ul>
         </div>
@@ -90,20 +90,20 @@
             class="btn"
             @click="onNextClick"
           >
-            下一步
+            Next
           </button>
           <button
             v-if="step === 1 && checkValue"
             class="btn btn-disabled"
           >
-            下一步
+            Next
           </button>
           <button
             v-if="step === 2"
             class="btn"
             @click="onMintClick"
           >
-            确定
+            Confirm
           </button>
         </div>
       </div>

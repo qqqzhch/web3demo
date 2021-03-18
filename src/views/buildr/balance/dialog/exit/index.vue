@@ -18,14 +18,14 @@
               class="btn"
               @click="onJoinClick"
             >
-              抵押{{ poolData.tokenName }}
+              Collateral
             </button>
           </div>
           <div>
             <button
               class="btn btn-disabled"
             >
-              释放{{ poolData.tokenName }}
+              Withdraw
             </button>
           </div>
         </div>
@@ -34,9 +34,9 @@
           class="step-one"
         >
           <div class="grid-2">
-            <div>数量</div>
+            <div>Amount</div>
             <div>
-              余额：{{ unlockedCollateral }} {{ poolData.tokenName }}
+              Balance：{{ unlockedCollateral }} {{ poolData.tokenName }}
             </div>
           </div>
           <div>
@@ -58,22 +58,22 @@
           v-if="step === 2"
           class="step-two"
         >
-          <div>确认</div>
+          <div>Confirm</div>
           <div>{{ coinAmount }}</div>
           <div>LOGO {{ poolData.tokenName }}</div>
-          <div>将发送到您的账户中</div>
+          <div>will send to your wallet address</div>
         </div>
         <div>
           <ul class="grid-2">
-            <li>铸造额度：</li>
+            <li>Generating：</li>
             <li><span>{{ maxMintable }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>抵押率？</li>
+            <li>Collateral Ratio？</li>
             <li><span>{{ collRatio }}</span></li>
           </ul>
           <ul class="grid-2">
-            <li>清算价格</li>
+            <li>Liquidation Price</li>
             <li><span>{{ liquidationPrice }}</span></li>
           </ul>
         </div>
@@ -83,20 +83,20 @@
             class="btn"
             @click="onNextClick"
           >
-            下一步
+            Next
           </button>
           <button
             v-if="step === 1 && checkValue"
             class="btn btn-disabled"
           >
-            下一步
+            Next
           </button>
           <button
             v-if="step === 2"
             class="btn"
             @click="onExitClick"
           >
-            确认
+            Confirm
           </button>
         </div>
       </div>

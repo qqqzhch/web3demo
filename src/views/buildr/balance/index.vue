@@ -7,7 +7,7 @@
       <div class="title">
         My CDPs
       </div>
-      <div v-for="poolItem in poolsData" :key="poolItem.tokenName">
+      <div v-for="poolItem in poolsData" :key="poolItem.tokenTitle">
         <div class="CDP-item">
           <div class="small-item flex flex-col items-center">
             <img src="../../../assets/img/lambda48.svg" alt="lambda">
@@ -15,53 +15,53 @@
           </div>
           <div class="small-item">
             <div>
-              <span>目标抵押率</span>
+              <span>Target Coll. Ratio</span>
               <p>{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</p>
             </div>
             <div class="mrg-tb-20">
-              <span>当前价格</span>
+              <span>Current Price</span>
               <p>{{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD</p>
             </div>
           </div>
           <div class="small-item">
             <div>
-              <span>抵押资产</span>
+              <span>Collateral</span>
               <p>{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</p>
             </div>
             <div class="mrg-tb-20">
-              <span>当前债务</span>
+              <span>Current Debt</span>
               <p>{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</p>
             </div>
           </div>
           <div class="small-item">
             <div>
-              <span>可释放LAMB</span>
+              <span>Avail to Withdraw</span>
               <p>{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</p>
             </div>
             <div class="mrg-tb-20">
-              <span>可铸造额度</span>
+              <span>Avail to Generate</span>
               <p>{{ BigNumber(poolItem.maxMintable).toFixed(6) }} scUSD</p>
             </div>
           </div>
           <div class="small-item">
             <div>
-              <span>当前抵押率</span>
+              <span>Current Coll. Ratio</span>
               <p>{{ BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</p>
             </div>
             <div class="mrg-tb-20">
-              <span>清算价格</span>
+              <span>Liquidation Price</span>
               <p>{{ getLiquidationPrice(poolItem) }} USD</p>
             </div>
           </div>
           <div class="btn-warpper">
             <div>
               <button class="btn" @click="openJoinDialog(poolItem)">
-                抵押/提取资产
+                Collateral/Withdraw {{ poolItem.tokenName }}
               </button>
             </div>
             <div class="mrg-tb-20">
               <button class="btn" @click="openMintDialog(poolItem)">
-                铸造/偿还债务
+                Generate/Payback scUSD
               </button>
             </div>
           </div>
@@ -126,7 +126,7 @@
         width: 100%;
         line-height: 40px;
         height: 40px;
-        padding: 0px 20px;
+        padding: 0px 10px;
         background-color: #0058ff;
         color: rgb(255, 255, 255);
       }

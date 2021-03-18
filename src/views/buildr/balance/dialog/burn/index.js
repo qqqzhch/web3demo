@@ -43,7 +43,7 @@ export default {
     // 铸造额度
     maxMintable() {
       const { maxMintable } = this.poolData;
-      return `${BigNumber(maxMintable).toFixed(6)} 至 ${BigNumber(maxMintable).plus(this.netAmount).toFixed(6)} ${this.unit}`;
+      return `${BigNumber(maxMintable).toFixed(6)} to ${BigNumber(maxMintable).plus(this.netAmount).toFixed(6)} ${this.unit}`;
     },
     // 抵押率
     collRatio() {
@@ -53,7 +53,7 @@ export default {
       const newDebt = BigNumber(this.newDebt).isZero() ? 0 : this.newDebt;
 
       return `${BigNumber(collRatio).times(100).toFixed(6)}% 
-            至 ${newDebt ? BigNumber(pledgeNumber).times(currencyPrice).div(newDebt).times(100).toFixed(6) : 0}%`;
+            to ${newDebt ? BigNumber(pledgeNumber).times(currencyPrice).div(newDebt).times(100).toFixed(6) : 0}%`;
     },
     // 清算价格
     liquidationPrice() {

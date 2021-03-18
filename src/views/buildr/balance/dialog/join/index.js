@@ -44,7 +44,7 @@ export default {
         const netAmount = BigNumber(this.coinAmount).gt(targetAmount) ? BigNumber(this.coinAmount).minus(targetAmount) : 0;
         currMaxMintable = BigNumber(netAmount).times(targetRatio).plus(maxMintable);
       }
-      return `${BigNumber(maxMintable).toFixed(6)} 至 ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
+      return `${BigNumber(maxMintable).toFixed(6)} to ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
     },
     // 抵押率
     collRatio() {
@@ -55,8 +55,8 @@ export default {
 
       return existingDebt
         ? `${BigNumber(collRX).times(100).toFixed(6)}%` +
-        `至 ${BigNumber(pledgeNumber).plus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
-        : `0% 至 0%`;
+        `to ${BigNumber(pledgeNumber).plus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
+        : `0% to 0%`;
 
     },
     // 清算价格
@@ -69,7 +69,7 @@ export default {
       const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).plus(this.coinAmount))
         ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(BigNumber(pledgeNumber).plus(this.coinAmount)).toFixed(6);
 
-      return `1LAMB = ${liquPrice} USD 至 ${newLiquPrice} USD`;
+      return `1LAMB = ${liquPrice} USD to ${newLiquPrice} USD`;
     },
     // 验证输入值
     checkValue() {

@@ -2,10 +2,10 @@
   <div class="create box-shadow">
     <div class="header">
       <div class="title">
-        抵押数字资产创建金库
+        Designated Pool
       </div>
       <div class="info">
-        创建金库可获得scUSD的铸造额度
+        Designated mining, users can enjoy lower risk mining with a super high yield.
       </div>
     </div>
     <div class="grid-2 mrg-tb-20">
@@ -27,10 +27,10 @@
         </div>
         <div class="grid-2 mrg-t-20 mrg-b-5">
           <div>
-            抵押
+            Asset
           </div>
           <div class="pull-right">
-            <span class="f-gray">余额：</span>{{ currencyNumber }} LAMB
+            <span class="f-gray">Balance：</span>{{ currencyNumber }} LAMB
           </div>
         </div>
         <ScInput
@@ -41,7 +41,7 @@
         />
         <div class="grid-2 mrg-t-20">
           <div class="title">
-            可获得的授信额度
+            Build
           </div>
           <div class="pull-right" />
         </div>
@@ -54,51 +54,51 @@
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
-          <div>抵押物：</div>
+          <div>Collateral：</div>
           <div class="text-right">
             {{ pledgeNumber }} LAMB
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <div>获得铸造scUSD授信额度：</div>
+          <div>Received scUSD：</div>
           <div class="text-right">
             {{ stableNumber }} scUSD
           </div>
         </div>
-        <!--<div class="build-grid-2 mrg-b-5">-->
-        <!--<div>抵押率：</div>-->
-        <!--<div class="text-right">-->
-        <!--{{ BigNumber(targetRX).times(100) }}%-->
-        <!--</div>-->
-        <!--</div>-->
+        <div class="build-grid-2 mrg-b-5">
+          <div>Coll. Ratio：</div>
+          <div class="text-right">
+            {{ BigNumber(targetRX).times(100) }}%
+          </div>
+        </div>
         <div class="line mrg-tb-10" />
         <div class="build-grid-2 mrg-b-5">
-          <div>SuperCash {{ defaultPoolToken }}价格：</div>
+          <div>SuperCash {{ defaultPoolToken }} Price：</div>
           <div class="text-right">
             {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <div>清算价格：</div>
+          <div>Liquidation Price：</div>
           <div class="text-right">
             {{ pledgeNumber ? BigNumber(liquidationRatio).times(stableNumber).div(pledgeNumber) : 0 }} USD
           </div>
         </div>
         <div class="line mrg-tb-10" />
         <div class="build-grid-2 mrg-b-5">
-          <div>清算抵押率：</div>
+          <div>Liquidation Ratio：</div>
           <div class="text-right">
             {{ liquidationRatio * 100 }}%
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <div>稳定费率：</div>
+          <div>Stability Ratio：</div>
           <div class="text-right">
             {{ BigNumber(feeRate).times(100) }} %
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <div>全球scUSD债务上限：</div>
+          <div>Global scUSD Debt Ceiling：</div>
           <div class="text-right">
             {{ debtCap }} scUSD
           </div>
@@ -106,18 +106,18 @@
         <div class="line mrg-tb-10" />
         <div class="mrg-tb-20">
           <button
-            v-if="allowanceAmount === 0"
+            v-if="BigNumber(pledgeNumber).gt(allowanceAmount)"
             class="btn"
             @click="onApproveClick"
           >
-            授权额度
+            Approve
           </button>
           <button
-            else
+            v-else
             class="btn"
             @click="onJoinClick"
           >
-            铸造 scUSD 额度
+            Create and generate scUSD
           </button>
         </div>
       </div>

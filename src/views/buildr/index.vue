@@ -5,20 +5,20 @@
         :class="{'tab-item': true, 'tab-active': nav === 'balance'}"
         @click="toPage('balance')"
       >
-        管理金库
+        Manage
       </div>
       <div
         :class="{'tab-item': true, 'tab-active': nav === 'history'}"
         @click="toPage('history')"
       >
-        历史记录
+        History
       </div>
       <div>
         <button
           class="btn create-btn"
           @click="toPage('create')"
         >
-          创建金库
+          Create CDP
         </button>
       </div>
     </div>
