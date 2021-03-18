@@ -107,13 +107,16 @@
             {{ debtCap }} scUSD
           </div>
         </div>
-        <div>
+        <div v-if="!btnloading">
           <button v-if="BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
             Approve
           </button>
           <button v-else class="btn" @click="onJoinClick">
             Create and generate scUSD
           </button>
+        </div>
+        <div v-if="btnloading">
+          <Loading />
         </div>
       </div>
     </div>
