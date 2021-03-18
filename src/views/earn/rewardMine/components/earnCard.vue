@@ -8,8 +8,8 @@
             <p class="coin">
               {{ item.name }}
             </p>
-            <p class="price">
-              --
+            <p v-if="item.kind === 'multi'" class="price">
+              1 {{ item.symbol && item.symbol[0] }} = {{ item.price | formatNormalValue }} {{ item.symbol && item.symbol[1] }}
             </p>
           </div>
         </div>
@@ -17,18 +17,19 @@
         <div class="apy">
           <h4>APY</h4>
           <p class="percent">
-            {{ item.data && item.data.rewardRate | formatReward(365) }}
+            {{ item.data && item.data.rewardRate | formatReward(365) }}%
           </p>
         </div>
 
         <div class="balance">
           <div class="balance-item">
             <span class="title">Total Staked</span>
-            <span class="value">{{ item.data && item.data.totalSupply || 0 }}</span>
+            <span class="value">{{ (item.data && item.data.totalSupply) || 0 }}</span>
           </div>
           <div class="balance-item">
             <span class="title">Total Value of Pool</span>
-            <span class="value">--</span>
+            <span v-if="item.kind === 'multi'" class="value">{{ item.poolValue || '--' }}</span>
+            <span v-if="item.kind === 'single'" class="value">{{ item.data && item.data.totalSupply * earnPrice | formatNormalValue }}</span>
           </div>
           <div class="balance-item">
             <span class="title">Output</span>
@@ -68,7 +69,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons.vue'),
   },
   computed: {
-    ...mapState(['ethAddress']),
+    ...mapState(['earnPrice','ethAddress']),
   },
 };
 </script>

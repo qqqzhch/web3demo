@@ -29,13 +29,16 @@ export async function StakingRewardList(library, account, chainID) {
   for (let index = 0; index < list.length; index++) {
     const element = list[index];
     let balance, totalSupply, rewardRate, earned, rewardToken, TokenAddress, TokenAddressbalance;
+    const originRewardRate = await useStakingRewardsRead(library, account, element, 'rewardRate', []);
+    totalSupply = await useStakingRewardstotalSupply(library, account, element);
+    rewardRate = new TokenAmount(element, originRewardRate.toString());
 
     // 未连接钱包状态
     if (!account) {
       element.data = {
         balance: '',
-        totalSupply: '',
-        rewardRate: '',
+        totalSupply: totalSupply.toSignificant(6),
+        rewardRate: rewardRate.toSignificant(6),
         LPTokenAddress: '',
         earned: '',
         rewardToken: '',
@@ -48,8 +51,7 @@ export async function StakingRewardList(library, account, chainID) {
         rewardToken = getTokenInfo(chainID, rewardsTokenAddress);
 
         balance = await useStakingRewardsbalance(library, account, element);
-        totalSupply = await useStakingRewardstotalSupply(library, account, element);
-        rewardRate = await useStakingRewardsRead(library, account, element, 'rewardRate', []);
+
         //  TokenAddress = await useStakingRewardsRead(library,account,element,'stakingToken',[]);
         earned = await useStakingRewardsRead(library, account, element, 'earned', [account]);
 
@@ -59,10 +61,9 @@ export async function StakingRewardList(library, account, chainID) {
         newToken.address = TokenAddress;
         TokenAddressbalance = await useStakingRewardsbalance(library, account, newToken);
 
+        earned = new TokenAmount(element, earned.toString());
 
         //  console.log('TokenAddress',TokenAddress)
-        rewardRate = new TokenAmount(element, rewardRate.toString());
-        earned = new TokenAmount(element, earned.toString());
 
       } catch (error) {
         console.log(error);

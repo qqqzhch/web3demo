@@ -14,6 +14,7 @@
 import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
+import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 export default {
   data() {
     return {
@@ -32,23 +33,67 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
+
+        data.map(async (item) => {
+          if (item.kind === 'multi') {
+            const res = await this.getPriceData(item);
+            if (res) {
+              item.poolValue = res.usdtNum;
+              item.price = res.price;
+            }
+          }
+        });
+
         this.liquidityData = data.filter((item) => item.kind === 'multi');
         this.designatedData = data.filter((item) => item.kind === 'single');
       } catch (error) {
         console.log(error);
       } finally {
-        this.showLoading = false;
+        setTimeout(() => {
+          this.showLoading = false;
+        }, 1200);
       }
+    },
+    async getPriceData(item) {
+      const obj={};
+      if (item.kind === 'multi') {
+        const tokensymbolA = item.symbol[0];
+        const tokensymbolB = item.symbol[1];
+        const pledgeBalance = item.data && item.data.totalSupply;
+        const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
+        const data = await readpariInfoNuminfoEarn(
+          this.ethChainID,
+          this.ethersprovider,
+          tokensymbolA,
+          tokensymbolB,
+          pledgeBalanceWei
+        );
+        // console.log(data.aTokenbalance.toSignificant(6));
+        // console.log(data.bTokenbalance.toSignificant(6));
+
+        obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
+        obj.price = data.bTokenbalance.toSignificant(6)/data.aTokenbalance.toSignificant(6);
+        this.$store.commit('changeEarnPrice', data.price && data.price.toSignificant(6));
+      }
+      return obj;
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'web3', 'earnPrice']),
     isReady() {
-      return this.ethChainID;
+      return this.ethChainID && this.ethersprovider;
+    },
+    isConnect() {
+      return this.ethAddress;
     },
   },
   watch: {
     isReady(value) {
+      if (value) {
+        this.getListData();
+      }
+    },
+    isConnect(value) {
       if (value) {
         this.getListData();
       }

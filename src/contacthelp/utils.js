@@ -41,7 +41,7 @@ export function getProviderOrSigner(library, account) {
 
 // account is optional
 export function getContract(address, ABI, library, account) {
-  console.log('getContract');
+  // console.log('getContract');
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
@@ -50,7 +50,7 @@ export function getContract(address, ABI, library, account) {
 }
 
 export function getContractMulticall(address, ABI) {
-  console.log('getContract');
+  // console.log('getContract');
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }

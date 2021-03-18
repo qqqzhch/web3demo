@@ -18,9 +18,9 @@ import { abi as IUniswapV2PairABI } from "@uniswap/v2-core/build/IUniswapV2Pair.
 function useContract(
   address,
   ABI,
-  
+
 ) {
-  console.log('useContract');
+  // console.log('useContract');
   if (!address || !ABI) return null;
   try {
     // return new web3.eth.Contract(ABI,address)
@@ -37,7 +37,7 @@ function useContract(
 export function useTokenContractMulticall(
   token
 ) {
-  console.info("- -useTokenContract");
+  // console.info("- -useTokenContract");
   return useContract(
     token.address,
     ERC20_ABI

@@ -53,7 +53,7 @@ export default {
           this.$router.push(`/earn/myMine`);
           break;
 
-        case 'history':
+        case 'earn-history':
           this.$router.push(`/earn/history`);
           break;
 

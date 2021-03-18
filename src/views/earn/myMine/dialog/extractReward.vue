@@ -10,7 +10,7 @@
             <span class="card-title">Amount</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">Unclaimed {{ coinName }}</span>
-              <span>{{ claimAmount }}</span>
+              <span>{{ claimAmount }} {{ rewardToken }}</span>
             </div>
           </div>
           <div class="claim-wrapper">
@@ -19,8 +19,8 @@
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>You will receive {{ coinName }}</span>
-            <p>1234.21 {{ coinName }}</p>
+            <span>You will receive</span>
+            <p>{{ claimAmount }} {{ rewardToken }}</p>
           </div>
           <div class="price-item">
             <span>Price</span>
@@ -61,6 +61,7 @@ export default {
       coinName: '',
       extractLoading: false,
       fee: '',
+      rewardToken: ''
     };
   },
   methods: {
@@ -68,6 +69,7 @@ export default {
       this.data = data;
       this.coinName = data && data.name;
       this.claimAmount = data && data.data && data.data.earned;
+      this.rewardToken = data && data.data && data.data.rewardToken;
       this.getFee();
       this.openClaimDialog = true;
     },

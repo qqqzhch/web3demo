@@ -9,9 +9,10 @@ const store = new vuex.Store({
     token: "ETH",
     ethAddress: "",
     ethChainID: "",
-    web3:null,
-    ethersprovider:null,
-    htPrice:''
+    web3: null,
+    ethersprovider: null,
+    htPrice: '',
+    earnPrice: ''
   },
   mutations: {
     changeToken(state, token) {
@@ -24,20 +25,25 @@ const store = new vuex.Store({
     changeEthChainID(state, id) {
       state.ethChainID = id;
     },
-    changeweb3(state,obj){
+    changeweb3(state, obj) {
       console.log('changeweb3');
-      state.web3=obj.web3;
-      state.ethersprovider=obj.ethersprovider;
+      state.web3 = obj.web3;
+      state.ethersprovider = obj.ethersprovider;
 
     },
-    htPrice(state,price){
+    htPrice(state, price) {
 
-      state.htPrice=price;
+      state.htPrice = price;
+
+    },
+    changeEarnPrice(state, price) {
+
+      state.earnPrice = price;
 
     }
   },
 });
 
-[ buildrStore ].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
+[buildrStore].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
 
 export default store;

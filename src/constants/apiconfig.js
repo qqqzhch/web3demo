@@ -9,7 +9,7 @@ export  async function swapHistory(account,pageNum=1,showNum=10){
 
    const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
-  console.log(data);
+  // console.log(data);
   return data.data;
 
     /*
@@ -31,7 +31,7 @@ export  async function pledgeHistory(account,pageNum=1,showNum=10){
 
   const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
- console.log(data);
+//  console.log(data);
  return data.data;
 
    /*
@@ -57,7 +57,7 @@ export  async function buildrHistory(account,pageNum=1,showNum=10){
 export async function coinohlc(id){
   const data =  await  axios.get(`https://api.coingecko.com/api/v3/coins/${id}/ohlc?vs_currency=usd&days=1`);
 
- console.log(data);
+//  console.log(data);
  return data.data;
 
 

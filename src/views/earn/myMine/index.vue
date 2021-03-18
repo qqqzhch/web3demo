@@ -14,14 +14,14 @@
 
         <template slot="apy" slot-scope="{ row }">
           <span class="text-success">
-            {{ row.data && row.data.rewardRate | formatReward(365) }}
+            {{ row.data && row.data.rewardRate | formatReward(365) }}%
           </span>
         </template>
         <template slot="stake" slot-scope="{ row }">
           {{ row.data && row.data.balance }}
         </template>
         <template slot="earned" slot-scope="{ row }">
-          {{ row.data && row.data.earned }}
+          {{ row.data && row.data.earned }} {{ row.data && row.data.rewardToken }}
         </template>
 
         <template slot="operation" slot-scope="{ row }">

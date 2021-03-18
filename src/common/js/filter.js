@@ -50,7 +50,7 @@ const formatNormalValue = (value) => {
   }
   const val = String(value);
   const bigValue = new BigNumber(val);
-  const returnVal = bigValue.div(1).toNumber();
+  const returnVal = bigValue.div(1).decimalPlaces(6).toNumber();
   if (returnVal < 0.000001) {
     return "<0.000001";
   }

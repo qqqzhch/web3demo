@@ -114,17 +114,12 @@ export default {
           this.tokenObj.amountToApprove,
           this.tokenObj.dataAddress
         );
-        const txInfo = await this.getTransaction(result.hash);
-
-        if (txInfo.status === false) {
-          this.approveLoading = false;
-          throw new Error('发送交易失败');
-        } else {
-          const timer = setTimeout(() => {
-            this.approveLoading = false;
+        if (result) {
+          const wait = await result.wait([1]);
+          if (wait) {
             this.needApprove = false;
-            clearTimeout(timer);
-          }, 1000);
+            this.approveLoading = false;
+          }
         }
       } catch (error) {
         this.approveLoading = false;
@@ -175,7 +170,7 @@ export default {
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
         const esGas = await stakingRewardsContract.estimateGas.stake(amount);
-        const result = await stakingRewardsContract.stake(amount,{
+        const result = await stakingRewardsContract.stake(amount, {
           gasLimit: esGas
         });
         const name = this.data && this.data.name;

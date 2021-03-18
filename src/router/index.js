@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    redirect: '/buildr/guide' 
+    redirect: '/buildr/guide'
     // component: Home,
   },
   {
@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: "/exchange",
-    name: "exchange",
+    // name: "exchange",
     component: () => import("@/views/swap/Menu.vue"),
     children: [
       {
@@ -40,7 +40,7 @@ const routes = [
   },
   {
     path: "/earn",
-    name: "earn",
+    // name: "earn",
     component: () => import("@/views/earn/index.vue"),
     children: [
       {
@@ -55,7 +55,7 @@ const routes = [
       },
       {
         path: "history",
-        name: "history",
+        name: "earn-history",
         component: () => import("@/views/earn/history/index.vue")
       },
     ]
@@ -63,7 +63,7 @@ const routes = [
 
   {
     path: "/buildr",
-    name: "buildr",
+    // name: "buildr",
     component: () => import("@/views/buildr/index.vue"),
     children: [
       {
