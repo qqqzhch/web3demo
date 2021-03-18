@@ -99,7 +99,7 @@
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     margin-top: 24px;
     .small-item {
-      margin:0 50px;
+      width: 16%;
       div {
         span {
           height: 16px;
@@ -126,7 +126,6 @@
         width: 100%;
         line-height: 40px;
         height: 40px;
-        padding: 0px 10px;
         background-color: #0058ff;
         color: rgb(255, 255, 255);
       }

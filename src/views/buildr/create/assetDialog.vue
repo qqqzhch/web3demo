@@ -9,22 +9,20 @@
           <img src="../../../assets/img/search-16.png">
           <input v-model="searchCon" type="text" @keyup="search">
         </div>
-        <template v-for="(item, index) in assetData">
-          <div v-if="tokenInfo[item].isNoUse === false" :key="index" class="asset-content" @click="selectToken(item)">
+        <template v-for="(item, index) in tokenInfo">
+          <div v-if="item.isNoUse === true" :key="index" class="asset-content" @click="selectToken(item.token)">
             <div class="flex justify-between items-center">
               <div class="con-wapper flex justify-between items-center">
                 <template>
-                  <img v-if="item === 'mLAMB'" src="../../../assets/img/mlamb48.svg" alt="mlamb">
-                  <img v-if="item === 'ETH'" src="../../../assets/img/ethlogo-32.png" alt="eth">
-                  <img v-if="item === 'USDT'" src="../../../assets/img/usdt.png" alt="usdt">
-                  <img v-if="item === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
+                  <img v-if="item.token === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
+                  <img v-if="item.token === 'HT'" src="../../../assets/img/lambda48.svg" alt="HT">
                 </template>
                 <div class="text-warpper">
-                  <p>{{ item }}</p>
-                  <span>{{ tokenInfo[item].desc }}</span>
+                  <p>{{ item.name }}</p>
+                  <span>{{ item.desc }}</span>
                 </div>
               </div>
-              <div :class="token === item ? 'icon-active' : 'img-warpper'">
+              <div :class="token === item.token ? 'icon-active' : 'img-warpper'">
                 <img src="../../../assets/img/check-blue-24.png">
               </div>
             </div>
@@ -33,14 +31,12 @@
             <div class="flex justify-between items-center">
               <div class="con-wapper flex justify-between items-center">
                 <template>
-                  <img v-if="item === 'mLAMB'" src="../../../assets/img/mlamb48.svg" alt="mlamb">
-                  <img v-if="item === 'ETH'" src="../../../assets/img/ethlogo-32.png" alt="eth">
-                  <img v-if="item === 'USDT'" src="../../../assets/img/usdt.png" alt="usdt">
-                  <img v-if="item === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
+                  <img v-if="item.token === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
+                  <img v-if="item.token === 'HT'" src="../../../assets/img/lambda48.svg" alt="HT">
                 </template>
                 <div class="text-warpper disableAssets">
-                  <p>{{ item }}</p>
-                  <span>{{ tokenInfo[item].desc }}</span>
+                  <p>{{ item.name }}</p>
+                  <span>{{ item.desc }}</span>
                 </div>
               </div>
             </div>
@@ -56,7 +52,7 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      tokenInfo: {},
+      tokenInfo: [],
       openAssetDialog: false,
       assetData: [],
       backupData: [],

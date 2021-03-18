@@ -4,6 +4,8 @@
         "title":"LAMB pool1",
         "titlei18":"LAMB_pool1",
         "token":"LAMB",
+        "desc":"Lambda",
+        "isNoUse":true,
         "state":true
     },
     {
@@ -11,6 +13,8 @@
         "title":"LAMB pool2",
         "titlei18":"LAMB_pool2",
         "token":"LAMB",
+        "desc":"Lambda",
+        "isNoUse":false,
         "state":true
     },
     {
@@ -18,6 +22,7 @@
         "title":"HT pool2",
         "titlei18":"HT_pool2",
         "token":"HT",
+        "isNoUse":false,
         "state":false
     }
 ]
