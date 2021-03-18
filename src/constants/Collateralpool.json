@@ -5,16 +5,22 @@
         "titlei18":"LAMB_pool1",
         "token":"LAMB",
         "desc":"Lambda",
-        "isNoUse":true,
         "state":true
     },
     {
         "name":"LAMB2",
-        "title":"LAMB pool2",
-        "titlei18":"LAMB_pool2",
+        "title":"LAMB2 pool1",
+        "titlei18":"LAMB2_pool1",
         "token":"LAMB",
         "desc":"Lambda",
-        "isNoUse":false,
+        "state":true
+    },
+    {
+        "name":"SCASH",
+        "title":"SCASH pool2",
+        "titlei18":"SCASH_pool2",
+        "token":"SCASH",
+        "desc":"SCASH",
         "state":true
     },
     {
@@ -22,7 +28,6 @@
         "title":"HT pool2",
         "titlei18":"HT_pool2",
         "token":"HT",
-        "isNoUse":false,
         "state":false
     }
 ]

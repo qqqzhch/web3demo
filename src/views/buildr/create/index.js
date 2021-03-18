@@ -1,6 +1,7 @@
 import { mapState } from 'vuex';
 import BigNumber from "bignumber.js";
 import event from '@/common/js/event';
+import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
 import { collateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
 import {
@@ -43,6 +44,10 @@ export default {
     },
   },
   methods: {
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol,chainID);
+    },
     getParams() {
       return {
         tokenName: this.defaultPoolToken,
@@ -116,7 +121,13 @@ export default {
       this.getAllowanceAmount();
     },
     openAsset(){
-      this.$refs.asset.open(this.collateralPools);
+      this.$refs.asset.open({
+        defaultToken: this.defaultPoolToken,
+        data: this.collateralPools
+      });
+    },
+    setAsset(token) {
+      this.defaultPoolToken = token;
     }
   },
   watch: {

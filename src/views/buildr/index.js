@@ -26,5 +26,8 @@ export default {
           break;
       }
     },
+  },
+  created() {
+    this.nav = this.$route.name;
   }
 };

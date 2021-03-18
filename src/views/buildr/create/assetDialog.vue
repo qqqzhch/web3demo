@@ -9,13 +9,12 @@
           <img src="../../../assets/img/search-16.png">
           <input v-model="searchCon" type="text" @keyup="search">
         </div>
-        <template v-for="(item, index) in tokenInfo">
-          <div v-if="item.isNoUse === true" :key="index" class="asset-content" @click="selectToken(item.token)">
+        <template v-for="(item, index) in assetData">
+          <div :key="index" class="asset-content" @click="selectToken(item.token)">
             <div class="flex justify-between items-center">
               <div class="con-wapper flex justify-between items-center">
                 <template>
-                  <img v-if="item.token === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
-                  <img v-if="item.token === 'HT'" src="../../../assets/img/lambda48.svg" alt="HT">
+                  <img :src="getTokenImg(item.token)" :alt="item.token">
                 </template>
                 <div class="text-warpper">
                   <p>{{ item.name }}</p>
@@ -27,20 +26,6 @@
               </div>
             </div>
           </div>
-          <div v-else :key="index" class="asset-content disableAssets-warpper">
-            <div class="flex justify-between items-center">
-              <div class="con-wapper flex justify-between items-center">
-                <template>
-                  <img v-if="item.token === 'LAMB'" src="../../../assets/img/lambda48.svg" alt="lamb">
-                  <img v-if="item.token === 'HT'" src="../../../assets/img/lambda48.svg" alt="HT">
-                </template>
-                <div class="text-warpper disableAssets">
-                  <p>{{ item.name }}</p>
-                  <span>{{ item.desc }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </template>
       </div>
     </Modal>
@@ -48,7 +33,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -60,41 +45,24 @@ export default {
     };
   },
   methods: {
-    filterAssetData() {
-      if (!this.assetName) {
-        this.assetData = this.assetFullData;
-      }
-      this.assetData = this.assetFullData.filter((item) => item.includes(this.assetName));
+    open({data, defaultToken}) {
+      this.token = defaultToken;
+      this.tokenInfo = data;
+      this.assetData = data;
+      this.openAssetDialog = true;
+    },
+    getTokenImg(tokensymbol){
+      return this.$parent.getTokenImg(tokensymbol);
     },
     selectToken(token) {
-      this.$store.commit('changeToken', token);
+      this.$parent.setAsset(token);
       this.openAssetDialog = false;
       this.searchCon = '';
     },
-    open(data) {
-      this.tokenInfo = data;
-      this.assetData = Object.keys(data);
-      this.backupData = this.assetData;
-      this.openAssetDialog = true;
-    },
     search() {
       const val = this.searchCon.toLowerCase();
-      const newListData = [];
-
-      if (val) {
-        this.backupData.filter((item) => {
-          if (item.toLowerCase().indexOf(val) !== -1) {
-            newListData.push(item);
-          }
-        });
-        this.assetData = newListData;
-      } else {
-        this.assetData = this.backupData;
-      }
+      this.assetData = this.tokenInfo.filter(item => item.token.toLowerCase().includes(val));
     },
-  },
-  computed: {
-    ...mapState(['token']),
   },
 };
 </script>

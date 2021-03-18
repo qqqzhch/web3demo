@@ -16,12 +16,16 @@
           </p>
           <div class="connect flex justify-between items-center">
             <div class="icon-wrapper flex justify-start items-center">
-              <template>
-                <img v-if="token === 'LAMB'" src="../../../assets/img/lamblogo-32.png" alt="eth" class="mr-2">
-                <img v-if="token === 'HT'" src="../../../assets/img/lamblogo-32.png" alt="HT" class="mr-2">
-                <!-- <img v-if="token === 'tLAMB'" src="../../assets/img/tlamb48.svg" alt="eth" class="mr-2"> -->
+              <template v-for="(item, index) in collateralPools">
+                <img
+                  v-if="defaultPoolToken===item.token"
+                  :key="index"
+                  class="mr-2"
+                  :src="getTokenImg(item.token)"
+                  :alt="item.token"
+                >
               </template>
-              <span>{{ token }}</span>
+              <span>{{ defaultPoolToken }}</span>
             </div>
             <div class="arrow-wrapper">
               <img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">
@@ -107,7 +111,7 @@
           <button v-if="BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
             Approve
           </button>
-          <button else class="btn" @click="onJoinClick">
+          <button v-else class="btn" @click="onJoinClick">
             Create and generate scUSD
           </button>
         </div>
