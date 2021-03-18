@@ -3,7 +3,9 @@
     <div class="guide-left">
       <h2>Buildr</h2>
       <p>Stake crypto assets, build stable scUSD.</p>
-      <button>Create CDP</button>
+      <button @click="CreateCDP">
+        Create CDP
+      </button>
     </div>
     <div class="guide-right">
       <img src="../../../assets/img/guide.svg" alt="guide">
