@@ -27,8 +27,9 @@ export default {
     maxMintable() {
       const { maxMintable, targetRatio } = this.poolData;
 
-      const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
-      const currMaxMintable = BigNumber(maxMintable).minus(this.coinAmount).times(targetRX);
+      // const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
+      let currMaxMintable = BigNumber(maxMintable).minus(BigNumber(this.coinAmount).times(targetRatio));
+      currMaxMintable = BigNumber(currMaxMintable).lt(0) ? 0 : currMaxMintable;
 
       return `${BigNumber(maxMintable).toFixed(6)} to ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
     },
