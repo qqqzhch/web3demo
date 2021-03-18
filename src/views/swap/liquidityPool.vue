@@ -13,15 +13,23 @@
         <h2>How to get scUSD ?</h2>
         <div class="flex items-center buttons-warpper">
           <div class="button-item">
-            <h3>Build scUSD</h3>
+            <h3>
+              Build scUSD
+            </h3>
             <div class="border-image">
-              <button>SuperCash Builder</button>
+              <button @click="tobuilder">
+                SuperCash Builder
+              </button>
             </div>
           </div>
           <div class="button-item">
-            <h3>Buy scUSD</h3>
+            <h3>
+              Buy scUSD
+            </h3>
             <div class="border-image">
-              <button>SuperCash Exchange</button>
+              <button @click="toexchange">
+                SuperCash Exchange
+              </button>
             </div>
           </div>
         </div>
@@ -155,6 +163,12 @@ export default {
 
   },
   methods: {
+    tobuilder(){
+      this.$router.push('/buildr');
+    },
+    toexchange(){
+      this.$router.push('/exchange');
+    },
     getTokenImg(tokensymbol){
       const chainID = this.ethChainID ;
       return getTokenImg(tokensymbol,chainID);

@@ -251,17 +251,17 @@ export default {
         this.$data.inputnoticeA =  '';
         const num = parseFloat( this.$data.Amount ) ;
         if(isNaN(num)){
-          this.$data.inputnoticeA =  ' 输入值需要是数值 ';
+          this.$data.inputnoticeA =  ' The input value needs to be numeric ';
           return false;
         }
         const inamount = new BigNumber(this.$data.Amount) ;
         if(inamount.isGreaterThan(this.balance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
+          this.$data.inputnoticeA =  ' Input value must be less than balance and greater than 0 ';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = " 输入值需要是数值 ";
+        this.$data.inputnoticeA = " The input value needs to be numeric ";
       }
     },
     getTokenImg(tokensymbol) {
@@ -406,14 +406,14 @@ export default {
         this.openRemoveDialog = false;
 
         event.$emit('sendtx',[tx,{
-          okinfo:baseTip+"成功",
-          failinfo:baseTip+'失败'
+          okinfo:baseTip+"success",
+          failinfo:baseTip+'fail'
         }]);
 
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: "交易已取消",
+          title: "Transaction cancelled",
         });
       }
 

@@ -169,14 +169,14 @@ export default {
       //           });
       this.$refs.haveSendtx.open(tx.base);
       event.$emit('sendtx',[tx.response,{
-        okinfo:tx.base+"成功",
-        failinfo:tx.base+'失败'
+        okinfo:tx.base+"success",
+        failinfo:tx.base+'fail'
       }]);
       this.openConfirmDialog = false;
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: '交易已取消',
+                    title: 'Transaction cancelled',
                 });
 
       }

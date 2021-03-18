@@ -4,21 +4,21 @@
       <div class="switch-wrapper flex justify-start items-center">
         <button
           class="menu-item"
-          :class="name === 'swap'? 'active-menu':''"
+          :class="nameclass === 'swap'? 'active-menu':''"
           @click="toPage('swap')"
         >
           Swap
         </button>
         <button
           class="menu-item"
-          :class="name === 'pool'? 'active-menu':''"
+          :class="nameclass === 'pool'? 'active-menu':''"
           @click="toPage('pool')"
         >
           Liquidity Pool
         </button>
         <button
           class="menu-item"
-          :class="name === 'history'? 'active-menu':''"
+          :class="nameclass === 'history'? 'active-menu':''"
           @click="toPage('history')"
         >
           History
@@ -53,6 +53,13 @@ export default {
   mounted() {
     this.name = this.$route.name;
   },
+  computed:{
+    nameclass:function(){
+        const  name = this.$route.name;
+        console.log( name );
+        return name;
+    }
+  }
 };
 </script>
 

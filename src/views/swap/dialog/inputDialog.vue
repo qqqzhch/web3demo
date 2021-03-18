@@ -140,7 +140,7 @@
             >
               <Buttons>Next</Buttons>
             </div>
-            <p class="buy">
+            <p class="buy" @click="toexchange">
               Buy scUSD
             </p>
           </div>
@@ -301,6 +301,9 @@ export default {
     };
   },
   methods: {
+    toexchange(){
+      this.$router.push('/exchange');
+    },
     clearData(){
       this.$data.aTokenAmount = '';
       this.$data.bTokenAmount = '';
@@ -577,17 +580,17 @@ export default {
         // }
         const num = parseFloat( this.$data.aTokenAmount ) ;
         if(isNaN(num)){
-          this.$data.inputnoticeA =  ' 输入值需要是数值 ';
+          this.$data.inputnoticeA =  ' The input value needs to be numeric ';
           return false;
         }
         const inamount = new BigNumber(this.$data.aTokenAmount) ;
         if(inamount.isGreaterThan(this.tokenABalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeA =  ' 输入值需要小于余额并且大于0 ';
+          this.$data.inputnoticeA =  ' Input value must be less than balance and greater than 0 ';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = " 输入值需要是数值 ";
+        this.$data.inputnoticeA = " The input value needs to be numeric ";
       }
     },
     inputcheckupB() {
@@ -598,17 +601,17 @@ export default {
         // }
         const num = parseFloat( this.$data.bTokenAmount ) ;
         if(isNaN(num)){
-          this.$data.inputnoticeB =  ' 输入值需要是数值 ';
+          this.$data.inputnoticeB =  ' The input value needs to be numeric ';
           return false;
         }
         const inamount = new BigNumber(this.$data.bTokenAmount) ;
         if(inamount.isGreaterThan(this.tokenBBalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeB =  ' 输入值需要小于余额 并且大于0';
+          this.$data.inputnoticeB =  ' Input value must be less than balance and greater than 0';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeB = " 输入值需要是数值 ";
+        this.$data.inputnoticeB = " The input value needs to be numeric ";
       }
     },
     async approveA() {
@@ -643,7 +646,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: "授权已取消",
+          title: "Authorization cancelled",
         });
       }
       this.$data.btnloading = false;
@@ -683,7 +686,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: "授权已取消",
+          title: "Authorization cancelled",
         });
       }
       this.$data.btnloading = false;
@@ -707,14 +710,14 @@ export default {
         event.$emit("sendtx", [
           tx,
           {
-            okinfo: baseTip + "成功",
-            failinfo: baseTip + "失败",
+            okinfo: baseTip + "success",
+            failinfo: baseTip + "fail",
           },
         ]);
         this.$data.openInputDialog = false;
       } catch (error) {
         this.$Notice.error({
-          title: "交易已取消",
+          title: "Transaction cancelled",
         });
       }
       this.$data.btnloading = false;

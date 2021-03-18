@@ -159,21 +159,28 @@
         </Buttons>
         <div v-else>
           <Buttons
-            v-if="needApprove==false"
-            @click.native="openconfirmtDialog"
+            v-if="PriceImpactGreater==true"
           >
-            Swap Now
+            The price fluctuates too much to trade 
           </Buttons>
           <div v-else>
             <Buttons
-              class="smallbtn"
-              @click.native="makeApprove"
+              v-if="needApprove==false"
+              @click.native="openconfirmtDialog"
             >
-              Approve
-            </Buttons>
-            <Buttons class="smallbtn disableBtn">
               Swap Now
             </Buttons>
+            <div v-else>
+              <Buttons
+                class="smallbtn"
+                @click.native="makeApprove"
+              >
+                Approve
+              </Buttons>
+              <Buttons class="smallbtn disableBtn">
+                Swap Now
+              </Buttons>
+            </div>
           </div>
         </div>
       </div>
@@ -346,19 +353,19 @@ export default {
       try {
         const num = parseFloat(this.$data.inputAmount) ;
         if(isNaN(num)){
-          this.$data.inputnotice =  ' 输入值需要是数值 ';
+          this.$data.inputnotice =  ' Input value needs to be a value ';
           return false;
         }
         const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, "ether")) ;
-        if(inamount.isGreaterThan(this.inBalance)){
-          this.$data.inputnotice =  ' 输入值需要小于余额 ';
+        if(inamount.isGreaterThan(this.inBalance)||inamount.isLessThanOrEqualTo('0')){
+          this.$data.inputnotice =  ' Input value must be less than balance and greater than 0';
           return false;
 
         }
 
       } catch (error) {
         console.log(error);
-        this.$data.inputnotice =  ' 输入值需要是数值 ';
+        this.$data.inputnotice =  ' The input value needs to be numeric ';
       }
 
 
@@ -463,7 +470,7 @@ export default {
           //取消授权
           //需要提示
           this.$Notice.error({
-                    title: '授权已取消',
+                    title: 'Authorization cancelled',
                 });
         }
 
@@ -471,7 +478,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: '程序异常',
+                    title: 'Program exception',
                     desc:error.message
                 });
 
