@@ -2,6 +2,7 @@ import { mapState } from 'vuex';
 import BigNumber from "bignumber.js";
 import event from '@/common/js/event';
 import ScInput from '../components/ScInput.vue';
+import config from '@/constants/tokenInfo.js';
 import { collateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
@@ -16,6 +17,7 @@ export default {
   name: 'create',
   data() {
     return {
+      token:'ETH',
       currencyNumber: 0, // 资产数量
       pledgeNumber: 0,   // 质押币数量
       stableNumber: 0,   // 稳定币数量
@@ -27,12 +29,14 @@ export default {
       currencyPrice: 0,
       collateralPools: collateralPools,
       defaultPoolToken: collateralPools[0].token,
+      tokenInfo: config.tokenInfo,
       BigNumber,
     };
   },
   components: {
     ScInput,
     haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
+    assetDialog: () => import('@/views/buildr/create/assetDialog.vue'),
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
@@ -113,6 +117,9 @@ export default {
       this.getCurrencyPrice();
       this.getAllowanceAmount();
     },
+    openAsset(){
+      this.$refs.asset.open(this.tokenInfo);
+    }
   },
   watch: {
     isReady(value) {
