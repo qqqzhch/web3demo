@@ -68,7 +68,7 @@
           </div>
           <div>
             <p>{{ item.pairName }}</p>
-            <span>{{ item.price }} {{ item.pairSymbols[0] }} = 1 {{ item.pairSymbols[1] }}</span>
+            <span>{{ item.price }} {{ item.pairSymbols[1] }} = 1 {{ item.pairSymbols[0] }}</span>
           </div>
         </div>
         <div>
@@ -76,8 +76,8 @@
           <p>{{ item.totalSupply|formatBalance }}</p>
         </div>
         <div class="rightdiv">
-          <span>Inputed {{ item.pairSymbols[1] }}</span>
           <span>Inputed {{ item.pairSymbols[0] }}</span>
+          <span>Inputed {{ item.pairSymbols[1] }}</span>
           <span>My share of pool</span>
         </div>
         <div class="number">

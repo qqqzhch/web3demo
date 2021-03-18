@@ -169,8 +169,8 @@ export default {
       //           });
       this.$refs.haveSendtx.open(tx.base);
       event.$emit('sendtx',[tx.response,{
-        okinfo:tx.base+"success",
-        failinfo:tx.base+'fail'
+        okinfo:tx.base+" success",
+        failinfo:tx.base+' fail'
       }]);
       this.openConfirmDialog = false;
       } catch (error) {

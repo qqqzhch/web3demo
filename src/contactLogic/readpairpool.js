@@ -73,14 +73,14 @@ export async function readpairpool(chainID,library){
         const  tokenB = element.tokenAmounts[1].token;
         const pairaddress = element.liquidityToken.address;
 
-        PricePromiseList.push(getpairPrice(pairaddress,chainID,tokenB.symbol,tokenA.symbol));  
+        PricePromiseList.push(getpairPrice(pairaddress,chainID,tokenA.symbol,tokenB.symbol));  
 
         dataList.push({
             Pair:element,
             price:price.toSignificant(6),
-            pairName:`${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`,
+            pairName:`${element.tokenAmounts[0].token.symbol}/${element.tokenAmounts[1].token.symbol}`,
             listSymbol:element.tokenAmounts[1].token.symbol,
-            pairSymbols:[element.tokenAmounts[1].token.symbol,element.tokenAmounts[0].token.symbol]
+            pairSymbols:[element.tokenAmounts[0].token.symbol,element.tokenAmounts[1].token.symbol]
 
 
         });
@@ -475,8 +475,8 @@ export async  function getpairPrice(pairaddress,chainID,tokenA,tokenB){
   const outnum = new  BigNumber(PriceInfo.outamount); 
 
   const infoData = {
-    [PriceInfo.tokenA+"/"+PriceInfo.tokenB]:innum.div(outnum).toFixed(3),
-    [PriceInfo.tokenB+"/"+PriceInfo.tokenA]:outnum.div(innum).toFixed(3),
+    [PriceInfo.tokenA+"/"+PriceInfo.tokenB]:outnum.div(innum).toFixed(3),
+    [PriceInfo.tokenB+"/"+PriceInfo.tokenA]:innum.div(outnum).toFixed(3),
   };
   const obj={};
   obj[tokenA+'/'+tokenB] =infoData[tokenA+'/'+tokenB];

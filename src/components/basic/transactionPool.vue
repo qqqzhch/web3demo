@@ -21,7 +21,7 @@ export default {
         this.$Notice.success({
           title: 'Success',
           desc: tx.info.okinfo,
-          duration: 0
+          duration: 30
         });
         event.$emit('txsuccess');
       } else {
