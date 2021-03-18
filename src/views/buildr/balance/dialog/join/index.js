@@ -90,6 +90,14 @@ export default {
       this.step = 1;
       this.coinAmount = 0;
     },
+    //关闭弹窗
+    closeDialog(){
+      this.isOpen = false;
+    },
+    //确认弹窗返回按钮
+    changeStep(){
+      this.step = 1;
+    },
     onExitClick() {
       this.isOpen = false;
       this.$parent.openExitDialog(this.poolData);
