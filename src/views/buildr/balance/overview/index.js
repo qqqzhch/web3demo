@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapState('buildr', ['poolsData']),
     totalValue() {
-      return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(pool.pledgeNumber),  0);
+      return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(pool.pledgeNumber).times(pool.currencyPrice),  0);
     },
     totalDebt() {
       return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(pool.currentDebt),  0);

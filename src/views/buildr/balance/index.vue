@@ -16,7 +16,7 @@
           <div class="small-item">
             <div>
               <span>Target Coll. Ratio</span>
-              <p>{{ BigNumber(1).div(poolItem.targetRatio).times(100) }}%</p>
+              <p>{{ poolItem.targetRatio ? BigNumber(1).div(poolItem.targetRatio).times(100) : 0 }}%</p>
             </div>
             <div class="mrg-tb-20">
               <span>Current Price</span>

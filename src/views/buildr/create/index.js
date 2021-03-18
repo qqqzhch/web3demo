@@ -30,12 +30,14 @@ export default {
       collateralPools: collateralPools,
       defaultPoolToken: collateralPools[0].token,
       BigNumber,
+      btnloading: false,
     };
   },
   components: {
     ScInput,
     haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
     assetDialog: () => import('@/views/buildr/create/assetDialog.vue'),
+    Loading: () => import("@/components/basic/loading.vue"),
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
@@ -81,13 +83,20 @@ export default {
       this.stableNumber = BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX);
     },
     async onApproveClick() {
+      this.btnloading = true;
       const params = Object.assign({}, this.getParams(), {
         pledgeNumber: this.pledgeNumber,
       });
-      const result = await fetchApprove(params);
-      if (result && result.hash) {
-        // this.$parent.onChangeNav(2);
+      const transaction = await fetchApprove(params);
+      if (transaction && transaction.hash) {
+        const waitdata = await transaction.wait([1]);
+        this.btnloading = false;
         this.getAllowanceAmount();
+      } else {
+        this.$Notice.error({
+          title: 'Approve cancelled',
+        });
+        this.btnloading = false;
       }
     },
     async getAllowanceAmount(){
