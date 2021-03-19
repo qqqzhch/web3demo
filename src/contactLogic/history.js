@@ -77,7 +77,7 @@ export  async function readbuildrHistory(chainID,account,pageNum,showNum){
 
 
     });
-    
+
     return data;
 
 }
