@@ -3,7 +3,7 @@ import  {collateralPools} from '@/contactLogic/buildr/balance.js';
 import {
     fetchAllowanceAmount,
   } from '@/contactLogic/buildr/create';
-  
+
   import Cookies  from  'js-cookie' ;
 
 
@@ -15,14 +15,14 @@ import {
       $router.push('/buildr/balance');
       return ;
     }
-    
+
     const callList = [];
     collateralPools.forEach(element => {
       console.log(element.token);
       const tokenName = element.token;
 
       callList.push(fetchAllowanceAmount({ chainID, account, library, tokenName }));
-      
+
     });
     const  AllowanceList = await  Promise.all(callList);
 
@@ -46,12 +46,12 @@ import {
       $router.push('/buildr/balance');
     }
 
-    
+
 
   }
 
- function checklocal(chainID,account){
-    
+ export function checklocal(chainID,account){
+
     const    buildrhaveAllowance = Cookies.get(account+"_"+chainID+"_"+'buildrhaveAllowance');
     console.log('cookie',buildrhaveAllowance);
      return buildrhaveAllowance;
