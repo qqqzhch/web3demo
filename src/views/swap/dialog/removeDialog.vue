@@ -72,7 +72,7 @@
           <div>
             <span>Price</span>
             <div class="price">
-              <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
+              <p>{{ price }} {{ tokenB.symbol }} = 1{{ tokenA.symbol }}</p>
               <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
             </div>
           </div>
