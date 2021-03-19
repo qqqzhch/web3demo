@@ -91,7 +91,9 @@
     color: #14171c;
     line-height: 24px;
   }
-  .CDP-item {
+  .CDP-content{
+    margin-bottom: 50px;
+    .CDP-item {
     padding: 24px;
     display: flex;
     align-items: center;
@@ -131,5 +133,7 @@
       }
     }
   }
+  }
+  
 }
 </style>

@@ -97,6 +97,10 @@ export default {
 .header-wrapper {
   width: 100%;
   height: 88px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
   background-color: #ffffff;
   .nav-wrapper {
     height: 100%;
