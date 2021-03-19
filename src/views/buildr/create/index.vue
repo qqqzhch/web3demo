@@ -32,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="input-warpper grid-2 mrg-t-20 mrg-b-5">
+        <div class="input-warpper flex justify-between items-center mrg-t-20 mrg-b-5">
           <div class="mortgage">
             Collateral
           </div>
@@ -43,18 +43,18 @@
           </div>
         </div>
         <div class="Input-item">
-          <ScInput title="" unit="LAMB" placetext="0" :on-change="onChangePledgeNumber" />
+          <ScInput class="myInput" title="" unit="LAMB" :on-change="onChangePledgeNumber" />
           <img :src="getTokenImg(defaultToken)" alt="lambda">
         </div>
 
-        <div class="grid-2">
-          <div class="title">
+        <div class=" flex">
+          <div class="title-build">
             Build
           </div>
           <div class="pull-right" />
         </div>
         <div class="Input-item">
-          <ScInput title="" unit="scUSD" :default-value="stableNumber" disabled="true" />
+          <ScInput class="myInput" title="" unit="scUSD" :default-value="stableNumber" disabled="true" />
           <img src="../../../assets/img/comp.svg" alt="comp">
           <img :src="getTokenImg('scUSD')" alt="lambda">
         </div>
@@ -200,14 +200,8 @@
         }
       }
     }
-    .title {
-      margin-top: 24px;
-      height: 19px;
-      font-size: 16px;
-      font-family: Gilroy-Medium, Gilroy;
-      font-weight: 500;
-      color: #14171c;
-      line-height: 19px;
+    .title-build {
+      margin: 24px 0 12px;;
     }
     .Input-item{
       position: relative;

@@ -92,7 +92,7 @@
       font-size: 30px;
       height: 70px;
       outline: none;
-      padding: 20px 15px 15px 15px;
+      padding: 20px 15px;
       width: 100%;
       vertical-align: middle;
       transition: border-color .2s cubic-bezier(.645,.045,.355,1);
