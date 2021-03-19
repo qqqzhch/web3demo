@@ -6,16 +6,9 @@
       </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
-          <Table :columns="getHistory" :data="list">
+          <Table :show-loading="showLoading" :columns="getHistory" :data="list">
             <template slot="Pool" slot-scope="{ row }">
               <div class="Pool">
-                <!-- <div v-if="row.method_name==='exit'" class="imgages-warpper">
-                <img :src="getTokenImg(row.show.tokenA)" class="imgLeft">
-                <img :src="getTokenImg(row.show.tokenB)" class="imgRight">
-              </div>
-              <div v-else class="imgages-warpper">
-                <img :src="getTokenImg(row.show.tokenA)" class="images">
-              </div> -->
                 <p>
                   {{ selectAddress(row.show.poolADDRESS) }}
                 </p>
@@ -79,11 +72,11 @@ export default {
       pageNum: 1,
       pairloading: false,
       addressName: '',
+      showLoading: false,
     };
   },
-  // components:{
-  //   loading: () => import("@/components/basic/loading.vue"),
-
+  // components: {
+  //   loading: () => import('@/components/basic/loading.vue'),
   // },
   methods: {
     getTokenImg(tokensymbol) {
@@ -91,46 +84,48 @@ export default {
       return getTokenImg(tokensymbol, chainID);
     },
     async getreadPledgeHistory() {
-      const library = this.ethersprovider;
-      const account = this.ethAddress;
-      const chainID = this.ethChainID;
-
-      const data = await readPledgeHistory(chainID, account, this.$data.pageIndex, 10);
-
-      this.list = this.$data.list.concat(data.data);
-
-      console.log(this.list);
-
-      if (data.count % 10 == 0) {
-        this.$data.pageNum = data.count / 10;
-      } else {
-        this.$data.pageNum = (data.count - (data.count % 10)) / 10 + 1;
+      this.showLoading = true;
+      try {
+        const account = this.ethAddress;
+        const chainID = this.ethChainID;
+        const data = await readPledgeHistory(chainID, account, this.pageIndex, 10);
+        this.list = this.list.concat(data.data);
+        // console.log(this.list);
+        if (data.count % 10 == 0) {
+          this.pageNum = data.count / 10;
+        } else {
+          this.pageNum = (data.count - (data.count % 10)) / 10 + 1;
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.showLoading = false;
       }
-      this.$data.pairloading = false;
     },
     selectAddress(val) {
-      const token = tokenList.filter((item) => {
+      const [token] = tokenList.filter((item) => {
         return item.address === val;
       });
-      return token[0].name;
+      return token.name;
     },
     onreachbottom() {
-      console.log('onreachbottom', this.$data.pageIndex);
+      // console.log('onreachbottom', this.pageIndex);
       const _this = this;
 
       return new Promise((resolve) => {
         setTimeout(async () => {
-          _this.$data.pageIndex += 1;
+          _this.pageIndex += 1;
           await _this.getreadPledgeHistory();
           resolve({});
         }, 1);
       });
     },
   },
-  mounted() {
-    this.$data.pageIndex = 1;
-    this.$data.list = [];
+  created() {
+    this.pageIndex = 1;
+    this.list = [];
     if (this.ethAddress) {
+      this.showLoading = true;
       this.getreadPledgeHistory();
     }
   },
