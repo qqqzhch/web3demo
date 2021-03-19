@@ -8,7 +8,7 @@ import LPtoken from "@/constants/minertoken.json";
 export  async function readSwapHistory(chainID,account,pageNum,showNum){
     const data = await swapHistory(account,pageNum,showNum);
     //['swapExactTokensForTokens','removeLiquidityWithPermit','addLiquidity']
-    
+
     data.data.forEach((item)=>{
         if(item.method_name == 'removeLiquidityWithPermit'){
             item.show = removeLiquidityWithPermitformat(item.txs,chainID);
@@ -18,7 +18,7 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
             item.show = addLiquidityformat(item.txs,chainID);
 
         }
-        
+
 
     });
 
@@ -32,7 +32,7 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
 export  async function readPledgeHistory(chainID,account,pageNum,showNum){
     const data = await pledgeHistory(account,pageNum,showNum);
     //['stake','exit','getReward']
-    
+
     data.data.forEach((item)=>{
         if(item.method_name == 'stake'){
             item.show = stakeformat(item.txs,chainID);
@@ -42,7 +42,7 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
             item.show = getRewardformat(item.txs,chainID);
 
         }
-        
+
 
     });
 
@@ -56,7 +56,7 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
 export  async function readbuildrHistory(chainID,account,pageNum,showNum){
     const data = await buildrHistory(account,pageNum,showNum);
     //['stake','exit','getReward']
-    
+
     data.data.forEach((item)=>{
         item.show = proxyformat(item.txs,chainID);
 
@@ -74,13 +74,10 @@ export  async function readbuildrHistory(chainID,account,pageNum,showNum){
         //     // item.show = getRewardformat(item.txs,chainID);
 
         // }
-        
+
 
     });
-
-
-
-    console.log(data);
+    
     return data;
 
 }
@@ -154,7 +151,7 @@ function addLiquidityformat(item,chainID){
     const  tokenADDRESSB = item[1].amount_token_address ;
 
     const amountLP = item[2].amount;
-    
+
 
     return {
         inamount:[inamount,outamount],
@@ -168,7 +165,7 @@ function addLiquidityformat(item,chainID){
 
 function stakeformat(item,chainID){
     const inamount = item[0].amount;
-    
+
 
     const  tokenADDRESSA = item[0].amount_token_address ;
     const  poolADDRESS = item[0].to ;
@@ -177,7 +174,7 @@ function stakeformat(item,chainID){
         inamount:inamount,
         poolADDRESS,
         tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
-    
+
     };
 
 }
@@ -185,7 +182,7 @@ function stakeformat(item,chainID){
 function exitformat(item,chainID){
     const outamountA = item[0].amount;
     const outamountB = item[1].amount;
-    
+
 
     const  tokenADDRESSA = item[0].amount_token_address ;
     const  tokenADDRESSB = item[1].amount_token_address ;
@@ -198,14 +195,14 @@ function exitformat(item,chainID){
         poolADDRESS,
         tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
         tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
-    
+
     };
 
 }
 
 function getRewardformat(item,chainID){
     const inamount = item[0].amount;
-    
+
 
     const  tokenADDRESSA = item[0].amount_token_address ;
     const  poolADDRESS = item[0].from ;
@@ -214,7 +211,7 @@ function getRewardformat(item,chainID){
         outamount:inamount,
         poolADDRESS,
         tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
-    
+
     };
 
 }
@@ -222,25 +219,25 @@ function getRewardformat(item,chainID){
 
 function proxyBurnedformat(item,chainID){
     const inamount = item[0].amount;
-    
+
     const  tokenADDRESSA = item[0].amount_token_address ;
-    
+
     return {
         amount:inamount,
         tokenA:tokenNameByaddressStack(tokenADDRESSA,chainID),
-    
+
     };
 }
 
 function proxyformat(item,chainID){
     const inamount = item[0].amount;
-    
+
     const  tokenADDRESSA = item[0].amount_token_address ;
-    
+
     return {
         amount:inamount,
         tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
-    
+
     };
 }
 

@@ -4,13 +4,13 @@
       <p class="earn-title">
         History
       </p>
-      <Scroll :loading-text="'loading....'" :height="400">
+      <Scroll :loading-text="'loading....'" :on-reach-bottom="onReachBottom" :height="400">
         <div class="list-wapper">
           <Table :columns="getHistory" :data="list">
-            <template slot="Assets" slot-scope="{ row}">
+            <template slot="Assets" slot-scope="{row}">
               <div class=" Assets">
                 <div class="imgages-warpper">
-                  <img src="../../../assets/img/lambda48.svg" class="images">
+                  <img :src="getTokenImg(row.assets)" class="images">
                 </div>
                 <p>
                   {{ row.assets }}
@@ -52,70 +52,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      list: [
-        {
-          assets:'LAMB',
-          actions:'Collateral',
-          amount:'1234',
-          date:'2021/03/04 ',
-          status:'Success'
-        },
-        {
-          assets:'scUSD',
-          actions:'Generate scUSD',
-          amount:'1234',
-          date:'2021/03/04 ',
-          status:'Success'
-        },
-        {
-          assets:'scUSD',
-          actions:'Payback scUSD',
-          amount:'1234',
-          date:'2021/03/04 ',
-          status:'Success'
-        }
-      ],
-    };
-  },
-  methods: {},
-  computed: {
-    getHistory() {
-      const columns = [
-        {
-          title: "Assets",
-          slot: "Assets",
-          minWidth: 100,
-        },
-        {
-          title: "Action",
-          slot: "Action",
-          minWidth: 200,
-        },
-        {
-          title: "Amount",
-          slot: "Amount",
-          minWidth: 100,
-        },
-        {
-          title: "Date",
-          slot: "Date",
-          minWidth: 200,
-        },
-        {
-          title: "Status",
-          slot: "Status",
-          minWidth: 100,
-        },
-      ];
-      return columns;
-    },
-  },
-};
-</script>
+<script src="./index.js"></script>
 
 <style lang="less" scoped>
 .content-wapper {

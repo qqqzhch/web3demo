@@ -46,7 +46,7 @@
           <div class="small-item">
             <div>
               <span>Current Coll. Ratio</span>
-              <p>{{ poolItem.collateralisationRatio ? BigNumber(1).div(poolItem.collateralisationRatio).times(100) : 0 }}%</p>
+              <p>{{ BigNumber(poolItem.collateralisationRatio).isZero() ? 0 : BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</p>
             </div>
             <div class="mrg-tb-20">
               <span>Liquidation Price</span>

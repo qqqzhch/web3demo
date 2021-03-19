@@ -108,7 +108,7 @@
           </div>
         </div>
         <div v-if="!btnloading">
-          <button v-if="BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
+          <button v-if="BigNumber(allowanceAmount).isZero() || BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
             Approve
           </button>
           <button v-else class="btn" @click="onJoinClick">
