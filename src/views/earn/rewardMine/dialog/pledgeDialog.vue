@@ -76,7 +76,7 @@
             </Buttons>
           </template>
 
-          <p class="buy">
+          <p class="buy" @click="toExchange">
             Buy scUSD
           </p>
         </div>
@@ -114,10 +114,10 @@
               <span>share of pool</span>
               <p>{{ increaseRate }}</p>
             </div>
-            <div>
+            <!-- <div>
               <span>Fee</span>
               <p>0.1 ETH</p>
-            </div>
+            </div> -->
           </div>
 
           <Buttons v-if="sendLoading === false" @click.native="confirmSendTx">

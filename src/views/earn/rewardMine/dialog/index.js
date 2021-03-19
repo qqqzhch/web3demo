@@ -46,15 +46,20 @@ export default {
   },
   methods: {
     showConfirnDialog() {
+      if (!this.checkData()) {
+        return false;
+      }
       this.isShowPledge = false;
     },
     showPledgeDialog() {
       this.isShowPledge = true;
     },
     open(data) {
-      console.log(data);
       this.data = data;
       this.openPledgeDialog = true;
+    },
+    toExchange() {
+      this.$router.push('/exchange');
     },
     percentage(val) {
       const balance = new BigNumber(this.data.data.LPTokenbalance);
@@ -160,9 +165,9 @@ export default {
 
     // 质押操作
     async confirmSendTx() {
-      if (!this.checkData()) {
-        return false;
-      }
+      // if (!this.checkData()) {
+      //   return false;
+      // }
       this.sendLoading = true;
       const num = this.pledgeAmount.toString();
       const amount = this.web3.utils.toWei(num, 'ether');
