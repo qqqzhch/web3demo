@@ -54,7 +54,6 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
 }
 
 export  async function readbuildrHistory(chainID,account,pageNum,showNum){
-    console.log(1112222);
     const data = await buildrHistory(account,pageNum,showNum);
     //['stake','exit','getReward']
 
@@ -78,10 +77,7 @@ export  async function readbuildrHistory(chainID,account,pageNum,showNum){
 
 
     });
-
-
-
-    console.log(data, 99999);
+    
     return data;
 
 }
