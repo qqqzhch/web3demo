@@ -1,25 +1,90 @@
+import { mapState } from "vuex";
 import { readbuildrHistory } from '../../../contactLogic/history';
-import {mapState} from "vuex";
+import { getTokenImg } from '@/contactLogic/readbalance.js';
+
+const getStatus = (status) => {
+  switch (status) {
+    case 1: return 'Success';
+    default: return 'Fail';
+  }
+};
 
 export default {
-  name: 'history',
+  data() {
+    return {
+      list: [],
+      pageNum: 1,
+      showNum: 10,
+    };
+  },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['web3','ethChainID', 'ethAddress']),
     isReady() {
-      return this.ethersprovider && this.ethChainID && this.ethAddress;
+      return this.ethChainID && this.ethAddress;
+    },
+    getHistory() {
+      const columns = [
+        {
+          title: "Assets",
+          slot: "Assets",
+          minWidth: 100,
+        },
+        {
+          title: "Action",
+          slot: "Action",
+          minWidth: 200,
+        },
+        {
+          title: "Amount",
+          slot: "Amount",
+          minWidth: 100,
+        },
+        {
+          title: "Date",
+          slot: "Date",
+          minWidth: 200,
+        },
+        {
+          title: "Status",
+          slot: "Status",
+          minWidth: 100,
+        },
+      ];
+      return columns;
     },
   },
   methods: {
+    getTokenImg(tokensymbol) {
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol, chainID);
+    },
     async loadData() {
       const chainID = this.ethChainID;
-      const library = this.ethersprovider;
       const account =  this.ethAddress;
-      const pageNum = 10;
-      const showNum = 10;
 
-      const data = await readbuildrHistory(chainID,account,pageNum,showNum);
-      console.log(data, 3333);
-    }
+      const {count, data} = await readbuildrHistory(chainID,account,this.pageNum, this.showNum);
+
+      this.list = data.map((tx) => {
+        const amount = this.web3.utils.fromWei(tx.show.amount);
+        return {
+          assets: tx.show.tokenA,
+          actions: tx.method_name,
+          amount,
+          date: tx.create_time,
+          status: getStatus(tx.tx_status)
+        };
+      });
+
+      this.pageNum = count % this.showNum === 0 ? this.pageNum + 1 : this.pageNum;
+    },
+    onReachBottom() {
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          await this.loadData();
+          resolve({});
+        }, 1);
+      });
+    },
   },
   watch: {
     isReady(value) {
@@ -29,9 +94,8 @@ export default {
     },
   },
   created() {
-    console.log(this.isReady, 9999222);
-    // if(this.isReady) {
+    if(this.isReady) {
       this.loadData();
-    // }
-  }
+    }
+  },
 };
