@@ -28,7 +28,7 @@
               <p><span>Balance：</span> {{ currMaxMintable }} scUSD</p>
             </div>
             <div class="input-warpper">
-              <ScInput unit="scUSD" :on-change="onChangeValue" />
+              <ScInput unit="scUSD" :default-value="coinAmount" :on-change="onChangeValue" />
               <img :src="getTokenImg('scUSD')" alt="comp">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">

@@ -27,7 +27,7 @@
               <p><span>Balance：</span> {{ unlockedCollateral }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
-              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" />
+              <ScInput :unit="poolData.tokenName" :default-value="coinAmount" :on-change="onChangeValue" />
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">
