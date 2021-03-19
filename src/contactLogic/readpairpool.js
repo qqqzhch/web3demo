@@ -61,7 +61,7 @@ export async function readpairpool(chainID, library) {
 
 
   const PairList = await Promise.all(callList);
-  console.log(PairList);
+  // console.log(PairList);
   const dataList = [];
   /*
   this.$data.price = price.toSignificant(6);
@@ -70,7 +70,7 @@ export async function readpairpool(chainID, library) {
   const PricePromiseList = [];
   PairList.forEach(async element => {
     const route = new Route([element], element.tokenAmounts[0].token);
-    
+
     const tokenA = element.tokenAmounts[0].token;
     const tokenB = element.tokenAmounts[1].token;
     const pairaddress = element.liquidityToken.address;
@@ -80,7 +80,7 @@ export async function readpairpool(chainID, library) {
         return  one;
       }
     });
-    
+
     let price  ;
     if(target.pair[1]==tokenA.symbol){
        price = route.pairs[0].priceOf(tokenB);
@@ -90,7 +90,7 @@ export async function readpairpool(chainID, library) {
 
     }
 
-    
+
 
     PricePromiseList.push(getpairPrice(pairaddress, chainID, target.pair[0], target.pair[1]));
 
@@ -136,7 +136,7 @@ export async function readpairpool(chainID, library) {
 
   });
 
-  console.log(dataList);
+  // console.log(dataList);
   return dataList;
 
   //     const ethcallProvider = new Provider(library,chainID);
@@ -586,7 +586,7 @@ export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, to
   const bTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
 
   const route = new Route([pairInfo], pairInfo.tokenAmounts[0].token);
-  const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token); 
+  const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
   //tokensymbolA, tokensymbolB
   const pairprice={};
   if(tokensymbolB ==  pairInfo.tokenAmounts[0].token.symbol){
@@ -596,8 +596,8 @@ export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, to
     pairprice[tokensymbolB+"/"+tokensymbolA] = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token).toSignificant(6);
     pairprice[tokensymbolA+"/"+tokensymbolB] = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token).toSignificant(6);
   }
-  console.log(pairprice);
-    
+  // console.log(pairprice);
+
 
 
   return {

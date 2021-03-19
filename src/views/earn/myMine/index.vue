@@ -14,7 +14,7 @@
 
         <template slot="apy" slot-scope="{ row }">
           <span class="text-success">
-            {{ row.data && row.data.rewardRate | formatReward(365) }}%
+            {{ row.data && row.data.rewardRate | formatReward(365,scashPrice,row.data&&row.data.totalSupply) }}%
           </span>
         </template>
         <template slot="stake" slot-scope="{ row }">
@@ -47,7 +47,9 @@
 import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
+import scash from '../utils/scash.vue';
 export default {
+  mixins: [scash],
   data() {
     return {
       columns: [
@@ -102,7 +104,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress','scashPrice']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
@@ -111,17 +113,20 @@ export default {
     isReady(value) {
       if (value) {
         this.getListData();
+        this.getScashPrice();
       }
     },
   },
   created() {
     if (this.isReady) {
       this.getListData();
+      this.getScashPrice();
     }
   },
   mounted() {
     event.$on('txsuccess', () => {
       this.getListData();
+      this.getScashPrice();
     });
   },
 };

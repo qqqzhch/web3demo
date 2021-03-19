@@ -17,7 +17,7 @@
         <div class="apy">
           <h4>APY</h4>
           <p class="percent">
-            {{ item.data && item.data.rewardRate | formatReward(365) }}%
+            {{ item.data && item.data.rewardRate | formatReward(365,scashPrice,item.data && item.data.totalSupply) }}%
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons.vue'),
   },
   computed: {
-    ...mapState(['earnPrice','ethAddress']),
+    ...mapState(['earnPrice','ethAddress','scashPrice']),
   },
 };
 </script>

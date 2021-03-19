@@ -12,7 +12,8 @@ const store = new vuex.Store({
     web3: null,
     ethersprovider: null,
     htPrice: '',
-    earnPrice: ''
+    earnPrice: '',
+    scashPrice: ''
   },
   mutations: {
     changeToken(state, token) {
@@ -40,6 +41,9 @@ const store = new vuex.Store({
 
       state.earnPrice = price;
 
+    },
+    changeScashPrice(state, price) {
+      state.scashPrice = price;
     }
   },
 });

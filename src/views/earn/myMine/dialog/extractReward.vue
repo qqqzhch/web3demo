@@ -24,7 +24,7 @@
           </div>
           <div class="price-item">
             <span>Price</span>
-            <p>--</p>
+            <p>1 {{ rewardToken }} = {{ scashPrice }} scUSD</p>
           </div>
           <div class="price-item">
             <span>Fee</span>
@@ -138,7 +138,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'htPrice', 'web3']),
+    ...mapState(['ethersprovider', 'ethAddress', 'htPrice', 'web3','scashPrice']),
   },
 };
 </script>

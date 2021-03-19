@@ -15,8 +15,9 @@ import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
-import { readpairpool } from '@/contactLogic/readpairpool.js';
+import scash from '../utils/scash.vue';
 export default {
+  mixins: [scash],
   data() {
     return {
       designatedData: [],
@@ -35,32 +36,27 @@ export default {
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
 
-        data.map(async (item) => {
-          if (item.kind === 'multi') {
-            const res = await this.getPriceData(item);
-            if (res) {
-              item.poolValue = res.usdtNum;
-              item.price = res.price;
+        // 同步循环内使用异步使用promise.all
+        const result = Promise.all(
+          data.map(async (item) => {
+            if (item.kind === 'multi') {
+              const res = await this.getPriceData(item);
+              if (res) {
+                item.poolValue = res.usdtNum;
+                item.price = res.price;
+              }
             }
-          }
-        });
+          })
+        );
+
+        await result;
 
         this.liquidityData = data.filter((item) => item.kind === 'multi');
         this.designatedData = data.filter((item) => item.kind === 'single');
       } catch (error) {
         console.log(error);
       } finally {
-        setTimeout(() => {
-          this.showLoading = false;
-        }, 1200);
-      }
-    },
-    async readList() {
-      try {
-        const data = await readpairpool(this.ethChainID, this.ethersprovider);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
+        this.showLoading = false;
       }
     },
     async getPriceData(item) {
@@ -80,15 +76,15 @@ export default {
         // console.log(data.aTokenbalance.toSignificant(6));
         // console.log(data.bTokenbalance.toSignificant(6));
 
-        obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
-        obj.price = data.bTokenbalance.toSignificant(6) / data.aTokenbalance.toSignificant(6);
-        this.$store.commit('changeEarnPrice', data.price && data.price.toSignificant(6));
+        obj.usdtNum = data.aTokenbalance.multiply(data.priceinvert).add(data.bTokenbalance).toSignificant(6);
+        obj.price = data.priceinvert && data.priceinvert.toSignificant(6);
+        this.$store.commit('changeEarnPrice', obj.price);
       }
       return obj;
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'web3', 'earnPrice']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'web3', 'earnPrice', 'scashPrice']),
     isReady() {
       return this.ethChainID && this.ethersprovider;
     },
@@ -100,22 +96,26 @@ export default {
     isReady(value) {
       if (value) {
         this.getListData();
+        this.getScashPrice();
       }
     },
     isConnect(value) {
       if (value) {
         this.getListData();
+        this.getScashPrice();
       }
     },
   },
   created() {
     if (this.isReady) {
       this.getListData();
+      this.getScashPrice();
     }
   },
   mounted() {
     event.$on('txsuccess', () => {
       this.getListData();
+      this.getScashPrice();
     });
   },
 };
@@ -125,6 +125,6 @@ export default {
 .rewardMine-wrapper {
   position: relative;
   width: 100%;
-  min-height: 700px;
+  // min-height: 700px;
 }
 </style>

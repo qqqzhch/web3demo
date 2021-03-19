@@ -138,16 +138,20 @@ const formatRate = (value) => {
   }
 };
 
-
-// 每年的比率/总质押量 = 每一份能收到的scash奖励
-// apy = 每一份能收到的scash奖励 * scash价格
-
-const formatReward = (value,days) => {
+const formatReward = (value, days, scashPrice, totalSupply) => {
   if (!value) {
     return "0";
   }
+  const rate = new BigNumber(value);
+  const time = new BigNumber(3600 * 24 * days);
+  let total = new BigNumber(totalSupply);
 
-  return numeral(value * (60 * 60 * 24 * days)).format("0,0");
+  if (total.isZero()) {
+    total = new BigNumber('1');
+  }
+  const scash = new BigNumber(scashPrice);
+  const reward = time.times(rate).div(total).times(scash).times('100').decimalPlaces(2).toNumber();
+  return reward;
 };
 
 const formatBalance = (value) => {
