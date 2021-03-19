@@ -10,6 +10,7 @@
       v-model="inputVal"
       type="input"
       name="repay"
+      autoComplete="off"
       :class="{'input-inner': true, 'no-title': !title}"
       :placeholder="placetext"
       :disabled="disabled"

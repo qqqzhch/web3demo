@@ -15,6 +15,7 @@ export default {
       list: [],
       pageNum: 1,
       showNum: 10,
+      isMore: true
     };
   },
   computed: {
@@ -64,7 +65,7 @@ export default {
 
       const {count, data} = await readbuildrHistory(chainID,account,this.pageNum, this.showNum);
 
-      this.list = data.map((tx) => {
+      const historyList = data.map((tx) => {
         const amount = this.web3.utils.fromWei(tx.show.amount);
         return {
           assets: tx.show.tokenA,
@@ -75,12 +76,19 @@ export default {
         };
       });
 
-      this.pageNum = count % this.showNum === 0 ? this.pageNum + 1 : this.pageNum;
+      this.list = this.list.concat(historyList);
+
+      const pageNum = (count % 10 === 0) ? (count / 10) : (count - (count % 10)) / 10 + 1;
+      this.isMore = pageNum !== this.pageNum;
+      this.pageNum = pageNum;
+
     },
     onReachBottom() {
       return new Promise((resolve) => {
         setTimeout(async () => {
-          await this.loadData();
+          if(this.isMore) {
+            await this.loadData();
+          }
           resolve({});
         }, 1);
       });
