@@ -586,7 +586,18 @@ export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, to
   const bTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
 
   const route = new Route([pairInfo], pairInfo.tokenAmounts[0].token);
-  const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
+  const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token); 
+  //tokensymbolA, tokensymbolB
+  const pairprice={};
+  if(tokensymbolB ==  pairInfo.tokenAmounts[0].token.symbol){
+    pairprice[tokensymbolA+"/"+tokensymbolB] = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token).toSignificant(6);
+    pairprice[tokensymbolB+"/"+tokensymbolA] = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token).toSignificant(6);
+  }else{
+    pairprice[tokensymbolB+"/"+tokensymbolA] = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token).toSignificant(6);
+    pairprice[tokensymbolA+"/"+tokensymbolB] = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token).toSignificant(6);
+  }
+  console.log(pairprice);
+    
 
 
   return {
@@ -598,6 +609,7 @@ export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, to
     totalSupply,
     price,
     priceinvert: price.invert(),
+    pairprice
 
   };
 
