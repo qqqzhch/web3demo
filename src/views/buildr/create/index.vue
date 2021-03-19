@@ -18,14 +18,14 @@
             <div class="icon-wrapper flex justify-start items-center">
               <template v-for="(item, index) in collateralPools">
                 <img
-                  v-if="defaultPoolToken===item.token"
+                  v-if="defaultTokenName===item.name"
                   :key="index"
                   class="mr-2"
                   :src="getTokenImg(item.token)"
                   :alt="item.token"
                 >
               </template>
-              <span>{{ defaultPoolToken }}</span>
+              <span>{{ defaultTokenName }}</span>
             </div>
             <div class="arrow-wrapper">
               <img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">
@@ -44,7 +44,7 @@
         </div>
         <div class="Input-item">
           <ScInput title="" unit="LAMB" placetext="请输入数量" :on-change="onChangePledgeNumber" />
-          <img src="../../../assets/img/lambda48.svg" alt="lambda">
+          <img :src="getTokenImg(defaultToken)" alt="lambda">
         </div>
 
         <div class="grid-2">
@@ -56,6 +56,7 @@
         <div class="Input-item">
           <ScInput title="" unit="scUSD" :default-value="stableNumber" disabled="true" />
           <img src="../../../assets/img/comp.svg" alt="comp">
+          <img :src="getTokenImg('scUSD')" alt="lambda">
         </div>
       </div>
       <div class="content-right">

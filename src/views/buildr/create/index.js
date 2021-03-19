@@ -28,7 +28,8 @@ export default {
       allowanceAmount: 0, //限额
       currencyPrice: 0,
       collateralPools: collateralPools,
-      defaultPoolToken: collateralPools[0].token,
+      defaultTokenName: collateralPools[0].name,
+      defaultToken: collateralPools[0].token,
       BigNumber,
       btnloading: false,
     };
@@ -52,7 +53,7 @@ export default {
     },
     getParams() {
       return {
-        tokenName: this.defaultPoolToken,
+        tokenName: this.defaultToken,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
@@ -107,8 +108,8 @@ export default {
     sendtx(tx) {
       this.$refs.haveSendtx.open(tx.base);
       event.$emit('sendtx',[tx.response, {
-        okinfo: tx.base+"成功",
-        failinfo: tx.base+'失败'
+        okinfo: tx.base+' SUCCESS',
+        failinfo: tx.base+' FAIL'
       }]);
     },
     // Join
@@ -118,7 +119,7 @@ export default {
         ...params,
         type: 'join',
         coinAmount: this.pledgeNumber,
-        unit: this.defaultPoolToken,
+        unit: this.defaultToken,
       };
       const tx = await fetchBalanaceChange(joinParams);
       this.sendtx(tx);
@@ -131,12 +132,14 @@ export default {
     },
     openAsset(){
       this.$refs.asset.open({
-        defaultToken: this.defaultPoolToken,
+        defaultTokenName: this.defaultTokenName,
         data: this.collateralPools
       });
     },
-    setAsset(token) {
-      this.defaultPoolToken = token;
+    setAsset(tokenName) {
+      this.defaultTokenName = tokenName;
+      const pool = collateralPools.find(pool => pool.name === this.defaultTokenName);
+      this.defaultToken = pool.token;
     }
   },
   watch: {

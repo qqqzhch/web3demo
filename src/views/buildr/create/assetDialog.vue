@@ -10,7 +10,7 @@
           <input v-model="searchCon" type="text" @keyup="search">
         </div>
         <template v-for="(item, index) in assetData">
-          <div :key="index" class="asset-content" @click="selectToken(item.token)">
+          <div :key="index" class="asset-content" @click="selectToken(item.name)">
             <div class="flex justify-between items-center">
               <div class="con-wapper flex justify-between items-center">
                 <template>
@@ -21,7 +21,7 @@
                   <span>{{ item.desc }}</span>
                 </div>
               </div>
-              <div :class="token === item.token ? 'icon-active' : 'img-warpper'">
+              <div :class="tokenName === item.name ? 'icon-active' : 'img-warpper'">
                 <img src="../../../assets/img/check-blue-24.png">
               </div>
             </div>
@@ -42,11 +42,12 @@ export default {
       assetData: [],
       backupData: [],
       searchCon: '',
+      tokenName: '',
     };
   },
   methods: {
-    open({data, defaultToken}) {
-      this.token = defaultToken;
+    open({data, defaultTokenName}) {
+      this.tokenName = defaultTokenName;
       this.tokenInfo = data;
       this.assetData = data;
       this.openAssetDialog = true;
@@ -54,8 +55,8 @@ export default {
     getTokenImg(tokensymbol){
       return this.$parent.getTokenImg(tokensymbol);
     },
-    selectToken(token) {
-      this.$parent.setAsset(token);
+    selectToken(tokenName) {
+      this.$parent.setAsset(tokenName);
       this.openAssetDialog = false;
       this.searchCon = '';
     },
