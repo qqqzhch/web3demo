@@ -15,6 +15,7 @@ import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
+import { readpairpool } from '@/contactLogic/readpairpool.js';
 export default {
   data() {
     return {
@@ -54,8 +55,16 @@ export default {
         }, 1200);
       }
     },
+    async readList() {
+      try {
+        const data = await readpairpool(this.ethChainID, this.ethersprovider);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getPriceData(item) {
-      const obj={};
+      const obj = {};
       if (item.kind === 'multi') {
         const tokensymbolA = item.symbol[0];
         const tokensymbolB = item.symbol[1];
@@ -72,7 +81,7 @@ export default {
         // console.log(data.bTokenbalance.toSignificant(6));
 
         obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
-        obj.price = data.bTokenbalance.toSignificant(6)/data.aTokenbalance.toSignificant(6);
+        obj.price = data.bTokenbalance.toSignificant(6) / data.aTokenbalance.toSignificant(6);
         this.$store.commit('changeEarnPrice', data.price && data.price.toSignificant(6));
       }
       return obj;

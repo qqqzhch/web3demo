@@ -161,7 +161,7 @@
           <Buttons
             v-if="PriceImpactGreater==true"
           >
-            The price fluctuates too much to trade 
+            The price fluctuates too much to trade
           </Buttons>
           <div v-else>
             <Buttons
@@ -268,7 +268,7 @@ export default {
       const data = await readpairpool(chainID,library);
       this.$data.pairlistloading=false;
 
-      console.log(data);
+      console.log({data});
       this.$data.pairlist = data ;
       if(data&&this.selectPairOBJ == null){
         setTimeout(()=>{
