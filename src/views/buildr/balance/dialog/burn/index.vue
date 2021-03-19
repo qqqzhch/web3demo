@@ -30,12 +30,14 @@
               <ScInput unit="scUSD" :on-change="onChangeValue" />
               <img :src="getTokenImg('scUSD')" alt="comp">
             </div>
-            <div v-if="checkValue==='overMaxValue'" class="notice">
-              <span>Value exceeded</span>
-              <img src="../../../../../assets/img/wenhao.svg" alt="?">
+            <div v-if="checkValue !== 'ok'" class="notice-warpper">
+              <div class="notice-content">
+                <img src="../../../../../assets/img/notice-red.png">
+                <p>{{ checkValue }}</p>
+              </div>
             </div>
-            <div v-if="checkValue==='isNaN'" class="notice">
-              <span>Invalid value</span>
+            <div v-if="checkValue==='ok'" class="notice">
+              <span>Payback scUSD will reduce current debt and raise liquidation price.</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>
@@ -85,10 +87,10 @@
             </ul>
           </div>
           <div class="button-warpper">
-            <button v-if="step === 1 && !checkValue" class="btn" @click="onNextClick">
+            <button v-if="step === 1 && checkValue === 'ok'" class="btn" @click="onNextClick">
               Next
             </button>
-            <button v-if="step === 1 && checkValue" class="btn btn-disabled">
+            <button v-if="step === 1 && checkValue !== 'ok'" class="btn btn-disabled">
               Next
             </button>
             <button v-if="step === 2" class="btn" @click="onBurnClick">
@@ -157,6 +159,28 @@
   }
   .padding-warpper {
     padding: 0 44px 10px;
+    .notice-warpper {
+      .notice-content {
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        padding: 9px 30px;
+        width: 100%;
+        height: 32px;
+        background: rgba(255, 60, 0, 0.1);
+        border-radius: 4px;
+        img {
+          margin-right: 10px;
+        }
+        p {
+          font-size: 12px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #ff3c00;
+          line-height: 14px;
+        }
+      }
+    }
     .step-one {
       h2 {
         height: 19px;

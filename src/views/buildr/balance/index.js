@@ -49,7 +49,7 @@ export default {
       return BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(currentDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
     },
     loadData() {
-      const poolsData = [];
+      this.poolsData = [];
       collateralPools.forEach(async (item) => {
         const params = this.getParmas(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
@@ -83,10 +83,9 @@ export default {
           allowanceAmount,
         };
         if(pledgeNumber) {
-          poolsData.push(itemData);
+          this.poolsData = this.poolsData.concat(itemData);
         }
       });
-      this.poolsData = poolsData;
     },
     openJoinDialog(poolData) {
       this.$refs.tokenJoin.open(poolData);
@@ -126,6 +125,7 @@ export default {
     BurnDialog: () => import('./dialog/burn/index.vue'),
     ExitDialog: () => import('./dialog/exit/index.vue'),
     haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
+    Loading: () => import("@/components/basic/loading.vue"),
   },
   created() {
     if(this.isReady) {
