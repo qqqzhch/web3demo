@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="Input-item">
-          <ScInput title="" unit="LAMB" placetext="请输入数量" :on-change="onChangePledgeNumber" />
+          <ScInput title="" unit="LAMB" placetext="0" :on-change="onChangePledgeNumber" />
           <img :src="getTokenImg(defaultToken)" alt="lambda">
         </div>
 
@@ -73,7 +73,7 @@
           </div>
         </div>
         <!--<div class="build-grid-2 mrg-b-5">-->
-        <!--<div>Coll. Ratio：</div>-->
+        <!--<p>Coll. Ratio：</p>-->
         <!--<div class="text-right">-->
         <!--{{ BigNumber(targetRX).times(100) }}%-->
         <!--</div>-->

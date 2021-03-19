@@ -21,7 +21,7 @@
         "titlei18":"SCASH_pool2",
         "token":"SCASH",
         "desc":"SCASH",
-        "state":true
+        "state":false
     },
     {
         "name":"HT",
