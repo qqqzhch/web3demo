@@ -11,12 +11,12 @@
       <div class="modal-content">
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
-            <button class="tab tab-disabled">
+            <button class="tab">
               Generate
             </button>
           </div>
           <div class="tab-warpper">
-            <button class="tab" @click="onBurnClick">
+            <button class="tab  tab-disabled" @click="onBurnClick">
               Payback
             </button>
           </div>
@@ -142,18 +142,18 @@
     width: 50%;
     .tab {
       width: 100%;
-      cursor: pointer;
+      cursor: not-allowed;
       height: 60px;
       background: #ffffff;
-      border-radius: 0px 12px 0px 12px;
+      border-radius: 12px 0px 0px 0px;
     }
     .tab-disabled {
       width: 100%;
-      cursor: not-allowed;
+      cursor: pointer;
       height: 60px;
       color: #999;
       background: #f7f8f9;
-      border-radius: 12px 0px 0px 0px;
+      border-radius: 0px 12px 0px 0px;
     }
   }
   .padding-warpper {
