@@ -1,5 +1,6 @@
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
+import { getTokenImg } from '@/contactLogic/readbalance.js';
 import Overview from './overview/index.vue';
 import { collateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
@@ -29,6 +30,10 @@ export default {
   },
   methods: {
     ...mapActions('buildr', ['setPoolsData']),
+    getTokenImg(tokensymbol){
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol,chainID);
+    },
     getParmas(item) {
       return {
         tokenName: item.token,

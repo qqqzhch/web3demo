@@ -29,14 +29,18 @@
             </div>
             <div class="input-warpper">
               <ScInput :default-value="coinAmount" :unit="poolData.tokenName" :on-change="onChangeValue" />
-              <img src="../../../../../assets/img/lambda48.svg" alt="lambda">
+              <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
             </div>
             <div v-if="checkValue==='overMaxValue'" class="notice">
-              <span>超过最大值</span>
+              <span>Value exceeded</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
             <div v-if="checkValue==='isNaN'" class="notice">
-              <span>不是有效数值</span>
+              <span>Invalid value</span>
+              <img src="../../../../../assets/img/wenhao.svg" alt="?">
+            </div>
+            <div v-if="checkValue==='isNaN'" class="notice">
+              <span>Invalid value</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>

@@ -16,6 +16,7 @@
       :disabled="disabled"
       @focus="onInputFocus"
       @blur="onInputBlur"
+      @keyup="onKeyUp"
     >
     <div class="input-append">
       {{ unit }}
@@ -24,6 +25,7 @@
 </template>
 
 <script>
+  import BigNumber from "bignumber.js";
   export default {
     name: 'ScInput',
     props: ['title', 'unit', 'placetext', 'disabled', 'onChange', 'defaultValue'],
@@ -39,6 +41,10 @@
       },
       onInputBlur() {
         this.focus = false;
+      },
+      onKeyUp(event) {
+        const { value } = event.target;
+        this.inputVal = value.replace(/[^0-9.]/g,'');
       }
     },
     watch: {

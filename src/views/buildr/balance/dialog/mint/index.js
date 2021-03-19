@@ -67,6 +67,9 @@ export default {
     }
   },
   methods: {
+    getTokenImg(token) {
+      return this.$parent.getTokenImg(token);
+    },
     open(poolData) {
       this.poolData = poolData;
       this.isOpen = true;

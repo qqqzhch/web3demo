@@ -28,14 +28,14 @@
             </div>
             <div class="input-warpper">
               <ScInput unit="scUSD" :on-change="onChangeValue" />
-              <img src="../../../../../assets/img/comp.svg" alt="comp">
+              <img :src="getTokenImg('scUSD')" alt="comp">
             </div>
             <div v-if="checkValue==='overMaxValue'" class="notice">
-              <span>超过最大值</span>
+              <span>Value exceeded</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
             <div v-if="checkValue==='isNaN'" class="notice">
-              <span>不是有效数值</span>
+              <span>Invalid value</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>
@@ -47,7 +47,7 @@
             <div class="confirm-content flex flex-col items-center">
               <img src="../../../../../assets/img/comp.svg" alt="comp">
               <h2>{{ coinAmount }}</h2>
-              <p>{{ poolData.tokenName }}</p>
+              <p>scUSD</p>
               <span>will payback scUSD debt</span>
             </div>
           </div>

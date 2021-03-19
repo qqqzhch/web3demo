@@ -29,14 +29,14 @@
             </div>
             <div class="input-warpper">
               <ScInput unit="scUSD" :on-change="onChangeValue" />
-              <img src="../../../../../assets/img/comp.svg" alt="comp">
+              <img :src="getTokenImg('scUSD')" alt="comp">
             </div>
             <div v-if="checkValue==='overMaxValue'" class="notice">
-              <span>超过最大值</span>
+              <span>Value exceeded</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
             <div v-if="checkValue==='isZero'" class="notice">
-              <span>不是有效数值</span>
+              <span>Invalid value</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>

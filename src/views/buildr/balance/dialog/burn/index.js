@@ -82,6 +82,9 @@ export default {
     }
   },
   methods: {
+    getTokenImg(token) {
+      return this.$parent.getTokenImg(token);
+    },
     // 打开弹窗
     open(poolData) {
       this.poolData = poolData;
