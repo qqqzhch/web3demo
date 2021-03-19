@@ -1,6 +1,7 @@
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
+import { checklocal } from '../guide/checkeBulderApprove';
 import Overview from './overview/index.vue';
 import { collateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
@@ -129,7 +130,14 @@ export default {
   },
   created() {
     if(this.isReady) {
-      this.loadData();
+      const chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const isHaveAllowance = checklocal(chainID, account);
+      if (isHaveAllowance === 'true') {
+        this.loadData();
+      } else {
+        this.$router.push('/buildr/guide');
+      }
     }
   }
 };

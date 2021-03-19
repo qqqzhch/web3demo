@@ -23,7 +23,6 @@
 </template>
 
 <script>
-  import BigNumber from "bignumber.js";
   export default {
     name: 'ScInput',
     props: ['title', 'unit', 'placetext', 'disabled', 'onChange', 'defaultValue'],
