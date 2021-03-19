@@ -221,7 +221,7 @@
                 <span>share of pool</span>
                 <div class="sharePoll">
                   <span>+{{ LiquidityInfo.poolPercentData | formatRate }}</span>
-                  <p>to {{ poolPercentData | formatRate }}</p>
+                  <p>to {{ newpercent | formatRate }}</p>
                 </div>
               </div>
               <div>
@@ -298,6 +298,7 @@ export default {
       parameters: [],
       inputnoticeA: '',
       inputnoticeB: '',
+      lpbalance:''
     };
   },
   methods: {
@@ -361,6 +362,8 @@ export default {
       this.$data.price = dataPrise.price.toSignificant(6);
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
       this.$data.poolPercentData = dataPrise.poolPercentData;
+      this.$data.lpbalance = dataPrise.balance.toString();
+      this.$data.totalSupply = dataPrise.totalSupply.toString();
     },
     aTokenChange: debounce(async function () {
       console.log("aTokenChange");
@@ -725,6 +728,21 @@ export default {
   },
   computed: {
     ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'htPrice']),
+    newpercent(){
+      const addlp = Web3.utils.toWei(this.$data.LiquidityInfo.liquidityMinted);
+      const oldlp = Web3.utils.toWei(this.lpbalance);
+      const oldalllp = Web3.utils.toWei(this.$data.totalSupply);
+
+      const addlpBG = new BigNumber(addlp) ;
+      const oldlpBG = new BigNumber(oldlp) ;
+      const oldalllpBG = new BigNumber(oldalllp) ;
+
+      let data = (addlpBG.plus(oldlpBG)).div(addlpBG.plus(oldalllpBG));
+      return data= data.toString();
+      
+      
+
+    }
   },
   watch:{
 
