@@ -70,19 +70,37 @@ export async function readpairpool(chainID, library) {
   const PricePromiseList = [];
   PairList.forEach(async element => {
     const route = new Route([element], element.tokenAmounts[0].token);
-    const price = route.pairs[0].priceOf(element.tokenAmounts[0].token);
+    
     const tokenA = element.tokenAmounts[0].token;
     const tokenB = element.tokenAmounts[1].token;
     const pairaddress = element.liquidityToken.address;
 
-    PricePromiseList.push(getpairPrice(pairaddress, chainID, tokenB.symbol, tokenA.symbol));
+    const  target = _.find(list,(one)=>{
+      if(one.pair.indexOf(tokenB.symbol)!=-1&&one.pair.indexOf(tokenA.symbol)!=-1){
+        return  one;
+      }
+    });
+    
+    let price  ;
+    if(target.pair[1]==tokenA.symbol){
+       price = route.pairs[0].priceOf(tokenB);
+
+    }else{
+      price = route.pairs[0].priceOf(tokenA);
+
+    }
+
+    
+
+    PricePromiseList.push(getpairPrice(pairaddress, chainID, target.pair[0], target.pair[1]));
 
     dataList.push({
       Pair: element,
       price: price.toSignificant(6),
-      pairName: `${element.tokenAmounts[1].token.symbol}/${element.tokenAmounts[0].token.symbol}`,
+      pairName: `${target.pair[0]}/${target.pair[1]}`,
       listSymbol: element.tokenAmounts[1].token.symbol,
-      pairSymbols: [element.tokenAmounts[1].token.symbol, element.tokenAmounts[0].token.symbol]
+      pairSymbols: [element.tokenAmounts[0].token.symbol, element.tokenAmounts[1].token.symbol],
+      configSymbols: [target.pair[0], target.pair[1]]
 
     });
 

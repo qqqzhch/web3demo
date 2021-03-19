@@ -68,7 +68,7 @@
           </div>
           <div>
             <p>{{ item.pairName }}</p>
-            <span>{{ item.price }} {{ item.pairSymbols[1] }} = 1 {{ item.pairSymbols[0] }}</span>
+            <span>1 {{ item.configSymbols[0] }} = {{ item.price }} {{ item.configSymbols[1] }} </span>
           </div>
         </div>
         <div>

@@ -1,7 +1,7 @@
 [
     {
         "chainId": 256,
-        "pair":["scUSD","USDT"]
+        "pair":["USDT","scUSD"]
     },
     {
         "chainId": 256,
