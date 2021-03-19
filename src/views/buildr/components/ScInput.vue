@@ -15,8 +15,6 @@
       :placeholder="placetext"
       :disabled="disabled"
       @focus="onInputFocus"
-      @blur="onInputBlur"
-      @keyup="onKeyUp"
     >
     <div class="input-append">
       {{ unit }}
@@ -42,10 +40,6 @@
       onInputBlur() {
         this.focus = false;
       },
-      onKeyUp(event) {
-        const { value } = event.target;
-        this.inputVal = value.replace(/[^0-9.]/g,'');
-      }
     },
     watch: {
       inputVal(val) {

@@ -7,6 +7,9 @@
       <div class="title">
         My CDPs
       </div>
+      <div v-if="!poolsData.length">
+        <Loading />
+      </div>
       <div v-for="poolItem in poolsData" :key="poolItem.tokenTitle">
         <div class="CDP-item">
           <div class="small-item flex flex-col items-center">
