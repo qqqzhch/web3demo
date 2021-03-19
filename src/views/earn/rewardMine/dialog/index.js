@@ -115,7 +115,7 @@ export default {
           this.tokenObj.dataAddress
         );
         if (result) {
-          const wait = await result.wait([1]);
+          const wait = await result.response.wait([1]);
           if (wait) {
             this.needApprove = false;
             this.approveLoading = false;

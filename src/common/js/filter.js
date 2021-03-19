@@ -138,6 +138,10 @@ const formatRate = (value) => {
   }
 };
 
+
+// 每年的比率/总质押量 = 每一份能收到的scash奖励
+// apy = 每一份能收到的scash奖励 * scash价格
+
 const formatReward = (value,days) => {
   if (!value) {
     return "0";
