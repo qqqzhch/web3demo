@@ -1,5 +1,5 @@
 <template>
-  <header class="header-wrapper">
+  <header :class="showBoxShadow ? 'header-wrapper header-wrapper-bg':'header-wrapper'">
     <nav
       class="nav-wrapper container mx-auto flex justify-between items-center"
     >
@@ -57,10 +57,21 @@ export default {
   data() {
     return {
       isExchange: false,
+      showBoxShadow:false,
     };
   },
   mounted() {
     this.routerUrl();
+     window.addEventListener(
+      "scroll",
+      this.debounce(this.scrollToTop, 30, false)
+    );
+  },
+  destroyed() {
+    window.removeEventListener(
+      "scroll",
+      this.debounce(this.scrollToTop, 30, false)
+    );
   },
   watch: {
     $route: {
@@ -82,7 +93,29 @@ export default {
         this.isExchange = true;
       }
     },
-    // openWalletDialog() {
+    scrollToTop() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 88) {
+        this.showBoxShadow = true;
+      } else {
+        this.showBoxShadow = false;
+      }
+    },
+    debounce(fn, wait, immediate) {
+      let timeout;
+      return function() {
+        const _this = this,
+          args = arguments;
+        const later = function() {
+          timeout = null;
+          if (!immediate) fn.apply(_this, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) fn.apply(_this, args);
+      };
+    }
   },
   computed: {
     ...mapState(['ethAddress']),
@@ -155,5 +188,8 @@ export default {
       }
     }
   }
+}
+.header-wrapper-bg{
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.03);
 }
 </style>

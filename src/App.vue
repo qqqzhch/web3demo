@@ -37,19 +37,8 @@ export default {
       this.isRouterAlive = false;
       this.$nextTick(() => (this.isRouterAlive = true));
     },
-    scrollToTop() {
-      const header = document.getElementsByTagName('header')[0];
-      console.log(header,'----------------------------------------');
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      if (scrollTop > 88) {
-        header.style.boxShadow = '0px 2px 10px 0px rgba(0, 0, 0, 0.03)';
-      } else {
-        header.style.boxShadow = '0px 0px 10px 0px rgba(0, 0, 0, 0)';
-      }
-    },
   },
   mounted() {
-    window.addEventListener('scroll', this.scrollToTop);
   },
 };
 </script>
