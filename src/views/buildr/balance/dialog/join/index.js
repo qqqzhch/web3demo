@@ -96,13 +96,16 @@ export default {
     //关闭弹窗
     closeDialog(){
       this.isOpen = false;
+      this.coinAmount = 0;
     },
     //确认弹窗返回按钮
     changeStep(){
       this.step = 1;
+      this.coinAmount = 0;
     },
     onExitClick() {
       this.isOpen = false;
+      this.coinAmount = 0;
       this.$parent.openExitDialog(this.poolData);
     },
     onChangeValue(value) {

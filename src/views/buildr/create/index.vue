@@ -38,13 +38,13 @@
           </div>
           <div class="pull-right">
             <p class="balance">
-              <span>Balance </span>{{ currencyNumber }} LAMB
+              <span>Balance </span>{{ currencyNumber }} {{ defaultToken }}
             </p>
           </div>
         </div>
         <div class="Input-item">
-          <ScInput class="myInput" title="" unit="LAMB" :on-change="onChangePledgeNumber" />
-          <img :src="getTokenImg(defaultToken)" alt="lambda">
+          <ScInput class="myInput" title="" :unit="defaultToken" :on-change="onChangePledgeNumber" />
+          <img :src="getTokenImg(defaultToken)" :alt="defaultToken">
         </div>
 
         <div class=" flex">
@@ -55,15 +55,14 @@
         </div>
         <div class="Input-item">
           <ScInput class="myInput" title="" unit="scUSD" :default-value="stableNumber" disabled="true" />
-          <img src="../../../assets/img/comp.svg" alt="comp">
-          <img :src="getTokenImg('scUSD')" alt="lambda">
+          <img :src="getTokenImg('scUSD')" alt="scUSD">
         </div>
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
           <p>Collateral：</p>
           <div class="text-right">
-            {{ pledgeNumber }} LAMB
+            {{ pledgeNumber }} {{ defaultToken }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
@@ -79,7 +78,7 @@
         <!--</div>-->
         <!--</div>-->
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>SuperCash {{ defaultPoolToken }}Price：</p>
+          <p>SuperCash Price：</p>
           <div class="text-right">
             {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>

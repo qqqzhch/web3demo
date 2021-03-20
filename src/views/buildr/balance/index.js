@@ -44,6 +44,11 @@ export default {
         web3: this.web3,
       };
     },
+    // 计算当前抵押率
+    getCurrentCollRatio(collateralisationRatio) {
+      const currCollRatio = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio).times(100).toNumber();
+      return currCollRatio;
+    },
     getLiquidationPrice(poolData){
       const { liquidationRatio, pledgeNumber, currentDebt } = poolData;
       const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
@@ -74,6 +79,7 @@ export default {
           unlockedCollateral,
           targetRatio,
           collateralisationRatio,
+          currentCollRatio: this.getCurrentCollRatio(collateralisationRatio),
           currentDebt,
           maxMintable,
           liquidationRatio,

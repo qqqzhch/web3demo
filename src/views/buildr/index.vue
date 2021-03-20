@@ -56,12 +56,6 @@
     .f-gray {
       color: #828489;
     }
-    .f-green {
-      color: #00D075;
-    }
-    .f-red {
-      color: #FF3C00;
-    }
     .f-size-20 {
       font-size: 20px;
     }

@@ -81,7 +81,7 @@ export default {
     },
     onChangePledgeNumber(val) {
       this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
-      this.stableNumber = BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX);
+      this.stableNumber = this.pledgeNumber ? BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX) : '';
     },
     async onApproveClick() {
       this.btnloading = true;

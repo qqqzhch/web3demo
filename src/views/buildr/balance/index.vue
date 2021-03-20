@@ -13,13 +13,15 @@
       <div v-for="poolItem in poolsData" :key="poolItem.tokenTitle">
         <div class="CDP-item">
           <div class="small-item flex flex-col items-center">
-            <img src="../../../assets/img/lambda48.svg" alt="lambda">
+            <img :src="getTokenImg(poolItem.tokenName)" :alt="poolItem.tokenName">
             <div>{{ poolItem.tokenTitle }}</div>
           </div>
           <div class="small-item">
             <div>
               <span>Target Coll. Ratio</span>
-              <p>{{ poolItem.targetRatio ? BigNumber(1).div(poolItem.targetRatio).times(100) : 0 }}%</p>
+              <p class="f-green">
+                {{ poolItem.targetRatio ? BigNumber(1).div(poolItem.targetRatio).times(100) : 0 }}%
+              </p>
             </div>
             <div class="mrg-tb-20">
               <span>Current Price</span>
@@ -49,7 +51,15 @@
           <div class="small-item">
             <div>
               <span>Current Coll. Ratio</span>
-              <p>{{ BigNumber(poolItem.collateralisationRatio).isZero() ? 0 : BigNumber(1).div(poolItem.collateralisationRatio).times(100) }}%</p>
+              <p
+                :class="{
+                  'f-green':poolItem.currentCollRatio >= 500,
+                  'f-warning': poolItem.currentCollRatio < 500 && poolItem.currentCollRatio > 200,
+                  'f-danger': poolItem.currentCollRatio <= 200
+                }"
+              >
+                {{ poolItem.currentCollRatio }}%
+              </p>
             </div>
             <div class="mrg-tb-20">
               <span>Liquidation Price</span>
@@ -82,7 +92,17 @@
 </template>
 
 <script src="./index.js" ></script>
-<style lang="less" scoped>
+<style lang="less">
+  .f-green {
+    color: #00D075 !important;
+  }
+  .f-warning {
+    color: #ede780 !important;
+  }
+  .f-danger {
+    color: #FF3C00 !important;
+  }
+
 .balance {
   margin: 24px 0 0 100px;
   .title {
@@ -137,6 +157,6 @@
     }
   }
   }
-  
+
 }
 </style>
