@@ -59,20 +59,45 @@
               <li class="title">
                 Generating：
               </li>
-              <li><span>{{ maxMintable }}</span></li>
+              <li>
+                <span>{{ BigNumber(poolData.maxMintable).toFixed(6) }} </span> to <span
+                  :class="{
+                    'f-green': poolData.maxMintable < currMaxMintable,
+                    'f-danger': poolData.maxMintable > currMaxMintable
+                  }"
+                >{{ BigNumber(currMaxMintable).toFixed(6) }} {{ unit }}</span>
+              </li>
             </ul>
             <ul>
               <li class="title flex">
                 <span>Collateral Ratio</span>
-                <img src="../../../../../assets/img/wenhao.svg" alt="?">
+                <img src="../../../../../assets/img/wenhao.svg">
               </li>
-              <li><span>{{ collRatio }}</span></li>
+              <li v-if="existingDebt">
+                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(6) }}%</span> to <span
+                  :class="{
+                    'f-green': newCollRX >= 5,
+                    'f-warning': newCollRX < 5 && newCollRX > 2,
+                    'f-danger': newCollRX <= 2
+                  }"
+                >{{ BigNumber(newCollRX).times(100).toFixed(6) }}%</span>
+              </li>
+              <li v-else>
+                <span>0% to 0%</span>
+              </li>
             </ul>
             <ul>
               <li class="title">
                 Liquidation Price
               </li>
-              <li><span>{{ liquidationPrice }}</span></li>
+              <li>
+                <span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD to <span
+                  :class="{
+                    'f-green': liquidationPrice > newLiquidationPrice,
+                    'f-danger': liquidationPrice < newLiquidationPrice
+                  }"
+                >{{ newLiquidationPrice }} USD</span>
+              </li>
             </ul>
           </div>
           <div class="button-warpper">

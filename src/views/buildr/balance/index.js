@@ -44,10 +44,10 @@ export default {
         web3: this.web3,
       };
     },
-    // 计算当前抵押率
-    getCurrentCollRatio(collateralisationRatio) {
-      const currCollRatio = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio).times(100).toNumber();
-      return currCollRatio;
+    // 计算当前抵押倍数
+    getCurrentCollRX(collateralisationRatio) {
+      const currentCollRX = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio).toNumber();
+      return currentCollRX;
     },
     getLiquidationPrice(poolData){
       const { liquidationRatio, pledgeNumber, currentDebt } = poolData;
@@ -78,11 +78,13 @@ export default {
           currencyNumber,
           unlockedCollateral,
           targetRatio,
+          targetRX: BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio).toNumber(),
           collateralisationRatio,
-          currentCollRatio: this.getCurrentCollRatio(collateralisationRatio),
+          currentCollRX: this.getCurrentCollRX(collateralisationRatio),
           currentDebt,
           maxMintable,
           liquidationRatio,
+          liquidationRX: BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio).toNumber(),
           feeRate,
           pledgeNumber,
           currencyPrice,

@@ -12,6 +12,7 @@ export default {
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
       unit: 'scUSD',
+      BigNumber,
     };
   },
   components: {
@@ -28,14 +29,11 @@ export default {
       return BigNumber(this.poolData.currentDebt);
     },
     // 铸造额度
-    maxMintable() {
-      const { maxMintable, collateralisationRatio, targetRatio, currencyPrice, pledgeNumber } = this.poolData;
-
-      const collRX = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio);
-      const targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
+    currMaxMintable() {
+      const { maxMintable, currentCollRX, targetRatio, targetRX, currencyPrice, pledgeNumber } = this.poolData;
 
       let currMaxMintable = 0;
-      if(BigNumber(collRX).gt(targetRX)) {
+      if(BigNumber(currentCollRX).gt(targetRX)) {
         currMaxMintable = BigNumber(this.coinAmount).times(targetRatio).plus(maxMintable);
       } else {
         // 达到目标抵押率需要的数量,如果coinAmount> targetAmount 增加额度，否则增加额度为0;
@@ -44,32 +42,30 @@ export default {
         const netAmount = BigNumber(this.coinAmount).gt(targetAmount) ? BigNumber(this.coinAmount).minus(targetAmount) : 0;
         currMaxMintable = BigNumber(netAmount).times(targetRatio).plus(maxMintable);
       }
-      return `${BigNumber(maxMintable).toFixed(6)} to ${BigNumber(currMaxMintable).toFixed(6)} ${this.unit}`;
+      return currMaxMintable;
     },
     // 抵押率
-    collRatio() {
-      const { collateralisationRatio, pledgeNumber, currencyPrice } = this.poolData;
+    newCollRX() {
+      const { pledgeNumber, currencyPrice } = this.poolData;
 
-      const collRX = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio);
       const existingDebt = BigNumber(this.existingDebt).isZero() ? 0 : this.existingDebt;
-
-      return existingDebt
-        ? `${BigNumber(collRX).times(100).toFixed(6)}%` +
-        `to ${BigNumber(pledgeNumber).plus(this.coinAmount).times(currencyPrice).div(existingDebt).times(100).toFixed(6)}%`
-        : `0% to 0%`;
-
+      return existingDebt ? BigNumber(pledgeNumber).plus(this.coinAmount).times(currencyPrice).div(existingDebt).toNumber() : 0;
     },
-    // 清算价格
+
+    // 初始清算价格
     liquidationPrice() {
-      const { liquidationRatio, pledgeNumber } = this.poolData;
+      const { liquidationRX, pledgeNumber } = this.poolData;
+      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
 
-      const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
-
-      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
+      return liquPrice;
+    },
+    // 变化后的清算价格
+    newLiquidationPrice() {
+      const { liquidationRX, pledgeNumber } = this.poolData;
       const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).plus(this.coinAmount))
-        ? 0 : BigNumber(this.existingDebt).times(liquRatio).div(BigNumber(pledgeNumber).plus(this.coinAmount)).toFixed(6);
+        ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(BigNumber(pledgeNumber).plus(this.coinAmount)).toFixed(6);
 
-      return `1LAMB = ${liquPrice} USD to ${newLiquPrice} USD`;
+      return newLiquPrice;
     },
     // 验证输入值
     checkValue() {

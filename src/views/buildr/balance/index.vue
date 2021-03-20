@@ -53,12 +53,12 @@
               <span>Current Coll. Ratio</span>
               <p
                 :class="{
-                  'f-green':poolItem.currentCollRatio >= 500,
-                  'f-warning': poolItem.currentCollRatio < 500 && poolItem.currentCollRatio > 200,
-                  'f-danger': poolItem.currentCollRatio <= 200
+                  'f-green': poolItem.currentCollRX >= 5,
+                  'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
+                  'f-danger': poolItem.currentCollRX <= 2
                 }"
               >
-                {{ poolItem.currentCollRatio }}%
+                {{ BigNumber(poolItem.currentCollRX).times(100) }}%
               </p>
             </div>
             <div class="mrg-tb-20">
@@ -97,7 +97,7 @@
     color: #00D075 !important;
   }
   .f-warning {
-    color: #ede780 !important;
+    color: #edc813 !important;
   }
   .f-danger {
     color: #FF3C00 !important;
