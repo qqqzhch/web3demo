@@ -28,7 +28,7 @@
               <p><span>Balance：</span> {{ currencyNumber }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
-              <ScInput :default-value="coinAmount" :unit="poolData.tokenName" :on-change="onChangeValue" />
+              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" />
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">
@@ -48,7 +48,7 @@
               <h2>Confirm</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img src="../../../../../assets/img/lambda48.svg" alt="lambda">
+              <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
               <h2>{{ coinAmount }}</h2>
               <p>{{ poolData.tokenName }}</p>
               <span>will be a staked to build scUSD</span>

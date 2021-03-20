@@ -39,14 +39,21 @@
       onInputBlur() {
         this.focus = false;
       },
+      onChangeValue(val){
+        const value = val || 0;
+        this.onChange && this.onChange(value);
+      }
     },
     watch: {
       inputVal(val) {
-        this.onChange && this.onChange(val);
+        this.onChangeValue(val);
       },
       defaultValue(val) {
         this.inputVal = val;
       }
+    },
+    created() {
+      this.onChangeValue(this.inputVal);
     }
   };
 

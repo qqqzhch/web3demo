@@ -91,14 +91,13 @@ export const fetchBalanaceChange = async ({ type, web3, chainID, account, librar
         response = await contractEstimateGas(ProxyActionsContract, 'burn', [currencyKey, amount]);
         break;
     }
-    // console.log(result);
     return {
       base: `${type.toUpperCase()} ${coinAmount} ${unit}`,
       hash: response.hash,
       response: response,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

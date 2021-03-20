@@ -44,6 +44,11 @@ export default {
         web3: this.web3,
       };
     },
+    // 计算当前抵押率
+    getCurrentCollRatio(collateralisationRatio) {
+      const currCollRatio = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio).times(100).toNumber();
+      return currCollRatio;
+    },
     getLiquidationPrice(poolData){
       const { liquidationRatio, pledgeNumber, currentDebt } = poolData;
       const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
@@ -74,6 +79,7 @@ export default {
           unlockedCollateral,
           targetRatio,
           collateralisationRatio,
+          currentCollRatio: this.getCurrentCollRatio(collateralisationRatio),
           currentDebt,
           maxMintable,
           liquidationRatio,
@@ -101,11 +107,17 @@ export default {
       this.$refs.tokenExit.open(poolData);
     },
     sendtx(tx) {
-      this.$refs.haveSendtx.open(tx.base);
-      event.$emit('sendtx',[tx.response, {
-        okinfo: tx.base+"成功",
-        failinfo: tx.base+'失败'
-      }]);
+      if(tx && tx.base){
+        this.$refs.haveSendtx.open(tx.base);
+        event.$emit('sendtx',[tx.response, {
+          okinfo: tx.base+' SUCCESS',
+          failinfo: tx.base+' FAIL'
+        }]);
+      } else {
+        this.$Notice.error({
+          title: 'Send transaction fail!',
+        });
+      }
     }
   },
   watch: {

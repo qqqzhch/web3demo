@@ -40,6 +40,9 @@ export default {
     newDebt() {
       return BigNumber(this.existingDebt).minus(this.netAmount);
     },
+    fmtDebt(){
+      return `${BigNumber(this.existingDebt).toFixed(6)} to ${BigNumber(this.newDebt).toFixed(6)} scUSD`;
+    },
     // 铸造额度
     maxMintable() {
       const { maxMintable } = this.poolData;
@@ -95,13 +98,16 @@ export default {
     //关闭弹窗
     closeDialog(){
       this.isOpen = false;
+      this.coinAmount = 0;
     },
     //确认弹窗返回按钮
     changeStep(){
       this.step = 1;
+      this.coinAmount = 0;
     },
     onMintClick() {
       this.isOpen = false;
+      this.coinAmount = 0;
       this.$parent.openMintDialog(this.poolData);
     },
     onChangeValue(value) {

@@ -29,7 +29,7 @@
             </div>
             <div class="input-warpper">
               <ScInput unit="scUSD" :on-change="onChangeValue" />
-              <img :src="getTokenImg('scUSD')" alt="comp">
+              <img :src="getTokenImg('scUSD')" alt="scUSD">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">
               <div class="notice-content">
@@ -48,7 +48,7 @@
               <h2>Confirm</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img src="../../../../../assets/img/comp.svg" alt="comp">
+              <img :src="getTokenImg('scUSD')" alt="scUSD">
               <h2>{{ coinAmount }}</h2>
               <p>scUSD</p>
               <span>will send to your wallet address</span>
@@ -59,7 +59,7 @@
               <li class="title">
                 Debt：
               </li>
-              <li><span>{{ existingDebt }}</span>至<span>{{ newDebt }}</span> scUSD</li>
+              <li><span>{{ fmtDebt }}</span></li>
             </ul>
             <ul>
               <li class="title">

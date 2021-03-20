@@ -7,7 +7,7 @@
       <div class="content">
         <div class="total-warpper">
           <h2>Total Collateral Value</h2>
-          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> scUSD</p>
+          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> USD</p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
@@ -23,7 +23,7 @@
             <p><span>{{ BigNumber(totalFee).toFixed(2) }}</span> scUSD</p>
           </div>
         </div>
-        <div class="refresh">
+        <div class="refresh" @click="refresh">
           <img src="../../../../assets/img/refresh.svg" alt="refresh">
         </div>
       </div>

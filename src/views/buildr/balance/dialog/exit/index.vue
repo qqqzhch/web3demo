@@ -47,7 +47,7 @@
               <h2>Confirm</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img src="../../../../../assets/img/lambda48.svg" alt="lambda">
+              <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
               <h2>{{ coinAmount }}</h2>
               <p>{{ poolData.tokenName }}</p>
               <span>will send to your wallet address</span>
