@@ -106,11 +106,17 @@ export default {
       this.allowanceAmount = allowanceAmount;
     },
     sendtx(tx) {
-      this.$refs.haveSendtx.open(tx.base);
-      event.$emit('sendtx',[tx.response, {
-        okinfo: tx.base+' SUCCESS',
-        failinfo: tx.base+' FAIL'
-      }]);
+      if(tx && tx.base){
+        this.$refs.haveSendtx.open(tx.base);
+        event.$emit('sendtx',[tx.response, {
+          okinfo: tx.base+' SUCCESS',
+          failinfo: tx.base+' FAIL'
+        }]);
+      } else {
+        this.$Notice.error({
+          title: 'Send transaction fail!',
+        });
+      }
     },
     // Join
     async onJoinClick() {

@@ -8,8 +8,6 @@ export default {
       BigNumber
     };
   },
-  components: {
-  },
   computed: {
     ...mapState('buildr', ['poolsData']),
     totalValue() {
@@ -25,5 +23,9 @@ export default {
       return this.poolsData.reduce((acc, pool) => BigNumber(pool.currentDebt).times(pool.feeRate).plus(acc),  0);
     }
   },
-  methods: {}
+  methods: {
+    refresh() {
+      this.$parent.loadData();
+    }
+  }
 };

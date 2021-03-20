@@ -23,7 +23,7 @@
             <p><span>{{ BigNumber(totalFee).toFixed(2) }}</span> scUSD</p>
           </div>
         </div>
-        <div class="refresh">
+        <div class="refresh" @click="refresh">
           <img src="../../../../assets/img/refresh.svg" alt="refresh">
         </div>
       </div>
