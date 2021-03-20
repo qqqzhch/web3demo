@@ -8,7 +8,7 @@
             alt="logo"
           >
         </div>
-        <p>2020 TransGo yriuwewet</p>
+        <p>© 2021 SuperCash All rights reserved</p>
       </div>
       <div class="right-wrapper">
         <div class="contact-wrapper flex justify-between items-center">
