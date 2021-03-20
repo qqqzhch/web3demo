@@ -9,7 +9,9 @@ import view from "./config/iview.js";
 import util from "./common/js/util.js";
 import i18n from "./i18n/index.js";
 import filters from "./common/js/filter.js";
+import VueClipboard from 'vue-clipboard2';
 
+Vue.use(VueClipboard);
 // 按需加载view-design组件
 view(Vue);
 
