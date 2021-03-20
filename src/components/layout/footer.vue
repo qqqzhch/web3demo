@@ -3,56 +3,54 @@
     <div class="footer-content container mx-auto flex justify-between items-center">
       <div class="left-wrapper">
         <div class="logo-wrapper">
-          <img
-            src="../../assets/footlogo.svg"
-            alt="logo"
-          >
+          <img src="../../assets/footlogo.svg" alt="logo">
         </div>
         <p>© 2021 SuperCash All rights reserved</p>
       </div>
-      <div class="right-wrapper">
+      <div class="right-wrapper flex">
         <div class="contact-wrapper flex justify-between items-center">
           <div class="contact-item mr">
-            <a
-              href="/"
-              target="_blank"
-            >
-              <img
-                src="../../assets/img/telegram.svg"
-                alt="telegram"
-              >
+            <a href="/" target="_blank">
+              <img src="../../assets/img/telegram.svg" alt="telegram">
             </a>
           </div>
           <div class="contact-item mr">
-            <a
-              href="/"
-              target="_blank"
-            >
-              <img
-                src="../../assets/img/twiter.svg"
-                alt="twiter"
-              >
+            <a href="/" target="_blank">
+              <img src="../../assets/img/twiter.svg" alt="twiter">
             </a>
           </div>
           <div class="contact-item">
-            <a
-              href="/"
-              target="_blank"
-            >
-              <img
-                src="../../assets/img/medium.svg"
-                alt="medium"
-              >
+            <a href="/" target="_blank">
+              <img src="../../assets/img/medium.svg" alt="medium">
             </a>
           </div>
         </div>
+        <Select v-model="lang" class="lang-wrapper" style="width: 124px" @on-change="getSelectLang">
+          <Option value="cn">
+            简体中文
+          </Option>
+          <Option value="en">
+            English
+          </Option>
+        </Select>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      lang: 'en',
+    };
+  },
+  methods: {
+    getSelectLang(val) {
+      console.log(val);
+    }
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -63,7 +61,7 @@ export default {};
   .footer-content {
     height: 100%;
     .left-wrapper {
-      .logo-wrapper{
+      .logo-wrapper {
         width: 150px;
       }
       p {
@@ -80,5 +78,8 @@ export default {};
       }
     }
   }
+}
+.lang-wrapper{
+  margin-left: 48px;
 }
 </style>
