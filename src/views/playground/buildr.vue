@@ -49,7 +49,7 @@ import {readSwapHistory,readPledgeHistory,readbuildrHistory} from '@/contactLogi
 
 import Web3 from 'web3';
 
-import   {getchainTokenPrice} from '@/contactLogic/tokenPrice.js';
+import   {getPrice} from '@/contactLogic/tokenPrice.js';
 
 
 export default {
@@ -234,7 +234,7 @@ export default {
     },
    async chainTokenPrice(){
 
-     const data = await getchainTokenPrice();
+     const data = await getPrice();
 
      console.log(data);
 
