@@ -92,7 +92,7 @@
 </template>
 
 <script src="./index.js" ></script>
-<style lang="less">
+<style lang="less" scoped>
   .f-green {
     color: #00D075 !important;
   }

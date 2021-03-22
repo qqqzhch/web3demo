@@ -132,7 +132,7 @@ export default {
           font-size: 14px;
           color: #828489;
           line-height: 16px;
-          margin-right: 50px;
+          // margin-right: 50px;
         }
         .value {
           float: right;

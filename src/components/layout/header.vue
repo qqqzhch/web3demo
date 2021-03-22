@@ -103,26 +103,26 @@ export default {
       jscookie.set('targetNet', val, { expires: 180 });
       this.getStatus();
 
-      if (this.statusVal === 'notConnect') {
-        this.$Notice.warning({
-          title: 'Wallet not connected',
-          desc: 'Please connect to your wallet',
-        });
-      }
+      // if (this.statusVal === 'notConnect') {
+      //   this.$Notice.warning({
+      //     title: 'Wallet not connected',
+      //     desc: 'Please connect to your wallet',
+      //   });
+      // }
 
-      if (this.statusVal === 'wrongConnect') {
-        this.$Notice.error({
-          title: 'Network not matched',
-          desc: 'Please switch to Ethereum Network in Metamask.',
-        });
-      }
+      // if (this.statusVal === 'wrongConnect') {
+      //   this.$Notice.error({
+      //     title: 'Network not matched',
+      //     desc: 'Please switch to Ethereum Network in Metamask.',
+      //   });
+      // }
 
-      if (this.statusVal === 'connect') {
-        this.$Notice.success({
-          title: 'Metamask Connected',
-          desc: this.ethAddress,
-        });
-      }
+      // if (this.statusVal === 'connect') {
+      //   this.$Notice.success({
+      //     title: 'Metamask Connected',
+      //     desc: this.ethAddress,
+      //   });
+      // }
 
       switch (val) {
         case '1':
@@ -227,9 +227,12 @@ export default {
         case '256':
           styleVal = 'hecoNet';
           break;
-        // case 'BSC':
-        //   styleVal = 'bscNet';
-        //   break;
+        case '56':
+          styleVal = 'bscNet';
+          break;
+        case '97':
+          styleVal = 'bscNet';
+          break;
 
         default:
           styleVal = 'ethNet';
@@ -241,20 +244,26 @@ export default {
       return this.ethChainID && this.ethAddress;
     },
   },
-  watch: {
-    isReady(value) {
-      if (value) {
-        this.getStatus();
-      }
-    },
-  },
+  // watch: {
+  //   isReady(value) {
+  //     if (value) {
+  //       this.getStatus();
+  //     }
+  //   },
+  // },
   mounted() {
-    if (this.isReady) {
-      this.getStatus();
-    } else {
-      this.statusVal = 'notConnect';
-      this.network = 'Ethereum';
-    }
+    setTimeout(() => {
+      if (this.isReady) {
+        this.getStatus();
+      } else {
+        this.statusVal = 'notConnect';
+        this.network = 'Ethereum';
+        this.$Notice.warning({
+          title: 'Wallet not connected',
+          desc: 'Please connect to your wallet',
+        });
+      }
+    }, 1000);
   },
 };
 </script>
