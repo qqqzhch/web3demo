@@ -13,7 +13,7 @@ import {
     if(checklocal(chainID,account)=='true'){
       console.log('已经授权过了');
       $router.push('/buildr/balance');
-      return ;
+      return true;
     }
 
     const callList = [];

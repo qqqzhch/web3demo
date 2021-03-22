@@ -1,7 +1,7 @@
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
-import { checklocal } from '../guide/checkeBulderApprove';
+import { checkeBulderApprove } from '../guide/checkeBulderApprove';
 import Overview from './overview/index.vue';
 import { collateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
@@ -34,6 +34,16 @@ export default {
     getTokenImg(tokensymbol){
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
+    },
+    async checkApprove() {
+      const { chainID, library, account } = this.getParmas();
+      const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account, true);
+
+      if(isHaveAllowance) {
+        this.loadData();
+      } else {
+        this.$router.push('/buildr/guide');
+      }
     },
     getParmas(item) {
       return {
@@ -125,7 +135,7 @@ export default {
   watch: {
     isReady(value) {
       if (value) {
-        this.loadData();
+        this.checkApprove();
       }
     },
     poolsData(nv) {
@@ -144,14 +154,7 @@ export default {
   },
   created() {
     if(this.isReady) {
-      const chainID = this.ethChainID;
-      const account = this.ethAddress;
-      const isHaveAllowance = checklocal(chainID, account);
-      if (isHaveAllowance === 'true') {
-        this.loadData();
-      } else {
-        this.$router.push('/buildr/guide');
-      }
+      this.checkApprove();
     }
   }
 };
