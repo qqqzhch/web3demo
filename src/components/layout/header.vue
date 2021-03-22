@@ -1,5 +1,5 @@
 <template>
-  <header :class="showBoxShadow ? 'header-wrapper header-wrapper-bg':'header-wrapper'">
+  <header class="header-wrapper header-wrapper-bg">
     <nav class="nav-wrapper container mx-auto flex justify-between items-center">
       <div class="left-wrapper flex items-center">
         <img src="../../assets/logo.svg" alt="logo">
@@ -7,46 +7,38 @@
           <router-link class="menu-item" to="/buildr" active-class="active">
             Buildr
           </router-link>
-          <router-link :class="isExchange ? 'menu-item active' : 'menu-item'" to="/exchange" active-class="active">
+          <router-link class="menu-item" to="/exchange" active-class="active">
             Exchange
           </router-link>
           <router-link class="menu-item" to="/earn" active-class="active">
             Earn
           </router-link>
-          <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">
-            Bridge
-          </a>
+          <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">Bridge</a>
         </div>
       </div>
 
       <div class="connect-wrapper flex justify-between items-center">
+        <Dropdown trigger="click" class="network-wrapper" @on-click="choseNetWork">
+          <div class="netWork flex justify-between items-center" :class="getBg">
+            <div class="dot" :class="statusVal" />
+            <span>{{ network }}</span>
+            <img class="arrow" src="../../assets/img/down.svg" alt="down">
+          </div>
+          <DropdownMenu slot="list" class="list-wrapper">
+            <template v-for="(item, index) in getNetList">
+              <DropdownItem :key="index" class="list-item" :name="item">
+                <img :src="netInfo[item].imgSrc" :alt="item">
+                <span>{{ netInfo[item].name }}</span>
+              </DropdownItem>
+            </template>
+          </DropdownMenu>
+        </Dropdown>
+
         <buttons v-if="!ethAddress" width="140px" height="40px" @click.native="openWalletDialog">
           Connect Wallet
         </buttons>
 
         <template v-else>
-          <Dropdown trigger="click" class="network-wrapper" @on-click="choseNetWork">
-            <div class="netWork flex justify-between items-center" :class="getBg">
-              <div class="dot" />
-              <span>{{ network }}</span>
-              <img class="arrow" src="../../assets/img/down.svg" alt="down">
-            </div>
-            <DropdownMenu slot="list" class="list-wrapper">
-              <DropdownItem class="list-item" name="eth">
-                <img src="../../assets/img/eth48.png" alt="eth">
-                <span>Ethereum</span>
-              </DropdownItem>
-              <DropdownItem class="list-item" name="heco">
-                <img src="../../assets/img/huobi48.svg" alt="heco">
-                <span>Heco</span>
-              </DropdownItem>
-              <DropdownItem class="list-item" name="bsc">
-                <img src="../../assets/img/BSC.svg" alt="bsc">
-                <span>BSC</span>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-
           <Dropdown trigger="click" class="func-wrapper" @on-click="choseFunc">
             <div class="connected-content flex justify-start items-center">
               <img src="../../assets/img/metamask18.svg" alt="metamask">
@@ -76,54 +68,30 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
+import config from '@/config/config.js';
+import jscookie from 'js-cookie';
 export default {
   components: {
-    buttons: () => import("@/components/basic/buttons"),
-    walletdialog: () => import("@/views/transfer/dialog/walletDialog"),
+    buttons: () => import('@/components/basic/buttons'),
+    walletdialog: () => import('@/views/transfer/dialog/walletDialog'),
   },
   data() {
     return {
       isExchange: false,
       showBoxShadow: false,
-      network: 'Ethereum',
+      network: '',
+      netInfo: config.netInfo,
+      netID: '1',
+      statusVal: '',
     };
-  },
-  mounted() {
-    this.routerUrl();
-    window.addEventListener(
-      "scroll",
-      this.debounce(this.scrollToTop, 30, false)
-    );
-  },
-  destroyed() {
-    window.removeEventListener(
-      "scroll",
-      this.debounce(this.scrollToTop, 30, false)
-    );
-  },
-  watch: {
-    $route: {
-      handler: function (val) {
-        if (val == "/") {
-          this.isExchange = true;
-        } else {
-          this.isExchange = false;
-        }
-      },
-    },
   },
   methods: {
     openWalletDialog() {
       this.$refs.wallet.open();
     },
-    routerUrl() {
-      if (this.$route.path == "/") {
-        this.isExchange = true;
-      }
-    },
-      copyAddress() {
-      this.$copyText(this.ethAddress).then((res) => {
+    copyAddress() {
+      this.$copyText(this.ethAddress).then(() => {
         this.$Notice.success({
           title: 'Address Copied!',
         });
@@ -131,21 +99,61 @@ export default {
     },
     // 选择目标网络
     choseNetWork(val) {
+      this.netID = val;
+      jscookie.set('targetNet', val, { expires: 180 });
+      this.getStatus();
+
+      if (this.statusVal === 'notConnect') {
+        this.$Notice.warning({
+          title: '钱包未连接',
+          desc: '请连接 Metamask 钱包',
+        });
+      }
+
+      if (this.statusVal === 'wrongConnect') {
+        this.$Notice.error({
+          title: '钱包与当前网络连接不一致',
+          desc: '请在 Metamask 钱包中切换至以太坊主网络',
+        });
+      }
+
+      if (this.statusVal === 'connect') {
+        this.$Notice.success({
+          title: '钱包连接网络成功',
+          desc: this.ethAddress,
+        });
+      }
+
       switch (val) {
-        case 'eth':
+        case '1':
           this.network = 'Ethereum';
           break;
-        case 'heco':
-          this.network = 'Heco';
+
+        case '3':
+          this.network = 'Ropsten';
           break;
-        case 'bsc':
-          this.network = 'BSC';
+
+        case '256':
+          this.network = 'Heco Test';
+          break;
+
+        case '128':
+          this.network = 'Heco Main';
+          break;
+
+        case '56':
+          this.network = 'BSC Main';
+          break;
+
+        case '97':
+          this.network = 'BSC Test';
           break;
 
         default:
           this.network = 'Ethereum';
           break;
       }
+      jscookie.set('net', this.network, { expires: 180 });
     },
 
     async choseFunc(val) {
@@ -155,7 +163,7 @@ export default {
       if (val === 'change') {
         this.openWalletDialog();
       }
-      if(val === 'disconnect') {
+      if (val === 'disconnect') {
         this.disconnectWallet();
       }
     },
@@ -163,51 +171,53 @@ export default {
     async disconnectWallet() {
       console.log('disconnect');
     },
-    scrollToTop() {
-      const scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      if (scrollTop > 88) {
-        this.showBoxShadow = true;
-      } else {
-        this.showBoxShadow = false;
+
+    getStatus() {
+      const targetID = parseInt(jscookie.get('targetNet'));
+
+      this.network = jscookie.get('net') || 'Ethereum';
+
+      // console.log(targetID, this.ethChainID, this.network);
+      if (!this.ethAddress) {
+        this.statusVal = 'notConnect';
       }
-    },
-    debounce(fn, wait, immediate) {
-      let timeout;
-      return function () {
-        const _this = this,
-          args = arguments;
-        const later = function () {
-          timeout = null;
-          if (!immediate) fn.apply(_this, args);
-        };
-        const callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) fn.apply(_this, args);
-      };
+      if (this.ethAddress && targetID !== this.ethChainID) {
+        this.statusVal = 'wrongConnect';
+      }
+
+      if (this.ethAddress && targetID === this.ethChainID) {
+        this.statusVal = 'connect';
+      }
+      console.log(this.statusVal);
     },
   },
   computed: {
-    ...mapState(["ethAddress"]),
+    ...mapState(['ethAddress', 'ethChainID']),
     getShortAddress() {
       return `${this.ethAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
     },
+    getNetList() {
+      const list = Object.keys(this.netInfo);
+      return list;
+    },
     getBg() {
       let styleVal;
-      // console.log(this.network);
-      switch (this.network) {
-        case 'Ethereum':
+      switch (this.netID) {
+        case '1':
           styleVal = 'ethNet';
           break;
-        case 'Heco':
+        case '3':
+          styleVal = 'ethNet';
+          break;
+        case '128':
           styleVal = 'hecoNet';
           break;
-        case 'BSC':
-          styleVal = 'bscNet';
+        case '256':
+          styleVal = 'hecoNet';
           break;
+        // case 'BSC':
+        //   styleVal = 'bscNet';
+        //   break;
 
         default:
           styleVal = 'ethNet';
@@ -215,6 +225,24 @@ export default {
       }
       return styleVal;
     },
+    isReady() {
+      return this.ethChainID && this.ethAddress;
+    },
+  },
+  watch: {
+    isReady(value) {
+      if (value) {
+        this.getStatus();
+      }
+    },
+  },
+  mounted() {
+    if (this.isReady) {
+      this.getStatus();
+    } else {
+      this.statusVal = 'notConnect';
+      this.network = 'Ethereum';
+    }
   },
 };
 </script>
@@ -293,7 +321,7 @@ export default {
             margin-left: 8px;
             width: 8px;
             height: 8px;
-            background: #00d075;
+            // background: #00d075;
             border-radius: 100%;
           }
           span {
@@ -341,5 +369,14 @@ export default {
 .bscNet {
   background: rgba(240, 185, 11, 0.1);
   border: 1px solid #f0b90b;
+}
+.notConnect {
+  background: #bbbbbb;
+}
+.wrongConnect {
+  background: #ff3c00;
+}
+.connect {
+  background: #00d075;
 }
 </style>

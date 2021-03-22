@@ -107,7 +107,7 @@ export async function readpairpool(chainID, library) {
   });
 
   const PriceList = await Promise.all(PricePromiseList);
-  console.log('PriceList', PriceList);
+  // console.log('PriceList', PriceList);
   dataList.forEach((item) => {
 
     const prise24 = _.find(PriceList, (one) => {

@@ -51,7 +51,7 @@ export  async function buildrHistory(account,pageNum=1,showNum=10,chainID){
 
   const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
- console.log(data);
+//  console.log(data);
  return data.data;
 }
 
@@ -68,7 +68,7 @@ export async function coinohlc(id){
 export async function pairPrice(pair_address){
   const data =  await  axios.get(`${baseUrl}api/24h_price_info?pair_address=${pair_address}`);
 
- console.log(data);
+//  console.log(data);
  return data.data;
 
 

@@ -51,6 +51,16 @@ const store = new vuex.Store({
 
     }
   },
+  actions: {
+    async getEthChainID({ state, commit }) {
+      try {
+        const res = await state.web3.eth.getChainId();
+        commit("changeEthChainID", res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  }
 });
 
 [buildrStore].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
