@@ -34,13 +34,13 @@ export default {
 
       let currMaxMintable = 0;
       if(BigNumber(currentCollRX).gt(targetRX)) {
-        currMaxMintable = BigNumber(this.coinAmount).times(targetRatio).plus(maxMintable);
+        currMaxMintable = BigNumber(this.coinAmount).times(currencyPrice).times(targetRatio).plus(maxMintable);
       } else {
         // 达到目标抵押率需要的数量,如果coinAmount> targetAmount 增加额度，否则增加额度为0;
         const targetAmount = BigNumber(this.existingDebt).times(targetRX).div(currencyPrice).minus(pledgeNumber);
 
         const netAmount = BigNumber(this.coinAmount).gt(targetAmount) ? BigNumber(this.coinAmount).minus(targetAmount) : 0;
-        currMaxMintable = BigNumber(netAmount).times(targetRatio).plus(maxMintable);
+        currMaxMintable = BigNumber(netAmount).times(currencyPrice).times(targetRatio).plus(maxMintable);
       }
       return currMaxMintable;
     },

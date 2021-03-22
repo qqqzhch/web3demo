@@ -26,9 +26,9 @@ export default {
     },
     // 铸造额度
     currMaxMintable() {
-      const { maxMintable, targetRatio } = this.poolData;
+      const { maxMintable, targetRatio, currencyPrice } = this.poolData;
 
-      let currMaxMintable = BigNumber(maxMintable).minus(BigNumber(this.coinAmount).times(targetRatio));
+      let currMaxMintable = BigNumber(maxMintable).minus(BigNumber(this.coinAmount).times(currencyPrice).times(targetRatio));
       currMaxMintable = BigNumber(currMaxMintable).lt(0) ? 0 : currMaxMintable;
 
       return currMaxMintable;
