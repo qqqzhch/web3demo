@@ -45,12 +45,29 @@ export default {
 <style lang="less" scoped>
 #app {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   .main-wrapper {
-    flex: 1;
-    margin-top: 88px;
+    margin-top: 112px;
+    min-height: calc(100vh - 208px);
   }
+}
+@media (max-width: 1024px) {
+ body{
+   max-height: 1069px;
+   #app{
+     overflow-y: hidden;
+     .header-wrapper{
+    position: static;
+    min-width: 1200px;
+  }
+  .main-wrapper{
+    margin-top: 0px;
+     min-width: 1200px;
+  }
+  .footer-wrapper{
+     min-width: 1200px;
+  }
+   }
+ }
+  
 }
 </style>

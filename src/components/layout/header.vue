@@ -339,7 +339,7 @@ export default {
   }
 }
 .header-wrapper-bg {
-  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
 }
 .list-item {
   height: 40px;
