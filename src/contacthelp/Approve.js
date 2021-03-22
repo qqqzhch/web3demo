@@ -20,8 +20,9 @@ export async function useTokenApprove(
     let result,gasEstimate;
 
     //MaxUint256   
-    const bigAmount = new BigNumber(amount);
-    const approveAmount = bigAmount.times('1.1').toFixed(0);
+    // const bigAmount = new BigNumber(amount);
+    // const approveAmount = bigAmount.times('1.1').toFixed(0);
+    const approveAmount = MaxUint256;
 
     try {
         gasEstimate = await contract.estimateGas.approve(spender,approveAmount);

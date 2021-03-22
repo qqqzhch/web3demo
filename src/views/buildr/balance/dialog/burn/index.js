@@ -63,7 +63,7 @@ export default {
     newLiquidationPrice() {
       const { liquidationRX, pledgeNumber } = this.poolData;
       const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-      return newLiquPrice
+      return newLiquPrice;
     },
     // 验证输入值, 输入的最大值是min[现有债务，当前额度]-fee
     checkValue() {
