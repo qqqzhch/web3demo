@@ -11,7 +11,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab tab-disabled" @click="onJoinClick">
-              Collateral
+              Stake
             </button>
           </div>
           <div class="tab-warpper">
@@ -27,7 +27,7 @@
               <p><span>Balance：</span> {{ unlockedCollateral }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
-              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" />
+              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">

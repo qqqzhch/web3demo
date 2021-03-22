@@ -27,7 +27,7 @@
               <p><span>Balance：</span> {{ BigNumber(scUSDNumber).toFixed(6) }} scUSD</p>
             </div>
             <div class="input-warpper">
-              <ScInput unit="scUSD" :on-change="onChangeValue" />
+              <ScInput unit="scUSD" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
               <img :src="getTokenImg('scUSD')" alt="scUSD">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">
