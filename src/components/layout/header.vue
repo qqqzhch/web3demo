@@ -105,21 +105,21 @@ export default {
 
       if (this.statusVal === 'notConnect') {
         this.$Notice.warning({
-          title: '钱包未连接',
-          desc: '请连接 Metamask 钱包',
+          title: 'Wallet not connected',
+          desc: 'Please connect to your wallet',
         });
       }
 
       if (this.statusVal === 'wrongConnect') {
         this.$Notice.error({
-          title: '钱包与当前网络连接不一致',
-          desc: '请在 Metamask 钱包中切换至以太坊主网络',
+          title: 'Network not matched',
+          desc: 'Please switch to Ethereum Network in Metamask.',
         });
       }
 
       if (this.statusVal === 'connect') {
         this.$Notice.success({
-          title: '钱包连接网络成功',
+          title: 'Metamask Connected',
           desc: this.ethAddress,
         });
       }
