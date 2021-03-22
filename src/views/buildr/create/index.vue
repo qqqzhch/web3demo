@@ -43,10 +43,15 @@
           </div>
         </div>
         <div class="Input-item">
-          <ScInput class="myInput" title="" :unit="defaultToken" :on-change="onChangePledgeNumber" />
+          <ScInput class="myInput" title="" :unit="defaultToken" :on-change="onChangePledgeNumber" :is-error="checkValue !== 'ok'" />
           <img :src="getTokenImg(defaultToken)" :alt="defaultToken">
         </div>
-
+        <div v-if="checkValue !== 'ok'" class="notice-warpper">
+          <div class="notice-content">
+            <img src="../../../assets/img/notice-red.png">
+            <p>{{ checkValue }}</p>
+          </div>
+        </div>
         <div class=" flex">
           <div class="title-build">
             Build
@@ -160,6 +165,28 @@
     margin: 12px 0 32px;
   }
   .content-left {
+    .notice-warpper {
+      .notice-content {
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        padding: 9px 30px;
+        width: 100%;
+        height: 32px;
+        background: rgba(255, 60, 0, 0.1);
+        border-radius: 4px;
+        img {
+          margin-right: 10px;
+        }
+        p {
+          font-size: 12px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #ff3c00;
+          line-height: 14px;
+        }
+      }
+    }
     .asset-item {
       .connect {
         width: 100%;

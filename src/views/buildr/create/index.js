@@ -45,6 +45,16 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
+    // 验证输入值
+    checkValue() {
+      if(BigNumber(this.pledgeNumber).gt(this.currencyNumber) || BigNumber(this.pledgeNumber).isLessThan(0)) {
+        return 'Input value must be less than balance and greater than 0';
+      } else if (isNaN(this.pledgeNumber)) {
+        return 'Input value needs to be a value';
+      } else {
+        return 'ok';
+      }
+    }
   },
   methods: {
     getTokenImg(tokensymbol){
@@ -80,7 +90,8 @@ export default {
       this.currencyPrice = currencyPrice;
     },
     onChangePledgeNumber(val) {
-      this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
+      this.pledgeNumber = val;
+      // this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
       this.stableNumber = this.pledgeNumber ? BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX) : '';
     },
     async onApproveClick() {

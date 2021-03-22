@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'input-group input-focus': focus, 'input-group': !focus}">
+  <div :class="{'input-group': true, 'input-focus': focus, 'input-error': isError}">
     <div
       v-if="title"
       class="input-prepend"
@@ -15,6 +15,7 @@
       :placeholder="placetext"
       :disabled="disabled"
       @focus="onInputFocus"
+      @blur="onInputBlur"
     >
     <div class="input-append">
       {{ unit }}
@@ -25,7 +26,7 @@
 <script>
   export default {
     name: 'ScInput',
-    props: ['title', 'unit', 'placetext', 'disabled', 'onChange', 'defaultValue'],
+    props: ['title', 'unit', 'placetext', 'disabled', 'onChange', 'defaultValue', 'isError'],
     data() {
       return {
         inputVal: '',
@@ -144,6 +145,24 @@
   }
   .no-title {
     border-left: 1px solid #0058FF;
+  }
+}
+.input-error {
+  .input-prepend {
+    border: 1px solid #ff3d00;
+    border-right: none;
+  }
+  .input-append {
+    border: 1px solid #ff3d00;
+    border-left: none;
+  }
+  .input-inner {
+    border: 1px solid #ff3d00;
+    border-left: none;
+    border-right: none;
+  }
+  .no-title {
+    border-left: 1px solid #ff3d00;
   }
 }
 </style>
