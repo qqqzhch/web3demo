@@ -180,15 +180,27 @@ export default {
       // console.log(targetID, this.ethChainID, this.network);
       if (!this.ethAddress) {
         this.statusVal = 'notConnect';
+        this.$Notice.warning({
+          title: 'Wallet not connected',
+          desc: 'Please connect to your wallet',
+        });
       }
       if (this.ethAddress && targetID !== this.ethChainID) {
         this.statusVal = 'wrongConnect';
+        this.$Notice.error({
+          title: 'Network not matched',
+          desc: 'Please switch to Ethereum Network in Metamask.',
+        });
       }
 
       if (this.ethAddress && targetID === this.ethChainID) {
         this.statusVal = 'connect';
+        this.$Notice.success({
+          title: 'Metamask Connected',
+          desc: this.ethAddress,
+        });
       }
-      console.log(this.statusVal);
+      // console.log(this.statusVal);
     },
   },
   computed: {
