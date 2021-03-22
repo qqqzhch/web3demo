@@ -6,6 +6,9 @@ import iviewen from "view-design/dist/locale/en-US";
 import iviewzh from "view-design/dist/locale/zh-CN";
 import jscookie from "js-cookie";
 
+import swapzh from "./lang/swap.zh.js";
+import swapen from "./lang/swap.en.js";
+
 Vue.use(VueI18n);
 const langList = ["en", "zh"];
 
@@ -15,8 +18,8 @@ const i18n = new VueI18n({
   locale: initKey,
   messages: {
 
-    en: Object.assign({}, iviewen,en),
-    zh: Object.assign({}, iviewzh,cn),
+    en: Object.assign({}, iviewen,en,swapen),
+    zh: Object.assign({}, iviewzh,cn,swapzh),
 
   },
 });

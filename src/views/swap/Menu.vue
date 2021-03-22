@@ -7,21 +7,21 @@
           :class="nameclass === 'swap'? 'active-menu':''"
           @click="toPage('swap')"
         >
-          Swap
+          {{ $t('swap.subMenu1') }}
         </button>
         <button
           class="menu-item"
           :class="nameclass === 'pool'? 'active-menu':''"
           @click="toPage('pool')"
         >
-          Liquidity Pool
+          {{ $t('swap.subMenu2') }}
         </button>
         <button
           class="menu-item"
           :class="nameclass === 'history'? 'active-menu':''"
           @click="toPage('history')"
         >
-          History
+          {{ $t('swap.subMenu3') }}
         </button>
       </div>
       <router-view />

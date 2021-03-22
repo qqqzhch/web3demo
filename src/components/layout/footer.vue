@@ -26,7 +26,7 @@
           </div>
         </div>
         <Select v-model="lang" class="lang-wrapper" style="width: 124px" @on-change="getSelectLang">
-          <Option value="cn">
+          <Option value="zh">
             简体中文
           </Option>
           <Option value="en">
@@ -39,6 +39,11 @@
 </template>
 
 <script>
+
+import jscookie from 'js-cookie';
+
+
+
 export default {
   data() {
     return {
@@ -48,6 +53,9 @@ export default {
   methods: {
     getSelectLang(val) {
       console.log(val);
+      // val === 'zh' ? (this.lang = 'en') : (this.lang = 'zh');
+      jscookie.set('langkey', this.lang, { expires: 180 });
+      this.$i18n.locale = this.lang;
     }
   },
 };

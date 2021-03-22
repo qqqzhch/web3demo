@@ -3,15 +3,15 @@
     <div class="content-wapper flex justify-between items-start">
       <div class="exchanges-wapper">
         <p class="exchanges-title">
-          Exchanges
+          {{ $t('swap.Exchanges') }}
         </p>
         <div class="list-wapper">
           <div class="list-title flex">
-            <span class="pair">Pair</span>
-            <span class="price">Price</span>
+            <span class="pair"> {{ $t('swap.Pair') }} </span>
+            <span class="price">{{ $t('swap.Price') }}</span>
             <div class="change-title flex">
-              <span>Change</span>
-              <Tooltip placement="top" content="Price comparison in recent 24 hours">
+              <span>{{ $t('swap.Change') }}</span>
+              <Tooltip placement="top" :content="$t('swap.ChangeTip')">
                 <img src="../../assets/img/problem-16.png">
               </Tooltip>
             </div>
@@ -47,13 +47,13 @@
       </div>
       <div class="swap-wapper">
         <p class="swap-title">
-          Swap
+          {{ $t('swap.pageTitle') }}
         </p>
         <div class="From-wrapper">
           <div class="title-content">
-            <span class="card-title">From</span>
+            <span class="card-title"> {{ $t('swap.fromToken') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Balance</span>
+              <span class="mr-2 text-secondary">{{ $t('swap.balance') }}</span>
               <span v-if="inputcurrency">{{ inBalance|format1e18Value }} {{ inputcurrency.symbol }}</span>
             </div>
           </div>

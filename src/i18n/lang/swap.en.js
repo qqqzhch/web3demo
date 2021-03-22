@@ -1,0 +1,40 @@
+export default {
+    swap:{
+        subMenu1:"Swap",
+        subMenu2:"Liquidity Pool",
+        subMenu3:"History",
+        Exchanges:'Exchanges',
+        pageTitle: "Swap",
+        Pair:'Pair',
+        Price:'Price',
+        Change:'Change',
+        ChangeTip:'Price comparison in recent 24 hours',
+        fromToken: "From",
+        toToken: "To（estimated）",
+        balance: "Balance",
+        swapBtn: "Swap",
+        price: "Price",
+        PriceImpact: "Price Impact",
+        LiquidityProviderFee: "Liquidity Provider Fee",
+        Minimumreceived: "Minimum Received",
+        LinkWallet: "Connect Wallet",
+        PriceImpactError: "The price fluctuates too much to trade",
+        approve: "Approve",
+        ethgasfree: "ETH Gas Fee",
+        enterthequantity: "Please enter the quantity",
+        pleasechoose: "Select",
+        pleaseselectTP:'Please select a trading pair',
+        InjectLiquidity:'Inject liquidity',
+        actions: {
+          checkMetaMask: "Please check if MetaMask Wallet is installed",
+          Amountexceedsbalance: "The swap amount cannot be greater than balance",
+          choosedifferentassettransaction:
+            "Enter the amount and select different assets to swap",
+            notfindpair:'Find the transaction pair and report an error, or the transaction pair does not exist',
+          Transactionfailure: "Transaction Failed",
+          approvesuccessful: "Authorization succeeded",
+          Transactionsent: "Transaction Sent",
+          Successfultrade:'Transaction succeeded'
+        },
+    }
+};
