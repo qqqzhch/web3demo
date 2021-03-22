@@ -15,7 +15,7 @@
             <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
-            <h2>Generating scUSD</h2>
+            <h2>Avail to generate</h2>
             <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>

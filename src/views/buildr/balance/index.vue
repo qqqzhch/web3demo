@@ -35,17 +35,17 @@
             </div>
             <div class="mrg-tb-20">
               <span>Current Debt</span>
-              <p>{{ BigNumber(poolItem.currentDebt).toFixed(6) }} scUSD</p>
+              <p>{{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</p>
             </div>
           </div>
           <div class="small-item">
             <div>
               <span>Avail to Withdraw</span>
-              <p>{{ BigNumber(poolItem.unlockedCollateral).toFixed(6) }} {{ poolItem.tokenName }}</p>
+              <p>{{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</p>
             </div>
             <div class="mrg-tb-20">
               <span>Avail to Generate</span>
-              <p>{{ BigNumber(poolItem.maxMintable).toFixed(6) }} scUSD</p>
+              <p>{{ BigNumber(poolItem.maxMintable).toFixed(2) }} scUSD</p>
             </div>
           </div>
           <div class="small-item">
@@ -58,7 +58,7 @@
                   'f-danger': poolItem.currentCollRX <= 2
                 }"
               >
-                {{ BigNumber(poolItem.currentCollRX).times(100) }}%
+                {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
               </p>
             </div>
             <div class="mrg-tb-20">
@@ -69,7 +69,7 @@
           <div class="btn-warpper">
             <div>
               <button class="btn" @click="openJoinDialog(poolItem)">
-                Collateral/Withdraw {{ poolItem.tokenName }}
+                Stake/Withdraw {{ poolItem.tokenName }}
               </button>
             </div>
             <div class="mrg-tb-20">

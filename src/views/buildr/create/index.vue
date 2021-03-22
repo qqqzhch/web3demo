@@ -2,10 +2,10 @@
   <div class="create box-shadow">
     <div class="header">
       <div class="title">
-        Designated Pool
+        Stake crypto token assets to create your CDPs.
       </div>
       <div class="info">
-        Designated mining, users can enjoy lower risk mining with a super high yield.
+        Create CDPs, generate scUSD.
       </div>
     </div>
     <div class="grid-2 mrg-tb-20">
@@ -76,12 +76,12 @@
             {{ stableNumber }} scUSD
           </div>
         </div>
-        <!--<div class="build-grid-2 mrg-b-5">-->
-        <!--<p>Coll. Ratio：</p>-->
-        <!--<div class="text-right">-->
-        <!--{{ BigNumber(targetRX).times(100) }}%-->
-        <!--</div>-->
-        <!--</div>-->
+        <div class="build-grid-2 mrg-b-5">
+          <p>Coll. Ratio：</p>
+          <div class="text-right">
+            {{ BigNumber(targetRX).times(100) }}%
+          </div>
+        </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
           <p>SuperCash Price：</p>
           <div class="text-right">

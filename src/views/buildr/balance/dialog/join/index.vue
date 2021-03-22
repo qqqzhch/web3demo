@@ -12,7 +12,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab">
-              Collateral
+              Stake
             </button>
           </div>
           <div class="tab-warpper">

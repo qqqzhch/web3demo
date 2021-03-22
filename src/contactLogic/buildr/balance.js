@@ -67,6 +67,13 @@ export async function contractEstimateGas(contract, methodName, parameters) {
  *
  * */
 
+const typeOption = {
+  'join': 'Stake',
+  'exit': 'Withdraw',
+  'mint': 'Generate',
+  'burn': 'Payback',
+};
+
 export const fetchBalanaceChange = async ({ type, web3, chainID, account, library, tokenName, coinAmount, unit}) => {
   const token = getProxyActionsToken(chainID);
   const ProxyActionsContract = useProxyActionsContractSigna(library, account, token);
@@ -92,7 +99,7 @@ export const fetchBalanaceChange = async ({ type, web3, chainID, account, librar
         break;
     }
     return {
-      base: `${type.toUpperCase()} ${coinAmount} ${unit}`,
+      base: `${typeOption[type]} ${coinAmount} ${unit}`,
       hash: response.hash,
       response: response,
     };

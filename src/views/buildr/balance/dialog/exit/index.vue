@@ -11,7 +11,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab tab-disabled" @click="onJoinClick">
-              Collateral
+              Stake
             </button>
           </div>
           <div class="tab-warpper">
