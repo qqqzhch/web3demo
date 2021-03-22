@@ -59,12 +59,12 @@
                 Debt：
               </li>
               <li>
-                <span>{{ BigNumber(existingDebt).toFixed(6) }} </span> to <span
+                <span>{{ BigNumber(existingDebt).toFixed(2) }} </span> to <span
                   :class="{
                     'f-green': existingDebt < newDebt,
                     'f-danger': existingDebt > newDebt
                   }"
-                >{{ BigNumber(newDebt).toFixed(6) }} {{ unit }}</span>
+                >{{ BigNumber(newDebt).toFixed(2) }} {{ unit }}</span>
               </li>
             </ul>
             <ul>
@@ -72,12 +72,12 @@
                 Generating：
               </li>
               <li>
-                <span>{{ BigNumber(poolData.maxMintable).toFixed(6) }} </span> to <span
+                <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
                   :class="{
                     'f-green': poolData.maxMintable < currMaxMintable,
                     'f-danger': poolData.maxMintable > currMaxMintable
                   }"
-                >{{ BigNumber(currMaxMintable).toFixed(6) }} {{ unit }}</span>
+                >{{ BigNumber(currMaxMintable).toFixed(2) }} {{ unit }}</span>
               </li>
             </ul>
             <ul>
@@ -86,13 +86,13 @@
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">
-                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(6) }}%</span> to <span
+                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(2) }}%</span> to <span
                   :class="{
                     'f-green': newCollRX >= 5,
                     'f-warning': newCollRX < 5 && newCollRX > 2,
                     'f-danger': newCollRX <= 2
                   }"
-                >{{ BigNumber(newCollRX).times(100).toFixed(6) }}%</span>
+                >{{ BigNumber(newCollRX).times(100).toFixed(2) }}%</span>
               </li>
               <li v-else>
                 <span>0% to 0%</span>
