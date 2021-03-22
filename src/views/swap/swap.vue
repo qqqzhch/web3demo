@@ -11,7 +11,9 @@
             <span class="price">Price</span>
             <div class="change-title flex">
               <span>Change</span>
-              <img src="../../assets/img/problem-16.png">
+              <Tooltip placement="top" content="Price comparison in recent 24 hours">
+                <img src="../../assets/img/problem-16.png">
+              </Tooltip>
             </div>
           </div>
           <div
@@ -95,14 +97,14 @@
           class="arrow-warpper"
           @click="Changeparameters"
         >
-          <img src="../../assets/img/exchange-32.png">
+          <img src="../../assets/img/exchange-32.svg">
         </div>
         <div
           v-else
           class="arrow-warpper arrow-active"
           @click="Changeparameters"
         >
-          <img src="../../assets/img/exchange-32-w.png">
+          <img src="../../assets/img/exchange-32-w.svg">
         </div>
 
         <div class="To-wapper From-wrapper">
@@ -597,6 +599,7 @@ export default {
         div {
           display: flex;
           width: 50%;
+          line-height: 32px;
           img {
             margin-right: 8px;
             p {
@@ -704,6 +707,7 @@ export default {
           position: absolute;
           right: 16px;
           top: 30%;
+          line-height: 32px;
           p {
             margin-left: 8px;
             font-size: 16px;

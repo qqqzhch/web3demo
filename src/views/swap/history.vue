@@ -216,6 +216,7 @@ export default {
         div {
           display: flex;
           width: 30%;
+          line-height: 32px;
           img {
             margin-right: 8px;
             p {
