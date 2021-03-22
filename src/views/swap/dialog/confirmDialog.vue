@@ -91,7 +91,7 @@
             </div>
             <div class="details-items">
               <p>Network Fee</p>
-              <span>{{ tradeData.gasfee |formatBalanceNumber }} HT ≈ $ {{ htPrice * tradeData.gasfee | formatBalanceNumber }}</span>
+              <span>{{ tradeData.gasfee |formatBalanceNumber }} {{ chainTokenName }} ≈ $ {{ chainTokenPrice * tradeData.gasfee | formatBalanceNumber }}</span>
             </div>
             <div class="details-items">
               <p>You will receive</p>
@@ -189,7 +189,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrice']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','chainTokenPrice','chainTokenName']),
   }
 };
 </script>

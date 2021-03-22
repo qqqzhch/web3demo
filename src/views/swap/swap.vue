@@ -143,7 +143,7 @@
             class="details-items"
           >
             <p>Fee</p>
-            <span>{{ gasfee|formatBalanceNumber }} HT ≈ $ {{ htPrice*gasfee |formatBalanceNumber }}</span>
+            <span>{{ gasfee|formatBalanceNumber }} {{ chainTokenName }} ≈ $ {{ chainTokenPrice*gasfee |formatBalanceNumber }}</span>
           </div>
           <div class="details-items">
             <p>Price Tolerance</p>
@@ -272,7 +272,7 @@ export default {
 
       console.log({data});
       this.$data.pairlist = data ;
-      if(data&&this.selectPairOBJ == null){
+      if(data&&data[0]&&this.selectPairOBJ == null){
         setTimeout(()=>{
           this.selectPair(data[0]);
         },1000);
@@ -501,7 +501,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','htPrice']),
+    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','chainTokenPrice','chainTokenName']),
   },
  async mounted() {
     if(this.ethChainID){

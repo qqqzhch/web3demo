@@ -226,7 +226,7 @@
               </div>
               <div>
                 <span>Fee</span>
-                <p>{{ fee |formatBalanceNumber }} HT≈${{ htPrice*fee |formatBalanceNumber }}</p>
+                <p>{{ fee |formatBalanceNumber }} HT≈${{ chainTokenPrice*fee |formatBalanceNumber }}</p>
               </div>
             </div>
             <Buttons @click.native="sendTX">
@@ -727,7 +727,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'htPrice']),
+    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'chainTokenPrice']),
     newpercent(){
       const addlp = Web3.utils.toWei(this.$data.LiquidityInfo.liquidityMinted);
       const oldlp = Web3.utils.toWei(this.lpbalance);

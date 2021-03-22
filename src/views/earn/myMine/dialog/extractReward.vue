@@ -91,8 +91,8 @@ export default {
       const gasPrice = await getGasPrice(this.ethersprovider);
       const bigGasPrice = new BigNumber(gasPrice);
       const bigGas = new BigNumber(esGas.toString());
-      const bigHTPrice = new BigNumber(this.htPrice);
-      const fee = bigGas.times(bigHTPrice).times(bigGasPrice).div('1e18');
+      const bigchainTokenPrice = new BigNumber(this.chainTokenPrice);
+      const fee = bigGas.times(bigchainTokenPrice).times(bigGasPrice).div('1e18');
       this.fee = fee.decimalPlaces(6).toNumber();
     },
 
@@ -138,7 +138,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'htPrice', 'web3','scashPrice']),
+    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3','scashPrice']),
   },
 };
 </script>

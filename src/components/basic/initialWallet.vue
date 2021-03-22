@@ -3,7 +3,9 @@ import Web3 from 'web3';
 import { mapState } from 'vuex';
 import { ethers } from 'ethers';
 
-import   {getHTPrice} from '@/contactLogic/tokenPrice.js';
+import   {getPrice} from '@/contactLogic/tokenPrice.js';
+
+import getChainCoinInfo from '@/constants/networkCoinconfig.js';
 
 export default {
   data() {
@@ -11,13 +13,18 @@ export default {
   },
   mounted() {
     this.initEth();
-    this.htPrice();
+    
   },
   methods: {
-   async htPrice(){
+   async coinPrice(){
+      const ChainID =this.ethChainID;
+      const coinInfo = getChainCoinInfo(ChainID);
 
-     const data = await getHTPrice();
-     this.$store.commit('htPrice', data);
+      const data = await getPrice(coinInfo.tokenID);
+      
+      this.$store.commit('changechainTokenName', coinInfo.coinName);
+      
+      this.$store.commit('chainTokenPrice', data);
     //  console.log('ht 价格',data);
 
 
@@ -135,6 +142,7 @@ export default {
         const isConnect = await this.isEthConnect();
 
         await this.getEthChainID();
+        await this.coinPrice();
 
         if (!isConnect) {
           // this.$Notice.warning({
@@ -168,7 +176,13 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethAddress', 'web3', 'ethersprovider']),
+    ...mapState(['ethAddress', 'web3', 'ethersprovider','ethChainID']),
   },
+  watch:{
+    ethChainID:function(){
+      this.coinPrice();
+    }
+
+  }
 };
 </script>

@@ -11,9 +11,10 @@ const store = new vuex.Store({
     ethChainID: "",
     web3: null,
     ethersprovider: null,
-    htPrice: '',
+    chainTokenPrice: '',
     earnPrice: '',
-    scashPrice: ''
+    scashPrice: '',
+    chainTokenName: '',
   },
   mutations: {
     changeToken(state, token) {
@@ -32,9 +33,9 @@ const store = new vuex.Store({
       state.ethersprovider = obj.ethersprovider;
 
     },
-    htPrice(state, price) {
+    chainTokenPrice(state, price) {
 
-      state.htPrice = price;
+      state.chainTokenPrice = price;
 
     },
     changeEarnPrice(state, price) {
@@ -44,6 +45,10 @@ const store = new vuex.Store({
     },
     changeScashPrice(state, price) {
       state.scashPrice = price;
+    },
+    changechainTokenName(state, name){
+      state.chainTokenName = name;
+
     }
   },
 });

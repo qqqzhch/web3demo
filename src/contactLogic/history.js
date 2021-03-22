@@ -6,7 +6,7 @@ import tokens from "@/constants/token.json";
 import LPtoken from "@/constants/minertoken.json";
 
 export  async function readSwapHistory(chainID,account,pageNum,showNum){
-    const data = await swapHistory(account,pageNum,showNum);
+    const data = await swapHistory(account,pageNum,showNum,chainID);
     //['swapExactTokensForTokens','removeLiquidityWithPermit','addLiquidity']
 
     data.data.forEach((item)=>{
@@ -30,7 +30,7 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
 }
 
 export  async function readPledgeHistory(chainID,account,pageNum,showNum){
-    const data = await pledgeHistory(account,pageNum,showNum);
+    const data = await pledgeHistory(account,pageNum,showNum,chainID);
     //['stake','exit','getReward']
 
     data.data.forEach((item)=>{
@@ -54,7 +54,7 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
 }
 
 export  async function readbuildrHistory(chainID,account,pageNum,showNum){
-    const data = await buildrHistory(account,pageNum,showNum);
+    const data = await buildrHistory(account,pageNum,showNum,chainID);
     //['stake','exit','getReward']
 
     data.data.forEach((item)=>{
