@@ -36,7 +36,7 @@ export default {
       return getTokenImg(tokensymbol,chainID);
     },
     async checkApprove() {
-      const { chainID, library, account } = this.getParmas();
+      const { chainID, library, account } = this.getParmas({});
       const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account, true);
 
       if(isHaveAllowance) {

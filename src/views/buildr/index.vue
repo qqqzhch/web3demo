@@ -30,7 +30,7 @@
 
 <script src="./index.js"></script>
 
-<style lang="less" scoped>
+<style lang="less">
   .buildr-warp {
     .mrg-t-10 {
       margin-top: 10px;

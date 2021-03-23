@@ -4,7 +4,7 @@
       <Overview />
     </div>
     <div class="CDP-content">
-      <div class="title">
+      <div class="title2">
         My CDPs
       </div>
       <div v-if="!poolsData.length">
@@ -105,7 +105,7 @@
 
 .balance {
   margin: 24px 0 0 100px;
-  .title {
+  .title2 {
     margin-top: 24px;
     height: 24px;
     font-size: 20px;
