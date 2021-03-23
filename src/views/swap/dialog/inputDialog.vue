@@ -812,10 +812,11 @@ export default {
         }
         .unit {
           position: absolute;
+          justify-content: space-between;
+          width: 88px;
           right: 16px;
           top: 30%;
           p {
-            margin-left: 8px;
             font-size: 16px;
             font-family: Gilroy-Medium, Gilroy;
             line-height: 32px;

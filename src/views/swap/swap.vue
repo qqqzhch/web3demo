@@ -66,7 +66,7 @@
             >
             <div
               v-if="inputcurrency"
-              class="flex unit"
+              class="flex justify-between unit"
             >
               <img
                 width="32"
@@ -124,7 +124,7 @@
             >
             <div
               v-if="outputcurrency"
-              class="flex unit"
+              class="flex justify-between unit"
             >
               <img
                 width="32"
@@ -707,9 +707,9 @@ export default {
           position: absolute;
           right: 16px;
           top: 30%;
+          width: 88px;
           line-height: 32px;
           p {
-            margin-left: 8px;
             font-size: 16px;
             font-family: Gilroy-Medium, Gilroy;
             font-weight: 500;
