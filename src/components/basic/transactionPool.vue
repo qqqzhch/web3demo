@@ -19,14 +19,14 @@ export default {
       console.log('Status after confirmation', txlast);
       if (txlast) {
         this.$Notice.success({
-          title: 'Success',
+          title: this.$t('swapConfirm.successCom'),
           desc: tx.info.okinfo,
           duration: 10
         });
         event.$emit('txsuccess');
       } else {
         this.$Notice.error({
-          title: 'The deal failed',
+          title: this.$t('swapConfirm.failCom'),
           desc: tx.info.failinfo,
         });
       }

@@ -11,10 +11,10 @@
         <div class="img-warpper text-center">
           <img src="../../assets/img/check-green-64.png">
         </div>
-        <h1>The transaction has been sent</h1>
+        <h1>{{ $t('swapConfirm.txhavesend') }}</h1>
         <p>{{ title }}</p>
         <Buttons @click.native="close">
-          Confirm
+          {{ $t('swapConfirm.Confirm') }}
         </Buttons>
       </div>
     </modal>

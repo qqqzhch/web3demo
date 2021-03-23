@@ -41,14 +41,20 @@
 <script>
 
 import jscookie from 'js-cookie';
+import { mapState } from 'vuex';
 
 
 
 export default {
   data() {
     return {
-      lang: 'en',
+      lang: '',
     };
+  },
+  mounted() {
+    console.log('foot mounted');
+    const langkey = jscookie.get("langkey")||'en';
+    this.$data.lang =langkey ;
   },
   methods: {
     getSelectLang(val) {
@@ -58,6 +64,10 @@ export default {
       this.$i18n.locale = this.lang;
     }
   },
+  computed: {
+    
+  },
+
 };
 </script>
 

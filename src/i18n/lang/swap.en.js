@@ -12,29 +12,42 @@ export default {
         fromToken: "From",
         toToken: "To（estimated）",
         balance: "Balance",
-        swapBtn: "Swap",
+        swapBtn: "Swap Now",
         price: "Price",
         PriceImpact: "Price Impact",
         LiquidityProviderFee: "Liquidity Provider Fee",
         Minimumreceived: "Minimum Received",
-        LinkWallet: "Connect Wallet",
+        
         PriceImpactError: "The price fluctuates too much to trade",
         approve: "Approve",
-        ethgasfree: "ETH Gas Fee",
+        ethgasfree: "Fee",
         enterthequantity: "Please enter the quantity",
-        pleasechoose: "Select",
-        pleaseselectTP:'Please select a trading pair',
-        InjectLiquidity:'Inject liquidity',
+        
         actions: {
-          checkMetaMask: "Please check if MetaMask Wallet is installed",
-          Amountexceedsbalance: "The swap amount cannot be greater than balance",
-          choosedifferentassettransaction:
-            "Enter the amount and select different assets to swap",
-            notfindpair:'Find the transaction pair and report an error, or the transaction pair does not exist',
+          
+          Amountexceedsbalance: "The swap amount cannot be greater than balance,And greater than 0",
+          needNumber:"The value entered needs to be a number",
           Transactionfailure: "Transaction Failed",
-          approvesuccessful: "Authorization succeeded",
+          approvesuccessful: "Approve succeeded",
+          approvecancel:'Cancel approve',
           Transactionsent: "Transaction Sent",
           Successfultrade:'Transaction succeeded'
         },
+    },
+    swapConfirm:{
+      Confirm:'Confirm',
+      fromToken: "From",
+      toToken: "To（estimated）",
+      Asset:'Asset',
+      Destination:'Destination',
+      NetworkFee:'Network Fee',
+      Youwillreceive:'You will receive',
+      ConfirmBtn:'Confirm',
+      Transactioncancelled:'Transaction cancelled',
+      success:'success',
+      fail:'fail',
+      successCom:'Success',
+      failCom:'Fail',
+      txhavesend:'The transaction has been sent'
     }
 };

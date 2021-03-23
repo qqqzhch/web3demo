@@ -66,7 +66,7 @@
             >
             <div
               v-if="inputcurrency"
-              class="flex justify-between unit"
+              class="flex unit"
             >
               <img
                 width="32"
@@ -109,9 +109,9 @@
 
         <div class="To-wapper From-wrapper">
           <div class="title-content">
-            <span class="card-title">To</span>
+            <span class="card-title">{{ $t('swap.toToken') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Balance</span>
+              <span class="mr-2 text-secondary">{{ $t('swap.balance') }}</span>
               <span v-if="outputcurrency">{{ outBalance|format1e18Value }} {{ outputcurrency.symbol }}</span>
             </div>
           </div>
@@ -124,7 +124,7 @@
             >
             <div
               v-if="outputcurrency"
-              class="flex justify-between unit"
+              class="flex unit"
             >
               <img
                 width="32"
@@ -142,15 +142,15 @@
             v-if="needApprove==false"
             class="details-items"
           >
-            <p>Fee</p>
+            <p>{{ $t('swap.ethgasfree') }}</p>
             <span>{{ gasfee|formatBalanceNumber }} {{ chainTokenName }} ≈ $ {{ chainTokenPrice*gasfee |formatBalanceNumber }}</span>
           </div>
           <div class="details-items">
-            <p>Price Tolerance</p>
+            <p>{{ $t('swap.PriceImpact') }}</p>
             <span>{{ PriceImpact }}</span>
           </div>
           <div class="details-items">
-            <p>Min receive</p>
+            <p>{{ $t('swap.Minimumreceived') }}</p>
             <span v-if="outputcurrency">{{ Minimumreceived }} {{ outputcurrency.symbol }}</span>
           </div>
         </div>
@@ -163,24 +163,24 @@
           <Buttons
             v-if="PriceImpactGreater==true"
           >
-            The price fluctuates too much to trade
+            {{ $t('swap.PriceImpactError') }}
           </Buttons>
           <div v-else>
             <Buttons
               v-if="needApprove==false"
               @click.native="openconfirmtDialog"
             >
-              Swap Now
+              {{ $t('swap.swapBtn') }}
             </Buttons>
             <div v-else>
               <Buttons
                 class="smallbtn"
                 @click.native="makeApprove"
               >
-                Approve
+                {{ $t('swap.approve') }}
               </Buttons>
               <Buttons class="smallbtn disableBtn">
-                Swap Now
+                {{ $t('swap.swapBtn') }}
               </Buttons>
             </div>
           </div>
@@ -355,19 +355,22 @@ export default {
       try {
         const num = parseFloat(this.$data.inputAmount) ;
         if(isNaN(num)){
-          this.$data.inputnotice =  ' Input value needs to be a value ';
+          this.$data.inputnotice =  this.$t('swap.enterthequantity');
+          nowTrade = null ;
           return false;
         }
         const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, "ether")) ;
         if(inamount.isGreaterThan(this.inBalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnotice =  ' Input value must be less than balance and greater than 0';
+          this.$data.inputnotice =  this.$t('swap.actions.Amountexceedsbalance');
+          nowTrade = null ;
           return false;
 
         }
 
       } catch (error) {
         console.log(error);
-        this.$data.inputnotice =  ' The input value needs to be numeric ';
+        this.$data.inputnotice =  this.$t('swap.actions.needNumber');
+        nowTrade = null ;
       }
 
 
@@ -472,7 +475,7 @@ export default {
           //取消授权
           //需要提示
           this.$Notice.error({
-                    title: 'Authorization cancelled',
+                    title: this.$t('swap.actions.approvecancel'),
                 });
         }
 
@@ -480,7 +483,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: 'Program exception',
+                    title: this.$t('swap.actions.Transactionfailure'),
                     desc:error.message
                 });
 
@@ -707,9 +710,9 @@ export default {
           position: absolute;
           right: 16px;
           top: 30%;
-          width: 88px;
           line-height: 32px;
           p {
+            margin-left: 8px;
             font-size: 16px;
             font-family: Gilroy-Medium, Gilroy;
             font-weight: 500;

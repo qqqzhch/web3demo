@@ -30,6 +30,7 @@ Vue.locale = () => {};
 
 // 初始化语言key
 function initLangKey() {
+  console.log('initLangKey');
   let langkey = jscookie.get("langkey");
   // 如果未初始化，通过浏览器判断应该设置成啥语言
   if (!langkey) {

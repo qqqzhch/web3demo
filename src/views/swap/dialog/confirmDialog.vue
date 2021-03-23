@@ -16,7 +16,7 @@
             slot="header"
             class="title text-center"
           >
-            Confirm
+            {{ $t('swapConfirm.Confirm') }}
           </p>
 
           <div class="confrim-tLamb text-center">
@@ -26,7 +26,7 @@
           <div class="move-item flex justify-between items-center">
             <div class="from-item card-item">
               <p class="card-title text-center">
-                From
+                {{ $t('swapConfirm.fromToken') }}
               </p>
               <div class="main">
                 <img
@@ -50,7 +50,7 @@
 
             <div class="to-item card-item">
               <p class="card-title text-center">
-                To
+                {{ $t('swapConfirm.toToken') }}
               </p>
               <div class="main">
                 <img
@@ -76,7 +76,7 @@
             class="details-warpper"
           >
             <div class="details-items">
-              <p>Asset</p>
+              <p>{{ $t('swapConfirm.Asset') }}</p>
               <div class="details-items">
                 <img
                   width="16"
@@ -86,17 +86,17 @@
               </div>
             </div>
             <div class="details-items">
-              <p>Destination</p>
+              <p>{{ $t('swapConfirm.Destination') }}</p>
               <span>{{ `${this.ethAddress.slice(0,6)}...${this.ethAddress.slice(-6)}` }}</span>
             </div>
             <div class="details-items">
-              <p>Network Fee</p>
+              <p>{{ $t('swapConfirm.NetworkFee') }}</p>
               <span>{{ tradeData.gasfee |formatBalanceNumber }} {{ chainTokenName }} ≈ $ {{ chainTokenPrice * tradeData.gasfee | formatBalanceNumber }}</span>
             </div>
             <div class="details-items">
-              <p>You will receive</p>
+              <p>{{ $t('swapConfirm.Youwillreceive') }}</p>
               <div class="flex justify-between items-center">
-                <img src="../../../assets/img/ethlogo-32.png">
+                <img :src="getTokenImg(tradeData.outputcurrency.symbol)">
                 <span>{{ tradeData.coinBValue }} {{ tradeData.outputcurrency.symbol }}</span>
               </div>
             </div>
@@ -107,13 +107,13 @@
             v-if="btnloading"
             class="disableBtn"
           >
-            Confirm
+            {{ $t('swapConfirm.ConfirmBtn') }}
           </Buttons>
           <Buttons
             v-else
             @click.native="Sendtx"
           >
-            Confirm
+            {{ $t('swapConfirm.ConfirmBtn') }}
           </Buttons>
         </div>
       </div>
@@ -169,14 +169,14 @@ export default {
       //           });
       this.$refs.haveSendtx.open(tx.base);
       event.$emit('sendtx',[tx.response,{
-        okinfo:tx.base+" success",
-        failinfo:tx.base+' fail'
+        okinfo:tx.base+"  "+this.$t('swapConfirm.success'),
+        failinfo:tx.base+"  "+this.$t('swapConfirm.fail')
       }]);
       this.openConfirmDialog = false;
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: 'Transaction cancelled',
+                    title: this.$t('swapConfirm.Transactioncancelled'),
                 });
 
       }

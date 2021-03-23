@@ -20,22 +20,37 @@ export default {
         LinkWallet:'链接钱包',
         PriceImpactError:'价格波动太大，无法交易',
         approve:'授权',
-        ethgasfree:'以太坊交易手续费',
+        ethgasfree:'手续费',
         enterthequantity:'请输入数量',
-        pleasechoose:'请选择',
-        pleaseselectTP:'请选择交易对',
-        InjectLiquidity:'注入流动性',
+        
         actions:{
-            checkMetaMask:'请检查是否安装 MetaMask',
-            Amountexceedsbalance:'兑换的金额不能超过余额',
-            choosedifferentassettransaction:'输入金额，并选择不同的资产交易',
-            notfindpair:'查找交易对报错，或交易对不存在',
+            
+            Amountexceedsbalance:'兑换的金额不能超过余额,且大于0',
+            needNumber:"输入的值需要是数字",
+            
             Transactionfailure:'交易失败',
             approvesuccessful:'授权成功',
+            approvecancel:'取消授权',
             Transactionsent:'交易已发送',
             Successfultrade:'交易成功'
 
         },
 
-    }
+    },
+    swapConfirm:{
+        Confirm:'确认',
+        fromToken:'兑换资产',
+        toToken:'兑换为',
+        Asset:'资产',
+        Destination:'目标',
+        NetworkFee:'手续费',
+        Youwillreceive:'你将获得',
+        ConfirmBtn:'确定',
+        Transactioncancelled:'交易已经取消',
+        success:'成功',
+        fail:'失败',
+        successCom:'成功',
+        failCom:'失败',
+        txhavesend:'交易已发送'
+      }
 };
