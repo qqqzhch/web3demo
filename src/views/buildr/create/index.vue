@@ -121,7 +121,9 @@
           </button>
         </div>
         <div v-if="btnloading">
-          <Loading />
+          <button class="btn">
+            Loading...
+          </button>
         </div>
       </div>
     </div>

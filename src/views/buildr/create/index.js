@@ -47,7 +47,7 @@ export default {
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.pledgeNumber).gt(this.currencyNumber) || BigNumber(this.pledgeNumber).isLessThan(0)) {
+      if(BigNumber(this.pledgeNumber).isLessThan(0)) {
         return 'Input value must be less than balance and greater than 0';
       } else if (isNaN(this.pledgeNumber)) {
         return 'Input value needs to be a value';
