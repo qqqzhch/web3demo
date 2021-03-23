@@ -284,6 +284,10 @@ export default {
       .menu-wrapper {
         margin-left: 80px;
         .menu-item {
+          display: inline-block;
+          text-align: center;
+          width: 88px;
+          height: 28px;
           margin-right: 56px;
           font-size: 16px;
           font-weight: 500;
