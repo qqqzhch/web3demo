@@ -37,7 +37,7 @@ export default {
     },
     async checkApprove() {
       const { chainID, library, account } = this.getParmas({});
-      const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account, true);
+      const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
 
       if(isHaveAllowance) {
         this.loadData();
