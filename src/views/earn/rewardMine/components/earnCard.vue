@@ -15,7 +15,7 @@
         </div>
 
         <div class="apy">
-          <h4>APY</h4>
+          <h4>{{ $t('earn.card.apy') }}</h4>
           <p class="percent">
             {{ item.data && item.data.rewardRate | formatReward(365,scashPrice,item.data && item.data.totalSupply) }}%
           </p>
@@ -23,26 +23,26 @@
 
         <div class="balance">
           <div class="balance-item">
-            <span class="title">Total Staked</span>
+            <span class="title">{{ $t('earn.card.totalStaked') }}</span>
             <span class="value">{{ (item.data && item.data.totalSupply) || 0 }}</span>
           </div>
           <div class="balance-item">
-            <span class="title">Total Value of Pool</span>
+            <span class="title">{{ $t('earn.card.totalPool') }}</span>
             <span v-if="item.kind === 'multi'" class="value">{{ item.poolValue || '--' }}</span>
             <span v-if="item.kind === 'single'" class="value">{{ item.data && item.data.totalSupply * earnPrice | formatNormalValue }}</span>
           </div>
           <div class="balance-item">
-            <span class="title">Output</span>
+            <span class="title">{{ $t('earn.card.output') }}</span>
             <span class="value">--</span>
           </div>
         </div>
 
         <div class="btn-item">
           <button v-if="ethAddress" class="stakeBtn" @click="openStake(item)">
-            Stake
+            {{ $t('earn.card.stake') }}
           </button>
           <Buttons v-else width="100px" height="30px" class="disableBtn">
-            Stake
+            {{ $t('earn.card.stake') }}
           </Buttons>
         </div>
       </div>

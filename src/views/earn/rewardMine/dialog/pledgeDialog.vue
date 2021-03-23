@@ -3,13 +3,13 @@
     <Modal v-model="openPledgeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div v-if="isShowPledge" class="pledge-content">
         <p class="title text-center">
-          Stake {{ data.name }}
+          {{ $t('earn.card.stake') }} {{ data.name }}
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
-            <span class="card-title">Amount</span>
+            <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">{{ data.name }} Balance</span>
+              <span class="mr-2 text-secondary">{{ data.name }} {{ $t('earn.dialog.stakeDialog.balance') }}</span>
               <span>{{ data.data && data.data.LPTokenbalance }}</span>
             </div>
           </div>
@@ -34,25 +34,25 @@
               75%
             </div>
             <div @click="percentage(1)">
-              MAX
+              {{ $t('earn.dialog.stakeDialog.max') }}
             </div>
           </div>
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>Total staked LP of pool</span>
+            <span>{{ $t('earn.dialog.stakeDialog.totalStakePool') }}</span>
             <p>{{ data.data && data.data.totalSupply }} {{ data.name }}</p>
           </div>
           <div class="price-item">
-            <span>Yield</span>
+            <span>{{ $t('earn.dialog.stakeDialog.yield') }}</span>
             <p>{{ data.data && data.data.rewardRate | formatRate }}</p>
           </div>
           <div class="price-item">
-            <span>You will stake</span>
+            <span>{{ $t('earn.dialog.stakeDialog.willStake') }}</span>
             <p>{{ pledgeAmount || 0 }} {{ data.name }}</p>
           </div>
           <div class="price-item">
-            <span>share of pool</span>
+            <span>{{ $t('earn.dialog.stakeDialog.sharePool') }}</span>
             <p>
               <span class="sharePool">{{ increaseRate }}</span>
               to {{ totalRate }}
@@ -63,21 +63,21 @@
         <div class="btn-warpper">
           <template v-if="needApprove">
             <Buttons v-if="approveLoading" class="dialogBtn">
-              loading...
+              {{ $t('earn.dialog.loading') }}
             </Buttons>
             <Buttons v-else class="dialogBtn" @click.native="approveTx">
-              Approve
+              {{ $t('earn.dialog.stakeDialog.approve') }}
             </Buttons>
           </template>
 
           <template v-if="!needApprove">
             <Buttons @click.native="showConfirnDialog">
-              Next
+              {{ $t('earn.dialog.stakeDialog.next') }}
             </Buttons>
           </template>
 
           <p class="buy" @click="toExchange">
-            Buy scUSD
+            {{ $t('earn.dialog.stakeDialog.buy') }}
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@
             <img src="../../../../assets/img/arrow-left.svg" alt="arrow-left">
           </div>
           <p class="title text-center">
-            Confirm
+            {{ $t('earn.dialog.stakeDialog.confirm') }}
           </p>
           <div class="confirm-content">
             <div class="images-warpper items-center">
@@ -97,11 +97,11 @@
             </div>
             <h2>{{ pledgeAmount }}</h2>
             <p>{{ data.name }}</p>
-            <span>will be staked to mine</span>
+            <span>{{ $t('earn.dialog.stakeDialog.willMine') }}</span>
           </div>
           <div class="price-warpper">
             <div>
-              <span>Asset</span>
+              <span>{{ $t('earn.dialog.stakeDialog.asset') }}</span>
               <div>
                 <div class="images-warpper">
                   <img src="../../../../assets/img/comp.svg" width="14" alt="comp">
@@ -111,7 +111,7 @@
               </div>
             </div>
             <div>
-              <span>share of pool</span>
+              <span>{{ $t('earn.dialog.stakeDialog.sharePool') }}</span>
               <p>{{ increaseRate }}</p>
             </div>
             <!-- <div>
@@ -121,11 +121,11 @@
           </div>
 
           <Buttons v-if="sendLoading === false" @click.native="confirmSendTx">
-            Confirm
+            {{ $t('earn.dialog.stakeDialog.confirm') }}
           </Buttons>
 
           <Buttons v-else>
-            loading...
+            {{ $t('earn.dialog.loading') }}
           </Buttons>
         </div>
       </div>

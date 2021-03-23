@@ -38,36 +38,33 @@
   </footer>
 </template>
 
+
 <script>
-
 import jscookie from 'js-cookie';
-import { mapState } from 'vuex';
-
-
-
 export default {
   data() {
     return {
-      lang: '',
+      lang: null,
     };
   },
-  mounted() {
-    console.log('foot mounted');
-    const langkey = jscookie.get("langkey")||'en';
-    this.$data.lang =langkey ;
-  },
   methods: {
-    getSelectLang(val) {
-      console.log(val);
-      // val === 'zh' ? (this.lang = 'en') : (this.lang = 'zh');
-      jscookie.set('langkey', this.lang, { expires: 180 });
+    // 获取语言key
+    getKey() {
+      const key = jscookie.get('langkey');
+      key === 'zh' ? (this.lang = 'zh') : (this.lang = 'en');
       this.$i18n.locale = this.lang;
-    }
-  },
-  computed: {
-    
-  },
+    },
 
+    // 改变语言
+    getSelectLang(val) {
+      this.lang = val;
+      this.$i18n.locale = this.lang;
+      jscookie.set('langkey', this.lang, { expires: 180 });
+    },
+  },
+  mounted() {
+    this.getKey();
+  },
 };
 </script>
 
@@ -97,7 +94,7 @@ export default {
     }
   }
 }
-.lang-wrapper{
+.lang-wrapper {
   margin-left: 48px;
 }
 </style>

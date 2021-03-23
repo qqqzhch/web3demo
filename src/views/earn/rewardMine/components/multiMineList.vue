@@ -1,10 +1,10 @@
 <template>
   <div class="multiMine-wrapper mt-6">
     <h2 class="title">
-      Liquidity Pool
+      {{ $t('earn.multi.t1') }}
     </h2>
     <p class="subTitle">
-      Input liquidity, get LP Token and stake it to earn pool rewards.
+      {{ $t('earn.multi.t2') }}
     </p>
     <card :data="data" @openStake="openStake" />
     <pledgeDialog ref="pledge" />

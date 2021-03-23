@@ -1,10 +1,10 @@
 <template>
   <div class="singleMine-wrapper">
     <h2 class="title">
-      Designated Pool
+      {{ $t('earn.single.t1') }}
     </h2>
     <p class="subTitle">
-      Designated mining, users can enjoy lower risk mining with a super high yield.
+      {{ $t('earn.single.t2') }}
     </p>
     <card :data="data" @openStake="openStake" />
     <pledgeDialog ref="pledge" />

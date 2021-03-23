@@ -100,7 +100,7 @@ export default {
           amountToApprove,
           this.tokenObj.dataAddress
         );
-        console.log(this.needApprove);
+        // console.log(this.needApprove);
       } catch (error) {
         console.log(error);
       }
@@ -180,7 +180,7 @@ export default {
         });
         const name = this.data && this.data.name;
         this.$Notice.success({
-          title: '发送交易成功',
+          title: this.$t('notice.n33'),
         });
         event.$emit('sendtx', [
           result,

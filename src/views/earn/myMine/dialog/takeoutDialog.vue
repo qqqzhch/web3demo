@@ -3,13 +3,13 @@
     <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
       <div class="remove-content">
         <p class="title text-center">
-          Unstake {{ coinName }}
+          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
-            <span class="card-title">Amount</span>
+            <span class="card-title">{{ $t('commom.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Staked {{ coinName }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.staked') }} {{ coinName }}</span>
               <span>{{ stakeVal }}</span>
             </div>
           </div>
@@ -19,17 +19,17 @@
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>Unstake scUSD/USDT LP</span>
+            <span>{{ $t('myPage.dialog.unstake.unstake') }} scUSD/USDT LP</span>
             <p>{{ stakeVal }} {{ coinName }}</p>
           </div>
         </div>
 
         <div class="btn-warpper">
           <Buttons v-if="!takeLoading" @click.native="sendTakeout">
-            Confirm
+            {{ $t('commom.confirm') }}
           </Buttons>
           <Buttons v-else>
-            loading...
+            {{ $t('commom.loading') }}...
           </Buttons>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default {
       if (this.stakeVal <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
-          desc: '输入的值必须大于0',
+          desc: this.$t('notice.n31'),
         });
         return false;
       }
@@ -83,7 +83,7 @@ export default {
         const result = await stakingRewardsContract.exit({ gasLimit: esGas });
 
         this.$Notice.success({
-          title: '发送交易成功',
+          title: this.$t('notice.n33'),
         });
 
         event.$emit('sendtx', [
@@ -96,7 +96,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: '发送交易失败',
+          title: this.$t('notice.n32'),
         });
       } finally {
         this.openRemoveDialog = false;

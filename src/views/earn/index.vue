@@ -25,20 +25,6 @@ export default {
   data() {
     return {
       name: 'rewardMine',
-      menuList: [
-        {
-          id: 'rewardMine',
-          name: 'Earn',
-        },
-        {
-          id: 'myMine',
-          name: 'My Page',
-        },
-        {
-          id: 'earn-history',
-          name: 'History',
-        },
-      ],
     };
   },
   methods: {
@@ -61,6 +47,25 @@ export default {
           this.$router.push(`/earn`);
           break;
       }
+    },
+  },
+  computed: {
+    menuList() {
+      const list = [
+        {
+          id: 'rewardMine',
+          name: this.$t('tabMenu.earn'),
+        },
+        {
+          id: 'myMine',
+          name: this.$t('tabMenu.myPage'),
+        },
+        {
+          id: 'earn-history',
+          name: this.$t('tabMenu.history'),
+        },
+      ];
+      return list;
     },
   },
   mounted() {

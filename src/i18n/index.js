@@ -9,6 +9,10 @@ import jscookie from "js-cookie";
 import swapzh from "./lang/swap.zh.js";
 import swapen from "./lang/swap.en.js";
 
+
+import earnEN from './lang/earn.en.js';
+import earnZH from './lang/earn.zh.js';
+
 Vue.use(VueI18n);
 const langList = ["en", "zh"];
 
@@ -17,10 +21,8 @@ const initKey = initLangKey();
 const i18n = new VueI18n({
   locale: initKey,
   messages: {
-
-    en: Object.assign({}, iviewen,en,swapen),
-    zh: Object.assign({}, iviewzh,cn,swapzh),
-
+    en: Object.assign({}, iviewen,en,swapen,earnEN),
+    zh: Object.assign({}, iviewzh,cn,swapzh,earnZH),
   },
 });
 

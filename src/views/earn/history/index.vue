@@ -2,7 +2,7 @@
   <div class="content-wapper">
     <div class="earn-wapper">
       <p class="earn-title">
-        History
+        {{ $t('history.history') }}
       </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
@@ -44,10 +44,10 @@
             <template slot="Status" slot-scope="{ row }">
               <div class="Status">
                 <p v-if="row.tx_status === 1" class="status success">
-                  Success
+                  {{ $t('history.success') }}
                 </p>
                 <p v-else class="fail">
-                  Fail
+                  {{ $t('history.fail') }}
                 </p>
               </div>
             </template>
@@ -140,22 +140,22 @@ export default {
     getHistory() {
       const columns = [
         {
-          title: 'Pool',
+          title: this.$t('history.table.pool'),
           slot: 'Pool',
           minWidth: 200,
         },
         {
-          title: 'Action',
+          title: this.$t('history.table.action'),
           slot: 'Action',
           minWidth: 100,
         },
         {
-          title: 'Amount',
+          title: this.$t('history.table.amount'),
           slot: 'Amount',
           minWidth: 120,
         },
         {
-          title: 'Status',
+          title: this.$t('history.table.status'),
           slot: 'Status',
           minWidth: 100,
         },

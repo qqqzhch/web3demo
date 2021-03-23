@@ -3,13 +3,13 @@
     <Modal v-model="openClaimDialog" class-name="claim-modal" :footer-hide="true" :closable="true">
       <div class="claim-content">
         <p class="title text-center">
-          Claim
+          {{ $t('myPage.claim') }}
         </p>
         <div class="claim-wrapper">
           <div class="title-content">
-            <span class="card-title">Amount</span>
+            <span class="card-title">{{ $t('commom.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Unclaimed {{ coinName }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }} {{ coinName }}</span>
               <span>{{ claimAmount }} {{ rewardToken }}</span>
             </div>
           </div>
@@ -19,25 +19,25 @@
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>You will receive</span>
+            <span>{{ $t('commom.willRecieive') }}</span>
             <p>{{ claimAmount }} {{ rewardToken }}</p>
           </div>
           <div class="price-item">
-            <span>Price</span>
+            <span>{{ $t('myPage.dialog.claim.price') }}</span>
             <p>1 {{ rewardToken }} = {{ scashPrice }} scUSD</p>
           </div>
           <div class="price-item">
-            <span>Fee</span>
+            <span>{{ $t('myPage.dialog.claim.fee') }}</span>
             <p>${{ fee }}</p>
           </div>
         </div>
 
         <div class="btn-warpper">
           <Buttons v-if="!extractLoading" @click.native="sendExtract">
-            Confirm
+            {{ $t('commom.confirm') }}
           </Buttons>
           <Buttons v-else>
-            loading...
+            {{ $t('commom.loading') }}...
           </Buttons>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default {
       if (this.claimAmount <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
-          desc: '输入的值必须大于0',
+          desc: this.$t('notice.n31'),
         });
         return false;
       }
@@ -111,7 +111,7 @@ export default {
         const result = await stakingRewardsContract.getReward({ gasLimit: esGas });
 
         this.$Notice.success({
-          title: '发送交易成功',
+          title: this.$t('notice.n33'),
         });
 
         event.$emit('sendtx', [

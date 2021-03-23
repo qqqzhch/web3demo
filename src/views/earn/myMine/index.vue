@@ -1,7 +1,7 @@
 <template>
   <div class="myPage-wrapper">
     <h2 claas="pageTitle">
-      My Page
+      {{ $t('myPage.table.title') }}
     </h2>
     <div v-if="showLoading">
       <loading />
@@ -14,7 +14,7 @@
 
         <template slot="apy" slot-scope="{ row }">
           <span class="text-success">
-            {{ row.data && row.data.rewardRate | formatReward(365,scashPrice,row.data&&row.data.totalSupply) }}%
+            {{ row.data && row.data.rewardRate | formatReward(365, scashPrice, row.data && row.data.totalSupply) }}%
           </span>
         </template>
         <template slot="stake" slot-scope="{ row }">
@@ -27,10 +27,11 @@
         <template slot="operation" slot-scope="{ row }">
           <div class="btn-wrapper flex justify-start items-center">
             <button class="table-btn claim" @click="openClaim(row)">
-              Claim
+              {{ $t('myPage.table.claim') }}
             </button>
             <button class="table-btn stake" @click="openUnstake(row)">
-              Unstake <span v-if="row.kind === 'multi'" class="ml-1">LP</span>
+              {{ $t('myPage.table.unstake') }}
+              <span v-if="row.kind === 'multi'" class="ml-1">LP</span>
             </button>
           </div>
         </template>
@@ -52,29 +53,6 @@ export default {
   mixins: [scash],
   data() {
     return {
-      columns: [
-        {
-          title: 'Pool',
-          slot: 'pool',
-        },
-        {
-          title: 'APY',
-          slot: 'apy',
-        },
-        {
-          title: 'Staked',
-          slot: 'stake',
-        },
-        {
-          title: 'Unclaimed',
-          slot: 'earned',
-        },
-        {
-          title: 'Function',
-          slot: 'operation',
-          minWidth: 140,
-        },
-      ],
       data: [],
       showLoading: false,
     };
@@ -108,6 +86,32 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
+    columns() {
+        const columns = [
+        {
+          title: this.$t('myPage.table.pool'),
+          slot: 'pool',
+        },
+        {
+          title: this.$t('myPage.table.apy'),
+          slot: 'apy',
+        },
+        {
+          title: this.$t('myPage.table.stake'),
+          slot: 'stake',
+        },
+        {
+          title: this.$t('myPage.table.unclaim'),
+          slot: 'earned',
+        },
+        {
+          title: this.$t('myPage.table.function'),
+          slot: 'operation',
+          minWidth: 140,
+        },
+      ];
+      return columns;
+    }
   },
   watch: {
     isReady(value) {
