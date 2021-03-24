@@ -5,8 +5,8 @@
       <p>
         Earn a transaction fee by providing liquidity to trade pairs, and can be claimed by removing liquidity.
       </p>
-      <div class="buttonWarpper flex items-center">
-        <div class="button-item marginRight">
+      <div class="buttonWarpper flex justify-between items-center">
+        <div class="button-item">
           <div class="border-image">
             <p @click="tobuilder">
               SuperCash Builder
@@ -252,9 +252,6 @@ export default {
             }
           }
         }
-      }
-      .marginRight{
-        margin-right: 32px;
       }
     }
   }

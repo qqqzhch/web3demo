@@ -46,7 +46,7 @@ export default {
   width: 100%;
   .main-wrapper {
     margin-top: 112px;
-    margin-bottom: 124px;
+    margin-bottom: 60px;
     min-height: calc(100vh - 208px);
   }
 }
