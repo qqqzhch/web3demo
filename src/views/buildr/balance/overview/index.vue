@@ -1,8 +1,5 @@
 <template>
   <div class="overview-warp">
-    <div class="title">
-      Overview
-    </div>
     <div class="content-warpper flex items-center">
       <div class="content">
         <div class="total-warpper">
@@ -15,7 +12,7 @@
             <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
-            <h2>Avail to generate</h2>
+            <h2>scUSD Credit Line</h2>
             <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
