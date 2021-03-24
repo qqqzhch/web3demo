@@ -132,7 +132,7 @@
 }
 
 .balance {
-  margin: 24px 0 0 100px;
+  margin-top: 24px;
   .title2 {
     height: 24px;
     font-size: 20px;

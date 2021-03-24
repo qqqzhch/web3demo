@@ -59,7 +59,7 @@
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  margin: 20px 0 100px 100px;
+  margin: 20px 0 100px 0px;
   padding: 44px;
   .earn-wapper {
     .earn-title {

@@ -79,7 +79,7 @@
     }
     .tab {
       position: relative;
-      margin: 24px 0px 24px 100px;
+      margin: 24px 0px 24px 0px;
       .tab-item {
         position: relative;
         display: inline-block;
