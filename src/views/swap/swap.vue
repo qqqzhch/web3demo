@@ -149,7 +149,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import { ChainId, Token, TokenAmount, Fetcher, Route, Percent, Router, TradeType } from '@webfans/uniswapsdk';
+import { ChainId, TokenAmount } from '@webfans/uniswapsdk';
 
 import {
   INITIAL_ALLOWED_SLIPPAGE,
@@ -220,7 +220,7 @@ export default {
 
       console.log({ data });
       this.$data.pairlist = data;
-      if (data && data[0] && this.selectPairOBJ == null) {
+      if (data && data[0] && this.selectPairOBJ === null) {
         setTimeout(() => {
           this.selectPair(data[0]);
         }, 1000);
@@ -228,10 +228,6 @@ export default {
     },
     async selectPair(pair) {
       console.log(pair);
-      const chainID = this.ethChainID;
-      // const chainID = this.ethChainID ;
-      const library = this.ethersprovider;
-      const account = this.ethAddress;
 
       this.$data.selectPairOBJ = pair;
 
@@ -256,7 +252,7 @@ export default {
       const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
-      if (account == '') {
+      if (account === '') {
         return;
       }
       this.clearData();
@@ -314,9 +310,6 @@ export default {
     },
     async calculationOutPut(num) {
       const chainID = this.ethChainID;
-      const library = this.ethersprovider;
-      const account = this.ethAddress;
-
       const TokenA = getToken(this.$data.inputcurrency.symbol, chainID);
       const TokenB = getToken(this.$data.outputcurrency.symbol, chainID);
 
@@ -341,7 +334,6 @@ export default {
       }, 100);
     },
     async getGasFee(trade) {
-      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
 
@@ -350,7 +342,7 @@ export default {
       this.$data.needApprove = needApprove;
 
       console.log(needApprove);
-      if (needApprove == false) {
+      if (needApprove === false) {
         const gasfee = await SwapGas(library, account, ChainId, trade);
         console.log('gasfee', gasfee);
         this.$data.gasfee = gasfee;

@@ -92,9 +92,6 @@ export default {
       loading: false
     };
   },
-  components: {
-    loading: () => import("@/components/basic/loading.vue"),
-  },
   methods: {
     getTokenImg(tokensymbol) {
       const chainID = this.ethChainID;
@@ -102,7 +99,6 @@ export default {
     },
     async getreadSwapHistory() {
       this.loading = true;
-      const library = this.ethersprovider;
       const account = this.ethAddress;
       const chainID = this.ethChainID;
 
@@ -115,7 +111,7 @@ export default {
 
       this.$data.list = this.$data.list.concat(data.data);
 
-      if (data.count % 10 == 0) {
+      if (data.count % 10 === 0) {
         this.$data.pageNum = data.count / 10;
       } else {
         this.$data.pageNum = (data.count - (data.count % 10)) / 10 + 1;
