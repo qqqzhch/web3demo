@@ -21,27 +21,38 @@
             </div>
             <div class="text-right">
               <span>Liquidation Price: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
-              <span>Liquidation Ratio: <span class="f-warning">{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
+              <span>Liquidation Ratio: <span
+                class="f-warning"
+              >{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
               <span>Stability Fee: <span class="f-warning">{{ BigNumber(poolItem.feeRate).times(100) }}%</span></span>
             </div>
           </div>
           <div class="CDP-item">
-            <div class="small-item flex flex-col items-center">
+            <div class="small-item pool-wapper flex flex-col items-center">
               <img :src="getTokenImg(poolItem.tokenName)" :alt="poolItem.tokenName">
               <div>{{ poolItem.tokenTitle }}</div>
             </div>
-            <div class="small-item">
+            <div class="small-item line">
               <div>
                 <span>Current Coll. Ratio</span>
-                <p
-                  :class="{
-                    'f-green': poolItem.currentCollRX >= 5,
-                    'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
-                    'f-danger': poolItem.currentCollRX <= 2
-                  }"
-                >
-                  {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
-                </p>
+                <div class="circle-wapper">
+                  <span
+                    :class="{
+                      'bg-green': poolItem.currentCollRX >= 5,
+                      'bg-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
+                      'bg-danger': poolItem.currentCollRX <= 2
+                    }"
+                  />
+                  <p
+                    :class="{
+                      'f-green': poolItem.currentCollRX >= 5,
+                      'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
+                      'f-danger': poolItem.currentCollRX <= 2
+                    }"
+                  >
+                    {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
+                  </p>
+                </div>
               </div>
               <div class="mrg-tb-20">
                 <span>Current Price</span>
@@ -63,7 +74,8 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openExitDialog(poolItem)">Avail to Withdraw {{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</a>
+                <a href="javascript:;" @click="openExitDialog(poolItem)">Avail to Withdraw
+                  {{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</a>
               </div>
             </div>
             <div class="small-item text-center">
@@ -79,7 +91,8 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openBurnDialog(poolItem)">Current Debt {{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</a>
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">Current Debt
+                  {{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</a>
               </div>
             </div>
             <div class="btn-warpper" />
@@ -99,15 +112,24 @@
 
 <script src="./index.js" ></script>
 <style lang="less">
-  .f-green {
-    color: #00D075 !important;
-  }
-  .f-warning {
-    color: rgba(255, 181, 0, 1) !important;
-  }
-  .f-danger {
-    color: #FF3C00 !important;
-  }
+.f-green {
+  color: #00d075 !important;
+}
+.f-warning {
+  color: rgba(255, 181, 0, 1) !important;
+}
+.f-danger {
+  color: #ff3c00 !important;
+}
+.bg-green {
+  background-color: #00d075 !important;
+}
+.bg-warning {
+  background-color: rgba(255, 181, 0, 1) !important;
+}
+.bg-danger {
+  background-color: #ff3c00 !important;
+}
 
 .balance {
   margin: 24px 0 0 100px;
@@ -119,16 +141,16 @@
     color: #14171c;
     line-height: 24px;
   }
-  .CDP-content{
+  .CDP-content {
     margin: 24px 0px 50px 0px;
     padding: 32px 44px;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
-    .pool-item-warp{
+    .pool-item-warp {
       margin-top: 24px;
       padding: 24px;
       box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     }
-    .item-top{
+    .item-top {
       display: grid;
       grid-template-columns: 30% 70%;
       justify-content: space-between;
@@ -137,7 +159,7 @@
       span {
         color: #828489;
       }
-      .text-right{
+      .text-right {
         text-align: right;
         > span {
           margin-left: 20px;
@@ -147,34 +169,61 @@
     .CDP-item {
       display: flex;
       align-items: center;
-      justify-content: center;
       cursor: pointer;
       margin-top: 24px;
       .small-item {
-      width: 33%;
-      div {
-        span {
-          height: 16px;
-          font-size: 14px;
-          font-family: Gilroy-Medium, Gilroy;
-          font-weight: 500;
-          color: #828489;
-          line-height: 16px;
+        width: 25%;
+        .circle-wapper {
+          display: flex;
+          align-items: center;
+          span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+          }
         }
-        p {
-          height: 19px;
-          font-size: 20px;
-          font-family: Gilroy-Medium, Gilroy;
-          font-weight: 500;
-          color: #14171c;
-          line-height: 19px;
-          margin-top: 5px;
-        }
-        a {
-          text-decoration: underline;
+        div {
+          span {
+            height: 16px;
+            font-size: 14px;
+            font-family: Gilroy-Medium, Gilroy;
+            font-weight: 500;
+            color: #828489;
+            line-height: 16px;
+          }
+          p {
+            height: 19px;
+            font-size: 20px;
+            font-family: Gilroy-Medium, Gilroy;
+            font-weight: 500;
+            color: #14171c;
+            line-height: 19px;
+            margin-top: 5px;
+          }
+          a {
+            text-decoration: underline;
+          }
         }
       }
-    }
+      .line {
+        width: 30%;
+        position: relative;
+      }
+      .line::after {
+        content: "";
+        width: 2px;
+        height: 90px;
+        background: rgba(0, 0, 0, 0.06);
+        position: absolute;
+        right: 90px;
+        top: 23px;
+      }
+      .pool-wapper{
+        width: 18%;
+      }
+
       .btn {
         margin-left: 25%;
         width: 160px;
@@ -187,8 +236,7 @@
           background-color: #0025ff;
         }
       }
+    }
   }
-  }
-
 }
 </style>
