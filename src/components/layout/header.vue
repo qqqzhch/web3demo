@@ -5,15 +5,15 @@
         <img src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
           <router-link class="menu-item" to="/buildr" active-class="active">
-            Buildr
+            {{ $t('header.nav.Buildr') }}
           </router-link>
           <router-link class="menu-item" to="/exchange" active-class="active">
-            Exchange
+            {{ $t('header.nav.Exchange') }}
           </router-link>
           <router-link class="menu-item" to="/earn" active-class="active">
-            Earn
+            {{ $t('header.nav.Earn') }}
           </router-link>
-          <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">Bridge</a>
+          <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">{{ $t('header.nav.Bridge') }}</a>
         </div>
       </div>
 
@@ -35,7 +35,7 @@
         </Dropdown>
 
         <buttons v-if="!ethAddress" width="140px" height="40px" @click.native="openWalletDialog">
-          Connect Wallet
+          {{ $t('header.connectWallet') }}
         </buttons>
 
         <template v-else>
@@ -48,15 +48,15 @@
             <DropdownMenu slot="list" class="func-list-wrapper">
               <DropdownItem class="list-item" name="copy">
                 <img src="../../assets/img/copy16.svg" alt="copy">
-                <span>Copy Address</span>
+                <span>{{ $t('header.copyAddress') }}</span>
               </DropdownItem>
               <DropdownItem class="list-item" name="change">
                 <img src="../../assets/img/changeWallet.svg" alt="change">
-                <span>Change Wallet</span>
+                <span>{{ $t('header.changeWallet') }}</span>
               </DropdownItem>
               <DropdownItem class="list-item" name="disconnect">
                 <img src="../../assets/img/disconnect16.svg" alt="disconnect">
-                <span>Disconnect</span>
+                <span>{{ $t('header.Disconnect') }}</span>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -93,7 +93,7 @@ export default {
     copyAddress() {
       this.$copyText(this.ethAddress).then(() => {
         this.$Notice.success({
-          title: 'Address Copied!',
+          title: this.$t('notice.n36'),
         });
       });
     },
@@ -126,31 +126,31 @@ export default {
 
       switch (val) {
         case '1':
-          this.network = 'Ethereum';
+          this.network = this.$t('header.network.Ethereum');
           break;
 
         case '3':
-          this.network = 'Ropsten';
+          this.network = this.$t('header.network.Ropsten');
           break;
 
         case '256':
-          this.network = 'Heco Test';
+          this.network = this.$t('header.network.HecoTest');
           break;
 
         case '128':
-          this.network = 'Heco Main';
+          this.network = this.$t('header.network.HecoMain');
           break;
 
         case '56':
-          this.network = 'BSC Main';
+          this.network =  this.$t('header.network.BSCMain');
           break;
 
         case '97':
-          this.network = 'BSC Test';
+          this.network = this.$t('header.network.BSCTest');
           break;
 
         default:
-          this.network = 'Ethereum';
+          this.network = this.$t('header.network.Ethereum');
           break;
       }
       jscookie.set('net', this.network, { expires: 180 });
@@ -181,15 +181,15 @@ export default {
       if (!this.ethAddress) {
         this.statusVal = 'notConnect';
         this.$Notice.warning({
-          title: 'Wallet not connected',
-          desc: 'Please connect to your wallet',
+          title: this.$t('notice.n37'),
+          desc: this.$t('notice.n38'),
         });
       }
       if (this.ethAddress && targetID !== this.ethChainID) {
         this.statusVal = 'wrongConnect';
         this.$Notice.error({
-          title: 'Network not matched',
-          desc: 'Please switch to Ethereum Network in Metamask.',
+          title: this.$t('notice.n39'),
+          desc: this.$t('notice.n40'),
         });
       }
 
@@ -259,8 +259,8 @@ export default {
         this.statusVal = 'notConnect';
         this.network = 'Ethereum';
         this.$Notice.warning({
-          title: 'Wallet not connected',
-          desc: 'Please connect to your wallet',
+          title: this.$t('notice.n37'),
+          desc: this.$t('notice.n38'),
         });
       }
     }, 1000);

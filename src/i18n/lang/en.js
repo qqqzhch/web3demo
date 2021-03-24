@@ -38,5 +38,30 @@ export default {
     n33:"Successfully sent transaction",
     n34:"Please switch network to Heco Test Network",
     n35: "Please fill in correct amount",
+    n36:'Address Copied!',
+    n37:'Wallet not connected',
+    n38:'Please connect to your wallet',
+    n39:'Network not matched',
+    n40:'Please switch to Ethereum Network in Metamask.'
   },
+  header:{
+    nav:{
+      Buildr:'Buildr',
+      Exchange:'Exchange',
+      Earn:'Earn',
+      Bridge:'Bridge',
+    },
+    connectWallet:'Connect Wallet',
+    copyAddress:'Copy Address',
+    changeWallet:'Change Wallet',
+    Disconnect:'Disconnect',
+    network:{
+      Ethereum:'Ethereum',
+      Ropsten:'Ropsten',
+      HecoTest:'Heco Test',
+      HecoMain:'Heco Main',
+      BSCMain:'BSC Main',
+      BSCTest:'BSC Test',
+    }
+  }
 };
