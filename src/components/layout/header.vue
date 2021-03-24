@@ -260,17 +260,15 @@ export default {
         .menu-item {
           display: inline-block;
           text-align: center;
-          width: 88px;
+          padding: 0px 16px;
           height: 28px;
-          margin-right: 56px;
+          margin-right: 24px;
           font-size: 16px;
           font-weight: 500;
           color: #14171c;
-          // line-height: 19px;
         }
         .active {
           display: inline-block;
-          width: 88px;
           height: 28px;
           text-align: center;
           background: #0058ff;

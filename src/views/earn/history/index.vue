@@ -6,7 +6,7 @@
       </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
-          <Table :show-loading="showLoading" :columns="getHistory" :data="list">
+          <Table :loading="showLoading" :columns="getHistory" :data="list">
             <template slot="Pool" slot-scope="{ row }">
               <div class="Pool">
                 <p>
