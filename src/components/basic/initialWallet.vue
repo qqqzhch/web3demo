@@ -13,7 +13,7 @@ export default {
   },
   mounted() {
     this.initEth();
-    
+
   },
   methods: {
    async coinPrice(){
@@ -21,9 +21,9 @@ export default {
       const coinInfo = getChainCoinInfo(ChainID);
 
       const data = await getPrice(coinInfo.tokenID);
-      
+
       this.$store.commit('changechainTokenName', coinInfo.coinName);
-      
+
       this.$store.commit('chainTokenPrice', data);
     //  console.log('ht 价格',data);
 
@@ -54,10 +54,10 @@ export default {
         this.$store.commit('changeEthChainID', res);
       } catch (error) {
         console.log(error);
-        // this.$Notice.warning({
-        //   title: this.$t('notice.n'),
-        //   desc: this.$t('notice.n2'),
-        // });
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n2'),
+        });
       }
     },
 
@@ -66,19 +66,19 @@ export default {
       try {
         const res = await this.web3.eth.getAccounts();
         if (res.length < 1) {
-          // this.$Notice.warning({
-          //   title: this.$t('notice.n'),
-          //   desc: this.$t('notice.n7'),
-          // });
+          this.$Notice.warning({
+            title: this.$t('notice.n'),
+            desc: this.$t('notice.n7'),
+          });
           return false;
         }
         this.$store.commit('changeEthAddress', res[0]);
       } catch (error) {
         console.log(error);
-        // this.$Notice.warning({
-        //   title: this.$t('notice.n'),
-        //   desc: this.$t('notice.n8'),
-        // });
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n8'),
+        });
       }
     },
     // 将切换后的账户及时更新
@@ -86,10 +86,10 @@ export default {
       if (accounts.length === 0) {
         // console.log('Please connect to MetaMask.');
         // console.log("未连接账户");
-        // this.$Notice.warning({
-        //   title: this.$t('notice.n'),
-        //   desc: this.$t('notice.n9'),
-        // });
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n9'),
+        });
       } else if (accounts[0] !== this.ethAddress) {
         this.$store.commit('changeEthAddress', accounts[0]);
       }
@@ -103,10 +103,10 @@ export default {
       });
       window.ethereum.on('networkChanged', (network) => {
         this.$store.commit('changeEthChainID', network);
-        // this.$Notice.warning({
-        //   title: this.$t('notice.n'),
-        //   desc: this.$t('notice.n10'),
-        // });
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n10'),
+        });
         // 切换后刷新页面从而刷新相关的数据
         const timer = setTimeout(() => {
           window.location.reload();
@@ -127,10 +127,10 @@ export default {
           // 老版 MetaMask Legacy dapp browsers...
           web3Provider = window.web3.currentProvider;
         } else {
-          // this.$Notice.warning({
-          //   title: this.$t('notice.n'),
-          //   desc: this.$t('notice.n11'),
-          // });
+          this.$Notice.warning({
+            title: this.$t('notice.n'),
+            desc: this.$t('notice.n11'),
+          });
 
           return false;
         }
@@ -145,10 +145,10 @@ export default {
         await this.coinPrice();
 
         if (!isConnect) {
-          // this.$Notice.warning({
-          //   title: this.$t('notice.n'),
-          //   desc: this.$t('notice.n1'),
-          // });
+          this.$Notice.warning({
+            title: this.$t('notice.n'),
+            desc: this.$t('notice.n1'),
+          });
 
           return false;
         } else {
@@ -169,9 +169,9 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        // this.$Notice.warning({
-        //   title: this.$t('notice.n12'),
-        // });
+        this.$Notice.warning({
+          title: this.$t('notice.n12'),
+        });
       }
     },
   },
