@@ -149,7 +149,7 @@
   border-bottom: 1px dashed #eaeaea;
 }
 .create {
-  margin-left: 100px;
+  // margin-left: 100px;
   .title {
     font-size: 20px;
     font-family: Gilroy-Medium, Gilroy;
