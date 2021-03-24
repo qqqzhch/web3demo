@@ -142,7 +142,7 @@ export default {
           break;
 
         case '56':
-          this.network =  this.$t('header.network.BSCMain');
+          this.network = this.$t('header.network.BSCMain');
           break;
 
         case '97':
@@ -244,26 +244,21 @@ export default {
       return this.ethChainID && this.ethAddress;
     },
   },
-  // watch: {
-  //   isReady(value) {
-  //     if (value) {
-  //       this.getStatus();
-  //     }
-  //   },
-  // },
-  mounted() {
-    setTimeout(() => {
-      if (this.isReady) {
+  watch: {
+    isReady(value) {
+      if (value) {
         this.getStatus();
-      } else {
-        this.statusVal = 'notConnect';
-        this.network = 'Ethereum';
-        this.$Notice.warning({
-          title: this.$t('notice.n37'),
-          desc: this.$t('notice.n38'),
-        });
       }
-    }, 1000);
+    },
+  },
+  mounted() {
+    if (this.isReady) {
+      this.getStatus();
+    } else {
+      this.statusVal = 'notConnect';
+      // 设置默认网络
+      this.network = this.netInfo[config.defaultChainID].name;
+    }
   },
 };
 </script>
