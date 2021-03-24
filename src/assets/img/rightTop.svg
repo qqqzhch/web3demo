@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle 14</title>
+    <defs>
+        <linearGradient x1="30.7821315%" y1="-16.0966765%" x2="73.5168275%" y2="86.5011391%" id="linearGradient-1">
+            <stop stop-color="#FC466B" offset="0%"></stop>
+            <stop stop-color="#F9466D" offset="22%"></stop>
+            <stop stop-color="#F04774" offset="37%"></stop>
+            <stop stop-color="#E14980" offset="50%"></stop>
+            <stop stop-color="#CB4C90" offset="61%"></stop>
+            <stop stop-color="#AF50A6" offset="72%"></stop>
+            <stop stop-color="#8D54C0" offset="83%"></stop>
+            <stop stop-color="#6559DE" offset="92%"></stop>
+            <stop stop-color="#3F5EFB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Token-流动性备份" transform="translate(-668.000000, -273.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g id="编组-8" transform="translate(184.000000, 259.000000)">
+                <g id="编组" transform="translate(484.000000, 14.000000)">
+                    <polygon id="icon" points="15.8333333 5.34517797 4.75592232 16.422589 3.57741102 15.2440777 14.654822 4.16666667 8.33333333 4.16666667 8.33333333 2.5 17.5 2.5 17.5 11.6666667 15.8333333 11.6666667"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -483,8 +483,11 @@ export default {
         div {
           display: flex;
           width: 50%;
+          align-items: center;
           line-height: 32px;
           img {
+            max-width: 24px;
+            max-height: 24px;
             margin-right: 8px;
             p {
               height: 80px;
@@ -588,9 +591,15 @@ export default {
           position: absolute;
           right: 16px;
           top: 30%;
+          width: 80px;
+          justify-content: space-between;
+          align-items: center;
           line-height: 32px;
+          img{
+            max-width: 24px;
+            max-height: 24px;
+          }
           p {
-            margin-left: 8px;
             font-size: 16px;
             font-weight: 500;
             color: #14171c;
@@ -635,8 +644,8 @@ export default {
     .arrow-wrapper {
       position: relative;
       cursor: pointer;
-      width: 40px;
-      height: 40px;
+      width:32px;
+      height:32px;
       background: #f7f8f9;
       border-radius: 4px;
       margin: 34px auto;

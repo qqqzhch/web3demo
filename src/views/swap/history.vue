@@ -4,80 +4,87 @@
       <p class="exchanges-title">
         Order History
       </p>
-      <div class="list-wapper">
-        <div class="list-title flex">
-          <span class="pair">Pair</span>
-          <span class="price">Action</span>
-          <span class="amount">Amount</span>
-          <span class="amount">Recived</span>
-          <span class="status">Status</span>
+      <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
+        <div class="list-wapper">
+          <Table :loading-text="'loading....'" :columns="getHistory" :data="list">
+            <template slot="Pair" slot-scope="{ row }">
+              <div class="Pair flex items-center">
+                <img width="32" :src="getTokenImg(row.show.tokenB)">
+                <p>{{ row.show.tokenB }}/{{ row.show.tokenA }}</p>
+              </div>
+            </template>
+            <template slot="Action" slot-scope="{ row }">
+              <div class="price">
+                <p class="price">
+                  {{ actions[row.method_name] }}
+                </p>
+              </div>
+            </template>
+            <template slot="Amount" slot-scope="{ row }">
+              <div class="amout">
+                <p class="amout">
+                  <span v-if="row.show.inamount.constructor === Array">
+                    {{ row.show.inamount[0]|format1e18ValueList }} {{ row.show.tokenA }}<br>
+                    {{ row.show.inamount[1]|format1e18ValueList }} {{ row.show.tokenB }}
+                  </span>
+                  <span v-else>
+                    {{ row.show.inamount|format1e18ValueList }}
+                    <span v-if="row.show.outamount.constructor === Array">
+                      LP
+                    </span>
+                    <span v-else>
+                      {{ row.show.tokenA }}
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </template>
+            <template slot="Recived" slot-scope="{ row }">
+              <div class="Recived">
+                <p class="Recived">
+                  <span v-if="row.show.outamount.constructor === Array">
+                    {{ row.show.outamount[0]|format1e18ValueList }} {{ row.show.tokenA }}<br>
+                    {{ row.show.outamount[1]|format1e18ValueList }} {{ row.show.tokenB }}
+                  </span>
+                  <span v-else>
+                    {{ row.show.outamount|format1e18ValueList }}
+                    <span v-if="row.show.inamount.constructor === Array">
+                      LP
+                    </span>
+                    <span v-else>
+                      {{ row.show.tokenB }}
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </template>
+            <template slot="Status" slot-scope="{ row }">
+              <div class="status">
+                <p class="status executed">
+                  {{ row.tx_status==1?"Executed":"Fail" }}
+                </p>
+              </div>
+            </template>
+          </Table>
         </div>
-        <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
-          <div v-for="item in list" :key="item.hash" class="list-item">
-            <div>
-              <img width="32" :src="getTokenImg(item.show.tokenB)">
-              <p>{{ item.show.tokenB }}/{{ item.show.tokenA }}</p>
-            </div>
-            <p class="price">
-              {{ actions[item.method_name] }}
-            </p>
-            <p class="amout">
-              <span v-if="item.show.inamount.constructor === Array">
-                {{ item.show.inamount[0] | format1e18ValueList }} {{ item.show.tokenA }}
-                <br>
-                {{ item.show.inamount[1] | format1e18ValueList }} {{ item.show.tokenB }}
-              </span>
-              <span v-else>
-                {{ item.show.inamount | format1e18ValueList }}
-                <span v-if="item.show.outamount.constructor === Array">LP</span>
-                <span v-else>
-                  {{ item.show.tokenA }}
-                </span>
-              </span>
-            </p>
-            <p class="amout">
-              <span v-if="item.show.outamount.constructor === Array">
-                {{ item.show.outamount[0] | format1e18ValueList }} {{ item.show.tokenA }}
-                <br>
-                {{ item.show.outamount[1] | format1e18ValueList }} {{ item.show.tokenB }}
-              </span>
-              <span v-else>
-                {{ item.show.outamount | format1e18ValueList }}
-                <span v-if="item.show.inamount.constructor === Array">LP</span>
-                <span v-else>
-                  {{ item.show.tokenB }}
-                </span>
-              </span>
-            </p>
-            <p class="status executed">
-              {{ item.tx_status == 1 ? 'Executed' : 'Fail' }}
-            </p>
-          </div>
-        </Scroll>
-        <!-- <div
-          v-if="pairloading"
-          class="demo-spin-container "
-        >
-          <loading />
-        </div> -->
-      </div>
+      </Scroll>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { readSwapHistory } from '@/contactLogic/history.js';
-import { getTokenImg } from '@/contactLogic/readbalance.js';
+import { mapState } from "vuex";
+import { readSwapHistory } from "@/contactLogic/history.js";
+import { getToken, getTokenImg } from "@/contactLogic/readbalance.js";
 
 export default {
   data() {
     return {
       list: [],
       actions: {
-        swapExactTokensForTokens: 'swap',
-        addLiquidity: 'addLiquidity',
-        removeLiquidityWithPermit: 'removeLiquidity',
+        swapExactTokensForTokens: "swap",
+        addLiquidity: "addLiquidity",
+        removeLiquidityWithPermit: "removeLiquidity",
       },
       pageIndex: 1,
       pageNum: 1,
@@ -85,7 +92,7 @@ export default {
     };
   },
   components: {
-    loading: () => import('@/components/basic/loading.vue'),
+    loading: () => import("@/components/basic/loading.vue"),
   },
   methods: {
     getTokenImg(tokensymbol) {
@@ -97,7 +104,12 @@ export default {
       const account = this.ethAddress;
       const chainID = this.ethChainID;
 
-      const data = await readSwapHistory(chainID, account, this.$data.pageIndex, 10);
+      const data = await readSwapHistory(
+        chainID,
+        account,
+        this.$data.pageIndex,
+        10
+      );
 
       this.$data.list = this.$data.list.concat(data.data);
 
@@ -109,8 +121,9 @@ export default {
       this.$data.pairloading = false;
     },
     onreachbottom() {
-      console.log('onreachbottom', this.$data.pageIndex);
-      if (this.$data.pageIndex < this.$data.pageNum) this.$data.pairloading = true;
+      console.log("onreachbottom", this.$data.pageIndex);
+      if (this.$data.pageIndex < this.$data.pageNum)
+        this.$data.pairloading = true;
 
       const _this = this;
 
@@ -138,7 +151,37 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethAddress', 'ethChainID', 'web3', 'ethersprovider']),
+    getHistory() {
+      const columns = [
+        {
+          title: "Pair",
+          slot: "Pair",
+          minWidth: 200,
+        },
+        {
+          title: "Action",
+          slot: "Action",
+          minWidth: 100,
+        },
+        {
+          title: "Amount",
+          slot: "Amount",
+          minWidth: 120,
+        },
+        {
+          title: "Recived",
+          slot: "Recived",
+          minWidth: 120,
+        },
+        {
+          title: "Status",
+          slot: "Status",
+          minWidth: 100,
+        },
+      ];
+      return columns;
+    },
+    ...mapState(["ethAddress", "ethChainID", "web3", "ethersprovider"]),
   },
 };
 </script>
@@ -161,83 +204,44 @@ export default {
       line-height: 24px;
     }
     .list-wapper {
-      .list-title {
-        margin: 16px 0;
-        padding: 0 16px;
-        display: flex;
-        justify-content: space-between;
-        span {
-          width: 25%;
-          height: 14px;
-          font-size: 12px;
-          font-family: Gilroy-Medium, Gilroy;
-          font-weight: 500;
-          color: #828489;
-          line-height: 14px;
-        }
-        .status {
-          width: 10%;
-        }
-      }
-      .list-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-direction: row;
-        cursor: pointer;
-        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
-        padding: 16px;
-        position: relative;
-        div {
-          display: flex;
-          width: 30%;
-          line-height: 32px;
-          img {
-            margin-right: 8px;
-            p {
-              height: 80px;
-              font-size: 16px;
-              font-family: Gilroy-Medium, Gilroy;
-              font-weight: 500;
-              color: #14171c;
-              line-height: 19px;
-            }
-          }
-        }
-        .price {
-          width: 30%;
-          height: 19px;
+      .price {
+        p {
           font-size: 16px;
           font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #14171c;
           line-height: 19px;
         }
-        .amout {
-          width: 30%;
+      }
+      .Pair {
+        img {
+          max-width: 24px;
+          margin-right: 8px;
         }
-        .status {
-          width: 10%;
-        }
-        .executed {
-          color: #00d075;
-        }
-        .fall {
-          color: #ff3c00;
-        }
-        .sending {
-          color: #0058ff;
+        p {
+          font-size: 16px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 19px;
         }
       }
-      .list-item::before {
-        content: '';
-        height: 56px;
-        width: 2px;
-        background: #0058ff;
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: none;
+      .amout {
+        p {
+          font-size: 16px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #14171c;
+          line-height: 30px;
+        }
+      }
+      .status {
+        .status {
+          color: #00d075;
+        }
+        .fail {
+          color: #ff3c00;
+        }
       }
     }
   }

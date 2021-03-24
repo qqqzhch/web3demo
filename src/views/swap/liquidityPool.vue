@@ -1,39 +1,38 @@
 <template>
   <div class="pool-warpper">
     <div class="rewards-warpper">
-      <div class="rewards-item">
-        <h2>Liquidity provider rewards</h2>
-        <p>
-          Liquidity providers earn a transaction fee by providing liquidity to trade pairs, and can redeem liquidity and
-          earnings by removing liquidity.
-        </p>
-      </div>
-      <div class="rewards-item">
-        <h2>How to get scUSD ?</h2>
-        <div class="flex items-center buttons-warpper">
-          <div class="button-item">
-            <h3>Build scUSD</h3>
-            <div class="border-image">
-              <button @click="tobuilder">
-                SuperCash Builder
-              </button>
+      <h2>Where to get scUSD?</h2>
+      <p>
+        Earn a transaction fee by providing liquidity to trade pairs, and can be claimed by removing liquidity.
+      </p>
+      <div class="buttonWarpper flex items-center">
+        <div class="button-item marginRight">
+          <div class="border-image">
+            <p @click="tobuilder">
+              SuperCash Builder
+            </p>
+            <div>
+              <span>Get scUSD Credit Line</span>
+              <img src="../../assets/img/rightTop.svg" alt="arrow">
             </div>
           </div>
-          <div class="button-item">
-            <h3>Buy scUSD</h3>
-            <div class="border-image">
-              <button @click="toexchange">
-                SuperCash Exchange
-              </button>
+        </div>
+        <div class="button-item">
+          <div class="border-image">
+            <p @click="toexchange">
+              SuperCash Exchange
+            </p>
+            <div>
+              <span>Buy scUSD</span>
+              <img src="../../assets/img/rightTop.svg" alt="arrow">
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="liquidityPool">
-      <h2>Liquidity Pool</h2>
-      <p>You can get liquidity pool token by inputing liquidity to the following trading pairs.</p>
-      <div v-if="pairlistloading" class="demo-spin-container">
+      <h2>Input liquidity, get LP</h2>
+      <div v-if="pairlistloading" class="demo-spin-container ">
         <loading />
       </div>
       <div v-for="item in dataList" v-else :key="item.pairName" class="poolCon">
@@ -51,16 +50,19 @@
           <span>Total Inputed</span>
           <p>{{ item.totalSupply | formatBalance }}</p>
         </div>
-        <div class="rightdiv">
-          <span>Inputed {{ item.pairSymbols[0] }}</span>
-          <span>Inputed {{ item.pairSymbols[1] }}</span>
-          <span>My share of pool</span>
+        <div class=" flex items-center">
+          <div class="rightdiv">
+            <span>Inputed {{ item.pairSymbols[0] }}</span>
+            <span>Inputed {{ item.pairSymbols[1] }}</span>
+            <span class="colorText">My share of pool</span>
+          </div>
+          <div class="number">
+            <span>{{ item.aTokenbalance }}</span>
+            <span>{{ item.bTokenbalance }}</span>
+            <span class="colorText">{{ Calculatepercentage(item.balance,item.totalSupply) |formatRate }}</span>
+          </div>
         </div>
-        <div class="number">
-          <span>{{ item.aTokenbalance }}</span>
-          <span>{{ item.bTokenbalance }}</span>
-          <span>{{ Calculatepercentage(item.balance, item.totalSupply) | formatRate }}</span>
-        </div>
+
         <div>
           <div class="input-warpper">
             <button @click="openInput(item)">
@@ -84,14 +86,14 @@
 </template>
 
 <script>
-import { readpairLiquidity } from '@/contactLogic/readpairpool.js';
-import { mapState } from 'vuex';
-const debounce = require('debounce');
+import { readpairLiquidity } from "@/contactLogic/readpairpool.js";
+import { mapState } from "vuex";
+const debounce = require("debounce");
 
-const BigNumber = require('bignumber.js');
-import event from '@/common/js/event';
+const BigNumber = require("bignumber.js");
+import event from "@/common/js/event";
 
-import { getTokenImg } from '@/contactLogic/readbalance.js';
+import { getTokenImg } from "@/contactLogic/readbalance.js";
 
 export default {
   data() {
@@ -107,8 +109,8 @@ export default {
   },
   mounted() {
     //txsuccess
-    console.log('- -');
-    event.$on('txsuccess', () => {
+    console.log("- -");
+    event.$on("txsuccess", () => {
       this.readList();
     });
     if (this.ethChainID) {
@@ -132,10 +134,10 @@ export default {
   },
   methods: {
     tobuilder() {
-      this.$router.push('/buildr');
+      this.$router.push("/buildr");
     },
     toexchange() {
-      this.$router.push('/exchange');
+      this.$router.push("/exchange");
     },
     getTokenImg(tokensymbol) {
       const chainID = this.ethChainID;
@@ -153,7 +155,7 @@ export default {
       this.$refs.remove.open(pairs);
     },
     readList: debounce(async function () {
-      console.log('readList');
+      console.log("readList");
       const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
@@ -169,7 +171,7 @@ export default {
     }, 1000),
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress', 'web3', 'ethersprovider']),
+    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider"]),
   },
 };
 </script>
@@ -177,68 +179,90 @@ export default {
 <style lang="less" scoped>
 .pool-warpper {
   .rewards-warpper {
-    // width: 1000px;
-    // margin-left: 100px;
-    display: flex;
-    justify-content: space-between;
-    .rewards-item {
-      width: 400px;
-      h2 {
-        height: 38px;
-        width: 430px;
-        font-size: 32px;
-        font-family: Gilroy-Bold, Gilroy;
-        font-weight: bold;
-        color: #14171c;
-        line-height: 38px;
-      }
-      p {
-        width: 100%;
-        width: 430px;
-        font-size: 16px;
-        font-family: Gilroy-Regular, Gilroy;
-        font-weight: 400;
-        color: #14171c;
-        line-height: 19px;
-        margin-top: 16px;
-      }
-      .buttons-warpper {
-        margin-top: 12px;
-        .button-item {
-          margin-right: 24px;
-          h3 {
-            height: 19px;
+    background: #ffffff;
+    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    margin-left: 100px;
+    padding: 24px 44px;
+    h2 {
+      height: 40px;
+      font-size: 32px;
+      font-family: Gilroy-Bold, Gilroy;
+      font-weight: bold;
+      line-height: 38px;
+      background: linear-gradient(90deg, #fc466b 0%, #3f5efb 30%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      height: 19px;
+      font-size: 16px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #14171c;
+      line-height: 19px;
+      margin: 8px 0 16px;
+    }
+    .buttonWarpper {
+      margin-top: 12px;
+      .button-item {
+        width: 522px;
+        height: 50px;
+        border-radius: 25px;
+        align-items: center;
+        background-image: linear-gradient(
+          90deg,
+          rgba(251, 70, 107, 1),
+          rgba(63, 94, 251, 1)
+        );
+        position: relative;
+        .border-image {
+          width: 520px;
+          height: 48px;
+          border-radius: 24px;
+          padding: 0 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: absolute;
+          left: 1px;
+          top: 1px;
+          background: #ffffff;
+          p {
             font-size: 16px;
-            font-family: Gilroy-Bold, Gilroy;
-            font-weight: bold;
-            color: #14171c;
+            font-family: Gilroy-Medium, Gilroy;
+            font-weight: 500;
+            color: #3f5efb;
             line-height: 19px;
+            margin: 0px;
+            cursor: pointer;
           }
-          .border-image {
-            margin-top: 12px;
-            width: 180px;
-            height: 40px;
-            border-radius: 6px;
-            border: 1px solid;
-            border-image: linear-gradient(90deg, rgba(251, 70, 107, 1), rgba(63, 94, 251, 1)) 1 1;
-            button {
-              width: 100%;
-              height: 100%;
+          div {
+            span {
+              cursor: pointer;
+              height: 19px;
+              font-size: 16px;
               font-family: Gilroy-Medium, Gilroy;
               font-weight: 500;
-              color: #3f5efb;
+              color: #14171c;
               line-height: 19px;
+            }
+            display: flex;
+            img {
+              margin-left: 10px;
             }
           }
         }
+      }
+      .marginRight{
+        margin-right: 32px;
       }
     }
   }
   .liquidityPool {
     margin-top: 44px;
     padding: 32px 44px;
-    // width: 1000px;
-    // height: 559px;
+    height: 559px;
     background: #ffffff;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
@@ -265,6 +289,9 @@ export default {
       padding: 22px 24px;
       align-items: center;
       justify-content: space-between;
+      background: #ffffff;
+      box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+      border-radius: 12px;
       div {
         p {
           height: 24px;
@@ -299,10 +326,10 @@ export default {
           }
         }
         .input-warpper {
-          width: 120px;
+          width: 160px;
           height: 36px;
           background: #0058ff;
-          border-radius: 6px;
+          border-radius: 18px;
           button {
             width: 100%;
             height: 100%;
@@ -314,11 +341,11 @@ export default {
           }
         }
         .remove-warpper {
-          margin-top: 8px;
-          width: 120px;
+          width: 160px;
           height: 36px;
-          border-radius: 6px;
+          border-radius: 18px;
           border: 1px solid #0058ff;
+          margin-top: 8px;
           button {
             width: 100%;
             height: 100%;
@@ -329,18 +356,23 @@ export default {
             line-height: 19px;
           }
         }
+        .colorText {
+          font-size: 14px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #828489;
+          line-height: 16px;
+          background: linear-gradient(90deg, #fc466b 0%, #3f5efb 80%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
       }
       .number {
+        margin-left: 80px;
         span {
           color: #14171c;
         }
       }
-    }
-  }
-
-  .rightdiv {
-    span {
-      text-align: right;
     }
   }
 }
