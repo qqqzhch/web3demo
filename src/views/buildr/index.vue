@@ -18,7 +18,7 @@
           class="btn create-btn"
           @click="toPage('create')"
         >
-          Create CDP
+          + Create Vault
         </button>
       </div>
     </div>
@@ -108,14 +108,17 @@
         position: absolute;
         right: 0px;
         top: 0px;
-        width: 100px;
+        width: 120px;
         height: 32px;
         line-height: 32px;
         font-size: 14px;
         font-weight: 500;
-        color: #FFFFFF;
-        background: #0058FF;
-        border-radius: 6px;
+        color: #0058FF;
+        background: rgba(0, 88, 255, 0.1);
+        border-radius: 16px;
+        &:hover{
+          background: rgba(0, 88, 255, 0.2);
+        }
       }
     }
   }

@@ -5,78 +5,84 @@
     </div>
     <div class="CDP-content">
       <div class="title2">
-        My CDPs
+        My Vaults
       </div>
       <div v-if="!poolsData.length">
         <Loading />
       </div>
       <div v-for="poolItem in poolsData" :key="poolItem.tokenTitle">
-        <div class="CDP-item">
-          <div class="small-item flex flex-col items-center">
-            <img :src="getTokenImg(poolItem.tokenName)" :alt="poolItem.tokenName">
-            <div>{{ poolItem.tokenTitle }}</div>
-          </div>
-          <div class="small-item">
+        <div class="pool-item-warp">
+          <div class="item-top">
             <div>
               <span>Target Coll. Ratio</span>
-              <p class="f-green">
-                {{ poolItem.targetRatio ? BigNumber(1).div(poolItem.targetRatio).times(100) : 0 }}%
-              </p>
+              <span class="f-green">
+                {{ BigNumber(poolItem.targetRX).times(100).toFixed(2) }}%
+              </span>
             </div>
-            <div class="mrg-tb-20">
-              <span>Current Price</span>
-              <p>{{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD</p>
-            </div>
-          </div>
-          <div class="small-item">
-            <div>
-              <span>Collateral</span>
-              <p>{{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}</p>
-            </div>
-            <div class="mrg-tb-20">
-              <span>Current Debt</span>
-              <p>{{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</p>
+            <div class="text-right">
+              <span>Liquidation Price: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
+              <span>Liquidation Ratio: <span class="f-warning">{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
+              <span>Stability Fee: <span class="f-warning">{{ BigNumber(poolItem.feeRate).times(100) }}%</span></span>
             </div>
           </div>
-          <div class="small-item">
-            <div>
-              <span>Avail to Withdraw</span>
-              <p>{{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</p>
+          <div class="CDP-item">
+            <div class="small-item flex flex-col items-center">
+              <img :src="getTokenImg(poolItem.tokenName)" :alt="poolItem.tokenName">
+              <div>{{ poolItem.tokenTitle }}</div>
             </div>
-            <div class="mrg-tb-20">
-              <span>Avail to Generate</span>
-              <p>{{ BigNumber(poolItem.maxMintable).toFixed(2) }} scUSD</p>
+            <div class="small-item">
+              <div>
+                <span>Current Coll. Ratio</span>
+                <p
+                  :class="{
+                    'f-green': poolItem.currentCollRX >= 5,
+                    'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
+                    'f-danger': poolItem.currentCollRX <= 2
+                  }"
+                >
+                  {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
+                </p>
+              </div>
+              <div class="mrg-tb-20">
+                <span>Current Price</span>
+                <p class="f-green">
+                  {{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="small-item">
-            <div>
-              <span>Current Coll. Ratio</span>
-              <p
-                :class="{
-                  'f-green': poolItem.currentCollRX >= 5,
-                  'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
-                  'f-danger': poolItem.currentCollRX <= 2
-                }"
-              >
-                {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
-              </p>
+            <div class="small-item text-center">
+              <div>
+                <span>Deposited</span>
+                <p>
+                  {{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}
+                </p>
+              </div>
+              <div class="mrg-tb-10">
+                <button class="btn" @click="openJoinDialog(poolItem)">
+                  Deposit
+                </button>
+              </div>
+              <div>
+                <a href="javascript:;" @click="openExitDialog(poolItem)">Avail to Withdraw {{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</a>
+              </div>
             </div>
-            <div class="mrg-tb-20">
-              <span>Liquidation Price</span>
-              <p>{{ getLiquidationPrice(poolItem) }} USD</p>
+            <div class="small-item text-center">
+              <div>
+                <span>Current Credit Line</span>
+                <p>
+                  {{ BigNumber(poolItem.maxMintable).toFixed(2) }} scUSD
+                </p>
+              </div>
+              <div class="mrg-tb-10">
+                <button class="btn" @click="openMintDialog(poolItem)">
+                  Generate
+                </button>
+              </div>
+              <div>
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">Current Debt {{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</a>
+              </div>
             </div>
-          </div>
-          <div class="btn-warpper">
-            <div>
-              <button class="btn" @click="openJoinDialog(poolItem)">
-                Stake/Withdraw {{ poolItem.tokenName }}
-              </button>
-            </div>
-            <div class="mrg-tb-20">
-              <button class="btn" @click="openMintDialog(poolItem)">
-                Generate/Payback scUSD
-              </button>
-            </div>
+            <div class="btn-warpper" />
           </div>
         </div>
       </div>
@@ -97,7 +103,7 @@
     color: #00D075 !important;
   }
   .f-warning {
-    color: #edc813 !important;
+    color: rgba(255, 181, 0, 1) !important;
   }
   .f-danger {
     color: #FF3C00 !important;
@@ -106,7 +112,6 @@
 .balance {
   margin: 24px 0 0 100px;
   .title2 {
-    margin-top: 24px;
     height: 24px;
     font-size: 20px;
     font-family: Gilroy-Medium, Gilroy;
@@ -115,16 +120,38 @@
     line-height: 24px;
   }
   .CDP-content{
-    margin-bottom: 50px;
-    .CDP-item {
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    margin: 24px 0px 50px 0px;
+    padding: 32px 44px;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
-    margin-top: 24px;
-    .small-item {
-      width: 16%;
+    .pool-item-warp{
+      margin-top: 24px;
+      padding: 24px;
+      box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    }
+    .item-top{
+      display: grid;
+      grid-template-columns: 30% 70%;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      span {
+        color: #828489;
+      }
+      .text-right{
+        text-align: right;
+        > span {
+          margin-left: 20px;
+        }
+      }
+    }
+    .CDP-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-top: 24px;
+      .small-item {
+      width: 33%;
       div {
         span {
           height: 16px;
@@ -136,25 +163,30 @@
         }
         p {
           height: 19px;
-          font-size: 16px;
+          font-size: 20px;
           font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #14171c;
           line-height: 19px;
           margin-top: 5px;
         }
+        a {
+          text-decoration: underline;
+        }
       }
     }
-    .btn-warpper {
-      flex: 1;
       .btn {
-        width: 100%;
-        line-height: 40px;
-        height: 40px;
+        margin-left: 25%;
+        width: 160px;
+        height: 36px;
+        line-height: 36px;
+        border-radius: 18px;
         background-color: #0058ff;
         color: rgb(255, 255, 255);
+        &:hover {
+          background-color: #0025ff;
+        }
       }
-    }
   }
   }
 
