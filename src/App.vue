@@ -47,7 +47,7 @@ export default {
   .main-wrapper {
     margin-top: 112px;
     margin-bottom: 124px;
-    min-height: 600px;
+    min-height: calc(100vh - 208px);
   }
 }
 @media (max-width: 1024px) {

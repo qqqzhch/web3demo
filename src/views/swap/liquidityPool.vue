@@ -182,7 +182,6 @@ export default {
     background: #ffffff;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
-    margin-left: 100px;
     padding: 24px 44px;
     h2 {
       height: 40px;
@@ -191,13 +190,13 @@ export default {
       font-weight: bold;
       line-height: 38px;
       background: linear-gradient(90deg, #fc466b 0%, #3f5efb 30%);
-      -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     p {
       height: 19px;
       font-size: 16px;
-      font-family: Gilroy-Medium, Gilroy;
+
       font-weight: 500;
       color: #14171c;
       line-height: 19px;
@@ -230,7 +229,7 @@ export default {
           background: #ffffff;
           p {
             font-size: 16px;
-            font-family: Gilroy-Medium, Gilroy;
+
             font-weight: 500;
             color: #3f5efb;
             line-height: 19px;
@@ -242,7 +241,7 @@ export default {
               cursor: pointer;
               height: 19px;
               font-size: 16px;
-              font-family: Gilroy-Medium, Gilroy;
+
               font-weight: 500;
               color: #14171c;
               line-height: 19px;
@@ -262,14 +261,12 @@ export default {
   .liquidityPool {
     margin-top: 44px;
     padding: 32px 44px;
-    height: 559px;
     background: #ffffff;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
     h2 {
       height: 24px;
       font-size: 20px;
-      font-family: Gilroy-Medium, Gilroy;
       font-weight: 500;
       color: #14171c;
       line-height: 24px;
@@ -278,7 +275,6 @@ export default {
     p {
       height: 19px;
       font-size: 16px;
-      font-family: Gilroy-Regular, Gilroy;
       font-weight: 400;
       color: #14171c;
       line-height: 19px;
@@ -296,7 +292,6 @@ export default {
         p {
           height: 24px;
           font-size: 20px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #14171c;
           line-height: 24px;
@@ -305,7 +300,6 @@ export default {
           display: block;
           height: 16px;
           font-size: 14px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #828489;
           line-height: 16px;
@@ -334,7 +328,6 @@ export default {
             width: 100%;
             height: 100%;
             font-size: 16px;
-            font-family: Gilroy-Medium, Gilroy;
             font-weight: 500;
             color: #ffffff;
             line-height: 19px;
@@ -350,7 +343,6 @@ export default {
             width: 100%;
             height: 100%;
             font-size: 16px;
-            font-family: Gilroy-Medium, Gilroy;
             font-weight: 500;
             color: #0058ff;
             line-height: 19px;
@@ -358,12 +350,11 @@ export default {
         }
         .colorText {
           font-size: 14px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #828489;
           line-height: 16px;
           background: linear-gradient(90deg, #fc466b 0%, #3f5efb 80%);
-          -webkit-background-clip: text;
+          background-clip: text;
           -webkit-text-fill-color: transparent;
         }
       }

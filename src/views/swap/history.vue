@@ -6,7 +6,7 @@
       </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
         <div class="list-wapper">
-          <Table :loading-text="'loading....'" :columns="getHistory" :data="list">
+          <Table :loading="loading" :columns="getHistory" :data="list">
             <template slot="Pair" slot-scope="{ row }">
               <div class="Pair flex items-center">
                 <img width="32" :src="getTokenImg(row.show.tokenB)">
@@ -75,7 +75,7 @@
 <script>
 import { mapState } from "vuex";
 import { readSwapHistory } from "@/contactLogic/history.js";
-import { getToken, getTokenImg } from "@/contactLogic/readbalance.js";
+import {  getTokenImg } from "@/contactLogic/readbalance.js";
 
 export default {
   data() {
@@ -89,6 +89,7 @@ export default {
       pageIndex: 1,
       pageNum: 1,
       pairloading: false,
+      loading: false
     };
   },
   components: {
@@ -100,6 +101,7 @@ export default {
       return getTokenImg(tokensymbol, chainID);
     },
     async getreadSwapHistory() {
+      this.loading = true;
       const library = this.ethersprovider;
       const account = this.ethAddress;
       const chainID = this.ethChainID;
@@ -118,12 +120,12 @@ export default {
       } else {
         this.$data.pageNum = (data.count - (data.count % 10)) / 10 + 1;
       }
-      this.$data.pairloading = false;
+      this.loading = false;
     },
     onreachbottom() {
       console.log("onreachbottom", this.$data.pageIndex);
       if (this.$data.pageIndex < this.$data.pageNum)
-        this.$data.pairloading = true;
+        this.loading = true;
 
       const _this = this;
 
@@ -193,7 +195,7 @@ export default {
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  margin: 20px 0 100px 100px;
+  margin-top: 20px;
   padding: 44px;
   .exchanges-wapper {
     .exchanges-title {
