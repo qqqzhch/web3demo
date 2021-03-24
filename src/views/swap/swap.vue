@@ -1,13 +1,10 @@
 <template>
   <div>
-    <div class="content-wapper flex justify-between items-start">
-      <div class="exchanges-wapper">
-        <p class="exchanges-title">
-          {{ $t('swap.Exchanges') }}
-        </p>
-        <div class="list-wapper">
-          <div class="list-title flex">
-            <span class="pair"> {{ $t('swap.Pair') }} </span>
+    <div class="content-wrapper flex justify-between">
+      <div class="exchanges-wrapper">
+        <div class="list-wrapper">
+          <div class="list-title flex justify-between">
+            <span class="pair">{{ $t('swap.Pair') }}</span>
             <span class="price">{{ $t('swap.Price') }}</span>
             <div class="change-title flex">
               <span>{{ $t('swap.Change') }}</span>
@@ -16,62 +13,50 @@
               </Tooltip>
             </div>
           </div>
-          <div
-            v-if="pairlistloading"
-            class="demo-spin-container "
-          >
+          <div v-if="pairlistloading" class="demo-spin-container">
             <loading />
           </div>
           <div
             v-for="item in pairlist"
             v-else
             :key="item.pairName"
-            :class="selectPairName==item.pairName?'list-item active':'list-item'"
+            :class="selectPairName == item.pairName ? 'list-item active' : 'list-item'"
             @click="selectPair(item)"
           >
             <div>
-              <img
-                width="32"
-                :src="getTokenImg(item.listSymbol)"
-              >
+              <img width="32" :src="getTokenImg(item.listSymbol)">
               <p>{{ item.pairName }}</p>
             </div>
             <p class="price">
-              {{ item.price|formatNormalValue }}
+              {{ item.price | formatNormalValue }}
             </p>
-            <p :class="item.change=='+'? 'change':'change decline'">
-              {{ item.change }} {{ item.prisechange|formatRate }}
+            <p :class="item.change == '+' ? 'change' : 'change decline'">
+              {{ item.change }} {{ item.prisechange | formatRate }}
             </p>
           </div>
         </div>
       </div>
-      <div class="swap-wapper">
+      <div class="swap-wrapper">
         <p class="swap-title">
           {{ $t('swap.pageTitle') }}
         </p>
         <div class="From-wrapper">
           <div class="title-content">
-            <span class="card-title"> {{ $t('swap.fromToken') }}</span>
+            <span class="card-title">{{ $t('swap.fromToken') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('swap.balance') }}</span>
-              <span v-if="inputcurrency">{{ inBalance|format1e18Value }} {{ inputcurrency.symbol }}</span>
+              <span v-if="inputcurrency">{{ inBalance | format1e18Value }} {{ inputcurrency.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
             <input
               v-model="inputAmount"
               type="text"
-              :class="inputnotice==''? 'amount-input': 'amount-input  amount-input-error' "
+              :class="inputnotice == '' ? 'amount-input' : 'amount-input  amount-input-error'"
               @keyup="inputChange"
             >
-            <div
-              v-if="inputcurrency"
-              class="flex unit"
-            >
-              <img
-                width="32"
-                :src="getTokenImg(inputcurrency.symbol )"
-              >
+            <div v-if="inputcurrency" class="flex unit">
+              <img width="32" :src="getTokenImg(inputcurrency.symbol)">
               <p>
                 {{ inputcurrency.symbol }}
               </p>
@@ -82,54 +67,32 @@
           </div>
         </div>
 
-        <div
-          v-if="inputnotice"
-          class="notice-warpper"
-        >
+        <div v-if="inputnotice" class="notice-wrapper">
           <div class="notice-content">
             <img src="../../assets/img/notice-red.png">
             <p>{{ inputnotice }}</p>
           </div>
         </div>
 
-        <div
-          v-if="isArrow"
-          class="arrow-warpper"
-          @click="Changeparameters"
-        >
+        <div v-if="isArrow" class="arrow-wrapper" @click="Changeparameters">
           <img src="../../assets/img/exchange-32.svg">
         </div>
-        <div
-          v-else
-          class="arrow-warpper arrow-active"
-          @click="Changeparameters"
-        >
+        <div v-else class="arrow-wrapper arrow-active" @click="Changeparameters">
           <img src="../../assets/img/exchange-32-w.svg">
         </div>
 
-        <div class="To-wapper From-wrapper">
+        <div class="To-wrapper From-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('swap.toToken') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('swap.balance') }}</span>
-              <span v-if="outputcurrency">{{ outBalance|format1e18Value }} {{ outputcurrency.symbol }}</span>
+              <span v-if="outputcurrency">{{ outBalance | format1e18Value }} {{ outputcurrency.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
-            <input
-              v-model="coinBValue"
-              type="text"
-              class="amount-input"
-              readonly
-            >
-            <div
-              v-if="outputcurrency"
-              class="flex unit"
-            >
-              <img
-                width="32"
-                :src="getTokenImg(outputcurrency.symbol)"
-              >
+            <input v-model="coinBValue" type="text" class="amount-input" readonly>
+            <div v-if="outputcurrency" class="flex unit">
+              <img width="32" :src="getTokenImg(outputcurrency.symbol)">
               <p>
                 {{ outputcurrency.symbol }}
               </p>
@@ -137,13 +100,13 @@
           </div>
         </div>
 
-        <div class="details-warpper">
-          <div
-            v-if="needApprove==false"
-            class="details-items"
-          >
+        <div class="details-wrapper">
+          <div v-if="needApprove == false" class="details-items">
             <p>{{ $t('swap.ethgasfree') }}</p>
-            <span>{{ gasfee|formatBalanceNumber }} {{ chainTokenName }} ≈ $ {{ chainTokenPrice*gasfee |formatBalanceNumber }}</span>
+            <span>
+              {{ gasfee | formatBalanceNumber }} {{ chainTokenName }} ≈ $
+              {{ (chainTokenPrice * gasfee) | formatBalanceNumber }}
+            </span>
           </div>
           <div class="details-items">
             <p>{{ $t('swap.PriceImpact') }}</p>
@@ -155,28 +118,19 @@
           </div>
         </div>
 
-
-        <Buttons v-if="btnloading">
+        <Buttons v-if="btnloading" border-radius="24px">
           Loading...
         </Buttons>
         <div v-else>
-          <Buttons
-            v-if="PriceImpactGreater==true"
-          >
+          <Buttons v-if="PriceImpactGreater == true" border-radius="24px">
             {{ $t('swap.PriceImpactError') }}
           </Buttons>
           <div v-else>
-            <Buttons
-              v-if="needApprove==false"
-              @click.native="openconfirmtDialog"
-            >
+            <Buttons v-if="needApprove == false" border-radius="24px" @click.native="openconfirmtDialog">
               {{ $t('swap.swapBtn') }}
             </Buttons>
             <div v-else>
-              <Buttons
-                class="smallbtn"
-                @click.native="makeApprove"
-              >
+              <Buttons class="smallbtn" border-radius="24px" @click.native="makeApprove">
                 {{ $t('swap.approve') }}
               </Buttons>
               <Buttons class="smallbtn disableBtn">
@@ -195,33 +149,27 @@
 <script>
 import { mapState } from 'vuex';
 
-import { ChainId, Token, TokenAmount, Fetcher ,
-    Route, Percent, Router,TradeType,
-} from "@webfans/uniswapsdk";
+import { ChainId, Token, TokenAmount, Fetcher, Route, Percent, Router, TradeType } from '@webfans/uniswapsdk';
 
 import {
   INITIAL_ALLOWED_SLIPPAGE,
-  ONE_BIPS,
-  BASE_FEE,
-  ONE_HUNDRED_PERCENT,
-  BLOCKED_PRICE_IMPACT_NON_EXPERT,
-  ROUTER_ADDRESS
-} from "@/constants/index.js";
+  ROUTER_ADDRESS,
+} from '@/constants/index.js';
 
-import {readpairpool} from '@/contactLogic/readpairpool.js';
-import {readSwapBalance,getToken,getTokenImg} from '@/contactLogic/readbalance.js';
+import { readpairpool } from '@/contactLogic/readpairpool.js';
+import { readSwapBalance, getToken, getTokenImg } from '@/contactLogic/readbalance.js';
 
-import {tradeCalculate,SwapGas} from '@/contactLogic/swaplogoc.js';
+import { tradeCalculate, SwapGas } from '@/contactLogic/swaplogoc.js';
 import Web3 from 'web3';
 
-import {useNeedApprove} from '@/contacthelp/useNeedApprove.js';
-import {useTokenApprove}  from '@/contacthelp/Approve.js';
+import { useNeedApprove } from '@/contacthelp/useNeedApprove.js';
+import { useTokenApprove } from '@/contacthelp/Approve.js';
 
 import event from '@/common/js/event';
 
 const debounce = require('debounce');
 
-const BigNumber = require("bignumber.js");
+const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 
 let nowTrade;
@@ -230,60 +178,57 @@ export default {
   data() {
     return {
       isArrow: true,
-      pairlist:[],
-      selectPairName:'',
-      inputcurrency:null,
-      outputcurrency:null,
-      inputAmount:'',
-      inBalance:'',
-      outBalance:'',
-      selectPairOBJ:null,
-      PriceImpact:'',
-      PriceImpactGreater:false,
-      coinBValue:'',
-      Minimumreceived:'',
-      btnloading:false,
-      needApprove:false,
-      gasfee:'',
-      pairlistloading:false,
-      inputnotice:''
+      pairlist: [],
+      selectPairName: '',
+      inputcurrency: null,
+      outputcurrency: null,
+      inputAmount: '',
+      inBalance: '',
+      outBalance: '',
+      selectPairOBJ: null,
+      PriceImpact: '',
+      PriceImpactGreater: false,
+      coinBValue: '',
+      Minimumreceived: '',
+      btnloading: false,
+      needApprove: false,
+      gasfee: '',
+      pairlistloading: false,
+      inputnotice: '',
     };
   },
   components: {
-    Buttons: () => import("@/components/basic/buttons"),
-    confirmtDialog:() => import("@/views/swap/dialog/confirmDialog"),
-    loading: () => import("@/components/basic/loading.vue"),
+    Buttons: () => import('@/components/basic/buttons'),
+    confirmtDialog: () => import('@/views/swap/dialog/confirmDialog'),
+    loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
-    getTokenImg(tokensymbol){
-      const chainID = this.ethChainID ;
-      return getTokenImg(tokensymbol,chainID);
+    getTokenImg(tokensymbol) {
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol, chainID);
     },
     exchange() {
       this.isArrow = !this.isArrow;
     },
-   async readList(){
-      const chainID = this.ethChainID ;
+    async readList() {
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       // const account = this.ethAddress;
-      this.$data.pairlistloading=true;
-      const data = await readpairpool(chainID,library);
-      this.$data.pairlistloading=false;
+      this.$data.pairlistloading = true;
+      const data = await readpairpool(chainID, library);
+      this.$data.pairlistloading = false;
 
-      console.log({data});
-      this.$data.pairlist = data ;
-      if(data&&data[0]&&this.selectPairOBJ == null){
-        setTimeout(()=>{
+      console.log({ data });
+      this.$data.pairlist = data;
+      if (data && data[0] && this.selectPairOBJ == null) {
+        setTimeout(() => {
           this.selectPair(data[0]);
-        },1000);
-
+        }, 1000);
       }
-
-
     },
-   async selectPair(pair){
+    async selectPair(pair) {
       console.log(pair);
-      const chainID = this.ethChainID ;
+      const chainID = this.ethChainID;
       // const chainID = this.ethChainID ;
       const library = this.ethersprovider;
       const account = this.ethAddress;
@@ -292,272 +237,209 @@ export default {
 
       this.$data.selectPairName = pair.pairName;
 
-      this.$data.inputcurrency=pair.Pair.tokenAmounts[1].currency;
-      this.$data.outputcurrency=pair.Pair.tokenAmounts[0].currency;
+      this.$data.inputcurrency = pair.Pair.tokenAmounts[1].currency;
+      this.$data.outputcurrency = pair.Pair.tokenAmounts[0].currency;
       this.isArrow = true;
       this.showparameters();
-
-
-
     },
-    Changeparameters(){
+    Changeparameters() {
       console.log('Changeparameters');
-      if(this.$data.selectPairOBJ){
+      if (this.$data.selectPairOBJ) {
         this.isArrow = !this.isArrow;
-        this.$data.inputcurrency=this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow?1:0].currency;
-        this.$data.outputcurrency=this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow?0:1].currency;
+        this.$data.inputcurrency = this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow ? 1 : 0].currency;
+        this.$data.outputcurrency = this.$data.selectPairOBJ.Pair.tokenAmounts[this.isArrow ? 0 : 1].currency;
         this.showparameters();
         this.clearData();
-
       }
-
     },
-   async showparameters(){
-     const chainID = this.ethChainID ;
-     const library = this.ethersprovider;
-     const account = this.ethAddress;
-     if(account == ''){
-       return;
-     }
-     this.clearData();
+    async showparameters() {
+      const chainID = this.ethChainID;
+      const library = this.ethersprovider;
+      const account = this.ethAddress;
+      if (account == '') {
+        return;
+      }
+      this.clearData();
 
-      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
-      const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
+      const TokenA = getToken(this.$data.inputcurrency.symbol, chainID);
+      const TokenB = getToken(this.$data.outputcurrency.symbol, chainID);
 
-      const data = await readSwapBalance(chainID,library, account,TokenA,TokenB);
+      const data = await readSwapBalance(chainID, library, account, TokenA, TokenB);
 
-
-
-      this.$data.inBalance=data.TokenAamount.toString();
-      this.$data.outBalance=data.TokenBamount.toString();
-
+      this.$data.inBalance = data.TokenAamount.toString();
+      this.$data.outBalance = data.TokenBamount.toString();
     },
-   inputChange: debounce(async function(){
-     //debounce(
+    inputChange: debounce(async function () {
+      //debounce(
       console.log(this.$data.inputAmount);
-      this.$data.inputnotice =  '';
-      if(this.inputcheckup()){
+      this.$data.inputnotice = '';
+      if (this.inputcheckup()) {
         try {
-          this.$data.btnloading =true;
-           await this.calculationOutPut(this.$data.inputAmount);
+          this.$data.btnloading = true;
+          await this.calculationOutPut(this.$data.inputAmount);
         } catch (error) {
           console.log(error);
+        } finally {
+          this.$data.btnloading = false;
         }
-        finally{
-          this.$data.btnloading =false;
-        }
-
-
-
       }
-    },1000),
-    inputcheckup(){
+    }, 1000),
+    inputcheckup() {
       try {
-        const num = parseFloat(this.$data.inputAmount) ;
-        if(isNaN(num)){
-          this.$data.inputnotice =  this.$t('swap.enterthequantity');
-          nowTrade = null ;
+        const num = parseFloat(this.$data.inputAmount);
+        if (isNaN(num)) {
+          this.$data.inputnotice = this.$t('swap.enterthequantity');
+          nowTrade = null;
           return false;
         }
-        const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, "ether")) ;
-        if(inamount.isGreaterThan(this.inBalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnotice =  this.$t('swap.actions.Amountexceedsbalance');
-          nowTrade = null ;
+        const inamount = new BigNumber(Web3.utils.toWei(this.$data.inputAmount, 'ether'));
+        if (inamount.isGreaterThan(this.inBalance) || inamount.isLessThanOrEqualTo('0')) {
+          this.$data.inputnotice = this.$t('swap.actions.Amountexceedsbalance');
+          nowTrade = null;
           return false;
-
         }
-
       } catch (error) {
         console.log(error);
-        this.$data.inputnotice =  this.$t('swap.actions.needNumber');
-        nowTrade = null ;
+        this.$data.inputnotice = this.$t('swap.actions.needNumber');
+        nowTrade = null;
       }
 
-
-
       return true;
-
     },
-    clearData(){
+    clearData() {
       this.$data.inputAmount = '';
-      this.$data.coinBValue = '' ;
-      nowTrade = null ;
-      this.$data.inputnotice =  '';
-
+      this.$data.coinBValue = '';
+      nowTrade = null;
+      this.$data.inputnotice = '';
     },
-    async calculationOutPut(num){
-      const chainID = this.ethChainID ;
+    async calculationOutPut(num) {
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
 
-      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
-      const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
+      const TokenA = getToken(this.$data.inputcurrency.symbol, chainID);
+      const TokenB = getToken(this.$data.outputcurrency.symbol, chainID);
 
+      const inputAmount = new TokenAmount(TokenA, Web3.utils.toWei(num, 'ether'));
 
+      const outToken = new TokenAmount(TokenB, Web3.utils.toWei('0', 'ether'));
 
-      const inputAmount = new TokenAmount(
-        TokenA,
-        Web3.utils.toWei(num, "ether")) ;
+      console.log(inputAmount, outToken);
 
-      const outToken = new TokenAmount(
-        TokenB,
-        Web3.utils.toWei('0', "ether"));
-
-      console.log(inputAmount,outToken);
-
-      const result = await tradeCalculate(inputAmount,outToken);
-
-
+      const result = await tradeCalculate(inputAmount, outToken);
 
       console.log(result);
 
-      this.$data.PriceImpact=result.PriceImpact;
-      this.$data.PriceImpactGreater=result.PriceImpactGreater;
-      this.$data.coinBValue=result.coinBValue.toSignificant(6);
-      this.$data.Minimumreceived=result.Minimumreceived.toSignificant(6);
-      nowTrade=result.trade;
+      this.$data.PriceImpact = result.PriceImpact;
+      this.$data.PriceImpactGreater = result.PriceImpactGreater;
+      this.$data.coinBValue = result.coinBValue.toSignificant(6);
+      this.$data.Minimumreceived = result.Minimumreceived.toSignificant(6);
+      nowTrade = result.trade;
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.getGasFee(result.trade);
-      },100);
-
-
-
+      }, 100);
     },
-   async getGasFee(trade){
-
-      const chainID = this.ethChainID ;
+    async getGasFee(trade) {
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
 
       console.log(trade);
-      const needApprove =  await useNeedApprove(account, library, trade, INITIAL_ALLOWED_SLIPPAGE);
+      const needApprove = await useNeedApprove(account, library, trade, INITIAL_ALLOWED_SLIPPAGE);
       this.$data.needApprove = needApprove;
 
       console.log(needApprove);
-      if(needApprove==false){
-        const gasfee= await SwapGas(library,account,ChainId,trade);
-        console.log('gasfee',gasfee);
+      if (needApprove == false) {
+        const gasfee = await SwapGas(library, account, ChainId, trade);
+        console.log('gasfee', gasfee);
         this.$data.gasfee = gasfee;
-
       }
-
     },
-    async  makeApprove(){
+    async makeApprove() {
       console.log('makeApprove');
 
-      const chainID = this.ethChainID ;
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
       const num = this.$data.inputAmount;
 
-      const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
-      const  amount = Web3.utils.toWei(num, "ether");
+      const TokenA = getToken(this.$data.inputcurrency.symbol, chainID);
+      const amount = Web3.utils.toWei(num, 'ether');
       const spender = ROUTER_ADDRESS;
 
       try {
-        this.btnloading =true;
-        const transaction = await useTokenApprove(
-          library,
-          account,
-          TokenA,
-          spender,
-          amount
-        );
+        this.btnloading = true;
+        const transaction = await useTokenApprove(library, account, TokenA, spender, amount);
         console.log(transaction);
-        if(transaction){
+        if (transaction) {
           const waitdata = await transaction.wait([1]);
           console.log(waitdata);
           this.$data.needApprove = false;
           this.calculationOutPut(num);
-
-        }else{
+        } else {
           //取消授权
           //需要提示
           this.$Notice.error({
-                    title: this.$t('swap.actions.approvecancel'),
-                });
+            title: this.$t('swap.actions.approvecancel'),
+          });
         }
-
-
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-                    title: this.$t('swap.actions.Transactionfailure'),
-                    desc:error.message
-                });
-
+          title: this.$t('swap.actions.Transactionfailure'),
+          desc: error.message,
+        });
+      } finally {
+        this.btnloading = false;
       }
-      finally{
-        this.btnloading =false;
-      }
-
-
-
     },
-    openconfirmtDialog(){
-      if(nowTrade){
-        this.$refs.confirm.open(this.$data,nowTrade);
+    openconfirmtDialog() {
+      if (nowTrade) {
+        this.$refs.confirm.open(this.$data, nowTrade);
       }
-
-
-    }
+    },
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','chainTokenPrice','chainTokenName']),
+    ...mapState(['ethChainID', 'ethAddress', 'web3', 'ethersprovider', 'chainTokenPrice', 'chainTokenName']),
   },
- async mounted() {
-    if(this.ethChainID){
+  async mounted() {
+    if (this.ethChainID) {
       this.readList();
-
-
-
     }
     //txsuccess
-    event.$on('txsuccess',()=>{
+    event.$on('txsuccess', () => {
       this.readList();
       this.showparameters();
-
     });
-
   },
-  watch:{
-    ethChainID:function(){
-      if(this.ethChainID){
-       this.readList();
-
+  watch: {
+    ethChainID: function () {
+      if (this.ethChainID) {
+        this.readList();
       }
-
-    }
-
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.content-wapper {
-  width: 980px;
+.content-wrapper {
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  margin: 20px 0 100px 100px;
+  margin-top: 16px;
   padding: 44px;
-  .exchanges-wapper {
-    .exchanges-title {
-      font-size: 20px;
-      font-family: Gilroy-Medium, Gilroy;
-      font-weight: 500;
-      color: #14171c;
-      line-height: 24px;
-    }
-    .list-wapper {
+  .exchanges-wrapper {
+    width: 48%;
+    .list-wrapper {
+      width: 100%;
       .list-title {
-        margin: 16px 0;
-        padding: 0 16px;
+        width: 100%;
+        padding: 0px 16px 8px 16px;
         span {
           height: 14px;
           font-size: 12px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #828489;
           line-height: 14px;
@@ -575,7 +457,7 @@ export default {
             cursor: pointer;
             position: relative;
             :hover::after {
-              content: "fslkasfjlkasjflaksfjklasjfasfalksfjlkasjflkafj";
+              content: 'fslkasfjlkasjflaksfjklasjfasfalksfjlkasjflkafj';
               display: block;
               width: 156px;
               height: 40px;
@@ -594,7 +476,6 @@ export default {
         align-items: center;
         flex-direction: row;
         cursor: pointer;
-        width: 408px;
         height: 56px;
         box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
         padding: 16px;
@@ -608,7 +489,6 @@ export default {
             p {
               height: 80px;
               font-size: 16px;
-              font-family: Gilroy-Medium, Gilroy;
               font-weight: 500;
               color: #14171c;
               line-height: 19px;
@@ -619,7 +499,6 @@ export default {
           width: 25%;
           height: 19px;
           font-size: 16px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #14171c;
           line-height: 19px;
@@ -628,7 +507,6 @@ export default {
           width: 25%;
           height: 19px;
           font-size: 16px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #00d075;
           line-height: 19px;
@@ -638,7 +516,7 @@ export default {
         }
       }
       .list-item::before {
-        content: "";
+        content: '';
         height: 56px;
         width: 2px;
         background: #0058ff;
@@ -655,11 +533,11 @@ export default {
       }
     }
   }
-  .swap-wapper {
+  .swap-wrapper {
+    width: 48%;
     margin-left: 72px;
     .swap-title {
       font-size: 20px;
-      font-family: Gilroy-Medium, Gilroy;
       font-weight: 500;
       color: #14171c;
       line-height: 24px;
@@ -700,7 +578,7 @@ export default {
             border-radius: 4px;
           }
         }
-        .amount-input-error{
+        .amount-input-error {
           &:focus {
             border: 1px solid #ff3c00;
             border-radius: 4px;
@@ -714,9 +592,11 @@ export default {
           p {
             margin-left: 8px;
             font-size: 16px;
-            font-family: Gilroy-Medium, Gilroy;
             font-weight: 500;
             color: #14171c;
+          }
+          img{
+            max-width: 24px;
           }
         }
       }
@@ -725,13 +605,12 @@ export default {
         font-size: 12px;
         span {
           font-size: 12px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #0058ff;
         }
       }
     }
-    .notice-warpper {
+    .notice-wrapper {
       // display: none;
       .notice-content {
         margin: 20px 0;
@@ -747,30 +626,33 @@ export default {
         }
         p {
           font-size: 12px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #ff3c00;
           line-height: 14px;
         }
       }
     }
-    .arrow-warpper {
+    .arrow-wrapper {
+      position: relative;
       cursor: pointer;
       width: 40px;
       height: 40px;
       background: #f7f8f9;
       border-radius: 4px;
-      margin: 12px auto;
+      margin: 34px auto;
       img {
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 32px;
       }
     }
     .arrow-active {
       background: #0058ff;
     }
 
-    .details-warpper {
+    .details-wrapper {
       .details-items {
         margin-top: 8px;
         display: flex;
@@ -778,16 +660,13 @@ export default {
         align-items: center;
         flex-direction: row;
         p {
-          width: 100px;
           font-size: 14px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #828489;
           line-height: 16px;
         }
         span {
           font-size: 14px;
-          font-family: Gilroy-Medium, Gilroy;
           font-weight: 500;
           color: #14171c;
           line-height: 16px;
@@ -804,17 +683,17 @@ export default {
       }
     }
   }
-  .smallbtn{
+  .smallbtn {
     width: 45%;
     display: inline-block;
     margin: 2.5%;
   }
 }
 
-  .demo-spin-container{
-    display: inline-block;
-    width: 400px;
-    height: 100px;
-    position: relative;
-  }
+.demo-spin-container {
+  display: inline-block;
+  width: 400px;
+  height: 100px;
+  position: relative;
+}
 </style>

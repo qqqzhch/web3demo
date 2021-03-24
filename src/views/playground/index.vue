@@ -81,16 +81,18 @@
     </div>
 
     <div class="modal-wrapper">
-      <assetDialog ref="asset" />
+      <!-- <assetDialog ref="asset" />
       <succesDialog ref="succes" />
       <walletdialog ref="wallet" />
-      <confirmtDialog ref="confirm" />
+      <confirmtDialog ref="confirm" /> -->
       <takeoutDialog ref="take" />
     </div>
   </div>
 </template>
 
+
 <script>
+/* eslint-disable */
 import { mapState } from 'vuex';
 
 import { ChainId, Token, TokenAmount, Fetcher, Route, Percent, Router, TradeType } from '@webfans/uniswapsdk';
@@ -117,10 +119,6 @@ export default {
   name: 'Home',
   components: {
     buttons: () => import('@/components/basic/buttons'),
-    assetDialog: () => import('@/views/transfer/dialog/assetDialog'),
-    succesDialog: () => import('@/views/transfer/dialog/succesDialog'),
-    walletdialog: () => import('@/views/transfer/dialog/walletDialog'),
-    confirmtDialog: () => import('@/views/transfer/dialog/confirmDialog'),
     takeoutDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
     extractDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
   },

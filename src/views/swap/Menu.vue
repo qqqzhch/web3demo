@@ -71,7 +71,7 @@ export default {
     width: 100%;
     .switch-wrapper {
       margin-bottom: 24px;
-      margin-left: 100px;
+      // margin-left: 100px;
       .menu-item {
         display: inline-block;
         font-size: 16px;
@@ -81,7 +81,7 @@ export default {
         margin-right: 48px;
       }
       .active-menu {
-        color: rgba(20, 23, 28, 1);
+        color: #0058ff;
         padding: 4px;
         border-radius: 0px;
         border-bottom: 2px solid #0058ff;

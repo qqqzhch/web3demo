@@ -9,7 +9,8 @@
               {{ item.name }}
             </p>
             <p v-if="item.kind === 'multi'" class="price">
-              1 {{ item.symbol && item.symbol[0] }} = {{ item.price | formatNormalValue }} {{ item.symbol && item.symbol[1] }}
+              1 {{ item.symbol && item.symbol[0] }} = {{ item.price | formatNormalValue }}
+              {{ item.symbol && item.symbol[1] }}
             </p>
           </div>
         </div>
@@ -17,7 +18,7 @@
         <div class="apy">
           <h4>{{ $t('earn.card.apy') }}</h4>
           <p class="percent">
-            {{ item.data && item.data.rewardRate | formatReward(365,scashPrice,item.data && item.data.totalSupply) }}%
+            {{ item.data && item.data.rewardRate | formatReward(365, scashPrice, item.data && item.data.totalSupply) }}%
           </p>
         </div>
 
@@ -29,7 +30,9 @@
           <div class="balance-item">
             <span class="title">{{ $t('earn.card.totalPool') }}</span>
             <span v-if="item.kind === 'multi'" class="value">{{ item.poolValue || '--' }}</span>
-            <span v-if="item.kind === 'single'" class="value">{{ item.data && item.data.totalSupply * earnPrice | formatNormalValue }}</span>
+            <span v-if="item.kind === 'single'" class="value">
+              {{ item.data && (item.data.totalSupply * earnPrice) | formatNormalValue }}
+            </span>
           </div>
           <div class="balance-item">
             <span class="title">{{ $t('earn.card.output') }}</span>
@@ -41,7 +44,7 @@
           <button v-if="ethAddress" class="stakeBtn" @click="openStake(item)">
             {{ $t('earn.card.stake') }}
           </button>
-          <Buttons v-else width="100px" height="30px" class="disableBtn">
+          <Buttons v-else width="100px" height="30px" border-radius="18px" class="disableBtn">
             {{ $t('earn.card.stake') }}
           </Buttons>
         </div>
@@ -69,7 +72,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons.vue'),
   },
   computed: {
-    ...mapState(['earnPrice','ethAddress','scashPrice']),
+    ...mapState(['earnPrice', 'ethAddress', 'scashPrice']),
   },
 };
 </script>
@@ -130,7 +133,7 @@ export default {
         .title {
           float: left;
           font-size: 14px;
-          color: #828489;
+          color: #8690a8;
           line-height: 16px;
           // margin-right: 50px;
         }
@@ -146,7 +149,7 @@ export default {
       margin-left: 50px;
       .stakeBtn {
         background: #0058ff;
-        border-radius: 6px;
+        border-radius: 18px;
         padding: 8px 40px;
         font-size: 16px;
         font-weight: 500;

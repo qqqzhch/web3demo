@@ -81,7 +81,6 @@ export default {
     width: 100%;
     .switch-wrapper {
       margin-bottom: 24px;
-      margin-left: 100px;
       .menu-item {
         display: inline-block;
         font-size: 16px;
@@ -98,7 +97,6 @@ export default {
       }
     }
     .earn-child-content {
-      margin-left: 100px;
       margin-bottom: 110px;
     }
   }

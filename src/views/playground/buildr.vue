@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-
+/* eslint-disable */
 import { mapState } from 'vuex';
 
 import  {useProxyActionsContractRead,useProxyContractRead,useProxyActionsContractSigna,
@@ -44,7 +44,7 @@ getCollateralToken}  from '@/contactLogic/buildr/tokens.js';
 
 import {useTokenApprove} from '@/contacthelp/Approve.js';
 
-import {readSwapHistory,readPledgeHistory,readbuildrHistory} from '@/contactLogic/history.js';
+import {readbuildrHistory} from '@/contactLogic/history.js';
 
 
 import Web3 from 'web3';

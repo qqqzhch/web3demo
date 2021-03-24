@@ -1,15 +1,7 @@
 <template>
   <div class="input-dialog">
-    <Modal
-      v-model="openInputDialog"
-      class-name="input-modal"
-      :footer-hide="true"
-      :closable="true"
-    >
-      <div
-        v-if="isShowInput"
-        class="input-content"
-      >
+    <Modal v-model="openInputDialog" class-name="input-modal" :footer-hide="true" :closable="true">
+      <div v-if="isShowInput" class="input-content">
         <p class="title text-center">
           Input
         </p>
@@ -18,34 +10,22 @@
             <span class="card-title">Input</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">Balance</span>
-              <span
-                v-if="tokenA"
-              >{{ tokenABalance | formatNormalValue }}
-                {{ tokenA.symbol }}</span>
+              <span v-if="tokenA">{{ tokenABalance | formatNormalValue }} {{ tokenA.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
             <input
               v-model="aTokenAmount"
               type="text"
-              :class="inputnoticeA? 'amount-input amount-input-error':'amount-input'"
+              :class="inputnoticeA ? 'amount-input amount-input-error' : 'amount-input'"
               @keyup="aTokenChange"
             >
-            <div
-              v-if="tokenA"
-              class="flex unit"
-            >
-              <img
-                width="32"
-                :src="getTokenImg(tokenA.symbol)"
-              >
+            <div v-if="tokenA" class="flex unit">
+              <img width="32" :src="getTokenImg(tokenA.symbol)">
               <p>{{ tokenA.symbol }}</p>
             </div>
           </div>
-          <div
-            v-if="inputnoticeA"
-            class="notice-warpper"
-          >
+          <div v-if="inputnoticeA" class="notice-warpper">
             <div class="notice-content">
               <img src="../../../assets/img/notice-red.png">
               <p>{{ inputnoticeA }}</p>
@@ -53,44 +33,29 @@
           </div>
         </div>
         <div class="add-warpper">
-          <img
-            src="../../../assets/img/add.svg"
-            alt="add"
-          >
+          <img src="../../../assets/img/add.svg" alt="add">
         </div>
         <div class="Input-wrapper">
           <div class="title-content">
             <span class="card-title">Input</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">Balance</span>
-              <span
-                v-if="tokenB"
-              >{{ tokenBBalance | formatNormalValue }}
-                {{ tokenB.symbol }}</span>
+              <span v-if="tokenB">{{ tokenBBalance | formatNormalValue }} {{ tokenB.symbol }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
             <input
               v-model="bTokenAmount"
               type="text"
-              :class="inputnoticeB? 'amount-input amount-input-error':'amount-input'"
+              :class="inputnoticeB ? 'amount-input amount-input-error' : 'amount-input'"
               @keyup="bTokenChange"
             >
-            <div
-              v-if="tokenB"
-              class="flex unit"
-            >
-              <img
-                width="32"
-                :src="getTokenImg(tokenB.symbol)"
-              >
+            <div v-if="tokenB" class="flex unit">
+              <img width="32" :src="getTokenImg(tokenB.symbol)">
               <p>{{ tokenB.symbol }}</p>
             </div>
           </div>
-          <div
-            v-if="inputnoticeB"
-            class="notice-warpper"
-          >
+          <div v-if="inputnoticeB" class="notice-warpper">
             <div class="notice-content">
               <img src="../../../assets/img/notice-red.png">
               <p>{{ inputnoticeB }}</p>
@@ -116,28 +81,19 @@
           <div v-else>
             <div v-if="tokenAnotNeed == false || tokenBnotNeed == false">
               <div>
-                <Buttons
-                  v-if="tokenAnotNeed == false"
-                  @click.native="approveA"
-                >
+                <Buttons v-if="tokenAnotNeed == false" @click.native="approveA">
                   {{ tokenA.symbol }} Approve
                 </Buttons>
               </div>
               <br>
               <div>
-                <Buttons
-                  v-if="tokenBnotNeed == false"
-                  @click.native="approveB"
-                >
+                <Buttons v-if="tokenBnotNeed == false" @click.native="approveB">
                   {{ tokenB.symbol }} Approve
                 </Buttons>
               </div>
             </div>
 
-            <div
-              v-else
-              @click="showConfirmInput"
-            >
+            <div v-else @click="showConfirmInput">
               <Buttons>Next</Buttons>
             </div>
             <p class="buy" @click="toexchange">
@@ -147,18 +103,9 @@
         </div>
       </div>
       <div v-else>
-        <div
-          v-if="LiquidityInfo"
-          class="confirmInput-content"
-        >
-          <div
-            class="arrow-warpper"
-            @click="showInput"
-          >
-            <img
-              src="../../../assets/img/arrow-left.svg"
-              alt="arrow-left"
-            >
+        <div v-if="LiquidityInfo" class="confirmInput-content">
+          <div class="arrow-warpper" @click="showInput">
+            <img src="../../../assets/img/arrow-left.svg" alt="arrow-left">
           </div>
           <p class="title text-center">
             Confirm
@@ -169,36 +116,25 @@
 
           <div class="confirm-content">
             <div class="images-warpper">
-              <img
-                :src="getTokenImg(tokenB.symbol)"
-                width="48"
-                alt="comp"
-              >
-              <img
-                :src="getTokenImg(tokenA.symbol)"
-                width="48"
-                alt="comp"
-                class="img2"
-              >
+              <img :src="getTokenImg(tokenB.symbol)" width="48" alt="comp">
+              <img :src="getTokenImg(tokenA.symbol)" width="48" alt="comp" class="img2">
             </div>
             <h2>{{ LiquidityInfo.liquidityMinted }}</h2>
             <p>{{ tokenA.symbol }}/{{ tokenB.symbol }} LP</p>
-            <span>Output is estimated. You will receive at least
-              {{ LiquidityInfo.liquidityMinted }} {{ tokenA.symbol }}/{{
+            <span>
+              Output is estimated. You will receive at least {{ LiquidityInfo.liquidityMinted }} {{ tokenA.symbol }}/{{
                 tokenB.symbol
               }}
-              LP, or the transaction will revert.</span>
+              LP, or the transaction will revert.
+            </span>
           </div>
-          <div
-            v-if="btnloading"
-            class="demo-spin-container"
-          >
+          <div v-if="btnloading" class="demo-spin-container">
             <loading />
           </div>
           <div v-else>
             <div class="price-warpper">
               <div>
-                <span>{{ tokenA.symbol }} Input </span>
+                <span>{{ tokenA.symbol }} Input</span>
                 <p>{{ aTokenAmount }} {{ tokenA.symbol }}</p>
               </div>
               <div>
@@ -226,7 +162,7 @@
               </div>
               <div>
                 <span>Fee</span>
-                <p>{{ fee |formatBalanceNumber }} HT≈${{ chainTokenPrice*fee |formatBalanceNumber }}</p>
+                <p>{{ fee | formatBalanceNumber }} HT≈${{ (chainTokenPrice * fee) | formatBalanceNumber }}</p>
               </div>
             </div>
             <Buttons @click.native="sendTX">
@@ -248,75 +184,68 @@ import {
   buildAddliquidityParam,
   addliquidityGas,
   sendaddliquidity,
-} from "@/contactLogic/readpairpool.js";
-import { mapState } from "vuex";
-import {
-  getTokenImg,
-  readSwapBalance,
-  getToken,
-} from "@/contactLogic/readbalance.js";
+} from '@/contactLogic/readpairpool.js';
+import { mapState } from 'vuex';
+import { getTokenImg, readSwapBalance, getToken } from '@/contactLogic/readbalance.js';
 
-import Web3 from "web3";
+import Web3 from 'web3';
 
-import {
-  TokenAmount,
-} from "@webfans/uniswapsdk";
+import { TokenAmount } from '@webfans/uniswapsdk';
 
-const debounce = require("debounce");
+const debounce = require('debounce');
 
-import { useTokenApprove } from "@/contacthelp/Approve.js";
+import { useTokenApprove } from '@/contacthelp/Approve.js';
 
-import { ROUTER_ADDRESS } from "@/constants/index.js";
+import { ROUTER_ADDRESS } from '@/constants/index.js';
 
-import event from "@/common/js/event";
-const BigNumber = require("bignumber.js");
+import event from '@/common/js/event';
+const BigNumber = require('bignumber.js');
 
 export default {
   components: {
-    Buttons: () => import("@/components/basic/buttons"),
-    loading: () => import("@/components/basic/loading.vue"),
-    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
+    Buttons: () => import('@/components/basic/buttons'),
+    loading: () => import('@/components/basic/loading.vue'),
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   data() {
     return {
       openInputDialog: false,
       tokenA: null,
       tokenB: null,
-      tokenABalance: "",
-      tokenBBalance: "",
-      price: "",
-      priceinvert: "",
-      aTokenAmount: "",
-      bTokenAmount: "",
+      tokenABalance: '',
+      tokenBBalance: '',
+      price: '',
+      priceinvert: '',
+      aTokenAmount: '',
+      bTokenAmount: '',
       isShowInput: true,
       LiquidityInfo: null,
       tokenAnotNeed: true,
       tokenBnotNeed: true,
       btnloading: false,
-      fee: "",
-      poolPercentData: "",
+      fee: '',
+      poolPercentData: '',
       parameters: [],
       inputnoticeA: '',
       inputnoticeB: '',
-      lpbalance:''
+      lpbalance: '',
     };
   },
   methods: {
-    toexchange(){
+    toexchange() {
       this.$router.push('/exchange');
     },
-    clearData(){
+    clearData() {
       this.$data.aTokenAmount = '';
       this.$data.bTokenAmount = '';
-      this.$data.parameters =[];
-
+      this.$data.parameters = [];
     },
     getTokenImg(tokensymbol) {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol, chainID);
     },
     async open(pairs) {
-      console.log("open");
+      console.log('open');
       this.clearData();
 
       const chainID = this.ethChainID;
@@ -333,22 +262,10 @@ export default {
       // const TokenA = getToken(this.$data.inputcurrency.symbol,chainID);
       // const TokenB = getToken(this.$data.outputcurrency.symbol,chainID);
 
-      const data = await readSwapBalance(
-        chainID,
-        library,
-        account,
-        this.$data.tokenA,
-        this.$data.tokenB
-      );
+      const data = await readSwapBalance(chainID, library, account, this.$data.tokenA, this.$data.tokenB);
       console.log(data);
-      this.$data.tokenABalance = Web3.utils.fromWei(
-        data.TokenAamount.toString(),
-        "ether"
-      );
-      this.$data.tokenBBalance = Web3.utils.fromWei(
-        data.TokenBamount.toString(),
-        "ether"
-      );
+      this.$data.tokenABalance = Web3.utils.fromWei(data.TokenAamount.toString(), 'ether');
+      this.$data.tokenBBalance = Web3.utils.fromWei(data.TokenBamount.toString(), 'ether');
 
       // const [tokensymbolA,tokensymbolB] = pairs.pairSymbols;
       const dataPrise = await readpariInfoNuminfo(
@@ -358,7 +275,7 @@ export default {
         this.$data.tokenA.symbol,
         this.$data.tokenB.symbol
       );
-      console.log("dataPrise", dataPrise);
+      console.log('dataPrise', dataPrise);
       this.$data.price = dataPrise.price.toSignificant(6);
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
       this.$data.poolPercentData = dataPrise.poolPercentData;
@@ -366,7 +283,7 @@ export default {
       this.$data.totalSupply = dataPrise.totalSupply.toString();
     },
     aTokenChange: debounce(async function () {
-      console.log("aTokenChange");
+      console.log('aTokenChange');
       const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
@@ -377,19 +294,13 @@ export default {
 
       const num = this.$data.aTokenAmount;
 
-      if(this.inputcheckupA()==false){
-        return ;
+      if (this.inputcheckupA() == false) {
+        return;
       }
 
-      const coinATokenAmount = new TokenAmount(
-        TokenA,
-        Web3.utils.toWei(num, "ether")
-      );
+      const coinATokenAmount = new TokenAmount(TokenA, Web3.utils.toWei(num, 'ether'));
 
-      const coinBTokenAmount = new TokenAmount(
-        TokenB,
-        Web3.utils.toWei("0", "ether")
-      );
+      const coinBTokenAmount = new TokenAmount(TokenB, Web3.utils.toWei('0', 'ether'));
 
       const istargetBToken = true;
 
@@ -416,7 +327,7 @@ export default {
       this.$data.btnloading = false;
     }, 1000),
     bTokenChange: debounce(async function () {
-      console.log("bTokenChange");
+      console.log('bTokenChange');
       const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
@@ -426,22 +337,14 @@ export default {
 
       const num = this.$data.bTokenAmount;
 
-
-
-      if(this.inputcheckupB()==false){
-        return ;
+      if (this.inputcheckupB() == false) {
+        return;
       }
 
       this.$data.btnloading = true;
-      const coinATokenAmount = new TokenAmount(
-        TokenA,
-        Web3.utils.toWei("0", "ether")
-      );
+      const coinATokenAmount = new TokenAmount(TokenA, Web3.utils.toWei('0', 'ether'));
 
-      const coinBTokenAmount = new TokenAmount(
-        TokenB,
-        Web3.utils.toWei(num, "ether")
-      );
+      const coinBTokenAmount = new TokenAmount(TokenB, Web3.utils.toWei(num, 'ether'));
 
       const istargetBToken = false;
 
@@ -486,32 +389,17 @@ export default {
       const numa = this.$data.aTokenAmount;
       const numb = this.$data.bTokenAmount;
 
-      const coinATokenAmount = new TokenAmount(
-        TokenA,
-        Web3.utils.toWei(numa, "ether")
-      );
+      const coinATokenAmount = new TokenAmount(TokenA, Web3.utils.toWei(numa, 'ether'));
 
-      const coinBTokenAmount = new TokenAmount(
-        TokenB,
-        Web3.utils.toWei(numb, "ether")
-      );
+      const coinBTokenAmount = new TokenAmount(TokenB, Web3.utils.toWei(numb, 'ether'));
 
       this.$data.btnloading = true;
       try {
-        const parameters = await buildAddliquidityParam(
-          coinATokenAmount,
-          coinBTokenAmount,
-          account
-        );
+        const parameters = await buildAddliquidityParam(coinATokenAmount, coinBTokenAmount, account);
         console.log(parameters);
         this.$data.parameters = parameters;
 
-        const fee = await addliquidityGas(
-          chainID,
-          library,
-          account,
-          parameters
-        );
+        const fee = await addliquidityGas(chainID, library, account, parameters);
 
         console.log(fee);
 
@@ -520,7 +408,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: "获取手续费失败或逻辑异常",
+          title: '获取手续费失败或逻辑异常',
         });
       }
       this.$data.btnloading = false;
@@ -542,31 +430,19 @@ export default {
       const numa = this.$data.aTokenAmount;
       const numb = this.$data.bTokenAmount;
 
-      const coinATokenAmount = new TokenAmount(
-        TokenA,
-        Web3.utils.toWei(numa, "ether")
-      );
+      const coinATokenAmount = new TokenAmount(TokenA, Web3.utils.toWei(numa, 'ether'));
 
-      const coinBTokenAmount = new TokenAmount(
-        TokenB,
-        Web3.utils.toWei(numb, "ether")
-      );
+      const coinBTokenAmount = new TokenAmount(TokenB, Web3.utils.toWei(numb, 'ether'));
 
-      const result = await checkApprove(
-        chainID,
-        library,
-        account,
-        coinATokenAmount,
-        coinBTokenAmount
-      );
+      const result = await checkApprove(chainID, library, account, coinATokenAmount, coinBTokenAmount);
 
       console.log(result);
       this.$data.tokenAnotNeed = result.tokenAnotNeed;
       this.$data.tokenBnotNeed = result.tokenBnotNeed;
     },
     checkAmount() {
-      this.$data.inputnoticeA = "";
-      this.$data.inputnoticeB = "";
+      this.$data.inputnoticeA = '';
+      this.$data.inputnoticeB = '';
       const a = this.inputcheckupA();
       const b = this.inputcheckupB();
       if (a === false || b === false) {
@@ -581,19 +457,19 @@ export default {
         //   // this.$data.bTokenAmount = '';
         //   return ;
         // }
-        const num = parseFloat( this.$data.aTokenAmount ) ;
-        if(isNaN(num)){
-          this.$data.inputnoticeA =  ' The input value needs to be numeric ';
+        const num = parseFloat(this.$data.aTokenAmount);
+        if (isNaN(num)) {
+          this.$data.inputnoticeA = ' The input value needs to be numeric ';
           return false;
         }
-        const inamount = new BigNumber(this.$data.aTokenAmount) ;
-        if(inamount.isGreaterThan(this.tokenABalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeA =  ' Input value must be less than balance and greater than 0 ';
+        const inamount = new BigNumber(this.$data.aTokenAmount);
+        if (inamount.isGreaterThan(this.tokenABalance) || inamount.isLessThanOrEqualTo('0')) {
+          this.$data.inputnoticeA = ' Input value must be less than balance and greater than 0 ';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = " The input value needs to be numeric ";
+        this.$data.inputnoticeA = ' The input value needs to be numeric ';
       }
     },
     inputcheckupB() {
@@ -602,19 +478,19 @@ export default {
         //   // this.$data.aTokenAmount = '';
         //   return;
         // }
-        const num = parseFloat( this.$data.bTokenAmount ) ;
-        if(isNaN(num)){
-          this.$data.inputnoticeB =  ' The input value needs to be numeric ';
+        const num = parseFloat(this.$data.bTokenAmount);
+        if (isNaN(num)) {
+          this.$data.inputnoticeB = ' The input value needs to be numeric ';
           return false;
         }
-        const inamount = new BigNumber(this.$data.bTokenAmount) ;
-        if(inamount.isGreaterThan(this.tokenBBalance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeB =  ' Input value must be less than balance and greater than 0';
+        const inamount = new BigNumber(this.$data.bTokenAmount);
+        if (inamount.isGreaterThan(this.tokenBBalance) || inamount.isLessThanOrEqualTo('0')) {
+          this.$data.inputnoticeB = ' Input value must be less than balance and greater than 0';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeB = " The input value needs to be numeric ";
+        this.$data.inputnoticeB = ' The input value needs to be numeric ';
       }
     },
     async approveA() {
@@ -633,13 +509,7 @@ export default {
       const spender = ROUTER_ADDRESS;
       this.$data.btnloading = true;
 
-      const transaction = await useTokenApprove(
-        library,
-        account,
-        TokenA,
-        spender,
-        amount
-      );
+      const transaction = await useTokenApprove(library, account, TokenA, spender, amount);
       console.log(transaction);
       if (transaction) {
         const waitdata = await transaction.wait([1]);
@@ -649,7 +519,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: "Authorization cancelled",
+          title: 'Authorization cancelled',
         });
       }
       this.$data.btnloading = false;
@@ -673,13 +543,7 @@ export default {
 
       this.$data.btnloading = true;
 
-      const transaction = await useTokenApprove(
-        library,
-        account,
-        TokenB,
-        spender,
-        amount
-      );
+      const transaction = await useTokenApprove(library, account, TokenB, spender, amount);
       console.log(transaction);
       if (transaction) {
         const waitdata = await transaction.wait([1]);
@@ -689,7 +553,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: "Authorization cancelled",
+          title: 'Authorization cancelled',
         });
       }
       this.$data.btnloading = false;
@@ -710,43 +574,38 @@ export default {
         const tx = await sendaddliquidity(chainID, library, account, parameters);
         const baseTip = `add ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol}LP `;
         this.$refs.haveSendtx.open(baseTip);
-        event.$emit("sendtx", [
+        event.$emit('sendtx', [
           tx,
           {
-            okinfo: baseTip + "success",
-            failinfo: baseTip + "fail",
+            okinfo: baseTip + 'success',
+            failinfo: baseTip + 'fail',
           },
         ]);
         this.$data.openInputDialog = false;
       } catch (error) {
         this.$Notice.error({
-          title: "Transaction cancelled",
+          title: 'Transaction cancelled',
         });
       }
       this.$data.btnloading = false;
     },
   },
   computed: {
-    ...mapState(["ethChainID", "ethAddress", "web3", "ethersprovider",'chainTokenPrice']),
-    newpercent(){
+    ...mapState(['ethChainID', 'ethAddress', 'web3', 'ethersprovider', 'chainTokenPrice']),
+    newpercent() {
       const addlp = Web3.utils.toWei(this.$data.LiquidityInfo.liquidityMinted);
       const oldlp = Web3.utils.toWei(this.lpbalance);
       const oldalllp = Web3.utils.toWei(this.$data.totalSupply);
 
-      const addlpBG = new BigNumber(addlp) ;
-      const oldlpBG = new BigNumber(oldlp) ;
-      const oldalllpBG = new BigNumber(oldalllp) ;
+      const addlpBG = new BigNumber(addlp);
+      const oldlpBG = new BigNumber(oldlp);
+      const oldalllpBG = new BigNumber(oldalllp);
 
-      let data = (addlpBG.plus(oldlpBG)).div(addlpBG.plus(oldalllpBG));
-      return data= data.toString();
-      
-      
-
-    }
+      let data = addlpBG.plus(oldlpBG).div(addlpBG.plus(oldalllpBG));
+      return (data = data.toString());
+    },
   },
-  watch:{
-
-  }
+  watch: {},
 };
 </script>
 

@@ -4,18 +4,15 @@
       <div class="rewards-item">
         <h2>Liquidity provider rewards</h2>
         <p>
-          Liquidity providers earn a transaction fee by providing liquidity to
-          trade pairs, and can redeem liquidity and earnings by removing
-          liquidity.
+          Liquidity providers earn a transaction fee by providing liquidity to trade pairs, and can redeem liquidity and
+          earnings by removing liquidity.
         </p>
       </div>
       <div class="rewards-item">
         <h2>How to get scUSD ?</h2>
         <div class="flex items-center buttons-warpper">
           <div class="button-item">
-            <h3>
-              Build scUSD
-            </h3>
+            <h3>Build scUSD</h3>
             <div class="border-image">
               <button @click="tobuilder">
                 SuperCash Builder
@@ -23,9 +20,7 @@
             </div>
           </div>
           <div class="button-item">
-            <h3>
-              Buy scUSD
-            </h3>
+            <h3>Buy scUSD</h3>
             <div class="border-image">
               <button @click="toexchange">
                 SuperCash Exchange
@@ -37,43 +32,24 @@
     </div>
     <div class="liquidityPool">
       <h2>Liquidity Pool</h2>
-      <p>
-        You can get liquidity pool token by inputing liquidity to the following
-        trading pairs.
-      </p>
-      <div
-        v-if="pairlistloading"
-        class="demo-spin-container "
-      >
+      <p>You can get liquidity pool token by inputing liquidity to the following trading pairs.</p>
+      <div v-if="pairlistloading" class="demo-spin-container">
         <loading />
       </div>
-      <div
-        v-for="item in dataList"
-        v-else
-        :key="item.pairName"
-        class="poolCon"
-      >
+      <div v-for="item in dataList" v-else :key="item.pairName" class="poolCon">
         <div class="flex items-center justify-between">
           <div class="img-warpper flex">
-            <img
-              :src="getTokenImg(item.pairSymbols[0])"
-              alt=""
-              width="48"
-            >
-            <img
-              :src="getTokenImg(item.pairSymbols[1])"
-              width="48"
-              class="otherImg"
-            >
+            <img :src="getTokenImg(item.pairSymbols[0])" alt="" width="48">
+            <img :src="getTokenImg(item.pairSymbols[1])" width="48" class="otherImg">
           </div>
           <div>
             <p>{{ item.pairName }}</p>
-            <span>1 {{ item.configSymbols[0] }} = {{ item.price }} {{ item.configSymbols[1] }} </span>
+            <span>1 {{ item.configSymbols[0] }} = {{ item.price }} {{ item.configSymbols[1] }}</span>
           </div>
         </div>
         <div>
           <span>Total Inputed</span>
-          <p>{{ item.totalSupply|formatBalance }}</p>
+          <p>{{ item.totalSupply | formatBalance }}</p>
         </div>
         <div class="rightdiv">
           <span>Inputed {{ item.pairSymbols[0] }}</span>
@@ -83,7 +59,7 @@
         <div class="number">
           <span>{{ item.aTokenbalance }}</span>
           <span>{{ item.bTokenbalance }}</span>
-          <span>{{ Calculatepercentage(item.balance,item.totalSupply) |formatRate }}</span>
+          <span>{{ Calculatepercentage(item.balance, item.totalSupply) | formatRate }}</span>
         </div>
         <div>
           <div class="input-warpper">
@@ -108,77 +84,67 @@
 </template>
 
 <script>
-import  {readpairLiquidity} from '@/contactLogic/readpairpool.js';
+import { readpairLiquidity } from '@/contactLogic/readpairpool.js';
 import { mapState } from 'vuex';
 const debounce = require('debounce');
 
-const BigNumber = require("bignumber.js");
-import event from "@/common/js/event";
+const BigNumber = require('bignumber.js');
+import event from '@/common/js/event';
 
-
-import {getTokenImg} from '@/contactLogic/readbalance.js';
-
+import { getTokenImg } from '@/contactLogic/readbalance.js';
 
 export default {
   data() {
     return {
-      dataList:[],
-      pairlistloading:false
+      dataList: [],
+      pairlistloading: false,
     };
   },
   components: {
-    inputDialog: () => import("./dialog/inputDialog.vue"),
-    removeDialog: () => import("./dialog/removeDialog.vue"),
-    loading: () => import("@/components/basic/loading.vue"),
+    inputDialog: () => import('./dialog/inputDialog.vue'),
+    removeDialog: () => import('./dialog/removeDialog.vue'),
+    loading: () => import('@/components/basic/loading.vue'),
   },
   mounted() {
     //txsuccess
     console.log('- -');
-    event.$on('txsuccess',()=>{
+    event.$on('txsuccess', () => {
       this.readList();
-
     });
-    if(this.ethChainID){
-      this.$data.pairlistloading = true ;
+    if (this.ethChainID) {
+      this.$data.pairlistloading = true;
       this.readList();
-      
     }
-    
   },
-  watch:{
-    ethChainID:function(){
-      if(this.ethChainID){
-        this.$data.pairlistloading = true ;
-       this.readList();
-
-      } 
-    },
-    ethAddress:function(){
-      if(this.ethAddress){
-        this.$data.pairlistloading = true ;
+  watch: {
+    ethChainID: function () {
+      if (this.ethChainID) {
+        this.$data.pairlistloading = true;
         this.readList();
       }
-
-    }
-
+    },
+    ethAddress: function () {
+      if (this.ethAddress) {
+        this.$data.pairlistloading = true;
+        this.readList();
+      }
+    },
   },
   methods: {
-    tobuilder(){
+    tobuilder() {
       this.$router.push('/buildr');
     },
-    toexchange(){
+    toexchange() {
       this.$router.push('/exchange');
     },
-    getTokenImg(tokensymbol){
-      const chainID = this.ethChainID ;
-      return getTokenImg(tokensymbol,chainID);
+    getTokenImg(tokensymbol) {
+      const chainID = this.ethChainID;
+      return getTokenImg(tokensymbol, chainID);
     },
-    Calculatepercentage(balance,totalSupply){
-       const balance_ = new BigNumber(balance);
-       const totalSupply_ = new BigNumber(totalSupply);
-       return balance_.div(totalSupply_).toString() ;
-
-
+    Calculatepercentage(balance, totalSupply) {
+      const balance_ = new BigNumber(balance);
+      const totalSupply_ = new BigNumber(totalSupply);
+      return balance_.div(totalSupply_).toString();
     },
     openInput(pairs) {
       this.$refs.input.open(pairs);
@@ -186,40 +152,33 @@ export default {
     openRemove(pairs) {
       this.$refs.remove.open(pairs);
     },
-   readList:debounce(async function(){
-       console.log('readList');
-      const chainID = this.ethChainID ;
-      const library = this.ethersprovider; 
+    readList: debounce(async function () {
+      console.log('readList');
+      const chainID = this.ethChainID;
+      const library = this.ethersprovider;
       const account = this.ethAddress;
       try {
-        
-        const list = await readpairLiquidity(chainID,library,account);
+        const list = await readpairLiquidity(chainID, library, account);
         console.log(list);
         this.$data.dataList = list;
-        
       } catch (error) {
         console.log(error);
-        
+      } finally {
+        this.$data.pairlistloading = false;
       }
-      finally{
-        this.$data.pairlistloading = false ;
-      }
-      
-      
-      
-      },1000),
+    }, 1000),
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider']),
-  }
+    ...mapState(['ethChainID', 'ethAddress', 'web3', 'ethersprovider']),
+  },
 };
 </script>
 
 <style lang="less" scoped>
 .pool-warpper {
   .rewards-warpper {
-    width: 1000px;
-    margin-left: 100px;
+    // width: 1000px;
+    // margin-left: 100px;
     display: flex;
     justify-content: space-between;
     .rewards-item {
@@ -261,12 +220,7 @@ export default {
             height: 40px;
             border-radius: 6px;
             border: 1px solid;
-            border-image: linear-gradient(
-                90deg,
-                rgba(251, 70, 107, 1),
-                rgba(63, 94, 251, 1)
-              )
-              1 1;
+            border-image: linear-gradient(90deg, rgba(251, 70, 107, 1), rgba(63, 94, 251, 1)) 1 1;
             button {
               width: 100%;
               height: 100%;
@@ -281,10 +235,10 @@ export default {
     }
   }
   .liquidityPool {
-    margin: 44px 0 0 100px;
+    margin-top: 44px;
     padding: 32px 44px;
-    width: 1000px;
-    height: 559px;
+    // width: 1000px;
+    // height: 559px;
     background: #ffffff;
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
     border-radius: 12px;
@@ -384,17 +338,17 @@ export default {
     }
   }
 
-  .rightdiv{
-    span{
+  .rightdiv {
+    span {
       text-align: right;
     }
   }
 }
-.demo-spin-container{
-    display: inline-block;
-    width: 100%;
-    height: 200px;
-    position: relative;
-    margin-top: 100px;
-  }
+.demo-spin-container {
+  display: inline-block;
+  width: 100%;
+  height: 200px;
+  position: relative;
+  margin-top: 100px;
+}
 </style>

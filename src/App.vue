@@ -38,8 +38,7 @@ export default {
       this.$nextTick(() => (this.isRouterAlive = true));
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style lang="less" scoped>
@@ -47,27 +46,27 @@ export default {
   width: 100%;
   .main-wrapper {
     margin-top: 112px;
-    min-height: calc(100vh - 208px);
+    margin-bottom: 124px;
+    min-height: 600px;
   }
 }
 @media (max-width: 1024px) {
- body{
-   max-height: 1069px;
-   #app{
-     overflow-y: hidden;
-     .header-wrapper{
-    position: static;
-    min-width: 1200px;
+  body {
+    max-height: 1069px;
+    #app {
+      overflow-y: hidden;
+      .header-wrapper {
+        position: static;
+        min-width: 1200px;
+      }
+      .main-wrapper {
+        margin-top: 0px;
+        min-width: 1200px;
+      }
+      .footer-wrapper {
+        min-width: 1200px;
+      }
+    }
   }
-  .main-wrapper{
-    margin-top: 0px;
-     min-width: 1200px;
-  }
-  .footer-wrapper{
-     min-width: 1200px;
-  }
-   }
- }
-  
 }
 </style>

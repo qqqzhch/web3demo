@@ -1,11 +1,13 @@
 <template>
   <div class="multiMine-wrapper mt-6">
-    <h2 class="title">
-      {{ $t('earn.multi.t1') }}
-    </h2>
-    <p class="subTitle">
-      {{ $t('earn.multi.t2') }}
-    </p>
+    <div class="title-wrapper flex justify-between items-center">
+      <h2 class="title">
+        {{ $t('earn.multi.t1') }}
+      </h2>
+      <p class="subTitle">
+        {{ $t('earn.multi.t2') }}
+      </p>
+    </div>
     <card :data="data" @openStake="openStake" />
     <pledgeDialog ref="pledge" />
   </div>
@@ -43,10 +45,9 @@ export default {
     line-height: 24px;
   }
   .subTitle {
-    margin-top: 12px;
     font-size: 16px;
     font-weight: 400;
-    color: #14171c;
+    color: #8690a8;
     line-height: 19px;
   }
 }

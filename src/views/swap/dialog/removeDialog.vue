@@ -1,42 +1,23 @@
 <template>
   <div class="remove-dialog">
-    <Modal
-      v-model="openRemoveDialog"
-      class-name="remove-modal"
-      :footer-hide="true"
-      :closable="true"
-    >
-      <div
-        v-if="isShowRemove"
-        class="remove-content"
-      >
+    <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
+      <div v-if="isShowRemove" class="remove-content">
         <p class="title text-center">
           Remove
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
             <span class="card-title">Amount</span>
-            <div
-              v-if="tokenA&&tokenB"
-              class="balance-item"
-            >
+            <div v-if="tokenA && tokenB" class="balance-item">
               <span class="mr-2 text-secondary">{{ tokenB.symbol }}/{{ tokenA.symbol }} LP Balance</span>
-              <span>{{ balance|formatNormalValue }} </span>
+              <span>{{ balance | formatNormalValue }}</span>
             </div>
           </div>
           <div class="input-wrapper flex">
-            <input
-              v-model="Amount"
-              type="text"
-              class="amount-input"
-              @keyup="numchange"
-            >
+            <input v-model="Amount" type="text" class="amount-input" @keyup="numchange">
           </div>
 
-          <div
-            v-if="inputnoticeA"
-            class="notice-warpper"
-          >
+          <div v-if="inputnoticeA" class="notice-warpper">
             <div class="notice-content">
               <img src="../../../assets/img/notice-red.png">
               <p>{{ inputnoticeA }}</p>
@@ -57,10 +38,7 @@
             MAX
           </div>
         </div>
-        <div
-          v-if="tokenA&&tokenB"
-          class="price-warpper"
-        >
+        <div v-if="tokenA && tokenB" class="price-warpper">
           <div>
             <span>You will receive {{ tokenA.symbol }}</span>
             <p>{{ AmountA }} {{ tokenA.symbol }}</p>
@@ -79,28 +57,16 @@
         </div>
 
         <div v-if="btnLoading">
-          <Buttons> loading... </Buttons>
+          <Buttons>loading...</Buttons>
         </div>
-        <div
-          v-else
-          @click="showConfirmRemove"
-        >
-          <Buttons> Approve </Buttons>
+        <div v-else @click="showConfirmRemove">
+          <Buttons>Approve</Buttons>
         </div>
       </div>
 
-      <div
-        v-else
-        class="removeConfirm-content"
-      >
-        <div
-          class="arrow-warpper"
-          @click="showRemove"
-        >
-          <img
-            src="../../../assets/img/arrow-left.svg"
-            alt="arrow-left"
-          >
+      <div v-else class="removeConfirm-content">
+        <div class="arrow-warpper" @click="showRemove">
+          <img src="../../../assets/img/arrow-left.svg" alt="arrow-left">
         </div>
         <p class="title text-center">
           Confirm
@@ -110,41 +76,24 @@
         </p>
         <div class="token-swap flex items-center justify-between">
           <div class="token-item">
-            <img
-              :src="getTokenImg(tokenA.symbol)"
-              width="48"
-              alt="copm"
-            >
+            <img :src="getTokenImg(tokenA.symbol)" width="48" alt="copm">
             <p>{{ AmountA }}</p>
             <span>{{ tokenA.symbol }}</span>
           </div>
           <div class="add-warpper">
-            <img
-              src="../../../assets/img/add.svg"
-              alt="add"
-            >
+            <img src="../../../assets/img/add.svg" alt="add">
           </div>
           <div class="token-item">
-            <img
-              :src="getTokenImg(tokenB.symbol)"
-              width="48"
-              alt="copm"
-            >
+            <img :src="getTokenImg(tokenB.symbol)" width="48" alt="copm">
             <p>{{ AmountB }}</p>
             <span>{{ tokenB.symbol }}</span>
           </div>
         </div>
-        <div
-          v-if="btnLoading"
-          class="demo-spin-container"
-        >
+        <div v-if="btnLoading" class="demo-spin-container">
           <loading />
         </div>
         <div v-else>
-          <div
-            v-if="tokenA&&tokenB"
-            class="price-warpper"
-          >
+          <div v-if="tokenA && tokenB" class="price-warpper">
             <div>
               <span>Price</span>
               <div class="price">
@@ -155,13 +104,17 @@
             <div class="items-center">
               <span>share of pool</span>
               <div class="sharePoll">
-                <span>-{{ Reduceliquidit|formatRate }}</span>
-                <p>to {{ Residualliquidity|formatRate }}</p>
+                <span>-{{ Reduceliquidit | formatRate }}</span>
+                <p>to {{ Residualliquidity | formatRate }}</p>
               </div>
             </div>
             <div>
               <span>Fee</span>
-              <p>{{ fee |formatBalanceNumber }} {{ chainTokenName }}≈${{ chainTokenPrice*fee |formatBalanceNumber }}</p>
+              <p>
+                {{ fee | formatBalanceNumber }} {{ chainTokenName }}≈${{
+                  (chainTokenPrice * fee) | formatBalanceNumber
+                }}
+              </p>
             </div>
           </div>
           <Buttons @click.native="RemoveConfirm">
@@ -178,90 +131,87 @@
 
 <script>
 import { mapState } from 'vuex';
-import {getTokenImg,readSwapBalance,getToken} from '@/contactLogic/readbalance.js';
+import { getTokenImg } from '@/contactLogic/readbalance.js';
 
 import Web3 from 'web3';
 
-import { ChainId, Token, TokenAmount, Fetcher ,
-    Route, Percent, Router,TradeType,
-} from "@webfans/uniswapsdk";
+import {  TokenAmount} from '@webfans/uniswapsdk';
 
 const debounce = require('debounce');
 
-import {useTokenApprove}  from '@/contacthelp/Approve.js';
+// import { useTokenApprove } from '@/contacthelp/Approve.js';
 
-import { ROUTER_ADDRESS } from '@/constants/index.js';
+// import { ROUTER_ADDRESS } from '@/constants/index.js';
 
 import event from '@/common/js/event';
-const BigNumber = require("bignumber.js");
+const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 
-import {readpariInfoNuminfo}  from '@/contactLogic/readpairpool.js';
-import {localApprove,buildremoveparameter,removeliquidityGas,
-sendremoveliquidity}  from '@/contactLogic/removeLiquidity.js';
-
-
+import { readpariInfoNuminfo } from '@/contactLogic/readpairpool.js';
+import {
+  localApprove,
+  buildremoveparameter,
+  removeliquidityGas,
+  sendremoveliquidity,
+} from '@/contactLogic/removeLiquidity.js';
 
 let pariInfo;
 
 export default {
   components: {
-    Buttons: () => import("@/components/basic/buttons"),
-    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
-    loading: () => import("@/components/basic/loading.vue"),
+    Buttons: () => import('@/components/basic/buttons'),
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
+    loading: () => import('@/components/basic/loading.vue'),
   },
   data() {
     return {
       openRemoveDialog: false,
-      balance: "",
-      Amount: "",
+      balance: '',
+      Amount: '',
       isShowRemove: true,
-      removeAmount:'',
-      tokenB:null,
-      tokenA:null,
-      liquidityToken:null,
-      tokenAAmountWei:'',
-      tokenBAmountWei:'',
-      AmountA:'--',
-      AmountB:'--',
-      SignatureData:'',
-      price:'',
-      priceinvert:'',
-      btnLoading:false,
-      fee:'',
-      parameter:[],
-      totalSupply:'',
-      inputnoticeA:''
-
+      removeAmount: '',
+      tokenB: null,
+      tokenA: null,
+      liquidityToken: null,
+      tokenAAmountWei: '',
+      tokenBAmountWei: '',
+      AmountA: '--',
+      AmountB: '--',
+      SignatureData: '',
+      price: '',
+      priceinvert: '',
+      btnLoading: false,
+      fee: '',
+      parameter: [],
+      totalSupply: '',
+      inputnoticeA: '',
     };
   },
   methods: {
-    clearData(){
+    clearData() {
       this.$data.Amount = '';
       this.$data.parameter = [];
       this.$data.SignatureData = '';
-      this.$data.AmountA ='--';
-      this.$data.AmountB ='--';
+      this.$data.AmountA = '--';
+      this.$data.AmountB = '--';
       this.$data.inputnoticeA = '';
-
-
     },
     inputcheckupA() {
       try {
-        this.$data.inputnoticeA =  '';
-        const num = parseFloat( this.$data.Amount ) ;
-        if(isNaN(num)){
-          this.$data.inputnoticeA =  ' The input value needs to be numeric ';
+        this.$data.inputnoticeA = '';
+        const num = parseFloat(this.$data.Amount);
+        if (isNaN(num)) {
+          this.$data.inputnoticeA = ' The input value needs to be numeric ';
           return false;
         }
-        const inamount = new BigNumber(this.$data.Amount) ;
-        if(inamount.isGreaterThan(this.balance)||inamount.isLessThanOrEqualTo('0')){
-          this.$data.inputnoticeA =  ' Input value must be less than balance and greater than 0 ';
+        const inamount = new BigNumber(this.$data.Amount);
+        if (inamount.isGreaterThan(this.balance) || inamount.isLessThanOrEqualTo('0')) {
+          this.$data.inputnoticeA = ' Input value must be less than balance and greater than 0 ';
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = " The input value needs to be numeric ";
+        this.$data.inputnoticeA = ' The input value needs to be numeric ';
       }
     },
     getTokenImg(tokensymbol) {
@@ -269,14 +219,14 @@ export default {
       return getTokenImg(tokensymbol, chainID);
     },
     async open(pairs) {
-      const chainID = this.ethChainID ;
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
 
       this.clearData();
 
       this.openRemoveDialog = true;
-      this.$data.btnLoading =true;
+      this.$data.btnLoading = true;
       this.$data.isShowRemove = true;
 
       console.log('open');
@@ -284,9 +234,15 @@ export default {
       this.$data.tokenA = pairs.Pair.tokenAmounts[0].token;
       this.$data.tokenB = pairs.Pair.tokenAmounts[1].token;
 
-      const  dataPrise = await readpariInfoNuminfo(chainID,library,account, this.$data.tokenA.symbol,this.$data.tokenB.symbol);
+      const dataPrise = await readpariInfoNuminfo(
+        chainID,
+        library,
+        account,
+        this.$data.tokenA.symbol,
+        this.$data.tokenB.symbol
+      );
 
-      this.$data.balance = Web3.utils.fromWei(dataPrise.balance.toString(),'ether');
+      this.$data.balance = Web3.utils.fromWei(dataPrise.balance.toString(), 'ether');
       this.$data.balanceWei = dataPrise.balance.toString();
       this.$data.liquidityToken = dataPrise.pairInfo.liquidityToken;
 
@@ -299,173 +255,144 @@ export default {
       this.$data.priceinvert = dataPrise.priceinvert.toSignificant(6);
       this.$data.totalSupply = dataPrise.totalSupply.toString();
 
-
       console.log(dataPrise);
-      this.$data.btnLoading =false;
-
-
-
+      this.$data.btnLoading = false;
     },
-    percentage(i,cus) {
-      if(this.$data.btnLoading == true){
-        return ;
+    percentage(i, cus) {
+      if (this.$data.btnLoading == true) {
+        return;
       }
 
-      if(cus==undefined){
-        this.Amount = new  BigNumber(this.$data.balanceWei).div(1e18).times(i).toFixed(6);
+      if (cus == undefined) {
+        this.Amount = new BigNumber(this.$data.balanceWei).div(1e18).times(i).toFixed(6);
       }
 
-
-      this.AmountA = new  BigNumber(this.$data.tokenAAmountWei).div(1e18).times(i).toFixed(6);
-      this.AmountB = new  BigNumber(this.$data.tokenBAmountWei).div(1e18).times(i).toFixed(6);
+      this.AmountA = new BigNumber(this.$data.tokenAAmountWei).div(1e18).times(i).toFixed(6);
+      this.AmountB = new BigNumber(this.$data.tokenBAmountWei).div(1e18).times(i).toFixed(6);
 
       // this.Amount = new  BigNumber(this.balance * i).toFixed(6) ;
     },
     showRemove() {
       this.isShowRemove = true;
     },
-   async showConfirmRemove() {
-      const chainID = this.ethChainID ;
+    async showConfirmRemove() {
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
 
+      const num = this.$data.Amount;
+      const numA = this.$data.AmountA;
+      const numB = this.$data.AmountB;
 
-      const num = this.$data.Amount ;
-      const numA = this.$data.AmountA ;
-      const numB = this.$data.AmountB ;
-
-      if(this.inputcheckupA()== false){
+      if (this.inputcheckupA() == false) {
         return;
-
       }
 
-      this.$data.btnLoading = true ;
+      this.$data.btnLoading = true;
 
+      const ToRemoveAmount = new TokenAmount(this.$data.liquidityToken, Web3.utils.toWei(num, 'ether'));
 
+      try {
+        const SignatureData = await localApprove(library, chainID, account, pariInfo, ToRemoveAmount);
 
-      const ToRemoveAmount = new TokenAmount(
-        this.$data.liquidityToken,
-        Web3.utils.toWei(num, "ether")) ;
+        this.$data.SignatureData = SignatureData;
 
-     try {
-      const   SignatureData  = await localApprove(library,chainID,account,pariInfo,ToRemoveAmount);
+        const chainId = chainID;
+        const pair = pariInfo;
+        const signatureData = SignatureData;
 
-      this.$data.SignatureData = SignatureData ;
+        const currencyAmountA = new TokenAmount(this.$data.tokenA, Web3.utils.toWei(numA, 'ether'));
 
-      const chainId = chainID;
-      const pair = pariInfo;
-      const signatureData = SignatureData ;
+        const currencyAmountB = new TokenAmount(this.$data.tokenB, Web3.utils.toWei(numB, 'ether'));
 
-      const currencyAmountA = new TokenAmount(
-        this.$data.tokenA,
-        Web3.utils.toWei(numA, "ether")) ;
-
-
-      const currencyAmountB =  new TokenAmount(
-        this.$data.tokenB,
-        Web3.utils.toWei(numB, "ether")) ;
-
-      const parameter =  await buildremoveparameter({library,chainId,account,pair,
-  signatureData,ToRemoveAmount,currencyAmountA,currencyAmountB});
+        const parameter = await buildremoveparameter({
+          library,
+          chainId,
+          account,
+          pair,
+          signatureData,
+          ToRemoveAmount,
+          currencyAmountA,
+          currencyAmountB,
+        });
 
         console.log(parameter);
         this.$data.parameter = parameter;
-       const  fee =  await  removeliquidityGas (chainID,library,account,parameter)  ;
+        const fee = await removeliquidityGas(chainID, library, account, parameter);
 
-       this.$data.fee = fee ;
+        this.$data.fee = fee;
 
-
-      this.isShowRemove = false;
-
-
-
-     } catch (error) {
+        this.isShowRemove = false;
+      } catch (error) {
         console.log(error);
+      }
 
-     }
-
-     this.$data.btnLoading = false ;
-
-
-
+      this.$data.btnLoading = false;
     },
-    async RemoveConfirm(){
-      const chainID = this.ethChainID ;
+    async RemoveConfirm() {
+      const chainID = this.ethChainID;
       const library = this.ethersprovider;
       const account = this.ethAddress;
-      const  parameters = this.$data.parameter ;
-
+      const parameters = this.$data.parameter;
 
       try {
-        this.$data.btnLoading = true ;
+        this.$data.btnLoading = true;
 
-        const tx = await sendremoveliquidity(chainID,library,account,parameters) ;
-        const baseTip = `remove ${ this.$data.Amount } ${ this.$data.tokenA.symbol }/${ this.$data.tokenB.symbol } LP `;
+        const tx = await sendremoveliquidity(chainID, library, account, parameters);
+        const baseTip = `remove ${this.$data.Amount} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol} LP `;
 
         this.$refs.haveSendtx.open(baseTip);
         this.openRemoveDialog = false;
 
-        event.$emit('sendtx',[tx,{
-          okinfo:baseTip+"success",
-          failinfo:baseTip+'fail'
-        }]);
-
+        event.$emit('sendtx', [
+          tx,
+          {
+            okinfo: baseTip + 'success',
+            failinfo: baseTip + 'fail',
+          },
+        ]);
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: "Transaction cancelled",
+          title: 'Transaction cancelled',
         });
       }
 
-      this.$data.btnLoading = false ;
-
-
-
+      this.$data.btnLoading = false;
     },
-    numchange:debounce(function(){
-
-      if(this.inputcheckupA()== false){
+    numchange: debounce(function () {
+      if (this.inputcheckupA() == false) {
         return;
-
       }
 
-      const num = this.$data.Amount ;
-      const result = this.$data.Amount /this.$data.balance ;
+      const num = this.$data.Amount;
+      const result = this.$data.Amount / this.$data.balance;
 
-      this.percentage(result,true);
-
-
-
-    },1000)
+      this.percentage(result, true);
+    }, 1000),
   },
   computed: {
-    ...mapState(['ethChainID', 'ethAddress','web3','ethersprovider','chainTokenPrice','chainTokenName']),
-    Reduceliquidit(){
-
-      const  num = new  BigNumber(this.$data.Amount).times(1e18).div(this.$data.totalSupply).toFixed(6);
+    ...mapState(['ethChainID', 'ethAddress', 'web3', 'ethersprovider', 'chainTokenPrice', 'chainTokenName']),
+    Reduceliquidit() {
+      const num = new BigNumber(this.$data.Amount).times(1e18).div(this.$data.totalSupply).toFixed(6);
       return num;
-
     },
-    Residualliquidity(){
+    Residualliquidity() {
+      const b1 = new BigNumber(Web3.utils.toWei(this.$data.balance));
+      const a1 = new BigNumber(Web3.utils.toWei(this.$data.Amount));
+      const s1 = new BigNumber(this.$data.totalSupply);
 
-      const b1 =  new  BigNumber(Web3.utils.toWei(this.$data.balance));
-      const a1 =  new  BigNumber(Web3.utils.toWei(this.$data.Amount));
-      const s1 =  new  BigNumber(this.$data.totalSupply);
-
-      const  num = (b1.minus(a1)).div(s1.minus(a1)).toFixed(6);
+      const num = b1.minus(a1).div(s1.minus(a1)).toFixed(6);
       return num;
-
-    }
+    },
   },
-  watch:{
-    balance:function(){
-      if(this.$data.Amount  !=''){
+  watch: {
+    balance: function () {
+      if (this.$data.Amount != '') {
         this.numchange();
       }
-
-
-    }
-  }
+    },
+  },
 };
 </script>
 

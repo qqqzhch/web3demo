@@ -34,9 +34,9 @@
           </DropdownMenu>
         </Dropdown>
 
-        <buttons v-if="!ethAddress" width="140px" height="40px" @click.native="openWalletDialog">
+        <button v-if="!ethAddress" class="connectBtn" @click="openWalletDialog">
           {{ $t('header.connectWallet') }}
-        </buttons>
+        </button>
 
         <template v-else>
           <Dropdown trigger="click" class="func-wrapper" @on-click="choseFunc">
@@ -61,6 +61,7 @@
             </DropdownMenu>
           </Dropdown>
         </template>
+        </button>
       </div>
     </nav>
     <walletdialog ref="wallet" />
@@ -73,8 +74,7 @@ import config from '@/config/config.js';
 import jscookie from 'js-cookie';
 export default {
   components: {
-    buttons: () => import('@/components/basic/buttons'),
-    walletdialog: () => import('@/views/transfer/dialog/walletDialog'),
+    walletdialog: () => import('./dialog/walletDialog'),
   },
   data() {
     return {
@@ -102,27 +102,6 @@ export default {
       this.netID = val;
       jscookie.set('targetNet', val, { expires: 180 });
       this.getStatus();
-
-      // if (this.statusVal === 'notConnect') {
-      //   this.$Notice.warning({
-      //     title: 'Wallet not connected',
-      //     desc: 'Please connect to your wallet',
-      //   });
-      // }
-
-      // if (this.statusVal === 'wrongConnect') {
-      //   this.$Notice.error({
-      //     title: 'Network not matched',
-      //     desc: 'Please switch to Ethereum Network in Metamask.',
-      //   });
-      // }
-
-      // if (this.statusVal === 'connect') {
-      //   this.$Notice.success({
-      //     title: 'Metamask Connected',
-      //     desc: this.ethAddress,
-      //   });
-      // }
 
       switch (val) {
         case '1':
@@ -312,7 +291,7 @@ export default {
         }
         span {
           cursor: pointer;
-          font-size: 12px;
+          font-size: 16px;
           font-weight: 500;
           color: #14171c;
           line-height: 14px;
@@ -398,5 +377,14 @@ export default {
 }
 .connect {
   background: #00d075;
+}
+.connectBtn {
+  width: 148px;
+  height: 40px;
+  border-radius: 20px;
+  line-height: 19px;
+  font-size: 16px;
+  color: #0058ff;
+  border: 1px solid #0058ff;
 }
 </style>

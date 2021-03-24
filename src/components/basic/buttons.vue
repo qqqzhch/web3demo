@@ -6,7 +6,7 @@
     <button
       v-if="type === 'normal'"
       class="btn"
-      :style="`background-color: ${background}; color: ${color};`"
+      :style="`background-color: ${background}; color: ${color};border-radius: ${borderRadius}`"
     >
       <slot />
     </button>
@@ -41,6 +41,10 @@ export default {
     background:{
         type: String,
         default:'#015afe'
+    },
+    borderRadius:{
+        type: String,
+        default:'6px'
     },
     color:{
         type: String,
