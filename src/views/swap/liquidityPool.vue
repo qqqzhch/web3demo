@@ -36,7 +36,7 @@
         <loading />
       </div>
       <div v-for="item in dataList" v-else :key="item.pairName" class="poolCon">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center imgWapper">
           <div class="img-warpper flex">
             <img :src="getTokenImg(item.pairSymbols[0])">
             <img :src="getTokenImg(item.pairSymbols[1])" class="otherImg">
@@ -46,11 +46,11 @@
             <span>1 {{ item.configSymbols[0] }} = {{ item.price }} {{ item.configSymbols[1] }}</span>
           </div>
         </div>
-        <div>
+        <div class="totalWarpper">
           <span>{{ $t('liquidity.pool.totalInputed') }}</span>
           <p>{{ item.totalSupply | formatBalance }}</p>
         </div>
-        <div class=" flex items-center">
+        <div class=" flex items-center inputedWarpper">
           <div class="rightdiv">
             <span>{{ $t('liquidity.pool.inputed') }} {{ item.pairSymbols[0] }}</span>
             <span>{{ $t('liquidity.pool.inputed') }} {{ item.pairSymbols[1] }}</span>
@@ -63,7 +63,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="buttonWarpper">
           <div class="input-warpper">
             <button @click="openInput(item)">
               {{ $t('liquidity.pool.btnInput') }}
@@ -103,9 +103,9 @@ export default {
     };
   },
   components: {
-    inputDialog: () => import('./dialog/inputDialog.vue'),
-    removeDialog: () => import('./dialog/removeDialog.vue'),
-    loading: () => import('@/components/basic/loading.vue'),
+    inputDialog: () => import("./dialog/inputDialog.vue"),
+    removeDialog: () => import("./dialog/removeDialog.vue"),
+    loading: () => import("@/components/basic/loading.vue"),
   },
   mounted() {
     //txsuccess
@@ -360,6 +360,18 @@ export default {
         span {
           color: #14171c;
         }
+      }
+      .imgWapper{
+        width: 25%;
+      }
+      .totalWarpper{
+        width: 15%;
+      }
+      .inputedWarpper{
+        width: 25%;
+      }
+      .buttonWarpper {
+        width: 15%;
       }
     }
   }
