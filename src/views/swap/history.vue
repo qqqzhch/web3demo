@@ -2,7 +2,7 @@
   <div class="content-wapper">
     <div class="exchanges-wapper">
       <p class="exchanges-title">
-        Order History
+        {{ $t('swapHistory.history') }}
       </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
         <div class="list-wapper">
@@ -75,7 +75,7 @@
 <script>
 import { mapState } from "vuex";
 import { readSwapHistory } from "@/contactLogic/history.js";
-import {  getTokenImg } from "@/contactLogic/readbalance.js";
+import { getTokenImg } from "@/contactLogic/readbalance.js";
 
 export default {
   data() {
@@ -89,7 +89,7 @@ export default {
       pageIndex: 1,
       pageNum: 1,
       pairloading: false,
-      loading: false
+      loading: false,
     };
   },
   methods: {
@@ -120,8 +120,7 @@ export default {
     },
     onreachbottom() {
       console.log("onreachbottom", this.$data.pageIndex);
-      if (this.$data.pageIndex < this.$data.pageNum)
-        this.loading = true;
+      if (this.$data.pageIndex < this.$data.pageNum) this.loading = true;
 
       const _this = this;
 
@@ -152,27 +151,27 @@ export default {
     getHistory() {
       const columns = [
         {
-          title: "Pair",
+          title: this.$t("swapHistory.table.Pair"),
           slot: "Pair",
           minWidth: 200,
         },
         {
-          title: "Action",
+          title: this.$t("swapHistory.table.Action"),
           slot: "Action",
           minWidth: 100,
         },
         {
-          title: "Amount",
+          title: this.$t("swapHistory.table.Amount"),
           slot: "Amount",
           minWidth: 120,
         },
         {
-          title: "Recived",
+          title: this.$t("swapHistory.table.Recived"),
           slot: "Recived",
           minWidth: 120,
         },
         {
-          title: "Status",
+          title: this.$t("swapHistory.table.Status"),
           slot: "Status",
           minWidth: 100,
         },

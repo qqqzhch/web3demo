@@ -3,13 +3,13 @@
     <Modal v-model="openInputDialog" class-name="input-modal" :footer-hide="true" :closable="true">
       <div v-if="isShowInput" class="input-content">
         <p class="title text-center">
-          Input
+          {{ $t('swapHistory.inputDialog.title') }}
         </p>
         <div class="Input-wrapper">
           <div class="title-content">
-            <span class="card-title">Input</span>
+            <span class="card-title">{{ $t('swapHistory.inputDialog.title') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Balance</span>
+              <span class="mr-2 text-secondary">{{ $t('swapHistory.inputDialog.balance') }}</span>
               <span v-if="tokenA">{{ tokenABalance | formatNormalValue }} {{ tokenA.symbol }}</span>
             </div>
           </div>
@@ -37,9 +37,9 @@
         </div>
         <div class="Input-wrapper">
           <div class="title-content">
-            <span class="card-title">Input</span>
+            <span class="card-title">{{ $t('swapHistory.inputDialog.title') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">Balance</span>
+              <span class="mr-2 text-secondary">{{ $t('swapHistory.inputDialog.balance') }}</span>
               <span v-if="tokenB">{{ tokenBBalance | formatNormalValue }} {{ tokenB.symbol }}</span>
             </div>
           </div>
@@ -76,28 +76,28 @@
 
         <div class="btn-warpper">
           <div v-if="btnloading">
-            <Buttons>loading</Buttons>
+            <Buttons>{{ $t('swapHistory.confirmDialog.loading') }}</Buttons>
           </div>
           <div v-else>
             <div v-if="tokenAnotNeed == false || tokenBnotNeed == false">
               <div>
                 <Buttons v-if="tokenAnotNeed == false" @click.native="approveA">
-                  {{ tokenA.symbol }} Approve
+                  {{ tokenA.symbol }} {{ $t('swapHistory.removeDialog.button') }}
                 </Buttons>
               </div>
               <br>
               <div>
                 <Buttons v-if="tokenBnotNeed == false" @click.native="approveB">
-                  {{ tokenB.symbol }} Approve
+                  {{ tokenB.symbol }} {{ $t('swapHistory.removeDialog.button') }}
                 </Buttons>
               </div>
             </div>
 
             <div v-else @click="showConfirmInput">
-              <Buttons>Next</Buttons>
+              <Buttons>{{ $t('swapHistory.inputDialog.button') }}</Buttons>
             </div>
             <p class="buy" @click="toexchange">
-              Buy scUSD
+              {{ $t('swapHistory.inputDialog.buy') }}
             </p>
           </div>
         </div>
@@ -108,10 +108,10 @@
             <img src="../../../assets/img/arrow-left.svg" alt="arrow-left">
           </div>
           <p class="title text-center">
-            Confirm
+            {{ $t('swapHistory.confirmDialog.titleConfirm') }}
           </p>
           <p class="will-receive">
-            You will receive
+            {{ $t('swapHistory.confirmDialog.willReceive') }}
           </p>
 
           <div class="confirm-content">
@@ -122,10 +122,10 @@
             <h2>{{ LiquidityInfo.liquidityMinted }}</h2>
             <p>{{ tokenA.symbol }}/{{ tokenB.symbol }} LP</p>
             <span>
-              Output is estimated. You will receive at least {{ LiquidityInfo.liquidityMinted }} {{ tokenA.symbol }}/{{
+              {{ $t('swapHistory.confirmDialog.content1') }} {{ LiquidityInfo.liquidityMinted }} {{ tokenA.symbol }}/{{
                 tokenB.symbol
               }}
-              LP, or the transaction will revert.
+              {{ $t('swapHistory.confirmDialog.content2') }}
             </span>
           </div>
           <div v-if="btnloading" class="demo-spin-container">
@@ -134,15 +134,15 @@
           <div v-else>
             <div class="price-warpper">
               <div>
-                <span>{{ tokenA.symbol }} Input</span>
+                <span>{{ tokenA.symbol }} {{ $t('swapHistory.inputDialog.title') }}</span>
                 <p>{{ aTokenAmount }} {{ tokenA.symbol }}</p>
               </div>
               <div>
-                <span>{{ tokenB.symbol }} Input</span>
+                <span>{{ tokenB.symbol }} {{ $t('swapHistory.inputDialog.title') }}</span>
                 <p>{{ bTokenAmount }} {{ tokenB.symbol }}</p>
               </div>
               <div>
-                <span>Price</span>
+                <span>{{ $t('swapHistory.confirmDialog.Price') }}</span>
                 <div class="price">
                   <p v-if="tokenB && tokenA && price">
                     {{ price }} {{ tokenB.symbol }} = 1 {{ tokenA.symbol }}
@@ -154,19 +154,19 @@
                 </div>
               </div>
               <div class="items-center">
-                <span>share of pool</span>
+                <span>{{ $t('swapHistory.confirmDialog.share') }}</span>
                 <div class="sharePoll">
                   <span>+{{ LiquidityInfo.poolPercentData | formatRate }}</span>
-                  <p>to {{ newpercent | formatRate }}</p>
+                  <p>{{ $t('swapHistory.confirmDialog.to') }} {{ newpercent | formatRate }}</p>
                 </div>
               </div>
               <div>
-                <span>Fee</span>
+                <span>{{ $t('swapHistory.confirmDialog.fee') }}</span>
                 <p>{{ fee | formatBalanceNumber }} HT≈${{ (chainTokenPrice * fee) | formatBalanceNumber }}</p>
               </div>
             </div>
             <Buttons @click.native="sendTX">
-              Confirm
+              {{ $t('swapHistory.confirmDialog.titleConfirm') }}
             </Buttons>
           </div>
         </div>

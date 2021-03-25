@@ -49,5 +49,38 @@ export default {
       successCom:'Success',
       failCom:'Fail',
       txhavesend:'The transaction has been sent'
+    },
+    swapHistory: {
+      history: 'Order History',
+      table: {
+        Pair: 'Pair',
+        Action: 'Action',
+        Amount: 'Amount',
+        Recived:'Recived',
+        Status: 'Status'
+      },
+      removeDialog:{
+        title:'Remove',
+        amount:'Amount',
+        balance:'Balance',
+        button:'Approve',
+      },
+      confirmDialog:{
+        titleConfirm:'Confirm',
+        willReceive:'You will receive',
+        loading:'loading',
+        share:'share of pool',
+        fee:'Fee',
+        Price:'Price',
+        to:'To',
+        content1:'Output is estimated. You will receive at least',
+        content2:'LP, or the transaction will revert.',
+      },
+      inputDialog:{
+        title:'Input',
+        balance:'Balance',
+        button:'Next',
+        buy:'Buy scUSD',
+      }
     }
 };

@@ -3,11 +3,11 @@
     <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
       <div v-if="isShowRemove" class="remove-content">
         <p class="title text-center">
-          Remove
+          {{ $t('swapHistory.removeDialog.title') }}
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
-            <span class="card-title">Amount</span>
+            <span class="card-title">{{ $t('swapHistory.removeDialog.amount') }}</span>
             <div v-if="tokenA && tokenB" class="balance-item">
               <span class="mr-2 text-secondary">{{ tokenB.symbol }}/{{ tokenA.symbol }} LP Balance</span>
               <span>{{ balance | formatNormalValue }}</span>
@@ -40,15 +40,15 @@
         </div>
         <div v-if="tokenA && tokenB" class="price-warpper">
           <div>
-            <span>You will receive {{ tokenA.symbol }}</span>
+            <span>{{ $t('swapHistory.confirmDialog.willReceive') }} {{ tokenA.symbol }}</span>
             <p>{{ AmountA }} {{ tokenA.symbol }}</p>
           </div>
           <div>
-            <span>You will receive {{ tokenB.symbol }}</span>
+            <span>{{ $t('swapHistory.confirmDialog.willReceive') }} {{ tokenB.symbol }}</span>
             <p>{{ AmountB }} {{ tokenB.symbol }}</p>
           </div>
           <div>
-            <span>Price</span>
+            <span>{{ $t('swapHistory.confirmDialog.Price') }}</span>
             <div class="price">
               <p>{{ price }} {{ tokenB.symbol }} = 1{{ tokenA.symbol }}</p>
               <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
@@ -57,10 +57,10 @@
         </div>
 
         <div v-if="btnLoading">
-          <Buttons>loading...</Buttons>
+          <Buttons>{{ $t('swapHistory.confirmDialog.loading') }}...</Buttons>
         </div>
         <div v-else @click="showConfirmRemove">
-          <Buttons>Approve</Buttons>
+          <Buttons>{{ $t('swapHistory.removeDialog.button') }}</Buttons>
         </div>
       </div>
 
@@ -69,10 +69,10 @@
           <img src="../../../assets/img/arrow-left.svg" alt="arrow-left">
         </div>
         <p class="title text-center">
-          Confirm
+          {{ $t('swapHistory.confirmDialog.titleConfirm') }}
         </p>
         <p class="will-receive">
-          You will receive
+          {{ $t('swapHistory.confirmDialog.willReceive') }}
         </p>
         <div class="token-swap flex items-center justify-between">
           <div class="token-item">
@@ -95,21 +95,21 @@
         <div v-else>
           <div v-if="tokenA && tokenB" class="price-warpper">
             <div>
-              <span>Price</span>
+              <span>{{ $t('swapHistory.confirmDialog.Price') }}</span>
               <div class="price">
                 <p>{{ price }} {{ tokenA.symbol }} = 1USDT</p>
                 <p>1 {{ tokenB.symbol }} = {{ priceinvert }} {{ tokenA.symbol }}</p>
               </div>
             </div>
             <div class="items-center">
-              <span>share of pool</span>
+              <span>{{ $t('swapHistory.confirmDialog.share') }}</span>
               <div class="sharePoll">
                 <span>-{{ Reduceliquidit | formatRate }}</span>
                 <p>to {{ Residualliquidity | formatRate }}</p>
               </div>
             </div>
             <div>
-              <span>Fee</span>
+              <span>{{ $t('swapHistory.confirmDialog.fee') }}</span>
               <p>
                 {{ fee | formatBalanceNumber }} {{ chainTokenName }}≈${{
                   (chainTokenPrice * fee) | formatBalanceNumber
@@ -118,7 +118,7 @@
             </div>
           </div>
           <Buttons @click.native="RemoveConfirm">
-            Confirm
+            {{ $t('swapHistory.confirmDialog.titleConfirm') }}
           </Buttons>
           <div />
         </div>
@@ -201,17 +201,17 @@ export default {
         this.$data.inputnoticeA = '';
         const num = parseFloat(this.$data.Amount);
         if (isNaN(num)) {
-          this.$data.inputnoticeA = ' The input value needs to be numeric ';
+          this.$data.inputnoticeA = this.$t('notice.swapNotice.n1');
           return false;
         }
         const inamount = new BigNumber(this.$data.Amount);
         if (inamount.isGreaterThan(this.balance) || inamount.isLessThanOrEqualTo('0')) {
-          this.$data.inputnoticeA = ' Input value must be less than balance and greater than 0 ';
+          this.$data.inputnoticeA = this.$t('notice.swapNotice.n2');
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = ' The input value needs to be numeric ';
+        this.$data.inputnoticeA = this.$t('notice.swapNotice.n1');
       }
     },
     getTokenImg(tokensymbol) {
@@ -354,7 +354,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: 'Transaction cancelled',
+          title: this.$t('notice.swapNotice.n3'),
         });
       }
 

@@ -19,7 +19,12 @@ export default {
     n37:'Wallet not connected',
     n38:'Please connect to your wallet',
     n39:'Network not matched',
-    n40:'Please switch to Ethereum Network in Metamask.'
+    n40:'Please switch to Ethereum Network in Metamask.',
+    swapNotice:{
+      n1:'The input value needs to be numeric ',
+      n2:'Input value must be less than balance and greater than 0',
+      n3:'Transaction cancelled'
+    }
   },
   header:{
     nav:{
