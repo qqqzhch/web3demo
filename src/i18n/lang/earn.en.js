@@ -8,22 +8,22 @@ export default {
   tabMenu: {
     earn: 'Earn',
     myPage: 'My Page',
-    history: 'history',
+    history: 'History',
   },
   earn: {
     single: {
-      t1: 'Designated Pool',
-      t2: 'Designated mining, users can enjoy lower risk mining with a super high yield.',
+      t1: 'Designated Mining',
+      t2: 'Stake designated assets, enjoy lower risk mining with a high yield.',
     },
     multi: {
-      t1: 'Liquidity Pool',
-      t2: 'Input liquidity, get LP Token and stake it to earn pool rewards.'
+      t1: 'Liquidity Mining',
+      t2: 'Stake LP to earn pool rewards.'
     },
     card: {
       apy: 'APY',
       totalStaked: 'Total Staked',
       totalPool: 'Total Value of Pool',
-      output: 'Output',
+      output: 'Daily Output',
       stake: "Stake",
     },
     dialog: {
@@ -31,9 +31,9 @@ export default {
         amount: 'Amount',
         balance: 'Balance',
         totalStakePool: 'Total staked LP of pool',
-        yield: 'Yield',
+        yield: 'APY',
         willStake: 'You will stake',
-        sharePool: 'share of pool',
+        sharePool: 'Share of pool',
         next: 'Next',
         approve: 'Approve',
         buy: 'Buy scUSD',
