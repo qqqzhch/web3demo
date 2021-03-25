@@ -1,18 +1,18 @@
 <template>
   <div class="pool-warpper">
     <div class="rewards-warpper">
-      <h2>Where to get scUSD?</h2>
+      <h2>{{ $t('liquidity.title') }}</h2>
       <p>
-        Earn a transaction fee by providing liquidity to trade pairs, and can be claimed by removing liquidity.
+        {{ $t('liquidity.subTitle') }}
       </p>
       <div class="buttonWarpper flex justify-between items-center">
         <div class="button-item">
           <div class="border-image">
             <p @click="tobuilder">
-              SuperCash Builder
+              {{ $t('liquidity.btnBuild') }}
             </p>
             <div>
-              <span>Get scUSD Credit Line</span>
+              <span>{{ $t('liquidity.btnGetscusd') }}</span>
               <img src="../../assets/img/rightTop.svg" alt="arrow">
             </div>
           </div>
@@ -20,10 +20,10 @@
         <div class="button-item">
           <div class="border-image">
             <p @click="toexchange">
-              SuperCash Exchange
+              {{ $t('liquidity.btnExchange') }}
             </p>
             <div>
-              <span>Buy scUSD</span>
+              <span>{{ $t('liquidity.btnBuyscusd') }}</span>
               <img src="../../assets/img/rightTop.svg" alt="arrow">
             </div>
           </div>
@@ -31,15 +31,15 @@
       </div>
     </div>
     <div class="liquidityPool">
-      <h2>Input liquidity, get LP</h2>
+      <h2>{{ $t('liquidity.pool.title') }}</h2>
       <div v-if="pairlistloading" class="demo-spin-container ">
         <loading />
       </div>
       <div v-for="item in dataList" v-else :key="item.pairName" class="poolCon">
         <div class="flex items-center justify-between">
           <div class="img-warpper flex">
-            <img :src="getTokenImg(item.pairSymbols[0])" alt="" width="48">
-            <img :src="getTokenImg(item.pairSymbols[1])" width="48" class="otherImg">
+            <img :src="getTokenImg(item.pairSymbols[0])">
+            <img :src="getTokenImg(item.pairSymbols[1])" class="otherImg">
           </div>
           <div>
             <p>{{ item.pairName }}</p>
@@ -47,14 +47,14 @@
           </div>
         </div>
         <div>
-          <span>Total Inputed</span>
+          <span>{{ $t('liquidity.pool.totalInputed') }}</span>
           <p>{{ item.totalSupply | formatBalance }}</p>
         </div>
         <div class=" flex items-center">
           <div class="rightdiv">
-            <span>Inputed {{ item.pairSymbols[0] }}</span>
-            <span>Inputed {{ item.pairSymbols[1] }}</span>
-            <span class="colorText">My share of pool</span>
+            <span>{{ $t('liquidity.pool.inputed') }} {{ item.pairSymbols[0] }}</span>
+            <span>{{ $t('liquidity.pool.inputed') }} {{ item.pairSymbols[1] }}</span>
+            <span class="colorText">{{ $t('liquidity.pool.sharePool') }}</span>
           </div>
           <div class="number">
             <span>{{ item.aTokenbalance }}</span>
@@ -66,12 +66,12 @@
         <div>
           <div class="input-warpper">
             <button @click="openInput(item)">
-              Input
+              {{ $t('liquidity.pool.btnInput') }}
             </button>
           </div>
           <div class="remove-warpper">
             <button @click="openRemove(item)">
-              Remove
+              {{ $t('liquidity.pool.btnRemove') }}
             </button>
           </div>
         </div>

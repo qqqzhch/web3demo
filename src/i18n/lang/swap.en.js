@@ -17,14 +17,14 @@ export default {
         PriceImpact: "Price Impact",
         LiquidityProviderFee: "Liquidity Provider Fee",
         Minimumreceived: "Minimum Received",
-        
+
         PriceImpactError: "The price fluctuates too much to trade",
         approve: "Approve",
         ethgasfree: "Fee",
         enterthequantity: "Please enter the quantity",
-        
+
         actions: {
-          
+
           Amountexceedsbalance: "The swap amount cannot be greater than balance,And greater than 0",
           needNumber:"The value entered needs to be a number",
           Transactionfailure: "Transaction Failed",
@@ -82,5 +82,21 @@ export default {
         button:'Next',
         buy:'Buy scUSD',
       }
-    }
+    },
+    liquidity: {
+      title: 'Where to get scUSD?',
+      subTitle: 'Earn a transaction fee by providing liquidity to trade pairs, and can be claimed by removing liquidity.',
+      btnBuild: 'SuperCash Builder',
+      btnGetscusd: 'Get scUSD Credit Line',
+      btnExchange: 'SuperCash Exchange',
+      btnBuyscusd: 'Buy scUSD',
+      pool: {
+        title: 'Input liquidity, get LP',
+        totalInputed: 'Total Inputed',
+        inputed: 'Inputed',
+        sharePool: 'My share of pool',
+        btnInput: 'Input',
+        btnRemove: 'Remove'
+      }
+    },
 };

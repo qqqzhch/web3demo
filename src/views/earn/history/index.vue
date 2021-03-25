@@ -91,7 +91,7 @@ export default {
         const data = await readPledgeHistory(chainID, account, this.pageIndex, 10);
         this.list = this.list.concat(data.data);
         // console.log(this.list);
-        if (data.count % 10 == 0) {
+        if (data.count % 10 === 0) {
           this.pageNum = data.count / 10;
         } else {
           this.pageNum = (data.count - (data.count % 10)) / 10 + 1;

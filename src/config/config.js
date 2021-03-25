@@ -9,6 +9,10 @@ export default {
       imgSrc: require('../assets/img/eth48.png'),
       name: 'Ropsten',
     },
+    '4': {
+      imgSrc: require('../assets/img/eth48.png'),
+      name: 'Rinkeby',
+    },
     '256': {
       imgSrc: require('../assets/img/huobi48.svg'),
       name: 'Heco Test',

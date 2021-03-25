@@ -103,35 +103,7 @@ export default {
       jscookie.set('targetNet', val, { expires: 180 });
       this.getStatus();
 
-      switch (val) {
-        case '1':
-          this.network = this.$t('header.network.Ethereum');
-          break;
-
-        case '3':
-          this.network = this.$t('header.network.Ropsten');
-          break;
-
-        case '256':
-          this.network = this.$t('header.network.HecoTest');
-          break;
-
-        case '128':
-          this.network = this.$t('header.network.HecoMain');
-          break;
-
-        case '56':
-          this.network = this.$t('header.network.BSCMain');
-          break;
-
-        case '97':
-          this.network = this.$t('header.network.BSCTest');
-          break;
-
-        default:
-          this.network = this.$t('header.network.Ethereum');
-          break;
-      }
+      this.network = this.netInfo[val].name;
       jscookie.set('net', this.network, { expires: 180 });
     },
 
@@ -169,13 +141,14 @@ export default {
         this.$Notice.error({
           title: this.$t('notice.n39'),
           desc: this.$t('notice.n40'),
+          duration: 30
         });
       }
 
       if (this.ethAddress && targetID === this.ethChainID) {
         this.statusVal = 'connect';
         this.$Notice.success({
-          title: 'Metamask Connected',
+          title: this.$t('notice.n41'),
           desc: this.ethAddress,
         });
       }
