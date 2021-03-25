@@ -66,7 +66,7 @@ export default {
 <style lang="less" scoped>
 .connect-wrapper {
   margin-top: 24px;
-  height: 100vh;
+  // height: 100vh;
   .content-wrapper {
     width: 100%;
     .switch-wrapper {
