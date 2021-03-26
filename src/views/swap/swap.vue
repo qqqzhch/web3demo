@@ -37,9 +37,6 @@
         </div>
       </div>
       <div class="swap-wrapper">
-        <p class="swap-title">
-          {{ $t('swap.pageTitle') }}
-        </p>
         <div class="From-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('swap.fromToken') }}</span>
@@ -540,7 +537,7 @@ export default {
     .From-wrapper {
       .title-content {
         overflow: hidden;
-        margin: 16px 0 8px;
+        margin-bottom: 8px;
         span {
           float: left;
         }

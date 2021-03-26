@@ -7,7 +7,7 @@
         </p>
         <div class="claim-wrapper">
           <div class="title-content">
-            <span class="card-title">{{ $t('commom.amount') }}</span>
+            <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }} {{ coinName }}</span>
               <span>{{ claimAmount }} {{ rewardToken }}</span>
@@ -19,7 +19,7 @@
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>{{ $t('commom.willRecieive') }}</span>
+            <span>{{ $t('common.willRecieive') }}</span>
             <p>{{ claimAmount }} {{ rewardToken }}</p>
           </div>
           <div class="price-item">
@@ -34,10 +34,10 @@
 
         <div class="btn-warpper">
           <Buttons v-if="!extractLoading" @click.native="sendExtract">
-            {{ $t('commom.confirm') }}
+            {{ $t('common.confirm') }}
           </Buttons>
           <Buttons v-else>
-            {{ $t('commom.loading') }}...
+            {{ $t('common.loading') }}...
           </Buttons>
         </div>
       </div>

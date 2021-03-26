@@ -3,13 +3,13 @@
     <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
       <div class="remove-content">
         <p class="title text-center">
-          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
+          {{ $t('myPage.dialog.dialog.unstake') }} {{ coinName }}
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
-            <span class="card-title">{{ $t('commom.amount') }}</span>
+            <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.staked') }} {{ coinName }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ coinName }}</span>
               <span>{{ stakeVal }}</span>
             </div>
           </div>
@@ -26,10 +26,10 @@
 
         <div class="btn-warpper">
           <Buttons v-if="!takeLoading" @click.native="sendTakeout">
-            {{ $t('commom.confirm') }}
+            {{ $t('common.confirm') }}
           </Buttons>
           <Buttons v-else>
-            {{ $t('commom.loading') }}...
+            {{ $t('common.loading') }}...
           </Buttons>
         </div>
       </div>

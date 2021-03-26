@@ -1,8 +1,5 @@
 <template>
   <div class="myPage-wrapper">
-    <h2 claas="pageTitle">
-      {{ $t('myPage.table.title') }}
-    </h2>
     <div v-if="showLoading">
       <loading />
     </div>

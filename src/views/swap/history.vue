@@ -1,9 +1,6 @@
 <template>
   <div class="content-wapper">
     <div class="exchanges-wapper">
-      <p class="exchanges-title">
-        {{ $t('swapHistory.history') }}
-      </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
         <div class="list-wapper">
           <Table :loading="loading" :columns="getHistory" :data="list">
@@ -108,8 +105,6 @@ export default {
         this.$data.pageIndex,
         10
       );
-
-      this.$data.list = this.$data.list.concat(data.data);
 
       if (data.count % 10 === 0) {
         this.$data.pageNum = data.count / 10;

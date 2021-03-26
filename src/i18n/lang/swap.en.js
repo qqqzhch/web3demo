@@ -56,6 +56,11 @@ export default {
         Recived:'Received',
         Status: 'Status'
       },
+      actions:{
+        stake:'Stake',
+        exit:'Unstake',
+        getReward:'Claim',
+      },
       removeDialog:{
         title:'Remove',
         amount:'Amount',

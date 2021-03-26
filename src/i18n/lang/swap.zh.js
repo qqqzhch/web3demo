@@ -52,5 +52,13 @@ export default {
         successCom:'成功',
         failCom:'失败',
         txhavesend:'交易已发送'
-      }
+    },
+    swapHistory: {
+        actions:{
+            stake:'质押',
+            exit:'取出',
+            getReward:'提取收益',
+         },
+    },
+      
 };

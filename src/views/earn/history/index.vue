@@ -1,9 +1,6 @@
 <template>
   <div class="content-wapper">
     <div class="earn-wapper">
-      <p class="earn-title">
-        {{ $t('history.history') }}
-      </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
           <Table :loading="showLoading" :columns="getHistory" :data="list">
@@ -16,8 +13,14 @@
             </template>
             <template slot="Action" slot-scope="{ row }">
               <div class="Action">
-                <p class="action">
-                  {{ row.method_name }}
+                <p v-if="row.method_name==='stake'" class="action">
+                  {{ $t('swapHistory.actions.stake') }}
+                </p>
+                <p v-if="row.method_name==='exit'" class="action">
+                  {{ $t('swapHistory.actions.exit') }}
+                </p>
+                <p v-if="row.method_name==='getReward'" class="action">
+                  {{ $t('swapHistory.actions.getReward') }}
                 </p>
               </div>
             </template>
@@ -59,10 +62,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { readPledgeHistory } from '@/contactLogic/history.js';
-import { getTokenImg } from '@/contactLogic/readbalance.js';
-import tokenList from '@/constants/earnList.json';
+import { mapState } from "vuex";
+import { readPledgeHistory } from "@/contactLogic/history.js";
+import { getTokenImg } from "@/contactLogic/readbalance.js";
+import tokenList from "@/constants/earnList.json";
 
 export default {
   data() {
@@ -71,8 +74,9 @@ export default {
       pageIndex: 1,
       pageNum: 1,
       pairloading: false,
-      addressName: '',
+      addressName: "",
       showLoading: false,
+      methodName: [],
     };
   },
   // components: {
@@ -88,9 +92,13 @@ export default {
       try {
         const account = this.ethAddress;
         const chainID = this.ethChainID;
-        const data = await readPledgeHistory(chainID, account, this.pageIndex, 10);
+        const data = await readPledgeHistory(
+          chainID,
+          account,
+          this.pageIndex,
+          10
+        );
         this.list = this.list.concat(data.data);
-        // console.log(this.list);
         if (data.count % 10 === 0) {
           this.pageNum = data.count / 10;
         } else {
@@ -140,30 +148,30 @@ export default {
     getHistory() {
       const columns = [
         {
-          title: this.$t('history.table.pool'),
-          slot: 'Pool',
+          title: this.$t("history.table.pool"),
+          slot: "Pool",
           minWidth: 200,
         },
         {
-          title: this.$t('history.table.action'),
-          slot: 'Action',
+          title: this.$t("history.table.action"),
+          slot: "Action",
           minWidth: 100,
         },
         {
-          title: this.$t('history.table.amount'),
-          slot: 'Amount',
+          title: this.$t("history.table.amount"),
+          slot: "Amount",
           minWidth: 120,
         },
         {
-          title: this.$t('history.table.status'),
-          slot: 'Status',
+          title: this.$t("history.table.status"),
+          slot: "Status",
           minWidth: 100,
         },
       ];
       return columns;
     },
 
-    ...mapState(['ethAddress', 'ethChainID', 'web3', 'ethersprovider']),
+    ...mapState(["ethAddress", "ethChainID", "web3", "ethersprovider"]),
   },
 };
 </script>
