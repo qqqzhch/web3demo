@@ -54,10 +54,10 @@
                 <img src="../../assets/img/changeWallet.svg" alt="change">
                 <span>{{ $t('header.changeWallet') }}</span>
               </DropdownItem>
-              <DropdownItem class="list-item" name="disconnect">
+              <!-- <DropdownItem class="list-item" name="disconnect">
                 <img src="../../assets/img/disconnect16.svg" alt="disconnect">
                 <span>{{ $t('header.Disconnect') }}</span>
-              </DropdownItem>
+              </DropdownItem> -->
             </DropdownMenu>
           </Dropdown>
         </template>
@@ -114,14 +114,14 @@ export default {
       if (val === 'change') {
         this.openWalletDialog();
       }
-      if (val === 'disconnect') {
-        this.disconnectWallet();
-      }
+      // if (val === 'disconnect') {
+      //   this.disconnectWallet();
+      // }
     },
 
-    async disconnectWallet() {
-      console.log('disconnect');
-    },
+    // async disconnectWallet() {
+    //   console.log('disconnect');
+    // },
 
     getStatus() {
       const targetID = parseInt(jscookie.get('targetNet'));

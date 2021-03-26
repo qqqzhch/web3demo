@@ -3,7 +3,7 @@
     <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
       <div class="remove-content">
         <p class="title text-center">
-          {{ $t('myPage.dialog.dialog.unstake') }} {{ coinName }}
+          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
