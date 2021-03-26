@@ -1,3 +1,5 @@
+import BigNumber from "bignumber.js";
+import _ from 'underscore';
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
@@ -6,7 +8,6 @@ import Overview from './overview/index.vue';
 import { getCollateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
-import BigNumber from "bignumber.js";
 
 export default {
   name: 'balance',
@@ -67,7 +68,7 @@ export default {
     },
     loadData() {
       this.poolsData = [];
-      this.collateralPools.forEach(async (item) => {
+      this.collateralPools.forEach(async (item, index) => {
         const params = this.getParmas(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
           liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
@@ -84,6 +85,7 @@ export default {
         const scUSDNumber = await fetchTokenBalance(scashParams);
 
         const itemData = {
+          index,
           isERC20: item.isERC20,
           isNative: item.isNative,
           tokenName: item.token,
@@ -105,7 +107,7 @@ export default {
           allowanceAmount,
         };
         if(pledgeNumber) {
-          this.poolsData = this.poolsData.concat(itemData);
+          this.poolsData = _.chain(this.poolsData.concat(itemData)).sortBy(pool => pool.index).value();
         }
       });
     },
