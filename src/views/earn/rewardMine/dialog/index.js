@@ -211,8 +211,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `Stake ${this.pledgeAmount} ${name} success`,
-            failinfo: `Stake ${this.pledgeAmount} ${name} fail`,
+            okinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {

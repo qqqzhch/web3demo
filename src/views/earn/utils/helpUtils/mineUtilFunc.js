@@ -1,7 +1,6 @@
 import multiSymbolData from "@/constants/earnList.json";
 import tokenlist from "@/constants/token.json";
 import { TokenAmount } from "@webfans/uniswapsdk";
-
 import _ from 'underscore';
 
 import { useStakingRewardsbalance, useStakingRewardstotalSupply, useStakingRewardsRead } from "./allowances.js";

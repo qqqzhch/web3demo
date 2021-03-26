@@ -4,6 +4,9 @@ export default {
     confirm: 'Confirm',
     amount: 'Amount',
     willRecieive: 'You will receive',
+    stake: 'Stake',
+    unstake: 'Unstake',
+    claim: 'Claim'
   },
   tabMenu: {
     earn: 'Earn',

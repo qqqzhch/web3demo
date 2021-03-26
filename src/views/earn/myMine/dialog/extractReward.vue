@@ -117,8 +117,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `Claim ${this.claimAmount} ${this.coinName} success`,
-            failinfo: `Claim ${this.claimAmount} ${this.coinName} fail`,
+            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.coinName} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.claim')} ${this.coinName} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {

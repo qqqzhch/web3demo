@@ -89,8 +89,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `Unstake ${this.stakeVal} ${this.coinName} success`,
-            failinfo: `Unstake ${this.stakeVal} ${this.coinName} fail`,
+            okinfo: `${this.$t('common.unStake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unStake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {

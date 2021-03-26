@@ -4,6 +4,9 @@ export default {
     confirm: '确认',
     amount: '数量',
     willRecieive: '你将收到',
+    stake: '质押',
+    unstake: '取出',
+    claim: '提取收益'
   },
   tabMenu: {
     earn: '收益挖矿',

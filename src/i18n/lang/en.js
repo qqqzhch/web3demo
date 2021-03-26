@@ -21,6 +21,8 @@ export default {
     n39:'Network not matched',
     n40:'Please switch to Ethereum Network in Metamask.',
     n41: 'Metamask Connected',
+    n42: 'success',
+    n43: 'fail',
     swapNotice:{
       n1:'The input value needs to be numeric ',
       n2:'Input value must be less than balance and greater than 0',
