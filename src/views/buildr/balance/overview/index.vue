@@ -41,7 +41,7 @@
     font-family: Gilroy-Medium, Gilroy;
     font-weight: 500;
     color: #14171c;
-    pne-height: 24px;
+    line-height: 24px;
   }
   .content-warpper {
     margin-top: 24px;
@@ -85,7 +85,7 @@
       .other-warpper {
         padding-top: 10px;
         div {
-          margin-right: 50px;
+          width: 30%;
         }
       }
       .refresh{
