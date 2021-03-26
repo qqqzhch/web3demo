@@ -20,6 +20,7 @@
       "scUSD"
     ]
   },
+
   {
     "name": "SCASH",
     "address": "0x116dFf7c5eD6e66DB8235C836bB17f14eB111943",
@@ -28,6 +29,16 @@
     "kind": "single",
     "symbol": [
       "SCASH"
+    ]
+  },
+  {
+    "name": "scUSD",
+    "address": "0x9C0aCB0182A58496d46E89C508B796B92Ded5b13",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "single",
+    "symbol": [
+      "scUSD"
     ]
   },
   {

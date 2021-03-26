@@ -8,6 +8,7 @@ import { useNeedApproveInput } from '@/contacthelp/useNeedApprove.js';
 import { useApproveCallback } from '@/contacthelp/useApproveCallback.js';
 import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances';
 import event from '@/common/js/event';
+import { getGasPrice } from '@/contacthelp/ethusdt.js';
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
@@ -23,11 +24,12 @@ export default {
       previousData: '',
       tokenObj: {},
       amountApproveObj: {},
-      sendLoading: false
+      sendLoading: false,
+      fee: ''
     };
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3']),
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3','chainTokenPrice']),
     increaseRate() {
       const inputAmount = new BigNumber(this.pledgeAmount);
       const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
@@ -49,6 +51,7 @@ export default {
       if (!this.checkData()) {
         return false;
       }
+      this.getFee();
       this.isShowPledge = false;
     },
     showPledgeDialog() {
@@ -65,6 +68,29 @@ export default {
       const balance = new BigNumber(this.data.data.LPTokenbalance);
       const percent = new BigNumber(val);
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+    },
+
+    // 获取手续费
+    async getFee() {
+      console.log(this.pledgeAmount);
+      try {
+        const num = this.pledgeAmount.toString();
+        const amount = this.web3.utils.toWei(num, 'ether');
+        const tokenJson = this.data;
+        console.log(tokenJson,num,amount);
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const esGas = await stakingRewardsContract.estimateGas.stake(amount);
+        const gasPrice = await getGasPrice(this.ethersprovider);
+        const bigGasPrice = new BigNumber(gasPrice);
+        const bigGas = new BigNumber(esGas.toString());
+        const bigchainTokenPrice = new BigNumber(this.chainTokenPrice);
+        const fee = bigGas.times(bigchainTokenPrice).times(bigGasPrice).div('1e18');
+        console.log({ esGas, gasPrice });
+        this.fee = fee.decimalPlaces(6).toNumber();
+      } catch (error) {
+        console.log(error);
+      }
+
     },
 
     // 限制Input输入小数点的长度

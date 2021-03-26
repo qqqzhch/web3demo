@@ -15,9 +15,7 @@ import { mapState } from 'vuex';
 import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
-import scash from '../utils/scash.vue';
 export default {
-  mixins: [scash],
   data() {
     return {
       designatedData: [],
@@ -35,23 +33,21 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
-
-        // 同步循环内使用异步使用promise.all
-        const result = Promise.all(
-          data.map(async (item) => {
-            if (item.kind === 'multi') {
-              const res = await this.getPriceData(item);
-              if (res) {
-                item.poolValue = res.usdtNum;
-                item.price = res.price;
-              }
-            }
-          })
-        );
-
-        await result;
-
-        this.liquidityData = data.filter((item) => item.kind === 'multi');
+        const tempLiquidity = data.filter((item) => item.kind === 'multi');
+        const result = [];
+        const results = async () => {
+          for (let index = 0; index < tempLiquidity.length; index++) {
+            const item = tempLiquidity[index];
+            const res = await this.getPriceData(item);
+            result.push({
+              ...item,
+              poolValue: res.usdtNum,
+              price: res.price,
+            });
+          }
+        };
+        await results();
+        this.liquidityData = result;
         this.designatedData = data.filter((item) => item.kind === 'single');
       } catch (error) {
         console.log(error);
@@ -60,26 +56,25 @@ export default {
       }
     },
     async getPriceData(item) {
+      // console.log({ item });
       const obj = {};
-      if (item.kind === 'multi') {
-        const tokensymbolA = item.symbol[0];
-        const tokensymbolB = item.symbol[1];
-        const pledgeBalance = item.data && item.data.totalSupply;
-        const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
-        const data = await readpariInfoNuminfoEarn(
-          this.ethChainID,
-          this.ethersprovider,
-          tokensymbolA,
-          tokensymbolB,
-          pledgeBalanceWei
-        );
-        // console.log(data.aTokenbalance.toSignificant(6));
-        // console.log(data.bTokenbalance.toSignificant(6));
-
-        obj.usdtNum = data.aTokenbalance.multiply(data.priceinvert).add(data.bTokenbalance).toSignificant(6);
-        obj.price = data.priceinvert && data.priceinvert.toSignificant(6);
-        this.$store.commit('changeEarnPrice', obj.price);
+      const tokensymbolA = item.symbol[0];
+      const tokensymbolB = item.symbol[1];
+      const pledgeBalance = item.data && item.data.totalSupply;
+      const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
+      const data = await readpariInfoNuminfoEarn(
+        this.ethChainID,
+        this.ethersprovider,
+        tokensymbolA,
+        tokensymbolB,
+        pledgeBalanceWei
+      );
+      obj.usdtNum = data.aTokenbalance.multiply(data.priceinvert).add(data.bTokenbalance).toSignificant(6);
+      obj.price = data.priceinvert && data.priceinvert.toSignificant(6);
+      if (tokensymbolA === 'SCASH' && tokensymbolB === 'USDT') {
+        this.$store.commit('changeScashPrice', obj.price);
       }
+      this.$store.commit('changeEarnPrice', obj.price);
       return obj;
     },
   },
@@ -96,26 +91,22 @@ export default {
     isReady(value) {
       if (value) {
         this.getListData();
-        this.getScashPrice();
       }
     },
     isConnect(value) {
       if (value) {
         this.getListData();
-        this.getScashPrice();
       }
     },
   },
   created() {
     if (this.isReady) {
       this.getListData();
-      this.getScashPrice();
     }
   },
   mounted() {
     event.$on('txsuccess', () => {
       this.getListData();
-      this.getScashPrice();
     });
   },
 };

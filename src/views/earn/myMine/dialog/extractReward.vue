@@ -24,7 +24,7 @@
           </div>
           <div class="price-item">
             <span>{{ $t('myPage.dialog.claim.price') }}</span>
-            <p>1 {{ rewardToken }} = {{ scashPrice }} scUSD</p>
+            <p>1 {{ rewardToken }} = {{ scashPrice }} USDT</p>
           </div>
           <div class="price-item">
             <span>{{ $t('myPage.dialog.claim.fee') }}</span>

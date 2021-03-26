@@ -17,6 +17,7 @@ function getTokenInfo(chainID, address) {
 }
 
 export async function StakingRewardList(library, account, chainID) {
+  console.log({library, account, chainID});
   const list = multiSymbolData || [];
   const result = [];
 
@@ -26,13 +27,12 @@ export async function StakingRewardList(library, account, chainID) {
     }
   });
 
-  for (let index = 0; index < list.length; index++) {
-    const element = list[index];
+  for (let index = 0; index < result.length; index++) {
+    const element = result[index];
     let balance, totalSupply, rewardRate, earned, rewardToken, TokenAddress, TokenAddressbalance;
     const originRewardRate = await useStakingRewardsRead(library, account, element, 'rewardRate', []);
     totalSupply = await useStakingRewardstotalSupply(library, account, element);
     rewardRate = new TokenAmount(element, originRewardRate.toString());
-
     // 未连接钱包状态
     if (!account) {
       element.data = {
@@ -89,7 +89,8 @@ export async function StakingRewardList(library, account, chainID) {
 
 
   }
-  return list;
+  return result;
 }
+
 
 

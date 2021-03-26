@@ -46,11 +46,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
+import { StakingRewardList} from '../utils/helpUtils/mineUtilFunc.js';
+import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 import event from '@/common/js/event';
-import scash from '../utils/scash.vue';
 export default {
-  mixins: [scash],
   data() {
     return {
       data: [],
@@ -67,12 +66,31 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
+        // console.log(data);
+        const [scashData] = data.filter(item => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
+        // console.log(scashData);
+        await this.getPriceData(scashData);
         this.data = data;
       } catch (error) {
         console.log(error);
       } finally {
         this.showLoading = false;
       }
+    },
+    async getPriceData(item) {
+      const tokensymbolA = item.symbol[0];
+      const tokensymbolB = item.symbol[1];
+      const pledgeBalance = item.data && item.data.totalSupply;
+      const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
+      const data = await readpariInfoNuminfoEarn(
+        this.ethChainID,
+        this.ethersprovider,
+        tokensymbolA,
+        tokensymbolB,
+        pledgeBalanceWei
+      );
+      const price = data.priceinvert && data.priceinvert.toSignificant(6);
+      this.$store.commit('changeScashPrice', price);
     },
     openClaim(data) {
       this.$refs.extract.open(data);
@@ -82,12 +100,12 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress','scashPrice']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'scashPrice','web3']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
     columns() {
-        const columns = [
+      const columns = [
         {
           title: this.$t('myPage.table.pool'),
           slot: 'pool',
@@ -111,26 +129,23 @@ export default {
         },
       ];
       return columns;
-    }
+    },
   },
   watch: {
     isReady(value) {
       if (value) {
         this.getListData();
-        this.getScashPrice();
       }
     },
   },
   created() {
     if (this.isReady) {
       this.getListData();
-      this.getScashPrice();
     }
   },
   mounted() {
     event.$on('txsuccess', () => {
       this.getListData();
-      this.getScashPrice();
     });
   },
 };

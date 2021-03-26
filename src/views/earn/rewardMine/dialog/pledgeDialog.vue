@@ -114,10 +114,10 @@
               <span>{{ $t('earn.dialog.stakeDialog.sharePool') }}</span>
               <p>{{ increaseRate }}</p>
             </div>
-            <!-- <div>
+            <div>
               <span>Fee</span>
-              <p>0.1 ETH</p>
-            </div> -->
+              <p>${{ fee }}</p>
+            </div>
           </div>
 
           <Buttons v-if="sendLoading === false" @click.native="confirmSendTx">
