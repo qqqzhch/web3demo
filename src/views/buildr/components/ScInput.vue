@@ -61,9 +61,6 @@
 </script>
 
 <style lang="less" scoped>
-.has-title {
-
-}
 .input-group {
     width: 100%;
     display: inline-table;

@@ -5,20 +5,20 @@
         :class="{'tab-item': true, 'tab-active': nav === 'balance'}"
         @click="toPage('balance')"
       >
-        Manage
+        {{ $t('build-manage') }}
       </div>
       <div
         :class="{'tab-item': true, 'tab-active': nav === 'history'}"
         @click="toPage('history')"
       >
-        History
+        {{ $t('build-history') }}
       </div>
       <div>
         <button
           class="btn create-btn"
           @click="toPage('create')"
         >
-          + Create Vault
+          + {{ $t('build-create-vault') }}
         </button>
       </div>
     </div>

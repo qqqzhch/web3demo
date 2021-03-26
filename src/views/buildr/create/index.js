@@ -47,9 +47,9 @@ export default {
     // 验证输入值
     checkValue() {
       if(BigNumber(this.pledgeNumber).isLessThan(0)) {
-        return 'Input value must be less than balance and greater than 0';
+        return this.$t('swapNotice.n2');
       } else if (isNaN(this.pledgeNumber)) {
-        return 'Input value needs to be a value';
+        return this.$t('buidrNotice.n1');
       } else {
         return 'ok';
       }
@@ -123,7 +123,7 @@ export default {
         this.loadData();
       } else {
         this.$Notice.error({
-          title: 'Approve cancelled',
+          title: this.$t('buidrNotice.n2'),
         });
         this.btnloading = false;
       }
@@ -142,7 +142,7 @@ export default {
         }]);
       } else {
         this.$Notice.error({
-          title: 'Send transaction fail!',
+          title: this.$t('buidrNotice.n3'),
         });
       }
     },

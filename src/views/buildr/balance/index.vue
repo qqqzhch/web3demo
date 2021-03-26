@@ -5,7 +5,7 @@
     </div>
     <div class="CDP-content">
       <div class="title2">
-        My Vaults
+        {{ $t('build-my-vaults') }}
       </div>
       <div v-if="!poolsData.length">
         <Loading />
@@ -14,17 +14,17 @@
         <div class="pool-item-warp">
           <div class="item-top">
             <div>
-              <span>Target Coll. Ratio</span>
+              <span>{{ $t('build-target-coll-ratio') }}</span>
               <span class="f-green">
                 {{ BigNumber(poolItem.targetRX).times(100).toFixed(2) }}%
               </span>
             </div>
             <div class="text-right">
-              <span>Liquidation Price: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
-              <span>Liquidation Ratio: <span
+              <span>{{ $t('build-liquidation-price') }}: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
+              <span>{{ $t('build-liquidation-ratio') }}: <span
                 class="f-warning"
               >{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
-              <span>Stability Fee: <span class="f-warning">{{ BigNumber(poolItem.feeRate).times(100) }}%</span></span>
+              <span>{{ $t('build-stability-fee') }}: <span class="f-warning">{{ BigNumber(poolItem.feeRate).times(100) }}%</span></span>
             </div>
           </div>
           <div class="CDP-item">
@@ -34,7 +34,7 @@
             </div>
             <div class="small-item line">
               <div>
-                <span>Current Coll. Ratio</span>
+                <span>{{ $t('build-current-coll-ratio') }}</span>
                 <div class="circle-wapper">
                   <span
                     :class="{
@@ -55,7 +55,7 @@
                 </div>
               </div>
               <div class="mrg-tb-20">
-                <span>Current Price</span>
+                <span>{{ $t('build-current-price') }}</span>
                 <p class="f-green">
                   {{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD
                 </p>
@@ -63,35 +63,35 @@
             </div>
             <div class="small-item text-center">
               <div>
-                <span>Deposited</span>
+                <span>{{ $t('build-Deposited') }}</span>
                 <p>
                   {{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}
                 </p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openJoinDialog(poolItem)">
-                  Deposit
+                  {{ $t('build-Deposit') }}
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openExitDialog(poolItem)">Avail to Withdraw
+                <a href="javascript:;" @click="openExitDialog(poolItem)">{{ $t('build-avail-to-withdraw') }}
                   {{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</a>
               </div>
             </div>
             <div class="small-item text-center">
               <div>
-                <span>Current Credit Line</span>
+                <span>{{ $t('build-current-credit-line') }}</span>
                 <p>
                   {{ BigNumber(poolItem.maxMintable).toFixed(2) }} scUSD
                 </p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openMintDialog(poolItem)">
-                  Generate
+                  {{ $t('build-generate') }}
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openBurnDialog(poolItem)">Current Debt
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">{{ $t('build-current-debt') }}
                   {{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</a>
               </div>
             </div>

@@ -12,20 +12,20 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab">
-              Deposit
+              {{ $t('build-Deposit') }}
             </button>
           </div>
           <div class="tab-warpper">
             <button class="tab  tab-disabled" @click="onExitClick">
-              Withdraw
+              {{ $t('build-withdraw') }}
             </button>
           </div>
         </div>
         <div class="padding-warpper">
           <div v-if="step === 1" class="step-one">
             <div class="grid-2">
-              <h2>Amount</h2>
-              <p><span>Balance：</span> {{ currencyNumber }} {{ poolData.tokenName }}</p>
+              <h2>{{ $t('build-Amount') }}</h2>
+              <p><span>{{ $t('build-balance') }}：</span> {{ currencyNumber }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
               <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
@@ -38,29 +38,29 @@
               </div>
             </div>
             <div v-if="checkValue==='ok'" class="notice">
-              <span>Deposit {{ poolData.tokenName }} will increase scUSD credit line.</span>
+              <span>{{ $t('build-Deposit') }} {{ poolData.tokenName }} {{ $t('build-will-increase') }}</span>
               <img src="../../../../../assets/img/wenhao.svg">
             </div>
           </div>
           <div v-if="step === 2" class="step-two">
             <div class="title-warpper">
               <img src="../../../../../assets/img/arrow-left.svg" alt="arrow" @click="changeStep">
-              <h2>Confirm</h2>
+              <h2>{{ $t('build-confirm') }}</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
               <h2>{{ coinAmount }}</h2>
               <p>{{ poolData.tokenName }}</p>
-              <span>will deposit to get scUSD credit line</span>
+              <span>{{ $t('build-will-deposit') }}</span>
             </div>
           </div>
           <div class="items-content">
             <ul>
               <li class="title">
-                Credit Line：
+                {{ $t('build-credit-line') }}：
               </li>
               <li>
-                <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
+                <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> {{ $t('build-to') }} <span
                   :class="{
                     'f-green': poolData.maxMintable < currMaxMintable,
                     'f-danger': poolData.maxMintable > currMaxMintable
@@ -70,11 +70,11 @@
             </ul>
             <ul>
               <li class="title flex">
-                <span>Coll.Ratio:</span>
+                <span>{{ $t('build-coll-ratio') }}:</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">
-                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(2) }}%</span> to <span
+                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
                   :class="{
                     'f-green': newCollRX >= 5,
                     'f-warning': newCollRX < 5 && newCollRX > 2,
@@ -83,15 +83,15 @@
                 >{{ BigNumber(newCollRX).times(100).toFixed(2) }}%</span>
               </li>
               <li v-else>
-                <span>0% to 0%</span>
+                <span>0% {{ $t('build-to') }} 0%</span>
               </li>
             </ul>
             <ul>
               <li class="title">
-                Liquidation Price
+                {{ $t('build-liquidation-price') }}
               </li>
               <li>
-                <span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD to <span
+                <span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span
                   :class="{
                     'f-green': liquidationPrice > newLiquidationPrice,
                     'f-danger': liquidationPrice < newLiquidationPrice
@@ -102,13 +102,13 @@
           </div>
           <div class="button-warpper">
             <button v-if="step === 1 && checkValue === 'ok'" class="btn" @click="onNextClick">
-              Next
+              {{ $t('build-next') }}
             </button>
             <button v-if="step === 1 && checkValue !== 'ok'" class="btn btn-disabled">
-              Next
+              {{ $t('build-next') }}
             </button>
             <button v-if="step === 2" class="btn" @click="onJoinClick">
-              Confirm
+              {{ $t('build-confirm') }}
             </button>
           </div>
           <div v-if="step === 1" class="close-warpper">

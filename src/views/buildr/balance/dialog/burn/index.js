@@ -73,9 +73,9 @@ export default {
       const netDebt = BigNumber(debt).plus(fee);
 
       if(BigNumber(this.coinAmount).gt(netDebt) || BigNumber(this.coinAmount).isLessThan(0)) {
-        return 'Input value must be less than balance+fee and greater than 0';
+        return this.$t('buidrNotice.n4');
       } else if (isNaN(this.coinAmount)) {
-        return 'Input value needs to be a value';
+        return this.$t('buidrNotice.n1');
       } else {
         return 'ok';
       }

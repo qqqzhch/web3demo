@@ -3,20 +3,20 @@
     <div class="content-warpper flex items-center">
       <div class="content">
         <div class="total-warpper">
-          <h2>Total Collateral Value</h2>
+          <h2>{{ $t('build-total-collateral-value') }}</h2>
           <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> USD</p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
-            <h2>Total Debt</h2>
+            <h2>{{ $t('build-total-debt') }}</h2>
             <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
-            <h2>scUSD Credit Line</h2>
+            <h2>{{ $t('build-scUSD-credit-line') }}</h2>
             <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> scUSD </p>
           </div>
           <div>
-            <h2>Stability Fee</h2>
+            <h2>{{ $t('build-stability-fee') }}</h2>
             <p><span>{{ BigNumber(totalFee).toFixed(2) }}</span> scUSD</p>
           </div>
         </div>

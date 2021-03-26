@@ -1,10 +1,10 @@
 <template>
   <div class="guide-warpper flex items-center justify-center">
     <div class="guide-left">
-      <h2>Buildr</h2>
-      <p>Deposit digital assets, get scUSD credit line.</p>
+      <h2>{{ $t('build-buildr') }}</h2>
+      <p>{{ $t('build-deposit-digital-assets') }}</p>
       <button @click="CreateCDP">
-        Create Vault
+        {{ $t('build-create-vault') }}
       </button>
     </div>
     <div class="guide-right">

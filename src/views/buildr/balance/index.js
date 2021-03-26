@@ -132,7 +132,7 @@ export default {
         }]);
       } else {
         this.$Notice.error({
-          title: 'Send transaction fail!',
+          title:  this.$t('buidrNotice.n3'),
         });
       }
     }

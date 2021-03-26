@@ -9,7 +9,7 @@
           <div class="title-content">
             <span class="card-title">{{ $t('swapHistory.removeDialog.amount') }}</span>
             <div v-if="tokenA && tokenB" class="balance-item">
-              <span class="mr-2 text-secondary">{{ tokenB.symbol }}/{{ tokenA.symbol }} LP Balance</span>
+              <span class="mr-2 text-secondary">{{ tokenB.symbol }}/{{ tokenA.symbol }} LP {{ $t('swapHistory.inputDialog.balance') }}</span>
               <span>{{ balance | formatNormalValue }}</span>
             </div>
           </div>
@@ -347,8 +347,8 @@ export default {
         event.$emit('sendtx', [
           tx,
           {
-            okinfo: baseTip + 'success',
-            failinfo: baseTip + 'fail',
+            okinfo: baseTip + this.$t('swapConfirm.success'),
+            failinfo: baseTip + this.$t('swapConfirm.fail'),
           },
         ]);
       } catch (error) {

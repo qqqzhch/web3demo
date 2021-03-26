@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="price-warpper flex justify-between">
-          <span>Price</span>
+          <span>{{ $t('swapHistory.confirmDialog.Price') }}</span>
           <div>
             <p v-if="tokenB && tokenA && price">
               {{ price }} {{ tokenB.symbol }} = 1 {{ tokenA.symbol }}
@@ -423,7 +423,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: '获取手续费失败或逻辑异常',
+          title: this.$t('swapNotice.n5'),
         });
       }
       this.$data.btnloading = false;
@@ -474,17 +474,17 @@ export default {
         // }
         const num = parseFloat(this.$data.aTokenAmount);
         if (isNaN(num)) {
-          this.$data.inputnoticeA = ' The input value needs to be numeric ';
+          this.$data.inputnoticeA = this.$t('swapNotice.n1');
           return false;
         }
         const inamount = new BigNumber(this.$data.aTokenAmount);
         if (inamount.isGreaterThan(this.tokenABalance) || inamount.isLessThanOrEqualTo('0')) {
-          this.$data.inputnoticeA = ' Input value must be less than balance and greater than 0 ';
+          this.$data.inputnoticeA = this.$t('swapNotice.n2');
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = ' The input value needs to be numeric ';
+        this.$data.inputnoticeA = this.$t('swapNotice.n1');
       }
     },
     inputcheckupB() {
@@ -495,17 +495,17 @@ export default {
         // }
         const num = parseFloat(this.$data.bTokenAmount);
         if (isNaN(num)) {
-          this.$data.inputnoticeB = ' The input value needs to be numeric ';
+          this.$data.inputnoticeB = this.$t('swapNotice.n1');
           return false;
         }
         const inamount = new BigNumber(this.$data.bTokenAmount);
         if (inamount.isGreaterThan(this.tokenBBalance) || inamount.isLessThanOrEqualTo('0')) {
-          this.$data.inputnoticeB = ' Input value must be less than balance and greater than 0';
+          this.$data.inputnoticeB = this.$t('swapNotice.n2');
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeB = ' The input value needs to be numeric ';
+        this.$data.inputnoticeB = this.$t('swapNotice.n1');
       }
     },
     async approveA() {
@@ -534,7 +534,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: 'Authorization cancelled',
+          title: this.$t('swapNotice.n4'),
         });
       }
       this.$data.btnloading = false;
@@ -568,7 +568,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: 'Authorization cancelled',
+          title: this.$t('swapNotice.n4'),
         });
       }
       this.$data.btnloading = false;
@@ -600,7 +600,7 @@ export default {
         this.$data.openInputDialog = false;
       } catch (error) {
         this.$Notice.error({
-          title: 'Transaction cancelled',
+          title: this.$t('swapNotice.n3'),
         });
       }
       this.$data.btnloading = false;

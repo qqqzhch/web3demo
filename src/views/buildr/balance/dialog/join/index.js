@@ -69,9 +69,9 @@ export default {
     // 验证输入值
     checkValue() {
       if(BigNumber(this.coinAmount).gt(this.currencyNumber) || BigNumber(this.coinAmount).isLessThan(0)) {
-        return 'Input value must be less than balance and greater than 0';
+        return this.$t('swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
-        return 'Input value needs to be a value';
+        return this.$t('buidrNotice.n1');
       } else {
         return 'ok';
       }

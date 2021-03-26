@@ -26,7 +26,15 @@ export default {
     swapNotice:{
       n1:'The input value needs to be numeric ',
       n2:'Input value must be less than balance and greater than 0',
-      n3:'Transaction cancelled'
+      n3:'Transaction cancelled',
+      n4:'Authorization cancelled',
+      n5:'获取手续费失败或逻辑异常',
+    },
+    buidrNotice:{
+      n1:'Input value needs to be a value',
+      n2:'Approve cancelled',
+      n3:'Send transaction fail!',
+      n4:'Input value must be less than balance+fee and greater than 0'
     }
   },
   header:{

@@ -1,9 +1,6 @@
 <template>
   <div class="content-wapper">
     <div class="earn-wapper">
-      <p class="earn-title">
-        History
-      </p>
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onReachBottom" :height="400">
         <div class="list-wapper">
           <Table :columns="getHistory" :data="list">

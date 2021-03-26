@@ -3,7 +3,7 @@
     <Modal v-model="openAssetDialog" class-name="asset-modal" :transfer="true" :footer-hide="true" :closable="true">
       <div class="modal-content">
         <p slot="header" class="title text-center">
-          Asset
+          {{ $t('build-Assets') }}
         </p>
         <div class="input-warpper flex items-center">
           <img src="../../../assets/img/search-16.png">

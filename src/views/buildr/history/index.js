@@ -26,27 +26,27 @@ export default {
     getHistory() {
       const columns = [
         {
-          title: "Assets",
+          title: this.$t('build-Assets'),
           slot: "Assets",
           minWidth: 100,
         },
         {
-          title: "Action",
+          title: this.$t('build-Action'),
           slot: "Action",
           minWidth: 200,
         },
         {
-          title: "Amount",
+          title: this.$t('build-Amount'),
           slot: "Amount",
           minWidth: 100,
         },
         {
-          title: "Date",
+          title: this.$t('build-Date'),
           slot: "Date",
           minWidth: 200,
         },
         {
-          title: "Status",
+          title: this.$t('build-Status'),
           slot: "Status",
           minWidth: 100,
         },
