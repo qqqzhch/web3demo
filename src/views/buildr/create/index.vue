@@ -2,30 +2,24 @@
   <div class="create box-shadow">
     <div class="header">
       <div class="title">
-        Stake crypto token assets to create your CDPs.
-      </div>
-      <div class="info">
-        Create CDPs, generate scUSD.
+        Deposit digital assets, get scUSD credit line.
       </div>
     </div>
     <div class="grid-2 mrg-tb-20">
       <div class="content-left">
         <div class="asset-item cursor-pointer" @click="openAsset">
-          <p class="card-title">
-            Asset
-          </p>
           <div class="connect flex justify-between items-center">
             <div class="icon-wrapper flex justify-start items-center">
               <template v-for="(item, index) in collateralPools">
                 <img
-                  v-if="defaultTokenName===item.name"
+                  v-if="defaultPool.name === item.name"
                   :key="index"
                   class="mr-2"
                   :src="getTokenImg(item.token)"
                   :alt="item.token"
                 >
               </template>
-              <span>{{ defaultTokenName }}</span>
+              <span>{{ defaultPool.name }}</span>
             </div>
             <div class="arrow-wrapper">
               <img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">
@@ -34,17 +28,17 @@
         </div>
         <div class="input-warpper flex justify-between items-center mrg-t-20 mrg-b-5">
           <div class="mortgage">
-            Collateral
+            Deposit
           </div>
           <div class="pull-right">
             <p class="balance">
-              <span>Balance </span>{{ currencyNumber }} {{ defaultToken }}
+              <span>Balance </span>{{ currencyNumber }} {{ defaultPool.token }}
             </p>
           </div>
         </div>
         <div class="Input-item">
-          <ScInput class="myInput" title="" :unit="defaultToken" :on-change="onChangePledgeNumber" :is-error="checkValue !== 'ok'" />
-          <img :src="getTokenImg(defaultToken)" :alt="defaultToken">
+          <ScInput class="myInput" title="" :unit="defaultPool.token" :on-change="onChangePledgeNumber" :is-error="checkValue !== 'ok'" />
+          <img :src="getTokenImg(defaultPool.token)" :alt="defaultPool.token">
         </div>
         <div v-if="checkValue !== 'ok'" class="notice-warpper">
           <div class="notice-content">
@@ -54,7 +48,7 @@
         </div>
         <div class=" flex">
           <div class="title-build">
-            Build
+            You will get credit line
           </div>
           <div class="pull-right" />
         </div>
@@ -65,25 +59,26 @@
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
-          <p>Collateral：</p>
-          <div class="text-right">
-            {{ pledgeNumber }} {{ defaultToken }}
+          <p>Target Coll. Ratio：</p>
+          <div class="text-right f-green">
+            {{ BigNumber(targetRX).times(100) }}%
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Received scUSD：</p>
+          <p>Collateral：</p>
+          <div class="text-right">
+            {{ pledgeNumber }} {{ defaultPool.token }}
+          </div>
+        </div>
+        <div class="build-grid-2 mrg-b-5">
+          <p>Credit Line：</p>
           <div class="text-right">
             {{ stableNumber }} scUSD
           </div>
         </div>
-        <div class="build-grid-2 mrg-b-5">
-          <p>Coll. Ratio：</p>
-          <div class="text-right">
-            {{ BigNumber(targetRX).times(100) }}%
-          </div>
-        </div>
+
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>SuperCash Price：</p>
+          <p>{{ defaultPool.token }} Current Price：</p>
           <div class="text-right">
             {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>
@@ -107,17 +102,17 @@
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Global scUSD Debt Ceiling：</p>
+          <p>scUSD available from {{ defaultPool.token }} 1：</p>
           <div class="text-right">
             {{ debtCap }} scUSD
           </div>
         </div>
         <div v-if="!btnloading">
-          <button v-if="BigNumber(allowanceAmount).isZero() || BigNumber(pledgeNumber).gt(allowanceAmount)" class="btn" @click="onApproveClick">
+          <button v-if="isApprove()" class="btn" @click="onApproveClick">
             Approve
           </button>
           <button v-else class="btn" @click="onJoinClick">
-            Create and generate scUSD
+            Deposit and Get Credits
           </button>
         </div>
         <div v-if="btnloading">
@@ -147,6 +142,9 @@
 }
 .line {
   border-bottom: 1px dashed #eaeaea;
+}
+.f-green {
+  color: #00d075 !important;
 }
 .create {
   // margin-left: 100px;

@@ -8,7 +8,17 @@ export const getTokenBySymbol = (chainID, symbol) => {
   return token || {};
 };
 
+/**
+ * getProxyActionsToken 只用于授权操作
+ * */
 export const getProxyActionsToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'ProxyActions';
+  });
+  return token || {};
+};
+
+export const getProxyToActionsToken = (chainID) => {
   const token = synthetixTokens.find((token) => {
     return chainID === token.chainId && token.name === 'ProxyToActions';
   });

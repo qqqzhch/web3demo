@@ -1,6 +1,6 @@
 import {
   getTokenBySymbol,
-  getProxyActionsToken,
+  getProxyToActionsToken,
   getCollateralToken,
   getExchangeRatesToken
 } from './tokens';
@@ -12,18 +12,26 @@ import {
   useExchangeRatesContractRead,
   useNeedApproveInput,
 } from './contractApi';
-import { useTokenApprove } from '../../contacthelp/Approve.js';
-
+import {
+  useTokenApprove,
+  useTokenApproveErc20Lambda
+} from '../../contacthelp/Approve.js';
 
 
 /**
  *  获取当前币种余额
+ *  isNative = true 获取原生资产余额
+ *  isNative = false 获取Erc20资产余额
  * */
-export const fetchTokenBalance = async ({tokenName, chainID, library, account}) => {
-  const token = getTokenBySymbol(chainID, tokenName);
-  const result = await useTokenbalance(library, account, token);
-
-  return result.toSignificant(18);
+export const fetchTokenBalance = async ({web3, tokenName, chainID, library, account, isNative}) => {
+  if(isNative && tokenName !== 'scUSD') {
+    const result = await library.getBalance(account);
+    return web3.utils.fromWei(result.toString());
+  } else {
+    const token = getTokenBySymbol(chainID, tokenName);
+    const result = await useTokenbalance(library, account, token);
+    return result.toSignificant(18);
+  }
 };
 
 /**
@@ -54,11 +62,14 @@ export const getNameHex = (web3, tokenName) => {
  *
  */
 export const fetchCollateralIndicators = async ({ web3, chainID, account, library, tokenName }) => {
-  const token = getProxyActionsToken(chainID);
+  const token = getProxyToActionsToken(chainID);
   const methodName = 'collateralAddress';
   const currencyKey = getNameHex(web3, tokenName);
   const parameter = [currencyKey];
+
   const tokenCollateralAddress = await useProxyActionsContractRead(library, account, token, methodName, parameter);
+
+
 
   const collateralToken = getCollateralToken(chainID);
   collateralToken.address = tokenCollateralAddress;
@@ -117,7 +128,7 @@ export const fetchCurrencyPrice = async ({ web3, chainID, account, library, toke
  * */
 
 export const fetchApprove = async ({ web3, chainID, account, library, tokenName, pledgeNumber }) => {
-  const proxyActionsToken = getProxyActionsToken(chainID);
+  const proxyActionsToken = getProxyToActionsToken(chainID);
   const methodName  = 'target' ;
   const parameter  = [] ;
 
@@ -139,7 +150,7 @@ export const fetchApprove = async ({ web3, chainID, account, library, tokenName,
 export const fetchAllowanceAmount = async ({ chainID, account, library, tokenName }) => {
   const mytoken = getTokenBySymbol(chainID, tokenName);
 
-  const proxyActionsToken = getProxyActionsToken(chainID);
+  const proxyActionsToken = getProxyToActionsToken(chainID);
   const methodName  = 'target' ;
   const parameter  = [] ;
   const targetToken = await useProxyContractRead(library, account, proxyActionsToken, methodName, parameter);
@@ -149,4 +160,30 @@ export const fetchAllowanceAmount = async ({ chainID, account, library, tokenNam
   return {
     allowanceAmount: result.toSignificant(18)
   };
+};
+
+
+/* *
+ *  授权Lambda授信额度
+ *
+ * */
+
+export const fetchLambdaApprove = async ({ web3, chainID, account, library, tokenName, pledgeNumber  }) => {
+  // 获取授权地址
+  const proxyActionsToken = getProxyToActionsToken(chainID);
+  const methodName  = 'target' ;
+  const parameter  = [] ;
+  const targetToken = await useProxyContractRead(library, account, proxyActionsToken, methodName, parameter);
+
+  const mytoken = getTokenBySymbol(chainID, tokenName);
+
+  // 获取开始授权额度，如何没有授权，默认为0;
+  const allowanceAmount = await useNeedApproveInput(library, account, mytoken, targetToken);
+  const allowance = allowanceAmount.toSignificant(18);
+
+  const fromValue = web3.utils.toWei(allowance);
+  const toValue = web3.utils.toWei(pledgeNumber);
+
+  const result = await useTokenApproveErc20Lambda(library, account, mytoken, targetToken, fromValue, toValue);
+  return result;
 };

@@ -103,8 +103,9 @@ export default {
     },
     async onExitClick() {
       this.isOpen = false;
+      const { isNative } = this.poolData;
       const params = {
-        type: 'exit',
+        type: isNative ? 'exitNative' : 'exit',
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,

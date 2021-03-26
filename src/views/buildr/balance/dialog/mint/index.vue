@@ -38,7 +38,7 @@
               </div>
             </div>
             <div v-if="checkValue==='ok'" class="notice">
-              <span>Generate scUSD will reduce stable assets quota and generate debt.</span>
+              <span>Generate scUSD will reduce scUSD credit line and generate scUSD debt.</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>
@@ -70,7 +70,7 @@
             </ul>
             <ul>
               <li class="title">
-                Generating：
+                Credit Line：
               </li>
               <li>
                 <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
@@ -83,7 +83,7 @@
             </ul>
             <ul>
               <li class="title flex">
-                <span>Collateral Ratio</span>
+                <span>Coll. Ratio</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">
@@ -114,7 +114,7 @@
             </ul>
             <ul>
               <li class="title">
-                Stability Ratio
+                Stability Fee:
               </li>
               <li><span>{{ feeRate }}</span></li>
             </ul>

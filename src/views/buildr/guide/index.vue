@@ -2,9 +2,9 @@
   <div class="guide-warpper flex items-center justify-center">
     <div class="guide-left">
       <h2>Buildr</h2>
-      <p>Stake crypto assets, build stable scUSD.</p>
+      <p>Deposit digital assets, get scUSD credit line.</p>
       <button @click="CreateCDP">
-        Create CDP
+        Create Vault
       </button>
     </div>
     <div class="guide-right">

@@ -201,6 +201,9 @@ import { ROUTER_ADDRESS } from '@/constants/index.js';
 import event from '@/common/js/event';
 const BigNumber = require('bignumber.js');
 
+import getChainCoinInfo from '@/constants/networkCoinconfig.js';
+
+
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
@@ -229,6 +232,7 @@ export default {
       inputnoticeA: '',
       inputnoticeB: '',
       lpbalance: '',
+      ethamount:''
     };
   },
   methods: {
@@ -393,13 +397,24 @@ export default {
 
       const coinBTokenAmount = new TokenAmount(TokenB, Web3.utils.toWei(numb, 'ether'));
 
+      let ethamount;
+      const coinInfo = getChainCoinInfo(chainID);
+      this.$data.ethamount= '';
+      if(this.$data.tokenA.symbol==coinInfo.coinName){
+        ethamount = Web3.utils.toWei(numa, "ether") ;
+        this.$data.ethamount = ethamount ;
+      }else{
+        ethamount = Web3.utils.toWei(numb, "ether") ;
+        this.$data.ethamount = ethamount ;
+      }
+
       this.$data.btnloading = true;
       try {
-        const parameters = await buildAddliquidityParam(coinATokenAmount, coinBTokenAmount, account);
+        const parameters = await buildAddliquidityParam(coinATokenAmount, coinBTokenAmount, account,chainID);
         console.log(parameters);
         this.$data.parameters = parameters;
 
-        const fee = await addliquidityGas(chainID, library, account, parameters);
+        const fee = await addliquidityGas(chainID, library, account, parameters,ethamount);
 
         console.log(fee);
 
@@ -571,7 +586,8 @@ export default {
 
       this.$data.btnloading = true;
       try {
-        const tx = await sendaddliquidity(chainID, library, account, parameters);
+        const tx = await sendaddliquidity(chainID, library, account, parameters,this.$data.ethamount);
+        
         const baseTip = `add ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol}LP `;
         this.$refs.haveSendtx.open(baseTip);
         event.$emit('sendtx', [

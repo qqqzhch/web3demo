@@ -8,11 +8,11 @@
         "state":true
     },
     {
-        "name":"LAMB2",
-        "title":"LAMB2 pool1",
-        "titlei18":"LAMB2_pool1",
-        "token":"LAMB",
-        "desc":"Lambda",
+        "name":"ETH",
+        "title":"ETH pool2",
+        "titlei18":"ETH_pool2",
+        "token":"ETH",
+        "desc":"ETH",
         "state":true
     },
     {
@@ -21,7 +21,7 @@
         "titlei18":"SCASH_pool2",
         "token":"SCASH",
         "desc":"SCASH",
-        "state":false
+        "state":true
     },
     {
         "name":"HT",

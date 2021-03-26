@@ -1,4 +1,4 @@
-import  {collateralPools} from '@/contactLogic/buildr/balance.js';
+import  { getCollateralPools } from '@/contactLogic/buildr/balance.js';
 
 import {
     fetchAllowanceAmount,
@@ -17,6 +17,7 @@ import {
     }
 
     const callList = [];
+    const collateralPools = getCollateralPools(chainID);
     collateralPools.forEach(element => {
       console.log(element.token);
       const tokenName = element.token;

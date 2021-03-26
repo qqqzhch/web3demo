@@ -8,13 +8,16 @@ import {
     TokenAmount,
     TradeType,
     Percent,
-    Router
+    Router,
+    ETHER
   } from "@webfans/uniswapsdk";
   import JSBI from "jsbi/dist/jsbi.mjs";
 
   import {DEFAULT_DEADLINE_FROM_NOW,INITIAL_ALLOWED_SLIPPAGE} from '@/constants/index.js';
 
   import {getRouterContract} from "./utils.js";
+  import getChainCoinInfo from '@/constants/networkCoinconfig.js';
+  
 
 export default async function buildSwap(recipient,blockTime,trade,ChainId,provider){
     
@@ -24,7 +27,15 @@ export default async function buildSwap(recipient,blockTime,trade,ChainId,provid
 
       const account = recipient;
       const swapMethods = [];
-      
+
+      const coinInfo = getChainCoinInfo(ChainId);
+
+      if(trade.inputAmount.currency.symbol==coinInfo.coinName){
+        trade.inputAmount.currency=ETHER;
+      }
+      if(trade.outputAmount.currency.symbol==coinInfo.coinName){
+        trade.outputAmount.currency=ETHER;
+      }
 
       swapMethods.push(Router.swapCallParameters(trade, {
         feeOnTransfer: false,

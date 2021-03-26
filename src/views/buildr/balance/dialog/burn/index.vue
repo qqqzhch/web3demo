@@ -69,7 +69,7 @@
             </ul>
             <ul>
               <li class="title">
-                Generating：
+                Credit Line：
               </li>
               <li>
                 <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
@@ -82,7 +82,7 @@
             </ul>
             <ul>
               <li class="title flex">
-                <span>Collateral Ratio</span>
+                <span>Coll. Ratio</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">

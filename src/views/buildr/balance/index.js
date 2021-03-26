@@ -3,7 +3,7 @@ import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
 import { checkeBulderApprove } from '../guide/checkeBulderApprove';
 import Overview from './overview/index.vue';
-import { collateralPools } from '@//contactLogic/buildr/balance';
+import { getCollateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
 import BigNumber from "bignumber.js";
@@ -12,7 +12,7 @@ export default {
   name: 'balance',
   data() {
     return {
-      collateralPools,
+      collateralPools: [],
       poolsData: [],
       BigNumber,
     };
@@ -38,8 +38,8 @@ export default {
     async checkApprove() {
       const { chainID, library, account } = this.getParmas({});
       const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
-
       if(isHaveAllowance) {
+        this.collateralPools = getCollateralPools(chainID);
         this.loadData();
       } else {
         this.$router.push('/buildr/guide');
@@ -47,6 +47,7 @@ export default {
     },
     getParmas(item) {
       return {
+        isNative: item.isNative,
         tokenName: item.token,
         chainID: this.ethChainID,
         library: this.ethersprovider,
@@ -66,7 +67,7 @@ export default {
     },
     loadData() {
       this.poolsData = [];
-      collateralPools.forEach(async (item) => {
+      this.collateralPools.forEach(async (item) => {
         const params = this.getParmas(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
           liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
@@ -83,6 +84,8 @@ export default {
         const scUSDNumber = await fetchTokenBalance(scashParams);
 
         const itemData = {
+          isERC20: item.isERC20,
+          isNative: item.isNative,
           tokenName: item.token,
           tokenTitle: item.title,
           currencyNumber,

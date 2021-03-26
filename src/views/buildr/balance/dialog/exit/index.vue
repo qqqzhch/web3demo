@@ -11,7 +11,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab tab-disabled" @click="onJoinClick">
-              Stake
+              Deposit
             </button>
           </div>
           <div class="tab-warpper">
@@ -37,7 +37,7 @@
               </div>
             </div>
             <div v-if="checkValue==='ok'" class="notice">
-              <span>Withdraw collateral will reduce stable assets quota.</span>
+              <span>Withdraw collateral {{ poolData.tokenName }} will reduce scUSD credit line.</span>
               <img src="../../../../../assets/img/wenhao.svg" alt="?">
             </div>
           </div>
@@ -56,7 +56,7 @@
           <div class="items-content">
             <ul>
               <li class="title">
-                Generating：
+                Credit Line：
               </li>
               <li>
                 <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
@@ -69,7 +69,7 @@
             </ul>
             <ul>
               <li class="title flex">
-                <span>Collateral Ratio</span>
+                <span>Coll. Ratio</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">

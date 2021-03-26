@@ -3,13 +3,14 @@ import BigNumber from "bignumber.js";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
-import { collateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
+import { getCollateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
   fetchCurrencyPrice,
   fetchApprove,
   fetchAllowanceAmount,
+  fetchLambdaApprove,
 } from '@/contactLogic/buildr/create';
 
 
@@ -17,7 +18,6 @@ export default {
   name: 'create',
   data() {
     return {
-      token:'',
       currencyNumber: 0, // 资产数量
       pledgeNumber: 0,   // 质押币数量
       stableNumber: 0,   // 稳定币数量
@@ -27,9 +27,8 @@ export default {
       debtCap: 0,    // 全球scUSD债务上限
       allowanceAmount: 0, //限额
       currencyPrice: 0,
-      collateralPools: collateralPools,
-      defaultTokenName: collateralPools[0].name,
-      defaultToken: collateralPools[0].token,
+      collateralPools: [], // 合约池
+      defaultPool: {},
       BigNumber,
       btnloading: false,
     };
@@ -61,9 +60,16 @@ export default {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
     },
+    getPools() {
+        const collateralPools = getCollateralPools(this.ethChainID);
+        this.collateralPools = collateralPools;
+        this.defaultPool = collateralPools[0];
+    },
     getParams() {
+      const { isNative, token } = this.defaultPool;
       return {
-        tokenName: this.defaultToken,
+        isNative,
+        tokenName: token,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
@@ -99,11 +105,22 @@ export default {
       const params = Object.assign({}, this.getParams(), {
         pledgeNumber: this.pledgeNumber,
       });
-      const transaction = await fetchApprove(params);
+
+      // 标准的ERC20合约授权
+      // 非标准的ERC20 token 需要单独授权，目前只有LAMB
+      // 原生代币不需要授权
+      let transaction;
+      if(this.defaultPool.isERC20) {
+        transaction = await fetchApprove(params);
+      } else if(this.defaultPool.token === 'LAMB'){
+        transaction = await fetchLambdaApprove(params);
+      }
+
       if (transaction && transaction.hash) {
         const waitdata = await transaction.wait([1]);
         this.btnloading = false;
-        this.getAllowanceAmount();
+        // 需要更新数据
+        this.loadData();
       } else {
         this.$Notice.error({
           title: 'Approve cancelled',
@@ -132,11 +149,13 @@ export default {
     // Join
     async onJoinClick() {
       const params = this.getParams();
+      const { isNative, isERC20 } = this.defaultPool;
+      const type = isNative ? 'joinNative' : isERC20 ? 'joinERC20' :'join';
       const joinParams = {
         ...params,
-        type: 'join',
+        type,
         coinAmount: this.pledgeNumber,
-        unit: this.defaultToken,
+        unit: this.defaultPool.token,
       };
       const tx = await fetchBalanaceChange(joinParams);
       this.sendtx(tx);
@@ -145,29 +164,42 @@ export default {
       this.getCurrencyNumber();
       this.getIndicators();
       this.getCurrencyPrice();
-      this.getAllowanceAmount();
+      if(!this.defaultPool.isNative) {
+        this.getAllowanceAmount();
+      }
     },
     openAsset(){
       this.$refs.asset.open({
-        defaultTokenName: this.defaultTokenName,
+        defaultTokenName: this.defaultPool.name,
         data: this.collateralPools
       });
     },
     setAsset(tokenName) {
-      this.defaultTokenName = tokenName;
-      const pool = collateralPools.find(pool => pool.name === this.defaultTokenName);
-      this.defaultToken = pool.token;
+      this.defaultPool = this.collateralPools.find(pool => pool.name === tokenName);
+
+      // 更新数据
+      this.getCurrencyNumber();
+      this.getIndicators();
+      this.getCurrencyPrice();
+      if(!this.defaultPool.isNative) {
+        this.getAllowanceAmount();
+      }
+    },
+    isApprove() {
+      return !this.defaultPool.isNative && (BigNumber(this.allowanceAmount).isZero() || BigNumber(this.pledgeNumber).gt(this.allowanceAmount));
     }
   },
   watch: {
     isReady(value) {
       if (value) {
+        this.getPools();
         this.loadData();
       }
     },
   },
   created() {
     if(this.isReady) {
+      this.getPools();
       this.loadData();
     }
   }

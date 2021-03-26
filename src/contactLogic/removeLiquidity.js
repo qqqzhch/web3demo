@@ -17,6 +17,10 @@ import {
 } from "@/contacthelp/utils.js";
 import {  getGasPrice } from '@/contacthelp/ethusdt.js';
 
+import BigNumber  from 'bignumber.js';
+
+import getChainCoinInfo from '@/constants/networkCoinconfig.js';
+
 
 export async function localApprove(library,chainId,account,pair,ToRemoveAmount){
     const pairContract = usePairContract(
@@ -38,7 +42,7 @@ export async function localApprove(library,chainId,account,pair,ToRemoveAmount){
         { name: "verifyingContract", type: "address" },
       ];
       const domain = {
-        name: "TransGo V2",
+        name: "Uniswap V2",
         version: "1",
         chainId: chainId,
         verifyingContract: pair.liquidityToken.address,
@@ -113,19 +117,6 @@ export async function buildremoveparameter({library,chainId,account,pair,
     ToRemoveAmount.raw.toString()
   );
 
-  /*
-      var aCoinf = percentToRemove.multiply(aTokenData.raw);
-
-      currencyAmountA = new TokenAmount(this.$data.coinAToken, aCoinf.quotient);
-
-      var bCoinf = percentToRemove.multiply(bTokenData.raw);
-
-      currencyAmountB = new TokenAmount(this.$data.coinBToken, bCoinf.quotient);
-  
-  */
-
-  
-
   const amountsMin = {
     ["CURRENCY_A"]: calculateSlippageAmount(
       currencyAmountA,
@@ -137,22 +128,51 @@ export async function buildremoveparameter({library,chainId,account,pair,
     )[0],
   };
 
-  const methodName = "removeLiquidityWithPermit";
-  const args = [
-    currencyAmountA.token.address,
-    currencyAmountB.token.address,
-    liquidityAmount.raw.toString(),
-    amountsMin["CURRENCY_A"].toString(),
-    amountsMin["CURRENCY_B"].toString(),
-    account,
-    signatureData.deadline,
-    false,
-    signatureData.v,
-    signatureData.r,
-    signatureData.s,
-  ];
-  return args;
+  let currencyoneIsETH = false,currencyBIsETH=false;
+  const coinInfo = getChainCoinInfo(chainId);
 
+
+  if(currencyAmountA.token.symbol==coinInfo.coinName||currencyAmountB.token.symbol==coinInfo.coinName){
+    currencyoneIsETH = true;
+    if(currencyAmountB.token.symbol==coinInfo.coinName){
+      currencyBIsETH = true;
+    }
+  }
+
+  let args;
+
+  if(currencyoneIsETH){
+    args = [
+     currencyBIsETH?currencyAmountA.token.address:currencyAmountB.token.address,
+     liquidityAmount.raw.toString(),
+     amountsMin["CURRENCY_A"].toString(),
+     amountsMin["CURRENCY_B"].toString(),
+     account,
+     signatureData.deadline,
+     false,
+     signatureData.v,
+     signatureData.r,
+     signatureData.s,
+   ];
+
+ }else{
+    args = [
+     currencyAmountA.token.address,
+     currencyAmountB.token.address,
+     liquidityAmount.raw.toString(),
+     amountsMin["CURRENCY_A"].toString(),
+     amountsMin["CURRENCY_B"].toString(),
+     account,
+     signatureData.deadline,
+     false,
+     signatureData.v,
+     signatureData.r,
+     signatureData.s,
+   ];
+  }
+
+  console.log('args',args);
+  return args;
 
 
 }
@@ -160,8 +180,26 @@ export async function buildremoveparameter({library,chainId,account,pair,
 
 export async function  removeliquidityGas (chainID,library,account,parameters){
   const contract = getRouterContract(chainID, library, account);
+  let estimatedGasLimit,estimatedGasLimit1,estimatedGasLimit2;
 
-  const estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
+  if(parameters.length==10){
+    console.log('----1');
+    estimatedGasLimit1 = await contract.estimateGas.removeLiquidityETHWithPermit(...parameters, {});
+    estimatedGasLimit2 = await contract.estimateGas.removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(...parameters, {});
+
+    if(BigNumber.isBigNumber(estimatedGasLimit1)){
+      estimatedGasLimit = estimatedGasLimit1;
+    }else if(BigNumber.isBigNumber(estimatedGasLimit2)){
+      estimatedGasLimit = estimatedGasLimit2;
+    }
+
+  }else{
+    console.log('----2');
+     estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
+
+  }
+  
+
   const gasPrice = await getGasPrice(library);
 
   const useWEI = estimatedGasLimit.mul(gasPrice);
@@ -173,13 +211,48 @@ export async function  removeliquidityGas (chainID,library,account,parameters){
 export async function sendremoveliquidity(chainID,library,account,parameters){
 
   const contract = getRouterContract(chainID, library, account);
-  const estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
-    
-  const result = await contract.removeLiquidityWithPermit(...parameters, {
-          ...{},
-          gasLimit: calculateGasMargin(estimatedGasLimit),
-        });
+
+  let estimatedGasLimit,estimatedGasLimit1,estimatedGasLimit2;
+  if(parameters.length==10){
+     estimatedGasLimit1 = await contract.estimateGas.removeLiquidityETHWithPermit(...parameters, {});
+     estimatedGasLimit2 = await contract.estimateGas.removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(...parameters, {});
+
+  }else{
+     estimatedGasLimit = await contract.estimateGas.removeLiquidityWithPermit(...parameters, {});
+
+  }
+  
+
+  let result;
+  if(parameters.length==10){
+    if(BigNumber.isBigNumber(estimatedGasLimit1)){
+      estimatedGasLimit = estimatedGasLimit1;
+       result = await contract.removeLiquidityETHWithPermit(...parameters, {
+        ...{},
+        gasLimit: calculateGasMargin(estimatedGasLimit),
+      });
+  
+    }else if(BigNumber.isBigNumber(estimatedGasLimit2)){
+      estimatedGasLimit = estimatedGasLimit2;
+      result = await contract.removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(...parameters, {
+        ...{},
+        gasLimit: calculateGasMargin(estimatedGasLimit),
+      });
+    }
+  
+  }
+  else{
+    result = await contract.removeLiquidityWithPermit(...parameters, {
+      ...{},
+      gasLimit: calculateGasMargin(estimatedGasLimit),
+    });
+
+  }
+
+  
         
   return result;
-
+      
 }
+
+  

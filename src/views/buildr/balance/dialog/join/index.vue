@@ -12,7 +12,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab">
-              Stake
+              Deposit
             </button>
           </div>
           <div class="tab-warpper">
@@ -38,7 +38,7 @@
               </div>
             </div>
             <div v-if="checkValue==='ok'" class="notice">
-              <span>Add collateral will generate stable assets.</span>
+              <span>Deposit {{ poolData.tokenName }} will increase scUSD credit line.</span>
               <img src="../../../../../assets/img/wenhao.svg">
             </div>
           </div>
@@ -51,13 +51,13 @@
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
               <h2>{{ coinAmount }}</h2>
               <p>{{ poolData.tokenName }}</p>
-              <span>will be a staked to build scUSD</span>
+              <span>will deposit to get scUSD credit line</span>
             </div>
           </div>
           <div class="items-content">
             <ul>
               <li class="title">
-                Generating：
+                Credit Line：
               </li>
               <li>
                 <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> to <span
@@ -70,7 +70,7 @@
             </ul>
             <ul>
               <li class="title flex">
-                <span>Collateral Ratio</span>
+                <span>Coll.Ratio:</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
               <li v-if="existingDebt">

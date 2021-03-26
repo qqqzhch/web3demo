@@ -6,7 +6,6 @@ import BigNumber from "bignumber.js";
 export default {
   data() {
     return {
-      type: 'join',
       step: 1,
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
@@ -112,8 +111,10 @@ export default {
     },
     async onJoinClick() {
       this.isOpen = false;
+      const { isNative, isERC20 } = this.poolData;
+      const type = isNative ? 'joinNative' : isERC20 ? 'joinERC20' :'join';
       const params = {
-        type: this.type,
+        type,
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,

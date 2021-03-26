@@ -19,5 +19,59 @@
     "symbol": [
       "scUSD"
     ]
+  },
+  {
+    "name": "SCASH",
+    "address": "0x116dFf7c5eD6e66DB8235C836bB17f14eB111943",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "single",
+    "symbol": [
+      "SCASH"
+    ]
+  },
+  {
+    "name": "scUSD/USDT LP",
+    "address": "0x02Df6b73c1Ee09a20FD339A026813983f59A0a33",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "multi",
+    "symbol": [
+      "scUSD",
+      "USDT"
+    ]
+  },
+  {
+    "name": "SCASH/scUSD  LP",
+    "address": "0xdF5a65318F28e10f8b4fab7a7Fdd1442832421d7",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "multi",
+    "symbol": [
+      "SCASH",
+      "scUSD"
+    ]
+  },
+  {
+    "name": "SCASH/USDT  LP",
+    "address": "0xA09c001eEb572316ad667EbA3D241fefbdb9aFE6",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "multi",
+    "symbol": [
+      "SCASH",
+      "USDT"
+    ]
+  },
+  {
+    "name": "SCASH/ETH  LP",
+    "address": "0x3A0a8e7e6ad5A1A6d76180f81b292c4EF663F68a",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "multi",
+    "symbol": [
+      "SCASH",
+      "ETH"
+    ]
   }
 ]

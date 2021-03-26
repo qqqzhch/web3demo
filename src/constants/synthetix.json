@@ -1,5 +1,4 @@
 [
-
     {
         "name": "ExchangeRates",
         "address": "0x17148c65204c05efD3d75726edE110b8c6eb82cA",
@@ -7,7 +6,7 @@
         "chainId": 256
     },
     {
-        "name": "proxyActions",
+        "name": "ProxyActions",
         "address": "0xb5B08477cF24F25561a07452122A83177fbCC430",
         "decimals": 18,
         "chainId": 256
@@ -29,5 +28,66 @@
         "address": "",
         "decimals": 18,
         "chainId": 256
+    },
+    {
+        "name": "ExchangeRates",
+        "address": "0xC0C14c6653f3237AB877Ba1ddb20e14d5fcC8270",
+        "decimals": 18,
+        "chainId": 3
+    },
+    {
+        "name": "ProxyActions",
+        "address": "0xA82A0931981eAFaEf3792DC8F957796eD54aa3B7",
+        "decimals": 18,
+        "chainId": 3
+    },
+    {
+        "name": "ProxyToActions",
+        "address": "0xa7Ad449b8b3E521D55D0bdEd9349Cc1784C4cc96",
+        "decimals": 18,
+        "chainId": 3
+    },
+    {
+        "name": "Collateral",
+        "address": "",
+        "decimals": 18,
+        "chainId": 3
+    },
+    {
+        "name": "CollateralState",
+        "address": "",
+        "decimals": 18,
+        "chainId": 3
+    }
+,
+    {
+        "name": "ExchangeRates",
+        "address": "0xdEa30de30f5B464D7Eb8939c420bC5785CC0F8d3",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "ProxyActions",
+        "address": "0xd251Df05Da30C36d9cdf9bb490D0D89A4C39CCB9",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "ProxyToActions",
+        "address": "0x2CEa68e571B5c056f23A9376aEcdDb5E3f540085",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "Collateral",
+        "address": "",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "CollateralState",
+        "address": "",
+        "decimals": 18,
+        "chainId": 4
     }
 ]

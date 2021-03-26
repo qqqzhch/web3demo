@@ -10,6 +10,8 @@ import { useTokenContractMulticall
 import {  Token, 
 } from "@webfans/uniswapsdk";
 
+import getChainCoinInfo from '@/constants/networkCoinconfig.js';
+
 export async function readSwapBalance(chainID,library, account,TokenA,TokenB){
     console.log('readSwapBalance');
      const  TokenAContract = useTokenContractMulticall(TokenA);
@@ -22,7 +24,17 @@ export async function readSwapBalance(chainID,library, account,TokenA,TokenB){
 
     const ethcallProvider = new Provider(library,chainID);
     await ethcallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
-    const [TokenAamount,TokenBamount] = await ethcallProvider.all(callList);
+    let [TokenAamount,TokenBamount] = await ethcallProvider.all(callList);
+    const coinInfo = getChainCoinInfo(chainID);
+
+    if(TokenA.symbol==coinInfo.coinName){
+        TokenAamount = await library.getBalance(account);
+    }
+
+    if(TokenB.symbol==coinInfo.coinName){
+        TokenBamount = await library.getBalance(account);
+    }
+
     return{
         TokenAamount,TokenBamount
     };

@@ -18,7 +18,7 @@
     "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v2-periphery": "^1.1.0-beta.0",
     "@webfans/ethers-multicall": "0.1.6",
-    "@webfans/uniswapsdk": "3.0.3",
+    "@webfans/uniswapsdk": "23.0.3",
     "autoprefixer": "^9",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",

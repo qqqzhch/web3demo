@@ -6,5 +6,21 @@
     {
         "chainId": 256,
         "pair":["SCASH","scUSD"]
+    },
+    {
+        "chainId": 4,
+        "pair":["USDT","scUSD"]
+    },
+    {
+        "chainId": 4,
+        "pair":["SCASH","scUSD"]
+    },
+    {
+        "chainId": 4,
+        "pair":["SCASH","USDT"]
+    },
+    {
+        "chainId": 4,
+        "pair":["SCASH","ETH"]
     }
 ]

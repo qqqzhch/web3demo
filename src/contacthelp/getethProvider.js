@@ -48,15 +48,19 @@ export default function(Tokencoin){
 
     } else{
         //https://eth-ropsten.alchemyapi.io/v2/EfE4GgSS1wdCAGanz3uOt3SiBA0g4m9R
-        return  getDefaultProvider(getNetwork(Tokencoin.chainId),{
-        alchemy:'EfE4GgSS1wdCAGanz3uOt3SiBA0g4m9R',
-        etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
-        // infura:{
-        //     projectId:'1e578c69998749d1b5d6e0814a82c634',
-        //     projectSecret:'0b5d3b1a1cf847e883de0f92bbe62419'
-        //    }
 
-        });
+        
+        return new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82');
+
+        // return  getDefaultProvider(getNetwork(Tokencoin.chainId),{
+        // alchemy:'EfE4GgSS1wdCAGanz3uOt3SiBA0g4m9R',
+        // etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
+        // // infura:{
+        // //     projectId:'1e578c69998749d1b5d6e0814a82c634',
+        // //     projectSecret:'0b5d3b1a1cf847e883de0f92bbe62419'
+        // //    }
+
+        // });
     }
 
 }

@@ -52,6 +52,7 @@ import ABI_Proxy from "../constants/abis/Proxy.json";
 
 import ABI_CollateralState from "../constants/abis/CollateralState.json";
 
+import ABI_ERC20_LAMBDA from "../constants/abis/erc20lambda.json";
 
 
 // returns null on errors
@@ -249,7 +250,7 @@ export function useproxyActionsContract(
   tokenAddress,
   withSignerIfPossible
 ) {
-  
+
   return useContract(
     library,
     account,
@@ -265,7 +266,7 @@ export function useCollateralContract(
   tokenAddress,
   withSignerIfPossible
 ) {
-  
+
   return useContract(
     library,
     account,
@@ -281,7 +282,7 @@ export function useRewarderCollateralContract(
   tokenAddress,
   withSignerIfPossible
 ) {
-  
+
   return useContract(
     library,
     account,
@@ -297,7 +298,7 @@ export function useProxyContract(
   tokenAddress,
   withSignerIfPossible
 ) {
-  
+
   return useContract(
     library,
     account,
@@ -313,7 +314,7 @@ export function useCollateralStateContract(
   tokenAddress,
   withSignerIfPossible
 ) {
-  
+
   return useContract(
     library,
     account,
@@ -323,6 +324,21 @@ export function useCollateralStateContract(
   );
 }
 
+export function useErc20LambdaContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_ERC20_LAMBDA,
+    withSignerIfPossible
+  );
+}
 
 
 //ABI_rewarder

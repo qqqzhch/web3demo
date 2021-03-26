@@ -5,9 +5,8 @@ import {
   useproxyActionsContract,
   useExchangeRatesContract,
   useProxyContract,
-  useCollateralStateContract
+  useCollateralStateContract,
 } from "../../contacthelp/useContract.js";
-import { calculateGasMargin } from "../../contacthelp/utils";
 import { useTokenAllowance } from "../../contacthelp/Allowances";
 
 /**

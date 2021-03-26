@@ -32,6 +32,7 @@ const BigNumber = require("bignumber.js");
 import { pairPrice } from '@/constants/apiconfig.js';
 
 import { swapExactTokensForTokensformat } from './history.js';
+import getChainCoinInfo from '@/constants/networkCoinconfig.js';
 
 
 
@@ -54,13 +55,26 @@ export async function readpairpool(chainID, library) {
     const coinB = _.find(tokenList, { symbol: element.pair[1] });
     const TokenA = new Token(coinA.chainId, coinA.address, coinA.decimals, coinA.symbol);
     const TokenB = new Token(coinB.chainId, coinB.address, coinB.decimals, coinB.symbol);
-    const pairCall = Fetcher.fetchPairData(TokenA, TokenB, getethProvider(TokenB));
-    callList.push(pairCall);
+    try {
+      const pairCall = Fetcher.fetchPairData(TokenA, TokenB, getethProvider(TokenB));
+      callList.push(pairCall);  
+    } catch (error) {
+      console.log(error);
+      console.log(coinA.symbol,coinB.symbol);
+      
+    }
+    
 
   });
+  let PairList;
+//  try {
+   PairList = await Promise.all(callList); 
+//  } catch (error) {
+//    console.log('error',error,callList);
+//    PairList=[];
+//  }
+  
 
-
-  const PairList = await Promise.all(callList);
   // console.log(PairList);
   const dataList = [];
   /*
@@ -111,7 +125,7 @@ export async function readpairpool(chainID, library) {
   dataList.forEach((item) => {
 
     const prise24 = _.find(PriceList, (one) => {
-      if (one[item.pairName]) {
+      if (one&&one[item.pairName]) {
         return one;
 
       }
@@ -298,7 +312,7 @@ export async function calculationLiquidity(library, chainID, coinATokenAmount, c
 
 }
 
-export async function buildAddliquidityParam(coinATokenAmount, coinBTokenAmount, account) {
+export async function buildAddliquidityParam(coinATokenAmount, coinBTokenAmount, account,ChainId) {
 
   const allowedSlippage = INITIAL_ALLOWED_SLIPPAGE;
 
@@ -312,16 +326,36 @@ export async function buildAddliquidityParam(coinATokenAmount, coinBTokenAmount,
 
   const deadline = blockTime + DEFAULT_DEADLINE_FROM_NOW;
 
-  const args = [
-    coinATokenAmount.currency.address,
-    coinBTokenAmount.currency.address,
-    coinATokenAmount.raw.toString(),
-    coinBTokenAmount.raw.toString(),
-    amountsMin['CURRENCY_A'].toString(),
-    amountsMin['CURRENCY_B'].toString(),
-    account,
-    Web3.utils.asciiToHex(deadline + ''),
-  ];
+  const coinInfo = getChainCoinInfo(ChainId);
+
+  let args ;
+
+  if(coinATokenAmount.currency.symbol ==coinInfo.coinName||
+    coinBTokenAmount.currency.symbol ==coinInfo.coinName){
+      const isBisEth = coinBTokenAmount.currency.symbol ==coinInfo.coinName;
+      args = [
+        isBisEth?coinATokenAmount.currency.address:coinBTokenAmount.currency.address,
+        isBisEth?coinATokenAmount.raw.toString():coinBTokenAmount.raw.toString(),
+        amountsMin['CURRENCY_A'].toString(),
+        amountsMin['CURRENCY_B'].toString(),
+        account,
+        Web3.utils.asciiToHex(deadline + ''),
+      ];
+
+  }else{
+    args = [
+      coinATokenAmount.currency.address,
+      coinBTokenAmount.currency.address,
+      coinATokenAmount.raw.toString(),
+      coinBTokenAmount.raw.toString(),
+      amountsMin['CURRENCY_A'].toString(),
+      amountsMin['CURRENCY_B'].toString(),
+      account,
+      Web3.utils.asciiToHex(deadline + ''),
+    ];
+
+  }
+
   return args;
 
 }
@@ -450,10 +484,17 @@ export async function checkApprove(chainID, library, account, coinATokenAmount, 
 
 }
 
-export async function addliquidityGas(chainID, library, account, parameters) {
+export async function addliquidityGas(chainID, library, account, parameters,ethamount) {
   const contract = getRouterContract(chainID, library, account);
 
-  const estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
+  let  estimatedGasLimit;
+
+  if(parameters.length== 6){
+    estimatedGasLimit = await contract.estimateGas.addLiquidityETH(...parameters, {value:ethamount});
+  }else{
+    estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
+  }
+    
   const gasPrice = await getGasPrice(library);
 
   const useWEI = estimatedGasLimit.mul(gasPrice);
@@ -462,15 +503,33 @@ export async function addliquidityGas(chainID, library, account, parameters) {
   return fee;
 }
 
-export async function sendaddliquidity(chainID, library, account, parameters) {
+export async function sendaddliquidity(chainID, library, account, parameters,ethamount) {
 
   const contract = getRouterContract(chainID, library, account);
-  const estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
 
-  const result = await contract.addLiquidity(...parameters, {
-    ...{},
-    gasLimit: calculateGasMargin(estimatedGasLimit),
-  });
+  let  estimatedGasLimit;
+  if(parameters.length== 6){
+    estimatedGasLimit = await contract.estimateGas.addLiquidityETH(...parameters, {value:ethamount});
+ }else{
+   estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
+ }
+
+ let result ;
+ if(parameters.length== 6){
+    result = await contract.addLiquidityETH(...parameters, {
+      ...{
+        value:ethamount
+      },
+     gasLimit: calculateGasMargin(estimatedGasLimit),
+   });
+
+ }else{
+     result = await contract.addLiquidity(...parameters, {
+     ...{},
+     gasLimit: calculateGasMargin(estimatedGasLimit),
+   });
+
+ }
   return result;
 
 }
