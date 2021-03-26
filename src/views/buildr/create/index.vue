@@ -59,20 +59,26 @@
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
-          <p>Target Coll. Ratio：</p>
-          <div class="text-right f-green">
+          <p class="f-size-20">
+            Target Coll. Ratio：
+          </p>
+          <div class="text-right f-green f-size-20">
             {{ BigNumber(targetRX).times(100) }}%
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Collateral：</p>
-          <div class="text-right">
+          <p class="f-size-20">
+            Collateral：
+          </p>
+          <div class="text-right f-size-20">
             {{ pledgeNumber }} {{ defaultPool.token }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Credit Line：</p>
-          <div class="text-right">
+          <p class="f-size-20">
+            Credit Line：
+          </p>
+          <div class="text-right f-size-20">
             {{ stableNumber }} scUSD
           </div>
         </div>
@@ -149,6 +155,7 @@
 .create {
   // margin-left: 100px;
   .title {
+    margin-bottom: 32px;
     font-size: 20px;
     font-family: Gilroy-Medium, Gilroy;
     font-weight: 500;
@@ -244,6 +251,10 @@
   }
 
   .content-right {
+    .f-size-20{
+      font-size: 20px;
+      color: #14171C;
+    }
     p {
       height: 16px;
       font-size: 14px;
@@ -255,9 +266,9 @@
     }
     .btn {
       margin-top: 30px;
-      line-height: 60px;
-      height: 60px;
-      padding-top: 3px;
+      line-height: 48px;
+      height: 48px;
+      border-radius: 24px;
       background-color: #0058ff;
       color: #ffffff;
       &:hover {
