@@ -693,7 +693,7 @@ export default {
 
 .demo-spin-container {
   display: inline-block;
-  width: 400px;
+  width: 100%;
   height: 100px;
   position: relative;
 }

@@ -1,5 +1,5 @@
 export default {
-  defaultChainID: 256,
+  defaultChainID: 4,
   netInfo: {
     '1': {
       imgSrc: require('../assets/img/eth48.png'),

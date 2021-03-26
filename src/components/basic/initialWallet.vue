@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import   {getPrice} from '@/contactLogic/tokenPrice.js';
 
 import getChainCoinInfo from '@/constants/networkCoinconfig.js';
+import chainConfig from '@/config/config.js';
 
 export default {
   data() {
@@ -131,6 +132,7 @@ export default {
             title: this.$t('notice.n'),
             desc: this.$t('notice.n11'),
           });
+          this.$store.commit('changeEthChainID', chainConfig.defaultChainID);
 
           return false;
         }
