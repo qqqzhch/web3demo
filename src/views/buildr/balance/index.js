@@ -8,6 +8,7 @@ import Overview from './overview/index.vue';
 import { getCollateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
 import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
+import i18n from '../../../i18n/index.js';
 
 export default {
   name: 'balance',
@@ -127,12 +128,12 @@ export default {
       if(tx && tx.base){
         this.$refs.haveSendtx.open(tx.base);
         event.$emit('sendtx',[tx.response, {
-          okinfo: tx.base+' SUCCESS',
-          failinfo: tx.base+' FAIL'
+          okinfo: tx.base + i18n.t('swapConfirm.successCom'),
+          failinfo: tx.base + i18n.t('swapConfirm.failCom')
         }]);
       } else {
         this.$Notice.error({
-          title:  this.$t('buidrNotice.n3'),
+          title: i18n.t('notice.buidrNotice.n3'),
         });
       }
     }

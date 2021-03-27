@@ -45,7 +45,8 @@ export default {
       fail:'Fail',
       successCom:'Success',
       failCom:'Fail',
-      txhavesend:'Transaction Sent'
+      txhavesend:'Transaction Sent',
+      add:'add'
     },
     swapHistory: {
       history: 'History',
@@ -66,6 +67,7 @@ export default {
         amount:'Amount',
         balance:'Balance',
         button:'Approve',
+        max:'MAX',
       },
       confirmDialog:{
         titleConfirm:'Confirm',

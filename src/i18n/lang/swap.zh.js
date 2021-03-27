@@ -45,7 +45,8 @@ export default {
       fail:'失败',
       successCom:'成功',
       failCom:'失败',
-      txhavesend:'交易已发送'
+      txhavesend:'交易已发送',
+      add:'添加',
     },
     swapHistory: {
       history: '历史记录',
@@ -61,6 +62,7 @@ export default {
         amount:'数量',
         balance:'余额',
         button:'授权',
+        max:'全部',
       },
       confirmDialog:{
         titleConfirm:'确认',

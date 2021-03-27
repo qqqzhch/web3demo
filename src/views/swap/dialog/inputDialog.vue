@@ -588,13 +588,13 @@ export default {
       try {
         const tx = await sendaddliquidity(chainID, library, account, parameters,this.$data.ethamount);
 
-        const baseTip = `add ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol}LP `;
+        const baseTip = `${this.$t('swapConfirm.add')} ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol} LP `;
         this.$refs.haveSendtx.open(baseTip);
         event.$emit('sendtx', [
           tx,
           {
-            okinfo: baseTip + 'success',
-            failinfo: baseTip + 'fail',
+            okinfo: baseTip +this.$t('swapConfirm.success'),
+            failinfo: baseTip + this.$t('swapConfirm.fail'),
           },
         ]);
         this.$data.openInputDialog = false;

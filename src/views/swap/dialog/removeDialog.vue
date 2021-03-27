@@ -35,7 +35,7 @@
             75%
           </div>
           <div @click="percentage(1)">
-            MAX
+            {{ $t('swapHistory.removeDialog.max') }}
           </div>
         </div>
         <div v-if="tokenA && tokenB" class="price-warpper">

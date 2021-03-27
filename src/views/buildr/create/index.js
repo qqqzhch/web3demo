@@ -12,6 +12,7 @@ import {
   fetchAllowanceAmount,
   fetchLambdaApprove,
 } from '@/contactLogic/buildr/create';
+import i18n from '../../../i18n/index.js';
 
 
 export default {
@@ -47,9 +48,9 @@ export default {
     // 验证输入值
     checkValue() {
       if(BigNumber(this.pledgeNumber).isLessThan(0)) {
-        return this.$t('notice.swapNotice.n2');
+        return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.pledgeNumber)) {
-        return this.$t('buidrNotice.n1');
+        return i18n.t('notice.buidrNotice.n1');
       } else {
         return 'ok';
       }
@@ -123,7 +124,7 @@ export default {
         this.loadData();
       } else {
         this.$Notice.error({
-          title: this.$t('buidrNotice.n2'),
+          title: i18n.t('notice.buidrNotice.n2'),
         });
         this.btnloading = false;
       }
@@ -137,12 +138,12 @@ export default {
       if(tx && tx.base){
         this.$refs.haveSendtx.open(tx.base);
         event.$emit('sendtx',[tx.response, {
-          okinfo: tx.base+' SUCCESS',
-          failinfo: tx.base+' FAIL'
+          okinfo: tx.base+ i18n.t('swapConfirm.successCom'),
+          failinfo: tx.base+ i18n.t('swapConfirm.failCom')
         }]);
       } else {
         this.$Notice.error({
-          title: this.$t('buidrNotice.n3'),
+          title: i18n.t('notice.buidrNotice.n3'),
         });
       }
     },
