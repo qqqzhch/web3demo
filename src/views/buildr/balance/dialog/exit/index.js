@@ -62,7 +62,7 @@ export default {
     // 验证输入值
     checkValue() {
       if(BigNumber(this.coinAmount).gt(this.unlockedCollateral) || BigNumber(this.coinAmount).isLessThan(0)) {
-        return this.$t('swapNotice.n2');
+        return this.$t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return this.$t('buidrNotice.n1');
       } else {

@@ -14,13 +14,13 @@
             <template slot="Action" slot-scope="{ row }">
               <div class="Action">
                 <p v-if="row.method_name==='stake'" class="action">
-                  {{ $t('swapHistory.actions.stake') }}
+                  {{ $t('earn.actions.stake') }}
                 </p>
                 <p v-if="row.method_name==='exit'" class="action">
-                  {{ $t('swapHistory.actions.exit') }}
+                  {{ $t('earn.actions.exit') }}
                 </p>
                 <p v-if="row.method_name==='getReward'" class="action">
-                  {{ $t('swapHistory.actions.getReward') }}
+                  {{ $t('earn.actions.getReward') }}
                 </p>
               </div>
             </template>

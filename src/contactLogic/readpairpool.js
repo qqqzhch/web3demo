@@ -57,23 +57,23 @@ export async function readpairpool(chainID, library) {
     const TokenB = new Token(coinB.chainId, coinB.address, coinB.decimals, coinB.symbol);
     try {
       const pairCall = Fetcher.fetchPairData(TokenA, TokenB, getethProvider(TokenB));
-      callList.push(pairCall);  
+      callList.push(pairCall);
     } catch (error) {
       console.log(error);
       console.log(coinA.symbol,coinB.symbol);
-      
+
     }
-    
+
 
   });
   let PairList;
 //  try {
-   PairList = await Promise.all(callList); 
+   PairList = await Promise.all(callList);
 //  } catch (error) {
 //    console.log('error',error,callList);
 //    PairList=[];
 //  }
-  
+
 
   // console.log(PairList);
   const dataList = [];
@@ -389,7 +389,6 @@ export async function checkoutTokenAllowance(tokenA, tokenB, library, chainID, a
 export async function readpariInfoNuminfo(chainID, library, account, tokensymbolA, tokensymbolB) {
   console.log('readpariInfoNuminfo');
   const pairInfo = await readpariInfo(chainID, library, tokensymbolA, tokensymbolB);
-
   const callList = [];
 
   const TokenContract = useTokenContractMulticall(pairInfo.liquidityToken);
@@ -494,7 +493,7 @@ export async function addliquidityGas(chainID, library, account, parameters,etha
   }else{
     estimatedGasLimit = await contract.estimateGas.addLiquidity(...parameters, {});
   }
-    
+
   const gasPrice = await getGasPrice(library);
 
   const useWEI = estimatedGasLimit.mul(gasPrice);
@@ -619,7 +618,6 @@ async function checkPairsUserbalance(pairList,library, account){
 export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, tokensymbolB, pledgebalance) {
   // console.log('readpariInfoNuminfo');
   const pairInfo = await readpariInfo(chainID, library, tokensymbolA, tokensymbolB);
-
   const callList = [];
 
   const TokenContract = useTokenContractMulticall(pairInfo.liquidityToken);
@@ -645,13 +643,15 @@ export async function readpariInfoNuminfoEarn(chainID, library, tokensymbolA, to
   const bTokenbalance = pairInfo.getLiquidityValue(pairInfo.tokenAmounts[1].token, totalSupplyTokenAmount, balanceTokenAmount, false);
 
   const route = new Route([pairInfo], pairInfo.tokenAmounts[0].token);
-  const price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
   //tokensymbolA, tokensymbolB
   const pairprice={};
+  let price;
   if(tokensymbolB ==  pairInfo.tokenAmounts[0].token.symbol){
+    price = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token);
     pairprice[tokensymbolA+"/"+tokensymbolB] = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token).toSignificant(6);
     pairprice[tokensymbolB+"/"+tokensymbolA] = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token).toSignificant(6);
   }else{
+    price = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token);
     pairprice[tokensymbolB+"/"+tokensymbolA] = route.pairs[0].priceOf(pairInfo.tokenAmounts[1].token).toSignificant(6);
     pairprice[tokensymbolA+"/"+tokensymbolB] = route.pairs[0].priceOf(pairInfo.tokenAmounts[0].token).toSignificant(6);
   }

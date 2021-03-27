@@ -47,6 +47,11 @@ export default {
         willMine: 'will be staked to mine'
       },
       loading: 'Loading'
+    },
+    actions: {
+      stake: 'Stake',
+      exit: 'Unstake',
+      getReward: 'Claim'
     }
   },
   myPage: {

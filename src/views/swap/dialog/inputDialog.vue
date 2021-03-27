@@ -423,7 +423,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$Notice.error({
-          title: this.$t('swapNotice.n5'),
+          title: this.$t('notice.swapNotice.n5'),
         });
       }
       this.$data.btnloading = false;
@@ -474,17 +474,17 @@ export default {
         // }
         const num = parseFloat(this.$data.aTokenAmount);
         if (isNaN(num)) {
-          this.$data.inputnoticeA = this.$t('swapNotice.n1');
+          this.$data.inputnoticeA = this.$t('notice.swapNotice.n1');
           return false;
         }
         const inamount = new BigNumber(this.$data.aTokenAmount);
         if (inamount.isGreaterThan(this.tokenABalance) || inamount.isLessThanOrEqualTo('0')) {
-          this.$data.inputnoticeA = this.$t('swapNotice.n2');
+          this.$data.inputnoticeA = this.$t('notice.swapNotice.n2');
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeA = this.$t('swapNotice.n1');
+        this.$data.inputnoticeA = this.$t('notice.swapNotice.n1');
       }
     },
     inputcheckupB() {
@@ -495,17 +495,17 @@ export default {
         // }
         const num = parseFloat(this.$data.bTokenAmount);
         if (isNaN(num)) {
-          this.$data.inputnoticeB = this.$t('swapNotice.n1');
+          this.$data.inputnoticeB = this.$t('notice.swapNotice.n1');
           return false;
         }
         const inamount = new BigNumber(this.$data.bTokenAmount);
         if (inamount.isGreaterThan(this.tokenBBalance) || inamount.isLessThanOrEqualTo('0')) {
-          this.$data.inputnoticeB = this.$t('swapNotice.n2');
+          this.$data.inputnoticeB = this.$t('notice.swapNotice.n2');
           return false;
         }
       } catch (error) {
         console.log(error);
-        this.$data.inputnoticeB = this.$t('swapNotice.n1');
+        this.$data.inputnoticeB = this.$t('notice.swapNotice.n1');
       }
     },
     async approveA() {
@@ -534,7 +534,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: this.$t('swapNotice.n4'),
+          title: this.$t('notice.swapNotice.n4'),
         });
       }
       this.$data.btnloading = false;
@@ -568,7 +568,7 @@ export default {
         //取消授权
         //需要提示
         this.$Notice.error({
-          title: this.$t('swapNotice.n4'),
+          title: this.$t('notice.swapNotice.n4'),
         });
       }
       this.$data.btnloading = false;
@@ -587,7 +587,7 @@ export default {
       this.$data.btnloading = true;
       try {
         const tx = await sendaddliquidity(chainID, library, account, parameters,this.$data.ethamount);
-        
+
         const baseTip = `add ${this.$data.LiquidityInfo.liquidityMinted} ${this.$data.tokenA.symbol}/${this.$data.tokenB.symbol}LP `;
         this.$refs.haveSendtx.open(baseTip);
         event.$emit('sendtx', [
@@ -600,7 +600,7 @@ export default {
         this.$data.openInputDialog = false;
       } catch (error) {
         this.$Notice.error({
-          title: this.$t('swapNotice.n3'),
+          title: this.$t('notice.swapNotice.n3'),
         });
       }
       this.$data.btnloading = false;

@@ -69,8 +69,8 @@ export default {
         tokensymbolB,
         pledgeBalanceWei
       );
-      obj.usdtNum = data.aTokenbalance.multiply(data.priceinvert).add(data.bTokenbalance).toSignificant(6);
-      obj.price = data.priceinvert && data.priceinvert.toSignificant(6);
+      obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
+      obj.price = data.price && data.price.toSignificant(6);
       if (tokensymbolA === 'SCASH' && tokensymbolB === 'USDT') {
         this.$store.commit('changeScashPrice', obj.price);
       }

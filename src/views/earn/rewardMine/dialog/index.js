@@ -58,7 +58,10 @@ export default {
       this.isShowPledge = true;
     },
     open(data) {
+      this.data = {};
       this.data = data;
+      this.pledgeAmount = '';
+      this.isShowPledge = true;
       this.openPledgeDialog = true;
     },
     toExchange() {

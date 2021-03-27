@@ -47,6 +47,11 @@ export default {
         willMine: '将被质押参与挖矿'
       },
       loading: '等待确认'
+    },
+    actions: {
+      stake: '质押',
+      exit: '取出',
+      getReward: '提取收益'
     }
   },
   myPage: {

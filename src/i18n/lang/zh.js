@@ -44,6 +44,7 @@ export default {
       Earn: '收益挖矿',
       Bridge: '跨链',
     },
+    connectWallet:'连接钱包',
     copyAddress: '复制地址',
     changeWallet: '更换钱包',
     Disconnect: '解除连接',

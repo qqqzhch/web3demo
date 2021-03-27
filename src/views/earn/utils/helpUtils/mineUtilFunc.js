@@ -16,7 +16,7 @@ function getTokenInfo(chainID, address) {
 }
 
 export async function StakingRewardList(library, account, chainID) {
-  console.log({library, account, chainID});
+  // console.log({library, account, chainID});
   const list = multiSymbolData || [];
   const result = [];
 
