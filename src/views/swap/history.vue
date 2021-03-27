@@ -82,6 +82,10 @@ export default {
         swapExactTokensForTokens: "swap",
         addLiquidity: "addLiquidity",
         removeLiquidityWithPermit: "removeLiquidity",
+        removeLiquidityETHWithPermit:"removeLiquidity",
+        addLiquidityETH:'addLiquidity',
+        swapExactTokensForETH:'swap',
+        removeLiquidityETHWithPermitSupportingFeeOnTransferTokens:'removeLiquidity'
       },
       pageIndex: 1,
       pageNum: 1,
@@ -105,7 +109,7 @@ export default {
         this.$data.pageIndex,
         10
       );
-
+      this.list = this.list.concat(data.data);
       if (data.count % 10 === 0) {
         this.$data.pageNum = data.count / 10;
       } else {

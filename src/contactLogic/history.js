@@ -17,7 +17,21 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
         }else if(item.method_name == 'addLiquidity'){
             item.show = addLiquidityformat(item.txs,chainID);
 
+        }else if(item.method_name == 'removeLiquidityETHWithPermit'){
+            item.show = removeLiquidityWithPermitformatETH(item.txs,chainID);
+
+        }else if(item.method_name == 'addLiquidityETH'){
+            item.show = addLiquidityformatETH(item.txs,chainID);
+
+        }else if(item.method_name == 'swapExactTokensForETH'){
+            item.show = swapExactTokensForTokensformatETH(item.txs,chainID);
+
+        }else if(item.method_name == 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens'){
+            item.show = removeLiquidityWithPermitformatETH(item.txs,chainID);
+
         }
+
+        //removeLiquidityETHWithPermitSupportingFeeOnTransferTokens,
 
 
     });
@@ -127,6 +141,23 @@ function removeLiquidityWithPermitformat(item,chainID){
 
 }
 
+function removeLiquidityWithPermitformatETH(item,chainID){
+    const lpamount = item[0].amount;
+    const  tokenADDRESSA = item[2].amount_token_address ;
+    const  tokenADDRESSB = item[3].amount_token_address ;
+    const amountA = item[2].amount;
+    const amountB = item[3].amount;
+
+    return {
+        inamount:lpamount,
+        outamount:[amountA,amountB],
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+        tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
+    };
+
+
+}
+
 export  function swapExactTokensForTokensformat(item,chainID){
     const inamount = item[0].amount;
     const outamount = item[1].amount;
@@ -143,7 +174,43 @@ export  function swapExactTokensForTokensformat(item,chainID){
 
 }
 
+export  function swapExactTokensForTokensformatETH(item,chainID){
+    const inamount = item[0].amount;
+    const outamount = item[1].amount;
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    const  tokenADDRESSB = item[1].amount_token_address ;
+
+    return {
+        inamount:inamount,
+        outamount:outamount,
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+        tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
+    };
+
+}
+
 function addLiquidityformat(item,chainID){
+    const inamount = item[0].amount;
+    const outamount = item[1].amount;
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+    const  tokenADDRESSB = item[1].amount_token_address ;
+
+    const amountLP = item[2].amount;
+
+
+    return {
+        inamount:[inamount,outamount],
+        outamount:amountLP,
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+        tokenB:tokenNameByaddress(tokenADDRESSB,chainID)
+    };
+
+}
+
+
+function addLiquidityformatETH(item,chainID){
     const inamount = item[0].amount;
     const outamount = item[1].amount;
 

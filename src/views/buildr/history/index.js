@@ -60,6 +60,7 @@ export default {
       return getTokenImg(tokensymbol, chainID);
     },
     async loadData() {
+      console.log('loadData');
       const chainID = this.ethChainID;
       const account =  this.ethAddress;
 

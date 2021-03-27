@@ -29,6 +29,11 @@
       <br>
       读取ht价格
     </button>
+    <br>
+
+    <button @click="getearnList">
+      读取赚钱列表
+    </button>
   </div>
 </template>
 <script>
@@ -50,6 +55,8 @@ import {readbuildrHistory} from '@/contactLogic/history.js';
 import Web3 from 'web3';
 
 import   {getPrice} from '@/contactLogic/tokenPrice.js';
+
+import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
 
 
 export default {
@@ -237,6 +244,13 @@ export default {
      const data = await getPrice();
 
      console.log(data);
+
+    },
+    async getearnList(){
+      const library = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainID = this.ethChainID;
+       StakingRewardListbatch(library, account, chainID)
 
     }
 

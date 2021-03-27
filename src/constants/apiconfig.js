@@ -1,12 +1,20 @@
 
 
-const baseUrl = 'http://59.110.68.178:8080/' ;
+const baseUrl = 'http://59.110.68.178:8086/' ;
 
 const axios = require('axios');
 
 export  async function swapHistory(account,pageNum=1,showNum=10,chainID){
-   const method_names =['swapExactTokensForTokens','removeLiquidityWithPermit','addLiquidity'].join(',');
-   const pair_addresses=['0x4DeFcc90F3e2Aabce3c767Ce1D2B1a6DAC308628','0xCF8f72E5053D779B5DbA62439E202a81898922F3'].join(',');
+   const method_names =['swapExactTokensForTokens','removeLiquidityWithPermit','addLiquidity',
+  'addLiquidityETH','swapExactETHForTokens','removeLiquidityETHWithPermit','swapExactTokensForETH',
+  'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens'].join(',');
+
+   const pair_addresses=[
+    '0x4B5ea1218Ac0544fb03617ca9780a2b0ed7edef5',
+    '0x51f624116513a9f4606a368f2eC9899c821258B3',
+    '0x0CC750e4426D677657409fab33E7957DDA8cC1F1',
+    '0x01c06572D6d351863270baC558ca945E2DBB56FE',
+  ].join(',');
 
    const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}&pair_addresses=${pair_addresses}`);
 
@@ -47,7 +55,7 @@ export  async function pledgeHistory(account,pageNum=1,showNum=10,chainID){
 
 
 export  async function buildrHistory(account,pageNum=1,showNum=10,chainID){
-  const method_names =['proxyMinted','proxyBurned','proxyJoined','proxyExited','approval'].join(',');
+  const method_names =['Mint','Burn','Join','Exit','approval'].join(',');
 
   const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 

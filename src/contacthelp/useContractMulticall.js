@@ -12,6 +12,8 @@ import { getContractMulticall  } from "./utils.js";
 
 import { abi as IUniswapV2PairABI } from "@uniswap/v2-core/build/IUniswapV2Pair.json";
 
+import ERC20_ABI_StakingRewards from "@/constants/abis/StakingRewards.json";
+
 
 
 // returns null on errors
@@ -41,6 +43,15 @@ export function useTokenContractMulticall(
   return useContract(
     token.address,
     ERC20_ABI
+  );
+}
+export function useStakingRewardsContractMulticall(
+  token
+) {
+  // console.info("- -useTokenContract");
+  return useContract(
+    token.address,
+    ERC20_ABI_StakingRewards
   );
 }
 
