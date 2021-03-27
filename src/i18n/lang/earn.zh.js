@@ -34,7 +34,7 @@ export default {
         amount: '数量',
         balance: '余额',
         totalStakePool: '矿池总锁仓量',
-        yield: '年化收益率',
+        yield: '收益率',
         willStake: '你将质押',
         sharePool: '矿池占比',
         next: '下一步',

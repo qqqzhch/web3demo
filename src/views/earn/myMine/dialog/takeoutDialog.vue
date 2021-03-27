@@ -19,7 +19,7 @@
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>{{ $t('myPage.dialog.unstake.unstake') }} scUSD/USDT LP</span>
+            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}</span>
             <p>{{ stakeVal }} {{ coinName }}</p>
           </div>
         </div>
@@ -89,8 +89,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.unStake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.unStake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {
