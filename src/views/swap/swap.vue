@@ -615,7 +615,7 @@ export default {
         display: flex;
         align-items: center;
         padding: 9px 30px;
-        width: 412px;
+        // width: 412px;
         height: 32px;
         background: rgba(255, 60, 0, 0.1);
         border-radius: 4px;

@@ -28,7 +28,7 @@ export default {
       n2:'Input value must be less than balance and greater than 0',
       n3:'Transaction cancelled',
       n4:'Authorization cancelled',
-      n5:'获取手续费失败或逻辑异常',
+      n5:'Failed to obtain the handling fee or abnormal logic',
     },
     buidrNotice:{
       n1:'Input value needs to be a value',
