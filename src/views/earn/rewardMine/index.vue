@@ -12,7 +12,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { StakingRewardList } from '../utils/helpUtils/mineUtilFunc.js';
+import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 export default {
@@ -32,8 +32,10 @@ export default {
     async getListData() {
       this.showLoading = true;
       try {
-        const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
+        const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
+        // console.log({data});
         const tempLiquidity = data.filter((item) => item.kind === 'multi');
+        // console.log({tempLiquidity});
         const result = [];
         const results = async () => {
           for (let index = 0; index < tempLiquidity.length; index++) {
@@ -48,6 +50,7 @@ export default {
         };
         await results();
         this.liquidityData = result;
+
         this.designatedData = data.filter((item) => item.kind === 'single');
       } catch (error) {
         console.log(error);
@@ -60,7 +63,7 @@ export default {
       const obj = {};
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
-      const pledgeBalance = item.data && item.data.totalSupply;
+      const pledgeBalance = item && item.data && item.data.totalSupply;
       const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
       const data = await readpariInfoNuminfoEarn(
         this.ethChainID,

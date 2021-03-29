@@ -43,7 +43,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { StakingRewardList} from '../utils/helpUtils/mineUtilFunc.js';
+import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 import event from '@/common/js/event';
 export default {
@@ -62,7 +62,7 @@ export default {
     async getListData() {
       this.showLoading = true;
       try {
-        const data = await StakingRewardList(this.ethersprovider, this.ethAddress, this.ethChainID);
+        const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
         // console.log(data);
         const [scashData] = data.filter(item => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
         // console.log(scashData);
@@ -86,7 +86,7 @@ export default {
         tokensymbolB,
         pledgeBalanceWei
       );
-      const price = data.priceinvert && data.priceinvert.toSignificant(6);
+      const price = data.price && data.price.toSignificant(6);
       this.$store.commit('changeScashPrice', price);
     },
     openClaim(data) {

@@ -26,7 +26,11 @@
           </div>
           <DropdownMenu slot="list" class="list-wrapper">
             <template v-for="(item, index) in getNetList">
-              <DropdownItem :key="index" class="list-item" :name="item">
+              <DropdownItem v-if="netInfo[item].isBan === false" :key="index" class="list-item" :name="item">
+                <img :src="netInfo[item].imgSrc" :alt="item">
+                <span>{{ netInfo[item].name }}</span>
+              </DropdownItem>
+              <DropdownItem v-else :key="index" disabled class="list-item" :name="item">
                 <img :src="netInfo[item].imgSrc" :alt="item">
                 <span>{{ netInfo[item].name }}</span>
               </DropdownItem>
@@ -317,6 +321,7 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
   img {
     max-width: 16px;
     margin-right: 8px;
