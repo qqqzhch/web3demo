@@ -37,7 +37,14 @@
           </div>
         </div>
         <div class="Input-item">
-          <ScInput class="myInput" title="" :unit="defaultPool.token" :on-change="onChangePledgeNumber" :is-error="checkValue !== 'ok'" />
+          <ScInput
+            class="myInput"
+            title=""
+            :default-value="pledgeNumber"
+            :unit="defaultPool.token"
+            :on-change="onChangePledgeNumber"
+            :is-error="checkValue !== 'ok'"
+          />
           <img :src="getTokenImg(defaultPool.token)" :alt="defaultPool.token">
         </div>
         <div v-if="checkValue !== 'ok'" class="notice-warpper">

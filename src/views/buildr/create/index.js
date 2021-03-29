@@ -40,6 +40,12 @@ export default {
     assetDialog: () => import('@/views/buildr/create/assetDialog.vue'),
     Loading: () => import("@/components/basic/loading.vue"),
   },
+  mounted() {
+    //txsuccess
+    event.$on('txsuccess',()=>{
+      this.loadData();
+    });
+  },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
     isReady() {
@@ -97,7 +103,7 @@ export default {
       this.currencyPrice = currencyPrice;
     },
     onChangePledgeNumber(val) {
-      this.pledgeNumber = val;
+      this.pledgeNumber = val || '';
       // this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
       this.stableNumber = this.pledgeNumber ? BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX) : '';
     },
@@ -162,6 +168,7 @@ export default {
       this.sendtx(tx);
     },
     loadData() {
+      this.pledgeNumber = 0;
       this.getCurrencyNumber();
       this.getIndicators();
       this.getCurrencyPrice();
@@ -177,14 +184,7 @@ export default {
     },
     setAsset(tokenName) {
       this.defaultPool = this.collateralPools.find(pool => pool.name === tokenName);
-
-      // 更新数据
-      this.getCurrencyNumber();
-      this.getIndicators();
-      this.getCurrencyPrice();
-      if(!this.defaultPool.isNative) {
-        this.getAllowanceAmount();
-      }
+      this.loadData();
     },
     isApprove() {
       return !this.defaultPool.isNative && (BigNumber(this.allowanceAmount).isZero() || BigNumber(this.pledgeNumber).gt(this.allowanceAmount));
