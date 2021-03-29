@@ -92,7 +92,7 @@
         cursor: pointer;
       }
       .tab-active {
-        color: #14171C;
+        color: rgba(0, 88, 255, 1);
       }
       .tab-active::after {
         content: "";
