@@ -108,7 +108,8 @@ export default {
       this.stableNumber = this.pledgeNumber ? BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX) : '';
     },
     async onApproveClick() {
-      this.btnloading = true;
+      if(!this.pledgeNumber) return;
+
       const params = Object.assign({}, this.getParams(), {
         pledgeNumber: this.pledgeNumber,
       });
@@ -117,6 +118,7 @@ export default {
       // 非标准的ERC20 token 需要单独授权，目前只有LAMB
       // 原生代币不需要授权
       let transaction;
+      this.btnloading = true;
       if(this.defaultPool.isERC20) {
         transaction = await fetchApprove(params);
       } else if(this.defaultPool.token === 'LAMB'){
@@ -164,8 +166,10 @@ export default {
         coinAmount: this.pledgeNumber,
         unit: this.defaultPool.token,
       };
-      const tx = await fetchBalanaceChange(joinParams);
-      this.sendtx(tx);
+      if(this.pledgeNumber) {
+        const tx = await fetchBalanaceChange(joinParams);
+        this.sendtx(tx);
+      }
     },
     loadData() {
       this.pledgeNumber = 0;
