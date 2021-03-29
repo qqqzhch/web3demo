@@ -167,6 +167,9 @@ import event from '@/common/js/event';
 const debounce = require('debounce');
 
 const BigNumber = require('bignumber.js');
+
+import _ from 'underscore';
+
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 
 let nowTrade;
@@ -385,7 +388,8 @@ export default {
     },
     openconfirmtDialog() {
       if (nowTrade) {
-        this.$refs.confirm.open(this.$data, nowTrade);
+        this.$refs.confirm.open(_.clone(this.$data), nowTrade);
+        this.clearData();
       }
     },
   },
