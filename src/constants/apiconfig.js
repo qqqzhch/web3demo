@@ -16,7 +16,7 @@ export  async function swapHistory(account,pageNum=1,showNum=10,chainID){
     '0x01c06572D6d351863270baC558ca945E2DBB56FE',
   ].join(',');
 
-   const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}&pair_addresses=${pair_addresses}`);
+   const data =  await  axios.get(`${baseUrl}api/txs?&category=swap&from=${account}&pageNum=${pageNum}&showNum=${showNum}&pair_addresses=${pair_addresses}`);
 
   // console.log(data);
   return data.data;
@@ -38,7 +38,7 @@ export  async function swapHistory(account,pageNum=1,showNum=10,chainID){
 export  async function pledgeHistory(account,pageNum=1,showNum=10,chainID){
   const method_names =['stake','exit','getReward'].join(',');
 
-  const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
+  const data =  await  axios.get(`${baseUrl}api/txs?&category=stake&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
 //  console.log(data);
  return data.data;
@@ -57,7 +57,7 @@ export  async function pledgeHistory(account,pageNum=1,showNum=10,chainID){
 export  async function buildrHistory(account,pageNum=1,showNum=10,chainID){
   const method_names =['Mint','Burn','Join','Exit','approval'].join(',');
 
-  const data =  await  axios.get(`${baseUrl}api/txs?method_names=${method_names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
+  const data =  await  axios.get(`${baseUrl}api/txs?&category=builder&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
 //  console.log(data);
  return data.data;

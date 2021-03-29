@@ -17,7 +17,7 @@ export default {
     async txstate(tx) {
       const txlast = await tx.tx.wait([1]);
       console.log('Status after confirmation', txlast);
-      if (txlast) {
+      if (txlast.status == 1) {
         this.$Notice.success({
           title: this.$t('swapConfirm.successCom'),
           desc: tx.info.okinfo,
