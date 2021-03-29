@@ -31,7 +31,7 @@
             <template slot="Date" slot-scope="{ row}">
               <div class="Date">
                 <p class="date">
-                  {{ row.date }}
+                  {{ row.date | formatDate }}
                 </p>
               </div>
             </template>
