@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
-import { getCollateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
+import { getCollateralPools, fetchBalanaceChange, fetchPledgeNumber } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
@@ -32,6 +32,7 @@ export default {
       defaultPool: {},
       BigNumber,
       btnloading: false,
+      poolsEnable: {},
     };
   },
   components: {
@@ -67,10 +68,28 @@ export default {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
     },
+    // check金库是否已创建
+    async checkPoolEnable() {
+      const loadList = [];
+      this.collateralPools.forEach((pool) => {
+        const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
+        loadList.push(fetchPledgeNumber(params));
+      });
+      const result = await Promise.all(loadList);
+
+      const poolsEnable = {};
+      this.collateralPools.forEach((pool, index) => {
+        const { pledgeNumber } = result[index];
+        poolsEnable[pool.token] = BigNumber(pledgeNumber).gt(0);
+      });
+
+      this.poolsEnable = poolsEnable;
+    },
     getPools() {
         const collateralPools = getCollateralPools(this.ethChainID);
         this.collateralPools = collateralPools;
         this.defaultPool = collateralPools[0];
+        this.checkPoolEnable();
     },
     getParams() {
       const { isNative, token } = this.defaultPool;
@@ -183,7 +202,8 @@ export default {
     openAsset(){
       this.$refs.asset.open({
         defaultTokenName: this.defaultPool.name,
-        data: this.collateralPools
+        data: this.collateralPools,
+        poolsEnable: this.poolsEnable,
       });
     },
     setAsset(tokenName) {

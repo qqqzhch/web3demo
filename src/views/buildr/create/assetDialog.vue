@@ -10,7 +10,7 @@
           <input v-model="searchCon" type="text" @keyup="search">
         </div>
         <template v-for="(item, index) in assetData">
-          <div :key="index" class="asset-content" @click="selectToken(item.name)">
+          <div v-if="!poolsEnable[item.name]" :key="index" class="asset-content" @click="selectToken(item.name)">
             <div class="flex justify-between items-center">
               <div class="con-wapper flex justify-between items-center">
                 <template>
@@ -23,6 +23,22 @@
               </div>
               <div :class="tokenName === item.name ? 'icon-active' : 'img-warpper'">
                 <img src="../../../assets/img/check-blue-24.png">
+              </div>
+            </div>
+          </div>
+          <div v-else :key="index" class="asset-content" :style="{'opacity': 0.4}">
+            <div class="flex justify-between items-center">
+              <div class="con-wapper flex justify-between items-center">
+                <template>
+                  <img :src="getTokenImg(item.token)" :alt="item.token">
+                </template>
+                <div class="text-warpper">
+                  <p>{{ item.name }}</p>
+                  <span>{{ item.desc }}</span>
+                </div>
+              </div>
+              <div>
+                Created
               </div>
             </div>
           </div>
@@ -43,11 +59,13 @@ export default {
       backupData: [],
       searchCon: '',
       tokenName: '',
+      poolsEnable: {},
     };
   },
   methods: {
-    open({data, defaultTokenName}) {
+    open({data, defaultTokenName, poolsEnable}) {
       this.tokenName = defaultTokenName;
+      this.poolsEnable = poolsEnable;
       this.tokenInfo = data;
       this.assetData = data;
       this.openAssetDialog = true;
