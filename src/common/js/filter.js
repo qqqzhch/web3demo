@@ -170,6 +170,16 @@ const formatBalanceNumber = (value) => {
   return bigValue.toFixed(6);
 };
 
+const two_digits = (value)=> {
+  if (value < 0) {
+    return '00';
+  }
+  if (value.toString().length <= 1) {
+    return `0${value}`;
+  }
+  return value;
+};
+
 export default {
   formatBalance,
   formatLAMBValue,
@@ -181,5 +191,6 @@ export default {
   formatRate,
   formatReward,
   formatBalanceNumber,
-  format1e18ValueList
+  format1e18ValueList,
+  two_digits
 };

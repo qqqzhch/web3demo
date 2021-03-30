@@ -20,6 +20,26 @@
       "scUSD"
     ]
   },
+  {
+    "name": "LAMB Vault",
+    "address": "0xAED82BD6a8657cfa0Ee966b6D431AF6E2CbcAbF5",
+    "decimals": 18,
+    "chainId": 256,
+    "kind": "airdrop",
+    "symbol": [
+      "scUSD"
+    ]
+  },
+  {
+    "name": "scUSD",
+    "address": "0xAED82BD6a8657cfa0Ee966b6D431AF6E2CbcAbF5",
+    "decimals": 18,
+    "chainId": 256,
+    "kind": "single",
+    "symbol": [
+      "scUSD"
+    ]
+  },
 
   {
     "name": "SCASH",

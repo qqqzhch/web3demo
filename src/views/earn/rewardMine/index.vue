@@ -4,6 +4,7 @@
       <loading />
     </div>
     <template v-else>
+      <airDrop :data="airDropData" />
       <singeMineList :data="designatedData" />
       <multiMineList :data="liquidityData" />
     </template>
@@ -20,10 +21,12 @@ export default {
     return {
       designatedData: [],
       liquidityData: [],
+      airDropData: [],
       showLoading: false,
     };
   },
   components: {
+    airDrop: ()=> import('./components/airDrop.vue'),
     singeMineList: () => import('./components/singleMineList.vue'),
     multiMineList: () => import('./components/multiMineList.vue'),
     loading: () => import('@/components/basic/loading.vue'),
@@ -33,6 +36,7 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
+        const airDrop = data.filter(item => item.kind === 'airdrop');
         // console.log({data});
         const tempLiquidity = data.filter((item) => item.kind === 'multi');
         // console.log({tempLiquidity});
