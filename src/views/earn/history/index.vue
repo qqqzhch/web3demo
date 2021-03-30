@@ -1,6 +1,6 @@
 <template>
   <div class="content-wapper">
-    <div class="earn-wapper">
+    <div v-if="list!=[]" class="earn-wapper">
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <div class="list-wapper">
           <Table :loading="showLoading" :columns="getHistory" :data="list">
@@ -58,6 +58,12 @@
         </div>
       </Scroll>
     </div>
+    <div v-else class="noData-wapper">
+      <div class="flex flex-col items-center">
+        <img src="../../../assets/img/noData.png" alt="noData">
+        <p>No Data</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -71,6 +77,7 @@ export default {
   data() {
     return {
       list: [],
+      list1: [],
       pageIndex: 1,
       pageNum: 1,
       pairloading: false,
@@ -239,6 +246,25 @@ export default {
           color: #ff3c00;
         }
       }
+    }
+  }
+  .noData-wapper {
+    width: 100%;
+    min-height: calc(100vh - 500px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      max-width: 80px;
+    }
+    p {
+      margin-top: 8px;
+      height: 16px;
+      font-size: 14px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #8690a8;
+      line-height: 16px;
     }
   }
 }

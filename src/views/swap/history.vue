@@ -1,6 +1,6 @@
 <template>
   <div class="content-wapper">
-    <div class="exchanges-wapper">
+    <div v-if="list!=[]" class="exchanges-wapper">
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="550">
         <div class="list-wapper">
           <Table :loading="loading" :columns="getHistory" :data="list">
@@ -66,6 +66,12 @@
         </div>
       </Scroll>
     </div>
+    <div v-else class="noData-wapper">
+      <div class="flex flex-col items-center">
+        <img src="../../assets/img/noData.png" alt="noData">
+        <p>No Data</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -82,10 +88,11 @@ export default {
         swapExactTokensForTokens: "swap",
         addLiquidity: "addLiquidity",
         removeLiquidityWithPermit: "removeLiquidity",
-        removeLiquidityETHWithPermit:"removeLiquidity",
-        addLiquidityETH:'addLiquidity',
-        swapExactTokensForETH:'swap',
-        removeLiquidityETHWithPermitSupportingFeeOnTransferTokens:'removeLiquidity'
+        removeLiquidityETHWithPermit: "removeLiquidity",
+        addLiquidityETH: "addLiquidity",
+        swapExactTokensForETH: "swap",
+        removeLiquidityETHWithPermitSupportingFeeOnTransferTokens:
+          "removeLiquidity",
       },
       pageIndex: 1,
       pageNum: 1,
@@ -239,6 +246,25 @@ export default {
           color: #ff3c00;
         }
       }
+    }
+  }
+  .noData-wapper {
+    width: 100%;
+    min-height: calc(100vh - 500px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      max-width: 80px;
+    }
+    p {
+      margin-top: 8px;
+      height: 16px;
+      font-size: 14px;
+      font-family: Gilroy-Medium, Gilroy;
+      font-weight: 500;
+      color: #8690a8;
+      line-height: 16px;
     }
   }
 }
