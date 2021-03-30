@@ -124,6 +124,9 @@
           <button v-if="isApprove()" class="btn" @click="onApproveClick">
             Approve
           </button>
+          <button v-else-if="poolsEnable[defaultPool.token]" class="btn btn-disabled">
+            Vault Created
+          </button>
           <button v-else class="btn" @click="onJoinClick">
             Deposit and Get Credits
           </button>
@@ -280,6 +283,13 @@
       color: #ffffff;
       &:hover {
         background-color: #0547ff;
+      }
+    }
+    .btn-disabled {
+      cursor: not-allowed;
+      background-color: #999;
+      &:hover {
+        background-color: #999 !important;
       }
     }
   }

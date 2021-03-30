@@ -20,7 +20,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress', 'currPool']),
+    ...mapState('buildr', ['currPool']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
@@ -136,6 +137,13 @@ export default {
           title: i18n.t('notice.buidrNotice.n3'),
         });
       }
+    },
+    // 首次创建金库，引导用于去铸造, 只出现一次
+    gotoGenerate() {
+      if(this.currPool.token) {
+        const [ poolData ] = this.poolsData.filter(pool => pool.tokenName === this.currPool.token);
+        poolData && this.openMintDialog(poolData);
+      }
     }
   },
   watch: {
@@ -147,6 +155,7 @@ export default {
     poolsData(nv) {
       this.poolsData = nv;
       this.setPoolsData(nv);
+      this.gotoGenerate();
     }
   },
   components: {

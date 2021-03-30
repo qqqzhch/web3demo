@@ -1,4 +1,4 @@
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import ScInput from '../../../components/ScInput.vue';
 import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
 import BigNumber from "bignumber.js";
@@ -70,6 +70,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('buildr', ['setCurrentPool']),
     getTokenImg(token) {
       return this.$parent.getTokenImg(token);
     },
@@ -77,12 +78,12 @@ export default {
       this.poolData = poolData;
       this.isOpen = true;
       this.step = 1;
-      this.coinAmount = 0;
     },
-    //关闭弹窗
+    //关闭弹窗,去掉首次引导
     closeDialog(){
       this.isOpen = false;
       this.coinAmount = 0;
+      this.setCurrentPool({});
     },
     //确认弹窗返回按钮
     changeStep(){
@@ -102,6 +103,7 @@ export default {
     },
     async onMintClick() {
       this.isOpen = false;
+      this.setCurrentPool({});
       const params = {
         type: 'mint',
         tokenName: this.poolData.tokenName,
