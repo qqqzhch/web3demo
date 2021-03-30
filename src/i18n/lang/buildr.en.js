@@ -43,7 +43,13 @@ export default {
   'build-will-deposit': 'will deposit to get scUSD credit line',
   'build-coll-ratio': 'Coll.Ratio',
   'build-generate-scUSD': 'Generate scUSD will reduce scUSD credit line and generate scUSD debt.',
-
-
-
+  'build-title-1': 'Deposit digital assets, get scUSD credit line',
+  'build-title-2': 'Hold scUSD, Be Superman with SCash',
+  'build-start-mining': 'Start Mining',
+  'build-get-super': 'Get super high SCASH rewards',
+  'build-synthetize-assets': 'Synthetize assets',
+  'build-trade-BTC': 'Trade BTC、TSLA stock and the other popular assets all around the world!',
+  'build-create-vaults': 'Create vaults',
+  'build-get-huge': 'Get huge SCASH Airdrop Bonus!',
+  'build-vault': 'Create vault',
 };

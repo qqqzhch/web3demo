@@ -87,7 +87,7 @@ const routes = [
       {
         path: "guide",
         name: "guide",
-        component: () => import("@/views/buildr/guide/index.vue")
+        component: () => import("@/views/buildr/guide/guide.vue")
       },
     ]
   },

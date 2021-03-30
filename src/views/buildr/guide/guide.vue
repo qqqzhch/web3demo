@@ -1,37 +1,37 @@
 <template>
   <div class="guide-warpper">
     <h2 class="buildr-title">
-      Deposit digital assets, get scUSD credit line
+      {{ $t('build-title-1') }}
     </h2>
     <h2 class="buildr-title">
-      Hold scUSD, Be Superman with SCash
+      {{ $t('build-title-2') }}
     </h2>
     <div class="list-warpper">
       <div class="list-item">
         <div class="img-wapper">
           <img src="../../../assets/img/itemImg.png">
-          <p>Start Mining </p>
+          <p>{{ $t('build-start-mining') }} </p>
         </div>
-        <span>Get super high SCASH rewards </span>
+        <span>{{ $t('build-get-super') }} </span>
       </div>
       <div class="list-item">
         <div class="img-wapper">
           <img src="../../../assets/img/itemImg.png">
-          <p>Synthetize assets </p>
+          <p>{{ $t('build-synthetize-assets') }} </p>
         </div>
-        <span>Trade BTC、TSLA stock and the other popular assets all around the world!</span>
+        <span>{{ $t('build-trade-BTC') }}</span>
       </div>
       <div class="list-item">
         <div class="img-wapper">
           <img src="../../../assets/img/itemImg.png">
-          <p>Create vaults </p>
+          <p>{{ $t('build-create-vaults') }} </p>
         </div>
-        <span>Get huge SCASH Airdrop Bonus!</span>
+        <span>{{ $t('build-get-huge') }}</span>
       </div>
     </div>
     <div class="button-wapper">
       <p @click="CreateCDP">
-        Create Vault
+        {{ $t('build-vault') }}
       </p>
     </div>
   </div>
@@ -57,6 +57,7 @@
       margin-top: 16px;
       .img-wapper {
         display: flex;
+        align-items: center;
         img {
           max-width: 12px;
           max-height: 12px;
