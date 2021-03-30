@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
-import { getCollateralPools, fetchBalanaceChange } from '@//contactLogic/buildr/balance';
+import { getCollateralPools, fetchBalanaceChange, fetchPledgeNumber } from '@//contactLogic/buildr/balance';
 import {
   fetchTokenBalance,
   fetchCollateralIndicators,
@@ -32,17 +32,23 @@ export default {
       defaultPool: {},
       BigNumber,
       btnloading: false,
+      poolsEnable: {},
     };
   },
   components: {
     ScInput,
-    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
-    assetDialog: () => import('@/views/buildr/create/assetDialog.vue'),
+    haveSendDialog: () => import("../components/haveSendDialog.vue"),
+    assetDialog: () => import('../components/assetDialog.vue'),
     Loading: () => import("@/components/basic/loading.vue"),
   },
   mounted() {
     //txsuccess
-    event.$on('txsuccess',()=>{
+    event.$on('txsuccess',() => {
+      const currPool = {
+        ...this.defaultPool,
+        pledgeNumber: this.pledgeNumber
+      };
+      this.$refs.haveSendtx.open(currPool, 'ok');
       this.loadData();
     });
   },
@@ -67,10 +73,28 @@ export default {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
     },
+    // check金库是否已创建
+    async checkPoolEnable() {
+      const loadList = [];
+      this.collateralPools.forEach((pool) => {
+        const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
+        loadList.push(fetchPledgeNumber(params));
+      });
+      const result = await Promise.all(loadList);
+
+      const poolsEnable = {};
+      this.collateralPools.forEach((pool, index) => {
+        const { pledgeNumber } = result[index];
+        poolsEnable[pool.token] = BigNumber(pledgeNumber).gt(0);
+      });
+
+      this.poolsEnable = poolsEnable;
+    },
     getPools() {
         const collateralPools = getCollateralPools(this.ethChainID);
         this.collateralPools = collateralPools;
         this.defaultPool = collateralPools[0];
+        this.checkPoolEnable();
     },
     getParams() {
       const { isNative, token } = this.defaultPool;
@@ -129,7 +153,7 @@ export default {
         const waitdata = await transaction.wait([1]);
         this.btnloading = false;
         // 需要更新数据
-        this.loadData();
+        this.loadData(true);
       } else {
         this.$Notice.error({
           title: i18n.t('notice.buidrNotice.n2'),
@@ -144,7 +168,7 @@ export default {
     },
     sendtx(tx) {
       if(tx && tx.base){
-        this.$refs.haveSendtx.open(tx.base);
+        this.$refs.haveSendtx.open(this.defaultPool, 'created');
         event.$emit('sendtx',[tx.response, {
           okinfo: tx.base+ i18n.t('swapConfirm.successCom'),
           failinfo: tx.base+ i18n.t('swapConfirm.failCom')
@@ -171,8 +195,8 @@ export default {
         this.sendtx(tx);
       }
     },
-    loadData() {
-      this.pledgeNumber = 0;
+    loadData(isClear) {
+      this.pledgeNumber = isClear ? this.pledgeNumber: 0;
       this.getCurrencyNumber();
       this.getIndicators();
       this.getCurrencyPrice();
@@ -183,7 +207,8 @@ export default {
     openAsset(){
       this.$refs.asset.open({
         defaultTokenName: this.defaultPool.name,
-        data: this.collateralPools
+        data: this.collateralPools,
+        poolsEnable: this.poolsEnable,
       });
     },
     setAsset(tokenName) {
@@ -192,7 +217,7 @@ export default {
     },
     isApprove() {
       return !this.defaultPool.isNative && (BigNumber(this.allowanceAmount).isZero() || BigNumber(this.pledgeNumber).gt(this.allowanceAmount));
-    }
+    },
   },
   watch: {
     isReady(value) {

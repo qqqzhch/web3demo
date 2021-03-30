@@ -18,7 +18,7 @@
           <div class="tab-warpper">
             <button class="tab  tab-disabled" @click="onBurnClick">
               {{ $t('build-payback') }}
-            </button> 
+            </button>
           </div>
         </div>
         <div class="padding-warpper">
@@ -28,7 +28,12 @@
               <p><span>{{ $t('build-balance') }}：</span> {{ BigNumber(maxMintable).toFixed(6) }} scUSD</p>
             </div>
             <div class="input-warpper">
-              <ScInput unit="scUSD" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
+              <ScInput
+                unit="scUSD"
+                :default-value="BigNumber(maxMintable).toString()"
+                :on-change="onChangeValue"
+                :is-error="checkValue !== 'ok'"
+              />
               <img :src="getTokenImg('scUSD')" alt="scUSD">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">

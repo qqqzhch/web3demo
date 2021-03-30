@@ -17,8 +17,6 @@
           {{ $t('swapConfirm.Confirm') }}
         </Buttons>
       </div>
-    </modal>
-
     </Modal>
   </div>
 </template>
