@@ -89,5 +89,11 @@
         "address": "",
         "decimals": 18,
         "chainId": 4
+    },
+    {
+        "name": "CollateralState",
+        "address": "",
+        "decimals": 18,
+        "chainId": 4
     }
 ]

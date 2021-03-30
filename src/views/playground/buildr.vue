@@ -34,6 +34,10 @@
     <button @click="getearnList">
       读取赚钱列表
     </button>
+    <br>
+    <button @click="syncReward">
+      读取铸造金库未提取的奖励
+    </button>
   </div>
 </template>
 <script>
@@ -57,6 +61,10 @@ import Web3 from 'web3';
 import   {getPrice} from '@/contactLogic/tokenPrice.js';
 
 import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
+
+import {getUnClaimedReward} from '@/contactLogic/earn/Reward.js';
+
+import {fetchCollateralIndicatorsCurrentDebt} from '@/contactLogic/buildr/create.js';
 
 
 export default {
@@ -251,6 +259,22 @@ export default {
       const account = this.ethAddress;
       const chainID = this.ethChainID;
        StakingRewardListbatch(library, account, chainID)
+
+    },
+    async syncReward(){
+      var web3 = this.web3;
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      var tokenName = 'LAMB';
+
+      var data = await getUnClaimedReward({ web3, chainID, account, library, tokenName })
+
+      console.log('未提取的奖励',data.toString())
+      var data2 = await fetchCollateralIndicatorsCurrentDebt({ web3, chainID, account, library, tokenName })
+      console.log('参与铸造的scusd',data2.toString())
+
+
 
     }
 
