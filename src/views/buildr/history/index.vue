@@ -1,6 +1,12 @@
 <template>
   <div class="content-wapper">
-    <div v-if="list!=[]" class="earn-wapper">
+    <div v-if="!ethAddress||list.length==0" class="noData-wapper">
+      <div class="flex flex-col items-center">
+        <img src="../../../assets/img/noData.png" alt="noData">
+        <p>No Data</p>
+      </div>
+    </div>
+    <div v-else class="earn-wapper">
       <Scroll :loading-text="'loading....'" :on-reach-bottom="onReachBottom" :height="400">
         <div class="list-wapper">
           <Table :columns="getHistory" :data="list">
@@ -46,12 +52,6 @@
         </div>
       </Scroll>
     </div>
-    <div v-else class="noData-wapper">
-      <div class="flex flex-col items-center">
-        <img src="../../../assets/img/noData.png" alt="noData">
-        <p>No Data</p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -89,7 +89,7 @@
         .imgages-warpper {
           display: flex;
           margin-right: 6px;
-          img{
+          img {
             width: 24px;
             margin: auto;
           }
