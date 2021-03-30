@@ -2,7 +2,7 @@
   <div class="create box-shadow">
     <div class="header">
       <div class="title">
-        Deposit digital assets, get scUSD credit line.
+        {{ $t('build-deposit-digital-assets') }} 
       </div>
     </div>
     <div class="grid-2 mrg-tb-20">
@@ -28,11 +28,11 @@
         </div>
         <div class="input-warpper flex justify-between items-center mrg-t-20 mrg-b-5">
           <div class="mortgage">
-            Deposit
+            {{ $t('build-Deposit') }}
           </div>
           <div class="pull-right">
             <p class="balance">
-              <span>Balance </span>{{ currencyNumber }} {{ defaultPool.token }}
+              <span>{{ $t('build-balance') }}  </span>{{ currencyNumber }} {{ defaultPool.token }}
             </p>
           </div>
         </div>
@@ -55,7 +55,7 @@
         </div>
         <div class=" flex">
           <div class="title-build">
-            You will get credit line
+            {{ $t('build-will-get-credit') }}
           </div>
           <div class="pull-right" />
         </div>
@@ -67,7 +67,7 @@
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            Target Coll. Ratio：
+            {{ $t('build-target-coll-ratio') }}：
           </p>
           <div class="text-right f-green f-size-20">
             {{ BigNumber(targetRX).times(100) }}%
@@ -75,7 +75,7 @@
         </div>
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            Collateral：
+            {{ $t('build-Collateral') }}：
           </p>
           <div class="text-right f-size-20">
             {{ pledgeNumber }} {{ defaultPool.token }}
@@ -83,7 +83,7 @@
         </div>
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            Credit Line：
+            {{ $t('build-credit-line') }}：
           </p>
           <div class="text-right f-size-20">
             {{ stableNumber }} scUSD
@@ -97,40 +97,40 @@
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Liquidation Price：</p>
+          <p>{{ $t('build-liquidation-price') }}：</p>
           <div class="text-right">
             {{ pledgeNumber ? BigNumber(liquidationRatio).times(stableNumber).div(pledgeNumber) : 0 }} USD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>Liquidation Ratio：</p>
+          <p>{{ $t('build-liquidation-ratio') }}：</p>
           <div class="text-right">
             {{ liquidationRatio * 100 }}%
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Stability Ratio：</p>
+          <p>{{ $t('build-Stability-Ratio') }}：</p>
           <div class="text-right">
             {{ BigNumber(feeRate).times(100) }} %
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>scUSD available from {{ defaultPool.token }} 1：</p>
+          <p>scUSD {{ $t('build-available-from') }} {{ defaultPool.token }} 1：</p>
           <div class="text-right">
             {{ debtCap }} scUSD
           </div>
         </div>
         <div v-if="!btnloading">
           <button v-if="isApprove()" class="btn" @click="onApproveClick">
-            Approve
+            {{ $t('build-Approve') }}
           </button>
           <button v-else class="btn" @click="onJoinClick">
-            Deposit and Get Credits
+            {{ $t('build-Get-Credits') }}
           </button>
         </div>
         <div v-if="btnloading">
           <button class="btn">
-            Loading...
+            {{ $t('build-Loading') }}...
           </button>
         </div>
       </div>
