@@ -91,7 +91,7 @@
         </div>
 
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>{{ defaultPool.token }} Current Price：</p>
+          <p>{{ defaultPool.token }} {{ $t('build-current-price') }}：</p>
           <div class="text-right">
             {{ BigNumber(currencyPrice).toFixed(6) }} USD
           </div>
@@ -125,7 +125,7 @@
             {{ $t('build-Approve') }}
           </button>
           <button v-else-if="poolsEnable[defaultPool.token]" class="btn btn-disabled">
-            Vault Created
+            {{ $t('build-vault-created') }}
           </button>
           <button v-else class="btn" @click="onJoinClick">
             {{ $t('build-Get-Credits') }}

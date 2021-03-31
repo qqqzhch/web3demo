@@ -11,7 +11,7 @@
         <div class="img-warpper text-center">
           <img src="../../../assets/img/check-green-64.png">
         </div>
-        <h1>Deposited {{ currPool.pledgeNumber }} LAMB, vault created.</h1>
+        <h1>{{ $t('build-Deposited') }} {{ currPool.pledgeNumber }} LAMB, {{ $t('build-vault-created') }}.</h1>
         <Buttons @click.native="onClose">
           {{ $t('build-generate') }} scUSD
         </Buttons>
@@ -20,7 +20,7 @@
         <div class="text-center">
           <Loading />
         </div>
-        <h1>Creating your Vault, please wait....</h1>
+        <h1>{{ $t('build-please-wait') }}....</h1>
       </div>
     </Modal>
   </div>
