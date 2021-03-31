@@ -83,17 +83,25 @@ export default {
       const result = await Promise.all(loadList);
 
       const poolsEnable = {};
+      let selected = false;
       this.collateralPools.forEach((pool, index) => {
         const { pledgeNumber } = result[index];
-        poolsEnable[pool.token] = BigNumber(pledgeNumber).gt(0);
+        const isCreated = BigNumber(pledgeNumber).gt(0);
+        poolsEnable[pool.token] = isCreated;
+        if(!isCreated && selected === false) {
+          this.defaultPool = pool;
+          selected = true;
+        }
       });
-
       this.poolsEnable = poolsEnable;
+      // 如果都已传教返回管理页面
+      if(selected === false) {
+        this.$router.push('/buildr/balance');
+      }
     },
     getPools() {
         const collateralPools = getCollateralPools(this.ethChainID);
         this.collateralPools = collateralPools;
-        this.defaultPool = collateralPools[0];
         this.checkPoolsEnable();
     },
     getParams() {

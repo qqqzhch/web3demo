@@ -13,7 +13,7 @@
       >
         {{ $t('build-history') }}
       </div>
-      <div>
+      <div :style="{'display': allPoolsEnable ? 'none' : 'block'}">
         <button
           class="btn create-btn"
           @click="toPage('create')"
