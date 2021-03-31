@@ -17,6 +17,7 @@ export default {
       collateralPools: [],
       poolsData: [],
       BigNumber,
+      allPoolsCreated: false,
     };
   },
   computed: {
@@ -33,7 +34,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions('buildr', ['setPoolsData']),
+    ...mapActions('buildr', ['setPoolsData', 'setAllPoolsEnable']),
     getTokenImg(tokensymbol){
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
@@ -42,7 +43,7 @@ export default {
     async checkPoolsEnable() {
       const loadList = [];
       this.collateralPools.forEach((pool) => {
-        const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
+        const params = Object.assign({}, this.getParams({}), {tokenName: pool.token});
         loadList.push(fetchPledgeNumber(params));
       });
 
@@ -52,12 +53,17 @@ export default {
         const { pledgeNumber } = result[index];
         return BigNumber(pledgeNumber).gt(0);
       });
+
+      // 判断是否创建按钮
+      const isAllCreated = poolsEnable.includes(false);
+      this.setAllPoolsEnable(!isAllCreated);
+
       return poolsEnable.includes(true);
     },
     async checkApprove() {
       const { chainID, library, account } = this.getParams({});
       this.collateralPools = getCollateralPools(chainID);
-      const isPoolsenable = this.checkPoolsEnable();
+      const isPoolsenable = await this.checkPoolsEnable();
       const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
       if(isPoolsenable || isHaveAllowance) {
         this.loadData();

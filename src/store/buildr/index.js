@@ -5,7 +5,8 @@ export default {
   moduleName: 'buildr',
   state: {
     poolsData: [],
-    currPool: {}
+    currPool: {},
+    allPoolsEnable: false
   },
   mutations: {
     [types.SET_POOLS_BALANCE_DATA] (state, poolsData) {
@@ -14,6 +15,9 @@ export default {
     [types.SET_CURRENT_POOL] (state, currPool) {
       state.currPool = currPool;
     },
+    [types.SET_All_POOLS_ENABLE] (state, enable) {
+      state.allPoolsEnable = enable;
+    },
   },
   actions: {
     setPoolsData({ commit }, poolsData){
@@ -21,6 +25,9 @@ export default {
     },
     setCurrentPool({ commit }, currPool){
       commit(types.SET_CURRENT_POOL, currPool);
+    },
+    setAllPoolsEnable({ commit }, enable){
+      commit(types.SET_All_POOLS_ENABLE, enable);
     },
   }
 };

@@ -1,9 +1,14 @@
+import { mapState } from "vuex";
+
 export default {
   name: 'Buildr',
   data() {
     return {
       nav: ''
     };
+  },
+  computed: {
+    ...mapState('buildr', ['allPoolsEnable']),
   },
   methods: {
     toPage(name) {

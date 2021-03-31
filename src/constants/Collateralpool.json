@@ -1,32 +1,32 @@
 [
     {
         "name":"LAMB",
-        "title":"LAMB pool1",
-        "titlei18":"LAMB_pool1",
+        "title":"LAMB-A",
+        "titlei18":"LAMB-A",
         "token":"LAMB",
         "desc":"Lambda",
         "state":true
     },
     {
         "name":"ETH",
-        "title":"ETH pool2",
-        "titlei18":"ETH_pool2",
+        "title":"ETH-A",
+        "titlei18":"ETH-A",
         "token":"ETH",
         "desc":"ETH",
         "state":true
     },
     {
         "name":"SCASH",
-        "title":"SCASH pool2",
-        "titlei18":"SCASH_pool2",
+        "title":"SCASH-A",
+        "titlei18":"SCASH-A",
         "token":"SCASH",
         "desc":"SCASH",
         "state":true
     },
     {
         "name":"HT",
-        "title":"HT pool2",
-        "titlei18":"HT_pool2",
+        "title":"HT-A",
+        "titlei18":"HT-A",
         "token":"HT",
         "state":false
     }
