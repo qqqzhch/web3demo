@@ -41,6 +41,7 @@ export default {
   'build-to': 'to',
   'build-fee': 'Fee',
   'build-next': 'Next',
+  'build-Created': 'Created',
   'build-withdraw': 'Withdraw',
   'build-withdraw-collateral': 'Withdraw collateral',
   'build-will-reduce': 'will reduce scUSD credit line.',
@@ -59,5 +60,8 @@ export default {
   'build-create-vaults': 'Create vaults',
   'build-get-huge': 'Get huge SCASH Airdrop Bonus!',
   'build-vault': 'Create vault',
-
+  'build-vault-created': 'vault created',
+  'build-please-wait': 'Creating your Vault, please wait',
+  'build-No-Data': 'No Data',
+ 
 };

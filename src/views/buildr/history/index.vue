@@ -3,7 +3,7 @@
     <div v-if="!ethAddress||list.length==0" class="noData-wapper">
       <div class="flex flex-col items-center">
         <img src="../../../assets/img/noData.png" alt="noData">
-        <p>No Data</p>
+        <p> {{ $t('build-No-Data') }}</p>
       </div>
     </div>
     <div v-else class="earn-wapper">

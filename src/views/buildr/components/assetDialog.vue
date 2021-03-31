@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div>
-                Created
+                {{ $t('build-Created') }}
               </div>
             </div>
           </div>
