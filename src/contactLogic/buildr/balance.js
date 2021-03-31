@@ -33,7 +33,6 @@ export const getCollateralPools = (chainID) => {
   }).filter(v => v.state);
 };
 
-
 /**
  *  获取抵押资产
  *  1 通过ProxyActions.sol合约获取tokenCollateralAddress

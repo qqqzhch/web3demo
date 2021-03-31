@@ -31,7 +31,7 @@ import {
     let  haveAllowance=false;
 
     AllowanceList.forEach((item)=>{
-
+      
       if(item.allowanceAmount !='0'){
         haveAllowance = true ;
       }

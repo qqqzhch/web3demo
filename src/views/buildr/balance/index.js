@@ -38,17 +38,34 @@ export default {
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
     },
+    // check金库是否已创建
+    async checkPoolsEnable() {
+      const loadList = [];
+      this.collateralPools.forEach((pool) => {
+        const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
+        loadList.push(fetchPledgeNumber(params));
+      });
+
+      const result = await Promise.all(loadList);
+
+      const poolsEnable = this.collateralPools.map((pool, index) => {
+        const { pledgeNumber } = result[index];
+        return BigNumber(pledgeNumber).gt(0);
+      });
+      return poolsEnable.includes(true);
+    },
     async checkApprove() {
-      const { chainID, library, account } = this.getParmas({});
+      const { chainID, library, account } = this.getParams({});
+      this.collateralPools = getCollateralPools(chainID);
+      const isPoolsenable = this.checkPoolsEnable();
       const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
-      if(isHaveAllowance) {
-        this.collateralPools = getCollateralPools(chainID);
+      if(isPoolsenable || isHaveAllowance) {
         this.loadData();
       } else {
         this.$router.push('/buildr/guide');
       }
     },
-    getParmas(item) {
+    getParams(item) {
       return {
         isNative: item.isNative,
         tokenName: item.token,
@@ -71,7 +88,7 @@ export default {
     loadData() {
       this.poolsData = [];
       this.collateralPools.forEach(async (item, index) => {
-        const params = this.getParmas(item);
+        const params = this.getParams(item);
         const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
           liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
         const { pledgeNumber } = await fetchPledgeNumber(params);
@@ -108,7 +125,7 @@ export default {
           scUSDNumber,
           allowanceAmount,
         };
-        if(pledgeNumber) {
+        if(BigNumber(pledgeNumber).gt(0)) {
           this.poolsData = _.chain(this.poolsData.concat(itemData)).sortBy(pool => pool.index).value();
         }
       });
