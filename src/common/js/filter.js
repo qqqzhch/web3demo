@@ -5,18 +5,18 @@ dayjs.extend(utc);
 const BigNumber = require("bignumber.js");
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 
-const formatLAMBValue = (value) => {
-  if (!value) {
-    return 0;
-  }
-  const val = parseFloat(value);
-  const bigValue = new BigNumber(val);
-  const returnVal = bigValue.div("1e6").toNumber();
-  if (returnVal < 0.000001) {
-    return "<0.000001";
-  }
-  return returnVal;
-};
+// const formatLAMBValue = (value) => {
+//   if (!value) {
+//     return 0;
+//   }
+//   const val = parseFloat(value);
+//   const bigValue = new BigNumber(val);
+//   const returnVal = bigValue.div("1e6").toNumber();
+//   if (returnVal < 0.000001) {
+//     return "<0.000001";
+//   }
+//   return returnVal;
+// };
 
 const format1e18Value = (value) => {
   if (!value) {
@@ -44,16 +44,13 @@ const format1e18ValueList = (value) => {
   return returnVal;
 };
 
-const formatNormalValue = (value) => {
+const formatNormalValue = (value, decimal = 6) => {
   if (!value) {
     return 0;
   }
   const val = String(value);
   const bigValue = new BigNumber(val);
-  const returnVal = bigValue.div(1).decimalPlaces(6).toNumber();
-  if (returnVal < 0.000001) {
-    return "<0.000001";
-  }
+  const returnVal = bigValue.div(1).decimalPlaces(decimal).toNumber();
   return returnVal;
 };
 
@@ -71,46 +68,6 @@ const formatDate = (value) => {
     .format("YYYY-MM-DD HH:mm:ss");
 };
 
-const formatAmount = (value) => {
-  if (value == "" || value == null) {
-    return 0;
-  }
-  let letters;
-  let val;
-
-  if (value.indexOf(",") >= 0) {
-    let letters1;
-    let val1;
-    const newValueList = [];
-    const valueList = value.split(",");
-    valueList.forEach((item) => {
-      const originValue = item.match(/[0-9\.]+/g);
-      const num = originValue[0].toString().length;
-
-      // let originLetters = item.split(originValue)[1];
-      const originLetters = item.slice(num);
-
-      letters1 = originLetters.substr(1);
-      const newval = new BigNumber(originValue[0]);
-      val1 = newval.div("1e6").toNumber();
-
-      letters1 = letters1.toUpperCase();
-      const amount = `${val1} ${letters1}`;
-      newValueList.push(amount);
-    });
-    return newValueList.join(",");
-  } else {
-    // console.log(value);
-    const originValue = value.match(/[0-9\.]+/g);
-    const num = originValue[0].toString().length;
-    const originLetters = value.slice(num);
-    letters = originLetters.slice(1);
-    const newval = new BigNumber(originValue[0]);
-    val = newval.div("1e6");
-    letters = letters.toUpperCase();
-    return `${val} ${letters}`;
-  }
-};
 
 const formatToken = (value) => {
   if (!value) {
@@ -170,7 +127,7 @@ const formatBalanceNumber = (value) => {
   return bigValue.toFixed(6);
 };
 
-const two_digits = (value)=> {
+const two_digits = (value) => {
   if (value < 0) {
     return '00';
   }
@@ -182,11 +139,10 @@ const two_digits = (value)=> {
 
 export default {
   formatBalance,
-  formatLAMBValue,
+  // formatLAMBValue,
   format1e18Value,
   formatDate,
   formatToken,
-  formatAmount,
   formatNormalValue,
   formatRate,
   formatReward,

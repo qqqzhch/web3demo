@@ -10,19 +10,21 @@
         </template>
 
         <template slot="apy" slot-scope="{ row }">
-          <span class="text-success">
+          <span v-if="row.kind !== 'airdrop'" class="text-success">
             {{ row.data && row.data.rewardRate | formatReward(365, scashPrice, row.data && row.data.totalSupply) }}%
           </span>
+          <span v-else>--</span>
         </template>
         <template slot="stake" slot-scope="{ row }">
-          {{ row.data && row.data.balance }}
+          <span v-if="row.kind !== 'airdrop'">{{ row.data && row.data.balance }}</span>
+          <span v-else>{{ row.data && row.data.balance }} scUSD</span>
         </template>
         <template slot="earned" slot-scope="{ row }">
-          {{ row.data && row.data.earned }} {{ row.data && row.data.rewardToken }}
+          {{ row.data && row.data.earned | formatNormalValue(2) }} {{ row.data && row.data.rewardToken }}
         </template>
 
         <template slot="operation" slot-scope="{ row }">
-          <div class="btn-wrapper flex justify-start items-center">
+          <div v-if="row.kind !== 'airdrop'" class="btn-wrapper flex justify-start items-center">
             <button class="table-btn claim" @click="openClaim(row)">
               {{ $t('myPage.table.claim') }}
             </button>
@@ -31,12 +33,18 @@
               <span v-if="row.kind === 'multi'" class="ml-1">LP</span>
             </button>
           </div>
+          <div v-else class="btn-wrapper">
+            <button class="table-btn stake" @click="openAir(row)">
+              提取空投
+            </button>
+          </div>
         </template>
       </Table>
     </template>
     <div class="modal-wrapper">
       <takeDialog ref="take" />
       <extractDialog ref="extract" />
+      <airDropDialog ref="airdrop" />
     </div>
   </div>
 </template>
@@ -46,6 +54,9 @@ import { mapState } from 'vuex';
 import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 import event from '@/common/js/event';
+import { getUnClaimedReward } from '@/contactLogic/earn/Reward.js';
+import { fetchCollateralIndicatorsCurrentDebt } from '@/contactLogic/buildr/create.js';
+const BigNumber = require('bignumber.js');
 export default {
   data() {
     return {
@@ -57,17 +68,35 @@ export default {
     loading: () => import('@/components/basic/loading.vue'),
     takeDialog: () => import('./dialog/takeoutDialog.vue'),
     extractDialog: () => import('./dialog/extractReward.vue'),
+    airDropDialog: () => import('./dialog/airdropDialog.vue')
   },
   methods: {
     async getListData() {
       this.showLoading = true;
       try {
+        const airData = await this.getAirdropList();
+        console.log({ airData });
+        const airObj = [
+          {
+            name: 'LAMB Vault',
+            data: {
+              balance: airData.staked,
+              earned: airData.unclaimReward,
+              rewardToken: 'SCASH',
+            },
+            kind: 'airdrop',
+          },
+        ];
+
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
+
+        const result = data.concat(airObj);
+        // console.log(data.push(airObj));
         // console.log(data);
-        const [scashData] = data.filter(item => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
+        const [scashData] = data.filter((item) => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
         // console.log(scashData);
         await this.getPriceData(scashData);
-        this.data = data;
+        this.data = result;
       } catch (error) {
         console.log(error);
       } finally {
@@ -95,11 +124,29 @@ export default {
     openUnstake(data) {
       this.$refs.take.open(data);
     },
+    openAir(data) {
+      this.$refs.airdrop.open(data);
+    },
+    async getAirdropList() {
+      const web3 = this.web3;
+      const chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      const tokenName = 'LAMB';
+      const unclaimReward = await getUnClaimedReward({ web3, chainID, account, library, tokenName });
+      // console.log();
+      const stake = await fetchCollateralIndicatorsCurrentDebt({ web3, chainID, account, library, tokenName });
+      const obj = {
+        unclaimReward: new BigNumber(unclaimReward.toString()).div(1e18).toNumber(),
+        staked: stake.toString(),
+      };
+      return obj;
+    },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'scashPrice','web3']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'scashPrice', 'web3']),
     isReady() {
-      return this.ethersprovider && this.ethChainID && this.ethAddress;
+      return this.ethersprovider && this.ethChainID && this.ethAddress && this.web3;
     },
     columns() {
       const columns = [
@@ -132,15 +179,18 @@ export default {
     isReady(value) {
       if (value) {
         this.getListData();
+        // this.getAirdropList();
       }
     },
   },
   created() {
     if (this.isReady) {
       this.getListData();
+      // this.getAirdropList();
     }
   },
   mounted() {
+    // this.getAirdropList();
     event.$on('txsuccess', () => {
       this.getListData();
     });

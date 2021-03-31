@@ -22,16 +22,16 @@ import getChainCoinInfo from '../../constants/networkCoinconfig';
  * */
 
 export const fetchRewardAddress = async ({ web3, chainID, account, library, tokenName }) => {
-
+    console.log({ web3, chainID, account, library, tokenName });
     const token = getProxyToActionsToken(chainID);
     const methodName = 'collateralAddress';
     const currencyKey = getNameHex(web3, tokenName);
     const parameter = [currencyKey];
     const tokenCollateralAddress = await useProxyActionsContractRead(library, account, token, methodName, parameter);
-  
+
     const collateralToken = getCollateralToken(chainID);
     collateralToken.address = tokenCollateralAddress;
-  
+
     const methodName2 = 'rewarderAddress';
     const parameter2 = [];
     const Address = await useCollateralContractRead(library, account, collateralToken, methodName2, parameter2);
@@ -42,7 +42,7 @@ export const fetchRewardAddress = async ({ web3, chainID, account, library, toke
 
 
   export const getUnClaimedReward = async ({ web3, chainID, account, library, tokenName }) => {
-    
+      console.log(web3, chainID, account, library, tokenName );
       const Address = await fetchRewardAddress({ web3, chainID, account, library, tokenName }) ;
       const objToken =  getCollateralToken(chainID);
 
@@ -55,10 +55,10 @@ export const fetchRewardAddress = async ({ web3, chainID, account, library, toke
     // const currencyKey = getNameHex(web3, tokenName);
     // const parameter = [currencyKey];
     // const tokenCollateralAddress = await useProxyActionsContractRead(library, account, token, methodName, parameter);
-  
+
     // const collateralToken = getCollateralToken(chainID);
     // collateralToken.address = tokenCollateralAddress;
-  
+
     const methodName = 'getUnClaimedReward';
     const parameter = [account];
 
@@ -68,4 +68,3 @@ export const fetchRewardAddress = async ({ web3, chainID, account, library, toke
   };
 
 
-  
