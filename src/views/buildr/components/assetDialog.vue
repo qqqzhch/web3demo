@@ -17,7 +17,7 @@
                   <img :src="getTokenImg(item.token)" :alt="item.token">
                 </template>
                 <div class="text-warpper">
-                  <p>{{ item.name }}</p>
+                  <p>{{ item.title }}</p>
                   <span>{{ item.desc }}</span>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                   <img :src="getTokenImg(item.token)" :alt="item.token">
                 </template>
                 <div class="text-warpper">
-                  <p>{{ item.name }}</p>
+                  <p>{{ item.title }}</p>
                   <span>{{ item.desc }}</span>
                 </div>
               </div>

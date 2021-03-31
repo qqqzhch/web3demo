@@ -21,6 +21,6 @@ export default {
     },
     setCurrentPool({ commit }, currPool){
       commit(types.SET_CURRENT_POOL, currPool);
-    }
+    },
   }
 };

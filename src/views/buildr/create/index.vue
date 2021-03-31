@@ -2,7 +2,7 @@
   <div class="create box-shadow">
     <div class="header">
       <div class="title">
-        {{ $t('build-deposit-digital-assets') }} 
+        {{ $t('build-deposit-digital-assets') }}
       </div>
     </div>
     <div class="grid-2 mrg-tb-20">
@@ -19,7 +19,7 @@
                   :alt="item.token"
                 >
               </template>
-              <span>{{ defaultPool.name }}</span>
+              <span>{{ defaultPool.title }}</span>
             </div>
             <div class="arrow-wrapper">
               <img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">
@@ -115,7 +115,7 @@
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>scUSD {{ $t('build-available-from') }} {{ defaultPool.token }} 1：</p>
+          <p>scUSD {{ $t('build-available-from') }} {{ defaultPool.token }}：</p>
           <div class="text-right">
             {{ debtCap }} scUSD
           </div>

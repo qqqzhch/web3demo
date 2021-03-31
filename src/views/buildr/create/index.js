@@ -74,7 +74,7 @@ export default {
       return getTokenImg(tokensymbol,chainID);
     },
     // check金库是否已创建
-    async checkPoolEnable() {
+    async checkPoolsEnable() {
       const loadList = [];
       this.collateralPools.forEach((pool) => {
         const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
@@ -94,7 +94,7 @@ export default {
         const collateralPools = getCollateralPools(this.ethChainID);
         this.collateralPools = collateralPools;
         this.defaultPool = collateralPools[0];
-        this.checkPoolEnable();
+        this.checkPoolsEnable();
     },
     getParams() {
       const { isNative, token } = this.defaultPool;
