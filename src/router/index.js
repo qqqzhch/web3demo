@@ -92,6 +92,10 @@ const routes = [
     ]
   },
   {
+    path: "/synth",
+    component: () => import("@/views/synth/index.vue"),
+  },
+  {
     path: "/buildrtest",
     name: "buildrtest",
     component: () => import("@/views/playground/buildr.vue"),
