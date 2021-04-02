@@ -51,13 +51,13 @@
             <span>{{ $t('earn.dialog.stakeDialog.willStake') }}</span>
             <p>{{ pledgeAmount || 0 }} {{ data.name }}</p>
           </div>
-          <div class="price-item">
+          <!-- <div class="price-item">
             <span>{{ $t('earn.dialog.stakeDialog.sharePool') }}</span>
             <p>
               <span class="sharePool">{{ increaseRate }}</span>
               to {{ totalRate }}
             </p>
-          </div>
+          </div> -->
         </div>
 
         <div class="btn-warpper">

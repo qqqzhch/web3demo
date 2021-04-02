@@ -37,14 +37,14 @@ export default {
       // console.log({rate});
       return numeral(rate).format('0.[0000]%');
     },
-    totalRate() {
-      const inputAmount = new BigNumber(this.pledgeAmount);
-      const balanceAmount = new BigNumber(this.data && this.data.data && this.data.data.LPTokenbalance);
-      const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
-      const rate = inputAmount.div(balanceAmount.plus(amountStake).plus(inputAmount)).decimalPlaces(6).toNumber();
-      // console.log({rate});
-      return numeral(rate).format('0.[0000]%');
-    },
+    // totalRate() {
+    //   const inputAmount = new BigNumber(this.pledgeAmount);
+    //   const balanceAmount = new BigNumber(this.data && this.data.data && this.data.data.LPTokenbalance);
+    //   const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
+    //   const rate = inputAmount.div(balanceAmount.plus(amountStake).plus(inputAmount)).decimalPlaces(6).toNumber();
+    //   // console.log({rate});
+    //   return numeral(rate).format('0.[0000]%');
+    // },
   },
   methods: {
     showConfirnDialog() {

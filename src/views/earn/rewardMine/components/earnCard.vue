@@ -18,7 +18,20 @@
         <div class="apy">
           <h4>{{ $t('earn.card.apy') }}</h4>
           <p class="percent">
-            {{ item.data && item.data.rewardRate | formatReward(365, scashPrice, item.data && item.data.totalSupply) }}%
+            <span v-if="item.kind === 'single'">
+              {{
+                item.data &&
+                  item.data.rewardRate
+                  | formatReward(365, scashPrice, item.data && item.data.totalSupply, item.data && (item.data.totalSupply * earnPrice))
+              }}%
+            </span>
+            <span v-if="item.kind === 'multi'">
+              {{
+                item.data &&
+                  item.data.rewardRate
+                  | formatReward(365, scashPrice, item.data && item.data.totalSupply, item.poolValue)
+              }}%
+            </span>
           </p>
         </div>
 

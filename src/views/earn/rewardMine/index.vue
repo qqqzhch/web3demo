@@ -4,7 +4,7 @@
       <loading />
     </div>
     <template v-else>
-      <airDrop :data="airDropData" />
+      <airDrop />
       <singeMineList :data="designatedData" />
       <multiMineList :data="liquidityData" />
     </template>
@@ -16,6 +16,7 @@ import { mapState } from 'vuex';
 import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
 import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
+import web3 from 'web3';
 export default {
   data() {
     return {
@@ -36,7 +37,6 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
-        const airDrop = data.filter(item => item.kind === 'airdrop');
         // console.log({data});
         const tempLiquidity = data.filter((item) => item.kind === 'multi');
         // console.log({tempLiquidity});
@@ -68,7 +68,7 @@ export default {
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
       const pledgeBalance = item && item.data && item.data.totalSupply;
-      const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
+      const pledgeBalanceWei = web3.utils.toWei(pledgeBalance.toString());
       const data = await readpariInfoNuminfoEarn(
         this.ethChainID,
         this.ethersprovider,
@@ -86,7 +86,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'web3', 'earnPrice', 'scashPrice']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'earnPrice', 'scashPrice']),
     isReady() {
       return this.ethChainID && this.ethersprovider;
     },

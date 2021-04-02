@@ -9,12 +9,12 @@
           {{ row.name }}
         </template>
 
-        <template slot="apy" slot-scope="{ row }">
+        <!-- <template slot="apy" slot-scope="{ row }">
           <span v-if="row.kind !== 'airdrop'" class="text-success">
             {{ row.data && row.data.rewardRate | formatReward(365, scashPrice, row.data && row.data.totalSupply) }}%
           </span>
           <span v-else>--</span>
-        </template>
+        </template> -->
         <template slot="stake" slot-scope="{ row }">
           <span v-if="row.kind !== 'airdrop'">{{ row.data && row.data.balance }}</span>
           <span v-else>{{ row.data && row.data.balance }} scUSD</span>
@@ -56,6 +56,7 @@ import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
 import event from '@/common/js/event';
 import { getUnClaimedReward } from '@/contactLogic/earn/Reward.js';
 import { fetchCollateralIndicatorsCurrentDebt } from '@/contactLogic/buildr/create.js';
+import web3 from 'web3';
 const BigNumber = require('bignumber.js');
 export default {
   data() {
@@ -107,7 +108,7 @@ export default {
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
       const pledgeBalance = item.data && item.data.totalSupply;
-      const pledgeBalanceWei = this.web3.utils.toWei(pledgeBalance.toString());
+      const pledgeBalanceWei = web3.utils.toWei(pledgeBalance.toString());
       const data = await readpariInfoNuminfoEarn(
         this.ethChainID,
         this.ethersprovider,
@@ -154,10 +155,10 @@ export default {
           title: this.$t('myPage.table.pool'),
           slot: 'pool',
         },
-        {
-          title: this.$t('myPage.table.apy'),
-          slot: 'apy',
-        },
+        // {
+        //   title: this.$t('myPage.table.apy'),
+        //   slot: 'apy',
+        // },
         {
           title: this.$t('myPage.table.stake'),
           slot: 'stake',

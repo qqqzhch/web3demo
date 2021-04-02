@@ -150,7 +150,11 @@ export async function StakingRewardListbatch(library, account, chainID) {
       element.data = {
         earned: '',
         balance: '',
-        LPTokenbalance: ''
+        LPTokenbalance: '',
+        rewardRate: rewardRateNumber,
+        LPTokenAddress: stakingToken_,
+        totalSupply: totalSupplyNumber,
+        rewardToken: rewardTokenSymbol.symbol,
       };
     } else {
       const stakingToken = {
