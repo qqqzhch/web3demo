@@ -1,0 +1,137 @@
+import { mapState } from 'vuex';
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import numeral from 'numeral';
+import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances';
+import event from '@/common/js/event';
+export default {
+  components: {
+    Buttons: () => import('@/components/basic/buttons'),
+  },
+  data() {
+    return {
+      openPledgeDialog: false,
+      pledgeAmount: '',
+      data: {},
+      previousData: '',
+      tokenObj: {},
+      amountApproveObj: {},
+      sendLoading: false,
+    };
+  },
+  computed: {
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3','chainTokenPrice']),
+    increaseRate() {
+      const inputAmount = new BigNumber(this.pledgeAmount);
+      const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
+      const rate = inputAmount.div(amountStake.plus(inputAmount)).decimalPlaces(6).toNumber();
+      // console.log({rate});
+      return numeral(rate).format('0.[0000]%');
+    },
+  },
+  methods: {
+    showConfirnDialog() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.getFee();
+      this.isShowPledge = false;
+    },
+    showPledgeDialog() {
+      this.isShowPledge = true;
+    },
+    open() {
+      // this.data = {};
+      // this.data = data;
+      this.pledgeAmount = '';
+      this.openPledgeDialog = true;
+    },
+    percentage(val) {
+      const balance = new BigNumber(this.data.data.LPTokenbalance);
+      const percent = new BigNumber(val);
+      this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+    },
+
+
+    // 限制Input输入小数点的长度
+    handleInput(e) {
+      const stringValue = e.target.value.toString();
+      const regex = /^\d*(\.\d{1,6})?$/;
+      if (!stringValue.match(regex) && this.pledgeAmount !== '') {
+        this.pledgeAmount = this.previousData;
+      }
+      this.previousData = this.pledgeAmount;
+    },
+
+    // 检验数据是否合法
+    checkData() {
+      const balance = this.data && this.data.data.LPTokenbalance;
+      const bigBalance = new BigNumber(balance);
+      const amount = new BigNumber(this.pledgeAmount);
+      if (this.pledgeAmount === '') {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n30'),
+        });
+        return false;
+      }
+      if (parseFloat(this.pledgeAmount) <= 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n31'),
+        });
+        return false;
+      }
+      // console.log(amount.toNumber(),bigBalance.toNumber(),amount.isGreaterThan(bigBalance));
+      if (amount.isGreaterThan(bigBalance)) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n29'),
+        });
+        return false;
+      }
+
+      return true;
+    },
+
+    // 质押操作
+    async confirmSendTx() {
+      // if (!this.checkData()) {
+      //   return false;
+      // }
+      this.sendLoading = true;
+      const num = this.pledgeAmount.toString();
+      const amount = this.web3.utils.toWei(num, 'ether');
+      const tokenJson = this.data;
+      try {
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const esGas = await stakingRewardsContract.estimateGas.stake(amount);
+        const result = await stakingRewardsContract.stake(amount, {
+          gasLimit: esGas
+        });
+        const name = this.data && this.data.name;
+        this.$Notice.success({
+          title: this.$t('notice.n33'),
+        });
+        event.$emit('sendtx', [
+          result,
+          {
+            okinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n43')}`,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.openPledgeDialog = false;
+        this.sendLoading = false;
+      }
+    },
+  },
+  watch: {
+    pledgeAmount() {
+      this.checkApprove();
+    },
+  },
+};
+

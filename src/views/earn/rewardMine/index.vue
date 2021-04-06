@@ -4,6 +4,7 @@
       <loading />
     </div>
     <template v-else>
+      <synth />
       <airDrop />
       <singeMineList :data="designatedData" />
       <multiMineList :data="liquidityData" />
@@ -28,6 +29,7 @@ export default {
   },
   components: {
     airDrop: ()=> import('./components/airDrop.vue'),
+    synth: ()=> import('./components/synth.vue'),
     singeMineList: () => import('./components/singleMineList.vue'),
     multiMineList: () => import('./components/multiMineList.vue'),
     loading: () => import('@/components/basic/loading.vue'),
