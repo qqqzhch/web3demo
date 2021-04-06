@@ -4,6 +4,7 @@ BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 import numeral from 'numeral';
 import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances';
 import event from '@/common/js/event';
+import config from '@/config/config.js';
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
@@ -17,10 +18,11 @@ export default {
       tokenObj: {},
       amountApproveObj: {},
       sendLoading: false,
+      balance: 0
     };
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3','chainTokenPrice']),
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
     increaseRate() {
       const inputAmount = new BigNumber(this.pledgeAmount);
       const amountStake = new BigNumber(this.data && this.data.data && this.data.data.totalSupply);
@@ -40,14 +42,34 @@ export default {
     showPledgeDialog() {
       this.isShowPledge = true;
     },
+
+    // 获取scUSD余额
+    async getSCUSDBalance() {
+      const contractAddress = config.scUSDContractAddress;
+      const abi = config.erc20Abi;
+      const contract = new this.web3.eth.Contract(abi, contractAddress);
+      try {
+        const res = await contract.methods
+          .balanceOf(this.ethAddress)
+          .call();
+        let result = new BigNumber(res).div("1e18").decimalPlaces(6).toNumber();
+        if (isNaN(result)) {
+          result = 0;
+        }
+        this.balance = result;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     open() {
       // this.data = {};
       // this.data = data;
       this.pledgeAmount = '';
+      this.getSCUSDBalance();
       this.openPledgeDialog = true;
     },
     percentage(val) {
-      const balance = new BigNumber(this.data.data.LPTokenbalance);
+      const balance = new BigNumber(this.balance);
       const percent = new BigNumber(val);
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
     },
@@ -65,7 +87,7 @@ export default {
 
     // 检验数据是否合法
     checkData() {
-      const balance = this.data && this.data.data.LPTokenbalance;
+      const balance = this.balance;
       const bigBalance = new BigNumber(balance);
       const amount = new BigNumber(this.pledgeAmount);
       if (this.pledgeAmount === '') {
@@ -126,11 +148,6 @@ export default {
         this.openPledgeDialog = false;
         this.sendLoading = false;
       }
-    },
-  },
-  watch: {
-    pledgeAmount() {
-      this.checkApprove();
     },
   },
 };

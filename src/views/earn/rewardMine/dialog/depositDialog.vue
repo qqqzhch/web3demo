@@ -10,16 +10,11 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">scUSD {{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>12345</span>
+              <span>{{ balance }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
-            <input
-              v-model.number="pledgeAmount"
-              type="number"
-              class="amount-input"
-              @input="handleInput"
-            >
+            <input v-model.number="pledgeAmount" type="number" class="amount-input" @input="handleInput">
           </div>
 
           <div class="percentage">

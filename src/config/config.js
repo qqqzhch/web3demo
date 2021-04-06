@@ -1,5 +1,7 @@
 export default {
   defaultChainID: 4,
+  scUSDContractAddress: '0x834fA13439CB5ED3Ae95019D657b106cFa5123AD',
+  erc20Abi: require('../constants/abis/erc20.json'),
   netInfo: {
     '1': {
       imgSrc: require('../assets/img/eth48.png'),
