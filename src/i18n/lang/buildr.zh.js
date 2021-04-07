@@ -43,4 +43,12 @@ export default {
   'build-will-deposit': '将被抵押并获得scUSD提取额度',
   'build-coll-ratio': '抵押率',
   'build-generate-scUSD': '提取 scUSD 将消耗提取额度，同时生成 scUSD 债务',
-};
+  'build-title-1': '抵押数字资产创建金库，即可铸造 scUSD！',
+  'build-title-2': '持有 scUSD，即刻享受 SCASH 钞能力',
+  'build-start-mining': '去挖矿',
+  'build-get-super': '获取超高 SCASH 挖矿奖励',
+  'build-synthetize-assets': '合成资产',
+  'build-trade-BTC': '交易 BTC、TSLA 股票等全球最热主流资产',
+  'build-create-vaults': '创建金库',
+  'build-get-huge': '领取 SCASH 空投奖励 !',
+}; 

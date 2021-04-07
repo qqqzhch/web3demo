@@ -31,7 +31,7 @@
     </div>
     <div class="button-wapper">
       <p @click="CreateCDP">
-        {{ $t('build-vault') }}
+        {{ $t('build-create-vaults') }}
       </p>
     </div>
   </div>
