@@ -373,7 +373,7 @@ export default {
       // var data = await getMasterPendingScash({chainID,account, library});
 
       // console.log('未提取的scash',data.toString())
-      var data2 = getmaxExitableAmount({chainID,account, library});
+      var data2 = await  getmaxExitableAmount({chainID,account, library});
       console.log('存款可以提取的scusd数量',data2.toString())
 
     },
