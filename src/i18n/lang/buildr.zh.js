@@ -17,7 +17,7 @@ export default {
   'build-Deposited': '已抵押',
   'build-Deposit': '继续抵押',
   'build-current-credit-line': '当前额度',
-  'build-generate': '去提取',
+  'build-generate': '铸造',
   'build-avail-to-withdraw': '当前可释放',
   'build-current-debt': '当前债务',
   'build-Assets': '资产',
