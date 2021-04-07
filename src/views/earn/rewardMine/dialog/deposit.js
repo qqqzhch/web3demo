@@ -2,9 +2,11 @@ import { mapState } from 'vuex';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 import numeral from 'numeral';
-import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances';
 import event from '@/common/js/event';
 import config from '@/config/config.js';
+import { getSCUSDVaultContract } from '@/contactLogic/earn/scusdDeposit.js';
+import Web3 from 'web3';
+import token from '@/constants/token.json';
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
@@ -32,20 +34,43 @@ export default {
     },
   },
   methods: {
-    showConfirnDialog() {
+    // 存入scUSD
+    async depositScusd() {
       if (!this.checkData()) {
         return false;
       }
-      this.getFee();
-      this.isShowPledge = false;
-    },
-    showPledgeDialog() {
-      this.isShowPledge = true;
+      this.sendLoading = true;
+      try {
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const Contract = getSCUSDVaultContract({ chainID, account, library });
+        const amount = Web3.utils.toWei(this.pledgeAmount.toString());
+        const tx = await Contract.stake(amount);
+        if (tx.hash) {
+          this.$Notice.success({
+            title: this.$t('notice.n33'),
+          });
+          event.$emit('sendtx', [
+            tx,
+            {
+              okinfo: `存入 ${this.pledgeAmount} scUSD ${this.$t('notice.n42')}`,
+              failinfo: `存入 ${this.pledgeAmount} scUSD ${this.$t('notice.n43')}`,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.openPledgeDialog = false;
+        this.sendLoading = false;
+      }
     },
 
     // 获取scUSD余额
     async getSCUSDBalance() {
-      const contractAddress = config.scUSDContractAddress;
+      const [scUSDItem] = token.tokens.filter(item => item.name === 'SuperCash scUSD' && item.chainId === this.ethChainID);
+      const contractAddress = scUSDItem.address;
       const abi = config.erc20Abi;
       const contract = new this.web3.eth.Contract(abi, contractAddress);
       try {
@@ -116,39 +141,6 @@ export default {
       return true;
     },
 
-    // 质押操作
-    async confirmSendTx() {
-      // if (!this.checkData()) {
-      //   return false;
-      // }
-      this.sendLoading = true;
-      const num = this.pledgeAmount.toString();
-      const amount = this.web3.utils.toWei(num, 'ether');
-      const tokenJson = this.data;
-      try {
-        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const esGas = await stakingRewardsContract.estimateGas.stake(amount);
-        const result = await stakingRewardsContract.stake(amount, {
-          gasLimit: esGas
-        });
-        const name = this.data && this.data.name;
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
-        event.$emit('sendtx', [
-          result,
-          {
-            okinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.stake')} ${this.pledgeAmount} ${name} ${this.$t('notice.n43')}`,
-          },
-        ]);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.openPledgeDialog = false;
-        this.sendLoading = false;
-      }
-    },
   },
 };
 

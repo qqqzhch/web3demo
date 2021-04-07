@@ -107,5 +107,11 @@
         "address": "0xd4E0683eFC185938E22D7A74f10248ac18bB2350",
         "decimals": 18,
         "chainId": 4
+    },
+    {
+        "name": "Blackhole",
+        "address": "0xF4cBacfD58e4005C8E6696E94C04A81Fc7Cc3f3b",
+        "decimals": 18,
+        "chainId": 4
     }
 ]

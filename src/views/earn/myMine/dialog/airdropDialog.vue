@@ -33,11 +33,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
-import { fetchRewardAddress } from '@/contactLogic/earn/Reward.js';
 import event from '@/common/js/event';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import { withdrawAirDropValue } from '@/contactLogic/AirDrop.js';
 export default {
   data() {
     return {
@@ -52,7 +51,6 @@ export default {
   },
   methods: {
     open(data) {
-      console.log(data);
       this.data = data;
       // this.coinName = data && data.name;
       this.claimAmount = data && data.data && data.data.earned;
@@ -70,46 +68,26 @@ export default {
       return true;
     },
 
-    async getAddress() {
-      const obj = {};
-      try {
-        const web3 = this.web3;
-        const chainID = this.ethChainID;
-        const account = this.ethAddress;
-        const library = this.ethersprovider;
-        const tokenName = 'LAMB';
-        const address = await fetchRewardAddress({ web3, chainID, account, library, tokenName });
-        obj.address = address;
-        return obj;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     // 提取收益
     async sendExtractAirdrop() {
       if (!this.checkData()) {
         return false;
       }
       this.extractAirdropLoading = true;
-      const addressObj = await this.getAddress();
-      console.log(addressObj);
       try {
-        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, addressObj);
-
-        const esGas = await stakingRewardsContract.estimateGas.getReward();
-
-        const result = await stakingRewardsContract.getReward({ gasLimit: esGas });
-
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const result = await withdrawAirDropValue(library, account, chainID);
+        // console.log('领取的奖励', result);
         this.$Notice.success({
           title: this.$t('notice.n33'),
         });
-
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.rewardToken} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.claim')} ${this.rewardToken} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.claimAirdrop')} ${this.claimAmount} LAMB ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.claimAirdrop')} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {

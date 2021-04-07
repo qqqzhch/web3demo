@@ -24,18 +24,28 @@
         </template>
 
         <template slot="operation" slot-scope="{ row }">
-          <div v-if="row.kind !== 'airdrop'" class="btn-wrapper flex justify-start items-center">
+          <div v-if="row.kind === 'airdrop'" class="btn-wrapper">
+            <button class="table-btn stake" @click="openAir(row)">
+              提取空投
+            </button>
+          </div>
+
+          <div v-else-if="row.kind === 'deposit'" class="btn-wrapper flex justify-start items-center">
+            <button class="table-btn claim" @click="openScusdDialog(row)">
+              {{ $t('myPage.table.claim') }}
+            </button>
+            <button class="table-btn stake" @click="openScusdUnstake(row)">
+              {{ $t('myPage.table.unstake') }}
+            </button>
+          </div>
+
+          <div v-else class="btn-wrapper flex justify-start items-center">
             <button class="table-btn claim" @click="openClaim(row)">
               {{ $t('myPage.table.claim') }}
             </button>
             <button class="table-btn stake" @click="openUnstake(row)">
               {{ $t('myPage.table.unstake') }}
               <span v-if="row.kind === 'multi'" class="ml-1">LP</span>
-            </button>
-          </div>
-          <div v-else class="btn-wrapper">
-            <button class="table-btn stake" @click="openAir(row)">
-              提取空投
             </button>
           </div>
         </template>
@@ -45,6 +55,8 @@
       <takeDialog ref="take" />
       <extractDialog ref="extract" />
       <airDropDialog ref="airdrop" />
+      <scUSDExtract ref="scusdExtract" />
+      <scUSDUnstake ref="scusdUnstake" />
     </div>
   </div>
 </template>
@@ -58,6 +70,8 @@ import { getUnClaimedReward } from '@/contactLogic/earn/Reward.js';
 import { fetchCollateralIndicatorsCurrentDebt } from '@/contactLogic/buildr/create.js';
 import web3 from 'web3';
 const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import { getMasterUserInfo, getMasterPendingScash } from '@/contactLogic/earn/scusdDeposit.js';
 export default {
   data() {
     return {
@@ -69,14 +83,15 @@ export default {
     loading: () => import('@/components/basic/loading.vue'),
     takeDialog: () => import('./dialog/takeoutDialog.vue'),
     extractDialog: () => import('./dialog/extractReward.vue'),
-    airDropDialog: () => import('./dialog/airdropDialog.vue')
+    airDropDialog: () => import('./dialog/airdropDialog.vue'),
+    scUSDExtract: () => import('./dialog/scUSDExtract.vue'),
+    scUSDUnstake: () => import('./dialog/scusdUnstake.vue')
   },
   methods: {
     async getListData() {
       this.showLoading = true;
       try {
         const airData = await this.getAirdropList();
-        console.log({ airData });
         const airObj = [
           {
             name: 'LAMB Vault',
@@ -88,10 +103,22 @@ export default {
             kind: 'airdrop',
           },
         ];
+        const scUSDData = await this.getScusdData();
+        const scUSDObj = [
+          {
+            name: 'scUSD 存款',
+            data: {
+              balance: scUSDData.participateData,
+              earned: scUSDData.sacshData,
+              rewardToken: 'SCASH',
+            },
+            kind: 'deposit',
+          },
+        ];
 
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
 
-        const result = data.concat(airObj);
+        const result = data.concat(airObj).concat(scUSDObj);
         // console.log(data.push(airObj));
         // console.log(data);
         const [scashData] = data.filter((item) => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
@@ -119,11 +146,33 @@ export default {
       const price = data.price && data.price.toSignificant(6);
       this.$store.commit('changeScashPrice', price);
     },
+
+    async getScusdData() {
+      const obj = {};
+      try {
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const data = await getMasterUserInfo({ chainID, account, library });
+        const scashData = await getMasterPendingScash({ chainID, account, library });
+        obj.participateData = new BigNumber(data[0].toString()).div('1e18').decimalPlaces(2).toNumber();
+        obj.sacshData = new BigNumber(scashData.toString()).div('1e18').decimalPlaces(2).toNumber();
+        return obj;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     openClaim(data) {
       this.$refs.extract.open(data);
     },
+    openScusdDialog(data) {
+      this.$refs.scusdExtract.open(data);
+    },
     openUnstake(data) {
       this.$refs.take.open(data);
+    },
+    openScusdUnstake(data) {
+      this.$refs.scusdUnstake.open(data);
     },
     openAir(data) {
       this.$refs.airdrop.open(data);

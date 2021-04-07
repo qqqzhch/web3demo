@@ -3,24 +3,24 @@
     <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
       <div class="remove-content">
         <p class="title text-center">
-          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
+          {{ $t('myPage.dialog.unstake.unstake') }} scUSD
         </p>
         <div class="remove-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ coinName }}</span>
-              <span>{{ stakeVal }}</span>
+              <span>{{ balance }}</span>
             </div>
           </div>
           <div class="remove-wrapper flex">
-            <input v-model="stakeVal" readonly type="text" class="amount-input">
+            <input v-model.number="stakeVal" type="number" class="amount-input" @input="handleInput">
           </div>
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}</span>
-            <p>{{ stakeVal }} {{ coinName }}</p>
+            <span>{{ $t('myPage.dialog.unstake.unstake') }} scUSD</span>
+            <p>{{ stakeVal }} scUSD</p>
           </div>
         </div>
 
@@ -39,8 +39,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
 import event from '@/common/js/event';
+import { getSCUSDVaultContract } from '@/contactLogic/earn/scusdDeposit.js';
+import web3 from 'web3';
 export default {
   inject: ['reload'],
   data() {
@@ -49,14 +50,25 @@ export default {
       data: {},
       coinName: '',
       stakeVal: '',
+      balance: '',
       takeLoading: false,
+      previousData: '',
     };
   },
   methods: {
+    // 限制Input输入小数点的长度
+    handleInput(e) {
+      const stringValue = e.target.value.toString();
+      const regex = /^\d*(\.\d{1,6})?$/;
+      if (!stringValue.match(regex) && this.stakeVal !== '') {
+        this.stakeVal = this.previousData;
+      }
+      this.previousData = this.stakeVal;
+    },
     open(data) {
+      this.data = {};
       this.data = data;
-      this.stakeVal = data && data.data && data.data.balance;
-      this.coinName = data && data.name;
+      this.balance = data && data.data && data.data.balance;
       this.openRemoveDialog = true;
     },
     checkData() {
@@ -64,6 +76,13 @@ export default {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
+        });
+        return false;
+      }
+      if (this.stakeVal > this.balance) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n29'),
         });
         return false;
       }
@@ -76,12 +95,13 @@ export default {
         return false;
       }
       this.takeLoading = true;
-      const tokenJson = this.data;
       try {
-        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const esGas = await stakingRewardsContract.estimateGas.exit();
-        const result = await stakingRewardsContract.exit({ gasLimit: esGas });
-
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const contract = getSCUSDVaultContract({ chainID, account, library });
+        const amount = web3.utils.toWei(this.stakeVal.toString());
+        const result = await contract.exit(account, amount);
         this.$Notice.success({
           title: this.$t('notice.n33'),
         });
@@ -89,8 +109,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} scUSD ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} scUSD ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {
@@ -108,7 +128,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethAddress','ethChainID']),
   },
 };
 </script>
@@ -145,23 +165,23 @@ export default {
           line-height: 14px;
         }
       }
-        .amount-input {
-          width: 100%;
-          height: 100%;
-          outline: none;
-          border: none;
-          background: #f7f8f9;
-          font-size: 40px;
-          line-height: 47px;
-          color: #14171c;
-          padding: 16px;
-          caret-color: #0058ff;
-          &:focus {
-            border: 1px solid #0058ff;
-            border-radius: 4px;
-          }
+      .amount-input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        border: none;
+        background: #f7f8f9;
+        font-size: 40px;
+        line-height: 47px;
+        color: #14171c;
+        padding: 16px;
+        caret-color: #0058ff;
+        &:focus {
+          border: 1px solid #0058ff;
+          border-radius: 4px;
         }
       }
+    }
 
     .price-warpper {
       margin-top: 30px;

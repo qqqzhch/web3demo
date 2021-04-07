@@ -1,31 +1,31 @@
 <template>
-  <div class="remove-dialog">
-    <Modal v-model="openRemoveDialog" class-name="remove-modal" :footer-hide="true" :closable="true">
-      <div class="remove-content">
+  <div class="claim-dialog">
+    <Modal v-model="openClaimDialog" class-name="claim-modal" :footer-hide="true" :closable="true">
+      <div class="claim-content">
         <p class="title text-center">
-          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
+          {{ $t('myPage.claim') }}
         </p>
-        <div class="remove-wrapper">
+        <div class="claim-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ coinName }}</span>
-              <span>{{ stakeVal }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
+              <span>{{ claimAmount }} {{ rewardToken }}</span>
             </div>
           </div>
-          <div class="remove-wrapper flex">
-            <input v-model="stakeVal" readonly type="text" class="amount-input">
+          <div class="claim-wrapper">
+            <input v-model="claimAmount" readonly type="text" class="amount-input">
           </div>
         </div>
         <div class="price-warpper">
           <div class="price-item">
-            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}</span>
-            <p>{{ stakeVal }} {{ coinName }}</p>
+            <span>{{ $t('common.willRecieive') }}</span>
+            <p>{{ claimAmount }} {{ rewardToken }}</p>
           </div>
         </div>
 
         <div class="btn-warpper">
-          <Buttons v-if="!takeLoading" @click.native="sendTakeout">
+          <Buttons v-if="!extractLoading" @click.native="sendExtract">
             {{ $t('common.confirm') }}
           </Buttons>
           <Buttons v-else>
@@ -39,28 +39,30 @@
 
 <script>
 import { mapState } from 'vuex';
-import { useStakingRewardsContractSigna } from '../../utils/helpUtils/allowances.js';
 import event from '@/common/js/event';
+const BigNumber = require('bignumber.js');
+BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import { Masterwithdraw } from '@/contactLogic/earn/scusdDeposit.js';
+
 export default {
-  inject: ['reload'],
   data() {
     return {
-      openRemoveDialog: false,
+      openClaimDialog: false,
+      claimAmount: '',
       data: {},
-      coinName: '',
-      stakeVal: '',
-      takeLoading: false,
+      extractLoading: false,
+      rewardToken: '',
     };
   },
   methods: {
     open(data) {
       this.data = data;
-      this.stakeVal = data && data.data && data.data.balance;
-      this.coinName = data && data.name;
-      this.openRemoveDialog = true;
+      this.claimAmount = data && data.data && data.data.earned;
+      this.rewardToken = data && data.data && data.data.rewardToken;
+      this.openClaimDialog = true;
     },
     checkData() {
-      if (this.stakeVal <= 0) {
+      if (this.claimAmount <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
@@ -70,18 +72,17 @@ export default {
       return true;
     },
 
-    // 取出LP
-    async sendTakeout() {
+    // 提取收益
+    async sendExtract() {
       if (!this.checkData()) {
         return false;
       }
-      this.takeLoading = true;
-      const tokenJson = this.data;
+      this.extractLoading = true;
       try {
-        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const esGas = await stakingRewardsContract.estimateGas.exit();
-        const result = await stakingRewardsContract.exit({ gasLimit: esGas });
-
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const result = await Masterwithdraw({ chainID, account, library });
         this.$Notice.success({
           title: this.$t('notice.n33'),
         });
@@ -89,8 +90,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.claim')} ${this.claimAmount} SCASH ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.claim')} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {
@@ -99,8 +100,8 @@ export default {
           title: this.$t('notice.n32'),
         });
       } finally {
-        this.openRemoveDialog = false;
-        this.takeLoading = false;
+        this.openClaimDialog = false;
+        this.extractLoading = false;
       }
     },
   },
@@ -108,30 +109,29 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethAddress','ethChainID']),
   },
 };
 </script>
 
 <style lang="less" scoped>
-.remove-modal {
+.claim-modal {
   width: 500px;
   background: #ffffff;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  .remove-content {
+  .claim-content {
     padding: 14px 28px;
     .title {
       height: 28px;
       font-size: 24px;
-
+      font-family: Gilroy-Medium, Gilroy;
       font-weight: 500;
       color: #14171c;
       line-height: 28px;
       margin-bottom: 24px;
     }
-
-    .remove-wrapper {
+    .claim-wrapper {
       .title-content {
         overflow: hidden;
         margin: 24px 0 8px;
@@ -145,6 +145,12 @@ export default {
           line-height: 14px;
         }
       }
+      .claim-wrapper {
+        width: 100%;
+        height: 72px;
+        background: #f7f8f9;
+        border-radius: 6px;
+        position: relative;
         .amount-input {
           width: 100%;
           height: 100%;
@@ -161,8 +167,14 @@ export default {
             border-radius: 4px;
           }
         }
+        .unit {
+          cursor: pointer;
+          position: absolute;
+          right: 16px;
+          top: 28px;
+        }
       }
-
+    }
     .price-warpper {
       margin-top: 30px;
       .price-item {
@@ -173,7 +185,7 @@ export default {
       span {
         height: 14px;
         font-size: 12px;
-
+        font-family: Gilroy-Medium, Gilroy;
         font-weight: 500;
         color: #828489;
         line-height: 14px;
@@ -181,7 +193,7 @@ export default {
       p {
         height: 14px;
         font-size: 12px;
-
+        font-family: Gilroy-Medium, Gilroy;
         font-weight: 500;
         color: #14171c;
         line-height: 14px;

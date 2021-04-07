@@ -31,11 +31,11 @@
       <div class="airdrop-item balance">
         <div class="balance-item">
           <span class="title">Total Deposited</span>
-          <span class="value">1245 scUSD</span>
+          <span class="value">{{ scusdDeposit || 0 }} scUSD</span>
         </div>
         <div class="balance-item">
           <span class="title">Daily Output</span>
-          <span class="value"> 123 SCASH</span>
+          <span class="value">123 SCASH</span>
         </div>
       </div>
 
@@ -51,19 +51,63 @@
 </template>
 
 <script>
+import {
+  getSCUSDVaultContract,
+  getMasterUserInfo,
+  getMasterPendingScash,
+  getmaxExitableAmount,
+  Masterwithdraw,
+} from '@/contactLogic/earn/scusdDeposit.js';
+import sythAddressData from '@/constants/synthetix.json';
+import { mapState } from 'vuex';
+import Web3 from 'web3';
 export default {
+  data() {
+    return {
+      scusdDeposit: '',
+    };
+  },
   props: {
     data: {
       type: Array,
     },
   },
   components: {
-    depositDialog: ()=> import('../dialog/depositDialog.vue')
+    depositDialog: () => import('../dialog/depositDialog.vue'),
+  },
+  computed: {
+    ...mapState(['ethChainID', 'ethAddress', 'ethersprovider']),
+    isReady() {
+      return this.ethChainID && this.ethersprovider && this.ethAddress;
+    },
   },
   methods: {
     openDeposit() {
       this.$refs.deposit.open();
     },
+
+    // 获取scUSD总存入量
+    async readscsudValt() {
+      try {
+        const chainID = this.ethChainID;
+        const account = this.ethAddress;
+        const library = this.ethersprovider;
+        const contract = getSCUSDVaultContract({ chainID, account, library });
+        const [recieiveItem] = sythAddressData.filter(
+          (item) => item.name === 'Blackhole' && item.chainId === this.ethChainID
+        );
+        const recieiveAddress = recieiveItem.address;
+        const totalSupply = await contract.balanceOf(recieiveAddress);
+        this.scusdDeposit = Web3.utils.fromWei(totalSupply.toString());
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  created() {
+    if (this.isReady) {
+      this.readscsudValt();
+    }
   },
 };
 </script>
@@ -116,7 +160,7 @@ export default {
       .apy-num {
         margin-top: 8px;
         font-size: 26px;
-        color: #00D075;
+        color: #00d075;
         line-height: 30px;
       }
       .tag {

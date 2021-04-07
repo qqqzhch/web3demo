@@ -40,8 +40,11 @@
         </div>
 
         <div class="btn-warpper">
-          <Buttons @click.native="showConfirnDialog">
-            {{ $t('earn.dialog.stakeDialog.next') }}
+          <Buttons v-if="sendLoading === false" @click.native="depositScusd">
+            {{ $t('earn.dialog.stakeDialog.confirm') }}
+          </Buttons>
+          <Buttons v-else>
+            {{ $t('earn.dialog.loading') }}
           </Buttons>
         </div>
       </div>
