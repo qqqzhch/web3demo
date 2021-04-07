@@ -38,6 +38,30 @@
     <button @click="syncReward">
       读取铸造金库未提取的奖励
     </button>
+    <br>
+    <button @click="getscsudValtAddress">
+      scusd 存款
+    </button>
+    <br>
+    <button @click="readscsudValt">
+      scusd 累计存款
+    </button>
+    <br>
+    <button @click="withdrawscsudValt">
+      scusd 取款
+    </button>
+    <br>
+    <button @click="readMyLP">
+      我的 scusd存款份额
+    </button>
+    <br>
+    <button @click="readMyLP2">
+      查询我的存款提取的scusd
+    </button>
+    <br>
+    <button @click="lp2Masterwithdraw">
+      提取奖励
+    </button>
   </div>
 </template>
 <script>
@@ -66,6 +90,8 @@ import {getUnClaimedReward} from '@/contactLogic/earn/Reward.js';
 
 import {fetchCollateralIndicatorsCurrentDebt} from '@/contactLogic/buildr/create.js';
 
+import {getSCUSDVaultContract,getMasterUserInfo,getMasterPendingScash,
+getmaxExitableAmount,Masterwithdraw} from '@/contactLogic/earn/scusdDeposit.js';
 
 export default {
   methods: {
@@ -276,6 +302,87 @@ export default {
 
 
 
+    },
+    async getscsudValtAddress(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      
+      var Contract = getSCUSDVaultContract({chainID,account, library});
+      const  amount = Web3.utils.toWei('10');
+      var tx = await Contract.stake(amount);
+      
+      console.log(tx)
+
+    },
+   async readscsudValt(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      
+      var Contract = getSCUSDVaultContract({chainID,account, library});
+      console.log(Contract)
+      var totalSupply = await Contract.totalSupply()
+      console.log(Web3.utils.fromWei(totalSupply.toString()))
+
+    },
+    async withdrawscsudValt(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      
+      var Contract = getSCUSDVaultContract({chainID,account, library});
+      const  amount = Web3.utils.toWei('1');
+      var tx = await Contract.exit(account,amount);
+
+      console.log(tx)
+
+    },
+   async readMyLP(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+
+      var data = await getMasterUserInfo({chainID,account, library});
+      
+      console.log(data[0].toString())
+      console.log(data[1].toString())
+      console.log(data[2].toString())
+      console.log('我的份额',data[0].toString())
+      // console.log('我的奖励 sccash',data[0].toString())
+      var data = await getMasterPendingScash({chainID,account, library});
+
+      console.log('未提取的scash',data.toString())
+      // var data2 = getmaxExitableAmount({chainID,account, library});
+      // console.log('存款可以提取的scusd数量',data2.toString())
+
+
+    },
+    async readMyLP2(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+
+      // var data = await getMasterUserInfo({chainID,account, library});
+      
+      // console.log(data[0].toString())
+      // console.log(data[1].toString())
+      // console.log(data[2].toString())
+      // console.log('我的份额',data[0].toString())
+      // // console.log('我的奖励 sccash',data[0].toString())
+      // var data = await getMasterPendingScash({chainID,account, library});
+
+      // console.log('未提取的scash',data.toString())
+      var data2 = getmaxExitableAmount({chainID,account, library});
+      console.log('存款可以提取的scusd数量',data2.toString())
+
+    },
+    async lp2Masterwithdraw(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      var tx =await Masterwithdraw({chainID,account, library});
+      console.log(tx)
     }
 
   },

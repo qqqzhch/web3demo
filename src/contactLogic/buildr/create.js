@@ -34,6 +34,7 @@ export const fetchTokenBalance = async ({web3, tokenName, chainID, library, acco
   }
 };
 
+
 /**
  * name to Hex
  */
@@ -205,6 +206,7 @@ export const fetchApprove = async ({ web3, chainID, account, library, tokenName,
   return result;
 };
 
+
 /**
  *  获取已授信的额度
  *  Allowance 限额
@@ -225,6 +227,7 @@ export const fetchAllowanceAmount = async ({ chainID, account, library, tokenNam
     allowanceAmount: result.toSignificant(18)
   };
 };
+
 
 
 /* *

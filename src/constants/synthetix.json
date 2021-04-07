@@ -62,19 +62,19 @@
 ,
     {
         "name": "ExchangeRates",
-        "address": "0xdEa30de30f5B464D7Eb8939c420bC5785CC0F8d3",
+        "address": "0xDd41797c20Fdb5325050fF035F622e5473797E83",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyActions",
-        "address": "0xd251Df05Da30C36d9cdf9bb490D0D89A4C39CCB9",
+        "address": "0xF8c8b0E68D2E4307cAEFb9af225da161C44F7C31",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyToActions",
-        "address": "0x2CEa68e571B5c056f23A9376aEcdDb5E3f540085",
+        "address": "0xb394bc999927b2C7087D4cF8eAAAd0E6d7259316",
         "decimals": 18,
         "chainId": 4
     },
@@ -91,8 +91,20 @@
         "chainId": 4
     },
     {
-        "name": "CollateralState",
-        "address": "",
+        "name": "ProxyVault",
+        "address": "0x8d29E72e650255f811225C5c4659486a1d2C2Ded",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "MasterChef",
+        "address": "0x20be5BD70a3088DE7297945Ba64F69075894fCed",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "Synthetic",
+        "address": "0xd4E0683eFC185938E22D7A74f10248ac18bB2350",
         "decimals": 18,
         "chainId": 4
     }

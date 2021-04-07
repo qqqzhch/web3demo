@@ -54,6 +54,12 @@ import ABI_CollateralState from "../constants/abis/CollateralState.json";
 
 import ABI_ERC20_LAMBDA from "../constants/abis/erc20lambda.json";
 
+import ABI_scusdDeposit_Vault from "../constants/abis/scusdDeposit/Vault.json";
+
+import ABI_scusdDeposit_Master from "../constants/abis/scusdDeposit/Master.json";
+
+import ABI_scusdDeposit_synthetic from "../constants/abis/scusdDeposit/synthetic.json";
+
 
 // returns null on errors
 function useContract(
@@ -339,6 +345,58 @@ export function useErc20LambdaContract(
     withSignerIfPossible
   );
 }
+
+export function useScusdDeposit_VaultContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_scusdDeposit_Vault,
+    withSignerIfPossible
+  );
+}
+
+export function useScusdDeposit_MasterContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_scusdDeposit_Master,
+    withSignerIfPossible
+  );
+}
+
+export function useScusdDeposit_syntheticContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_scusdDeposit_synthetic,
+    withSignerIfPossible
+  );
+}
+
+
+//ABI_scusdDeposit_Master
+
 
 
 //ABI_rewarder
