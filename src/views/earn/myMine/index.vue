@@ -16,8 +16,14 @@
           <span v-else>--</span>
         </template> -->
         <template slot="stake" slot-scope="{ row }">
-          <span v-if="row.kind !== 'airdrop'">{{ row.data && row.data.balance }}</span>
-          <span v-else>{{ row.data && row.data.balance }} scUSD</span>
+          <span v-if="row.kind === 'airdrop'">{{ row.data && row.data.balance }} scUSD</span>
+          <div v-else-if="row.kind === 'deposit'">
+            <p>{{ row.data && row.data.balance }}</p>
+            <p class="scusd">
+              {{ row.depositScusd }} scUSD
+            </p>
+          </div>
+          <span v-else>{{ row.data && row.data.balance }}</span>
         </template>
         <template slot="earned" slot-scope="{ row }">
           {{ row.data && row.data.earned | formatNormalValue(2) }} {{ row.data && row.data.rewardToken }}
@@ -71,7 +77,7 @@ import { fetchCollateralIndicatorsCurrentDebt } from '@/contactLogic/buildr/crea
 import web3 from 'web3';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
-import { getMasterUserInfo, getMasterPendingScash } from '@/contactLogic/earn/scusdDeposit.js';
+import { getMasterUserInfo, getMasterPendingScash, getmaxExitableAmount } from '@/contactLogic/earn/scusdDeposit.js';
 export default {
   data() {
     return {
@@ -85,24 +91,24 @@ export default {
     extractDialog: () => import('./dialog/extractReward.vue'),
     airDropDialog: () => import('./dialog/airdropDialog.vue'),
     scUSDExtract: () => import('./dialog/scUSDExtract.vue'),
-    scUSDUnstake: () => import('./dialog/scusdUnstake.vue')
+    scUSDUnstake: () => import('./dialog/scusdUnstake.vue'),
   },
   methods: {
     async getListData() {
       this.showLoading = true;
       try {
-        const airData = await this.getAirdropList();
-        const airObj = [
-          {
-            name: 'LAMB Vault',
-            data: {
-              balance: airData.staked,
-              earned: airData.unclaimReward,
-              rewardToken: 'SCASH',
-            },
-            kind: 'airdrop',
-          },
-        ];
+        // const airData = await this.getAirdropList();
+        // const airObj = [
+        //   {
+        //     name: 'LAMB Vault',
+        //     data: {
+        //       balance: airData.staked,
+        //       earned: airData.unclaimReward,
+        //       rewardToken: 'SCASH',
+        //     },
+        //     kind: 'airdrop',
+        //   },
+        // ];
         const scUSDData = await this.getScusdData();
         const scUSDObj = [
           {
@@ -112,13 +118,14 @@ export default {
               earned: scUSDData.sacshData,
               rewardToken: 'SCASH',
             },
+            depositScusd: scUSDData.usdData,
             kind: 'deposit',
           },
         ];
 
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
 
-        const result = data.concat(airObj).concat(scUSDObj);
+        const result = data.concat(scUSDObj);
         // console.log(data.push(airObj));
         // console.log(data);
         const [scashData] = data.filter((item) => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
@@ -155,8 +162,10 @@ export default {
         const library = this.ethersprovider;
         const data = await getMasterUserInfo({ chainID, account, library });
         const scashData = await getMasterPendingScash({ chainID, account, library });
+        const usdData = await getmaxExitableAmount({ chainID, account, library });
         obj.participateData = new BigNumber(data[0].toString()).div('1e18').decimalPlaces(2).toNumber();
         obj.sacshData = new BigNumber(scashData.toString()).div('1e18').decimalPlaces(2).toNumber();
+        obj.usdData = new BigNumber(usdData.toString()).div('1e18').decimalPlaces(2).toNumber();
         return obj;
       } catch (error) {
         console.log(error);
@@ -283,5 +292,9 @@ export default {
       color: #0058ff;
     }
   }
+}
+.scusd {
+  font-size: 14px;
+  color: rgba(20, 23, 28, 0.4);
 }
 </style>
