@@ -2,12 +2,12 @@
   <div class="airdrop-wrapper mb-6">
     <div class="title-wrapper flex justify-between items-center">
       <div class="left">
-        <span class="title">Vault Airdrop</span>
-        <span class="next">Next Airdrop</span>
+        <span class="title">{{ $t('Airdrop.VaultAirdrop') }}</span>
+        <span class="next">{{ $t('Airdrop.NextAirdrop') }}</span>
         <span class="time">2021.9.1 18:00(UTC+8)</span>
       </div>
       <div class="right">
-        Deposit digital assets, get scUSD credit line
+        {{ $t('Airdrop.Depositdigital') }}
       </div>
     </div>
     <div class="airdrop-content-wrapper flex justify-between items-center">
@@ -18,7 +18,7 @@
 
       <div class="airdrop-item volume">
         <p class="drop-title">
-          Airdrop Volume
+          {{ $t('Airdrop.AirdropVolume') }}
         </p>
         <p class="drop-num">
           1044
@@ -26,14 +26,14 @@
         </p>
 
         <p class="tag">
-          <span class="mine font10px">SCash Mining</span>
-          <span class="reward font10px">Fee Rewards</span>
+          <span class="mine font10px">{{ $t('synth.SCashMining') }}</span>
+          <span class="reward font10px">{{ $t('synth.FeeRewards') }}</span>
         </p>
       </div>
 
       <div class="airdrop-item countdown">
         <p class="drop-title">
-          Countdown
+          {{ $t('Airdrop.Countdown') }}
         </p>
         <!-- <div class="count"> -->
         <countDown class="count" date="2021-03-31 10:15:00" />
@@ -42,7 +42,7 @@
 
       <div class="airdrop-item create">
         <button class="createBtn" @click="goBuild">
-          Start Creating
+          {{ $t('Airdrop.StartCreating') }}
         </button>
       </div>
     </div>

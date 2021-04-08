@@ -88,5 +88,23 @@ export default {
       amount: 'Amount',
       status: 'Status'
     }
+  },
+  synth:{
+    SynthMining:'Synth Mining',
+    getSynth:'Deposit scUSD, get Synth rewards',
+    APY:'APY',
+    SCashMining:'SCash Mining',
+    FeeRewards:'Fee Rewards',
+    TotalDeposited:'Total Deposited',
+    DailyOutput:'Daily Output',
+    Deposit:'Deposit',
+  },
+  Airdrop:{
+    VaultAirdrop:'Vault Airdrop',
+    NextAirdrop:'Next Airdrop',
+    Depositdigital:'Deposit digital assets, get scUSD credit line',
+    AirdropVolume:'Airdrop Volume',
+    Countdown:'Countdown',
+    StartCreating:'Start Creating',
   }
 };

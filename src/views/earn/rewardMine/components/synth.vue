@@ -2,10 +2,10 @@
   <div class="synth-wrapper mb-6">
     <div class="title-wrapper flex justify-between items-center">
       <div class="left">
-        <span class="title">Synth Mining</span>
+        <span class="title">{{ $t('synth.SynthMining') }}</span>
       </div>
       <div class="right">
-        Deposit scUSD, get Synth rewards
+        {{ $t('synth.getSynth') }}
       </div>
     </div>
     <div class="airdrop-content-wrapper flex justify-between items-center">
@@ -16,32 +16,32 @@
 
       <div class="airdrop-item apy">
         <p class="drop-title">
-          APY
+          {{ $t('synth.APY') }}
         </p>
         <p class="apy-num">
           1044%
         </p>
 
         <p class="tag">
-          <span class="mine font10px">SCash Mining</span>
-          <span class="reward font10px">Fee Rewards</span>
+          <span class="mine font10px">{{ $t('synth.SCashMining') }}</span>
+          <span class="reward font10px">{{ $t('synth.FeeRewards') }}</span>
         </p>
       </div>
 
       <div class="airdrop-item balance">
         <div class="balance-item">
-          <span class="title">Total Deposited</span>
+          <span class="title">{{ $t('synth.TotalDeposited') }}</span>
           <span class="value">{{ scusdDeposit || 0 }} scUSD</span>
         </div>
         <div class="balance-item">
-          <span class="title">Daily Output</span>
+          <span class="title">{{ $t('synth.DailyOutput') }}</span>
           <span class="value">123 SCASH</span>
         </div>
       </div>
 
       <div class="airdrop-item create">
         <button class="createBtn" @click="openDeposit">
-          Deposit scUSD
+          {{ $t('synth.Deposit') }} scUSD
         </button>
       </div>
     </div>
