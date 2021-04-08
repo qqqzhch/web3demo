@@ -48,9 +48,7 @@ export default {
         const amount = Web3.utils.toWei(this.pledgeAmount.toString());
         const tx = await Contract.stake(amount);
         if (tx.hash) {
-          this.$Notice.success({
-            title: this.$t('notice.n33'),
-          });
+          event.$emit('sendSuccess');
           event.$emit('sendtx', [
             tx,
             {

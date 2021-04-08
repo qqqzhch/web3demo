@@ -43,10 +43,10 @@
             <span>{{ $t('earn.dialog.stakeDialog.totalStakePool') }}</span>
             <p>{{ data.data && data.data.totalSupply }} {{ data.name }}</p>
           </div>
-          <div class="price-item">
+          <!-- <div class="price-item">
             <span>{{ $t('earn.dialog.stakeDialog.yield') }}</span>
             <p>{{ data.data && data.data.rewardRate | formatRate }}</p>
-          </div>
+          </div> -->
           <div class="price-item">
             <span>{{ $t('earn.dialog.stakeDialog.willStake') }}</span>
             <p>{{ pledgeAmount || 0 }} {{ data.name }}</p>

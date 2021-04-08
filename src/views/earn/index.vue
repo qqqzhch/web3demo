@@ -17,15 +17,20 @@
         <router-view />
       </div>
     </div>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
+import event from '@/common/js/event';
 export default {
   data() {
     return {
       name: 'rewardMine',
     };
+  },
+  components: {
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   methods: {
     toPage(name) {
@@ -70,6 +75,9 @@ export default {
   },
   mounted() {
     this.name = this.$route.name;
+    event.$on('sendSuccess', () => {
+      this.$refs.haveSendtx.open('');
+    });
   },
 };
 </script>

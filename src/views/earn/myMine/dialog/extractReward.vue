@@ -82,9 +82,7 @@ export default {
         const esGas = await stakingRewardsContract.estimateGas.exit();
         const result = await stakingRewardsContract.exit({ gasLimit: esGas });
 
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
+        event.$emit('sendSuccess');
 
         event.$emit('sendtx', [
           result,
@@ -145,23 +143,23 @@ export default {
           line-height: 14px;
         }
       }
-        .amount-input {
-          width: 100%;
-          height: 100%;
-          outline: none;
-          border: none;
-          background: #f7f8f9;
-          font-size: 40px;
-          line-height: 47px;
-          color: #14171c;
-          padding: 16px;
-          caret-color: #0058ff;
-          &:focus {
-            border: 1px solid #0058ff;
-            border-radius: 4px;
-          }
+      .amount-input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        border: none;
+        background: #f7f8f9;
+        font-size: 40px;
+        line-height: 47px;
+        color: #14171c;
+        padding: 16px;
+        caret-color: #0058ff;
+        &:focus {
+          border: 1px solid #0058ff;
+          border-radius: 4px;
         }
       }
+    }
 
     .price-warpper {
       margin-top: 30px;

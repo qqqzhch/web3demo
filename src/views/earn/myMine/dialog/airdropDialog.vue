@@ -80,9 +80,7 @@ export default {
         const library = this.ethersprovider;
         const result = await withdrawAirDropValue(library, account, chainID);
         // console.log('领取的奖励', result);
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
+        event.$emit('sendSuccess');
         event.$emit('sendtx', [
           result,
           {
@@ -108,7 +106,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider','ethChainID','ethAddress', 'chainTokenPrice', 'web3']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'chainTokenPrice', 'web3']),
   },
 };
 </script>

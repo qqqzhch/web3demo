@@ -208,9 +208,7 @@ export default {
           gasLimit: esGas
         });
         const name = this.data && this.data.name;
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
+        event.$emit('sendSuccess');
         event.$emit('sendtx', [
           result,
           {

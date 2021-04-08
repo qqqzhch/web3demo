@@ -83,9 +83,7 @@ export default {
         const account = this.ethAddress;
         const library = this.ethersprovider;
         const result = await Masterwithdraw({ chainID, account, library });
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
+        event.$emit('sendSuccess');
 
         event.$emit('sendtx', [
           result,
@@ -109,7 +107,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress','ethChainID']),
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
   },
 };
 </script>
