@@ -63,7 +63,7 @@
   },
   {
     "name": "scUSD/USDT LP",
-    "address": "0x02Df6b73c1Ee09a20FD339A026813983f59A0a33",
+    "address": "0xFEE4C68308ba8d28506952DD2dB4e8A6D4D69bAd",
     "decimals": 18,
     "chainId": 4,
     "kind": "multi",
@@ -74,7 +74,7 @@
   },
   {
     "name": "SCASH/scUSD  LP",
-    "address": "0xdF5a65318F28e10f8b4fab7a7Fdd1442832421d7",
+    "address": "0xB6e060fc3ee864a358145dcfc5425619e61Cd60D",
     "decimals": 18,
     "chainId": 4,
     "kind": "multi",
