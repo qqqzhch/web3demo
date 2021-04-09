@@ -62,19 +62,19 @@
 ,
     {
         "name": "ExchangeRates",
-        "address": "0xDd41797c20Fdb5325050fF035F622e5473797E83",
+        "address": "0x1b07a00C476e0E1bD7306e7BA36d111C3670A309",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyActions",
-        "address": "0xF8c8b0E68D2E4307cAEFb9af225da161C44F7C31",
+        "address": "0x00fb7365645f94283a0fB6384bed53c40501961A",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyToActions",
-        "address": "0xb394bc999927b2C7087D4cF8eAAAd0E6d7259316",
+        "address": "0x3cF2BF36f8849dA37F49f473AFCf2df8933E320D",
         "decimals": 18,
         "chainId": 4
     },
@@ -92,25 +92,25 @@
     },
     {
         "name": "ProxyVault",
-        "address": "0x8d29E72e650255f811225C5c4659486a1d2C2Ded",
+        "address": "0x36d9c3bA67fa048Ba5138E7Ea8456958d81b1D48",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "MasterChef",
-        "address": "0x20be5BD70a3088DE7297945Ba64F69075894fCed",
+        "address": "0xEF88AEB30483dbfB10E33E2995474890fb0737b4",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "Synthetic",
-        "address": "0xF89972880f08C80600CF76caFA46cDcA0D39B79b",
+        "address": "0x2901E8978e5061444F27955A84142e2F240Ede37",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "Blackhole",
-        "address": "0xF4cBacfD58e4005C8E6696E94C04A81Fc7Cc3f3b",
+        "address": "0xE9B8e98256485f63fd72b128acFfb501716ab106",
         "decimals": 18,
         "chainId": 4
     }

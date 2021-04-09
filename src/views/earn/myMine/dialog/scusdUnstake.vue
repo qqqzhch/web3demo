@@ -101,7 +101,7 @@ export default {
         const library = this.ethersprovider;
         const contract = getSCUSDVaultContract({ chainID, account, library });
         const amount = web3.utils.toWei(this.stakeVal.toString());
-        const result = await contract.exit(account, amount);
+        const result = await contract.exit(amount);
         // this.$Notice.success({
         //   title: this.$t('notice.n33'),
         // });
