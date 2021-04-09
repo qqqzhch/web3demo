@@ -106,7 +106,7 @@ export default {
           gasLimit: esGas,
         });
         event.$emit('sendSuccess');
-
+        this.openRemoveDialog = false;
         event.$emit('sendtx', [
           result,
           {

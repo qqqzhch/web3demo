@@ -52,6 +52,7 @@ export default {
         });
         if (tx.hash) {
           event.$emit('sendSuccess');
+          this.openPledgeDialog = false;
           event.$emit('sendtx', [
             tx,
             {

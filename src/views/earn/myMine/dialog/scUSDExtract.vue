@@ -84,7 +84,7 @@ export default {
         const library = this.ethersprovider;
         const result = await Masterwithdraw({ chainID, account, library });
         event.$emit('sendSuccess');
-
+        this.openClaimDialog = false;
         event.$emit('sendtx', [
           result,
           {

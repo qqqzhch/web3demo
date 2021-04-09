@@ -209,6 +209,7 @@ export default {
         });
         const name = this.data && this.data.name;
         event.$emit('sendSuccess');
+        this.openPledgeDialog = false;
         event.$emit('sendtx', [
           result,
           {

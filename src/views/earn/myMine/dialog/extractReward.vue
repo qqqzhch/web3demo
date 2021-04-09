@@ -83,7 +83,7 @@ export default {
         const result = await stakingRewardsContract.exit({ gasLimit: esGas });
 
         event.$emit('sendSuccess');
-
+        this.openRemoveDialog = false;
         event.$emit('sendtx', [
           result,
           {
