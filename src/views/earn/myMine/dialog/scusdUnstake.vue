@@ -101,10 +101,10 @@ export default {
         const library = this.ethersprovider;
         const contract = getSCUSDVaultContract({ chainID, account, library });
         const amount = web3.utils.toWei(this.stakeVal.toString());
-        const result = await contract.exit(amount);
-        // this.$Notice.success({
-        //   title: this.$t('notice.n33'),
-        // });
+        const esGas = await contract.estimateGas.exit(amount);
+        const result = await contract.exit(amount, {
+          gasLimit: esGas,
+        });
         event.$emit('sendSuccess');
 
         event.$emit('sendtx', [
@@ -129,7 +129,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress','ethChainID']),
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
   },
 };
 </script>

@@ -46,7 +46,10 @@ export default {
         const library = this.ethersprovider;
         const Contract = getSCUSDVaultContract({ chainID, account, library });
         const amount = Web3.utils.toWei(this.pledgeAmount.toString());
-        const tx = await Contract.stake(amount);
+        const esGas = await Contract.estimateGas.stake(amount);
+        const tx = await Contract.stake(amount, {
+          gasLimit: esGas
+        });
         if (tx.hash) {
           event.$emit('sendSuccess');
           event.$emit('sendtx', [

@@ -41,7 +41,7 @@ export const getProxyVaultToken = (chainID) => {
 };
 
 export  function getSCUSDVaultContract({chainID,account, library}){
-   const Token =  getProxyVaultToken(chainID);     
+   const Token =  getProxyVaultToken(chainID);
    const VaultContract =  useScusdDeposit_VaultContract(library,account,Token.address,true);
 
    return VaultContract;
@@ -49,7 +49,7 @@ export  function getSCUSDVaultContract({chainID,account, library}){
 }
 
 export  function getSCUSDMasterContract({chainID,account, library}){
-   const Token =  getMasterChefToken(chainID);     
+   const Token =  getMasterChefToken(chainID);
    const VaultContract =  useScusdDeposit_MasterContract(library,account,Token.address,false);
 
    return VaultContract;
@@ -57,7 +57,7 @@ export  function getSCUSDMasterContract({chainID,account, library}){
 }
 
 export  function getSCUSDMasterContractSigner({chainID,account, library}){
-  const Token =  getMasterChefToken(chainID);     
+  const Token =  getMasterChefToken(chainID);
   const VaultContract =  useScusdDeposit_MasterContract(library,account,Token.address,true);
 
   return VaultContract;
@@ -68,7 +68,7 @@ export  function getMasterUserInfo({chainID,account, library}){
    const MasterContract = getSCUSDMasterContract({chainID,account, library});
    const poolName =getNameHex(Web3,'Synth');
 
-   const data = MasterContract.getUserInfo(poolName, account); 
+   const data = MasterContract.getUserInfo(poolName, account);
 
    return data;
 
@@ -78,7 +78,7 @@ export  function getMasterPendingScash({chainID,account, library}){
    const MasterContract = getSCUSDMasterContract({chainID,account, library});
    const poolName =getNameHex(Web3,'Synth');
 
-   const data = MasterContract.pendingScash(poolName, account); 
+   const data = MasterContract.pendingScash(poolName, account);
 
    return data;
 
@@ -87,9 +87,9 @@ export  function getMasterPendingScash({chainID,account, library}){
 export async function getmaxExitableAmount({chainID,account, library}){
   const Token = getSyntheticToken(chainID);
   const Contract = useScusdDeposit_syntheticContract(library,account,Token.address,true);
-  
 
-  const data = await Contract.maxExitableAmount(account); 
+
+  const data = await Contract.maxExitableAmount(account);
 
   return data;
 
@@ -99,8 +99,10 @@ export async function getmaxExitableAmount({chainID,account, library}){
 export async function Masterwithdraw({chainID,account, library}){
   const MasterContract = getSCUSDMasterContractSigner({chainID,account, library});
   const poolName =getNameHex(Web3,'Synth');
-
-  const tx = await MasterContract.withdraw(poolName); 
+  const esGas = await MasterContract.estimateGas.withdraw(poolName);
+  const tx = await MasterContract.withdraw(poolName,{
+    gasLimit: esGas
+  });
 
   return tx;
 
