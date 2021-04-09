@@ -53,7 +53,7 @@
   },
   {
     "name": "scUSD",
-    "address": "0x9C0aCB0182A58496d46E89C508B796B92Ded5b13",
+    "address": "0xafBeBbDb25A875dC61D8c6f5A92016FdfA114672",
     "decimals": 18,
     "chainId": 4,
     "kind": "single",
