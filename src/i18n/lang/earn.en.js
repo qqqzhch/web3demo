@@ -93,7 +93,7 @@ export default {
     SynthMining:'Synth Mining',
     getSynth:'Deposit scUSD, get Synth rewards',
     APY:'APY',
-    SCashMining:'SCash Mining',
+    SCashMining:'SCASH Mining',
     FeeRewards:'Fee Rewards',
     TotalDeposited:'Total Deposited',
     DailyOutput:'Daily Output',
@@ -102,9 +102,9 @@ export default {
   Airdrop:{
     VaultAirdrop:'Vault Airdrop',
     NextAirdrop:'Next Airdrop',
-    Depositdigital:'Deposit digital assets, get scUSD credit line',
+    Depositdigital:'Deposit digital assets, get SCASH airdrop bonus！',
     AirdropVolume:'Airdrop Volume',
-    Countdown:'Countdown',
+    Countdown:'START IN',
     StartCreating:'Start Creating',
   }
 };

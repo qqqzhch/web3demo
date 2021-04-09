@@ -40,7 +40,10 @@
       </div>
 
       <div class="airdrop-item create">
-        <button class="createBtn" @click="openDeposit">
+        <button v-if="ethAddress" class="createBtn" @click="openDeposit">
+          {{ $t('synth.Deposit') }} scUSD
+        </button>
+        <button v-else class="createBtn disableBtn">
           {{ $t('synth.Deposit') }} scUSD
         </button>
       </div>
@@ -51,13 +54,7 @@
 </template>
 
 <script>
-import {
-  getSCUSDVaultContract,
-  getMasterUserInfo,
-  getMasterPendingScash,
-  getmaxExitableAmount,
-  Masterwithdraw,
-} from '@/contactLogic/earn/scusdDeposit.js';
+import { getSCUSDVaultContract } from '@/contactLogic/earn/scusdDeposit.js';
 import sythAddressData from '@/constants/synthetix.json';
 import { mapState } from 'vuex';
 import Web3 from 'web3';

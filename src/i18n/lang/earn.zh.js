@@ -88,5 +88,24 @@ export default {
       amount: '数量',
       status: '状态'
     }
+  },
+  synth: {
+    SynthMining: '合成资产存款挖矿',
+    getSynth: '存入scUSD，获得聚合收益',
+    APY: '年化收益率',
+    SCashMining: 'SCASH 挖矿',
+    FeeRewards: '手续费收益',
+    TotalDeposited: '总存款量',
+    DailyOutput: '日产出',
+    Deposit: '存入',
+  },
+  Airdrop: {
+    VaultAirdrop: '金库空投',
+    NextAirdrop: '下次空投时间',
+    Depositdigital: '质押数字资产创建金库，获得 SCASH 空投奖励！',
+    AirdropVolume: '空投总量',
+    Countdown: '倒计时',
+    StartCreating: '去创建',
   }
+
 };
