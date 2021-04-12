@@ -36,9 +36,9 @@ export  async function swapHistory(account,pageNum=1,showNum=10,chainID){
 
 
 export  async function pledgeHistory(account,pageNum=1,showNum=10,chainID){
-  const method_names =['stake','exit','getReward'].join(',');
+  const names =['uniswap_stake','synthetic_stake'].join(',');
 
-  const data =  await  axios.get(`${baseUrl}api/txs?&category=stake&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
+  const data =  await  axios.get(`${baseUrl}api/txs?&category=${names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
 
 //  console.log(data);
  return data.data;

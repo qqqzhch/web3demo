@@ -46,6 +46,7 @@ export  async function readSwapHistory(chainID,account,pageNum,showNum){
 export  async function readPledgeHistory(chainID,account,pageNum,showNum){
     const data = await pledgeHistory(account,pageNum,showNum,chainID);
     //['stake','exit','getReward']
+    console.log('readPledgeHistory');
 
     data.data.forEach((item)=>{
         if(item.method_name == 'stake'){
@@ -118,7 +119,7 @@ function tokenNameByaddressStack(address,chainID){
         // {chainId:chainID,address:address}
     });
     if(coinA==undefined){
-        return '';
+        return tokenNameByaddress(address,chainID);
     }
     return coinA.symbol;
 

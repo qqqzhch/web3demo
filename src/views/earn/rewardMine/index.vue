@@ -16,8 +16,10 @@
 import { mapState } from 'vuex';
 import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
-import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
+import { readpariInfoNuminfoEarn,pairListEarn } from '@/contactLogic/readpairpool.js';
 import web3 from 'web3';
+import _ from 'underscore';
+
 export default {
   data() {
     return {
@@ -39,6 +41,7 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
+       const pairListPrise = await pairListEarn( this.ethChainID,this.ethersprovider);
         // console.log({data});
         const tempLiquidity = data.filter((item) => item.kind === 'multi');
         // console.log({tempLiquidity});
@@ -46,7 +49,7 @@ export default {
         const results = async () => {
           for (let index = 0; index < tempLiquidity.length; index++) {
             const item = tempLiquidity[index];
-            const res = await this.getPriceData(item);
+            const res = await this.getPriceData(item,pairListPrise);
             result.push({
               ...item,
               poolValue: res.usdtNum,
@@ -64,20 +67,40 @@ export default {
         this.showLoading = false;
       }
     },
-    async getPriceData(item) {
+    async getPriceData(item,pairListPrise) {
       // console.log({ item });
       const obj = {};
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
       const pledgeBalance = item && item.data && item.data.totalSupply;
       const pledgeBalanceWei = web3.utils.toWei(pledgeBalance.toString());
-      const data = await readpariInfoNuminfoEarn(
-        this.ethChainID,
-        this.ethersprovider,
-        tokensymbolA,
-        tokensymbolB,
-        pledgeBalanceWei
-      );
+
+      // const data = await readpariInfoNuminfoEarn(
+      //   this.ethChainID,
+      //   this.ethersprovider,
+      //   tokensymbolA,
+      //   tokensymbolB,
+      //   pledgeBalanceWei
+      // );
+      const pairItem = _.find(pairListPrise,(pairItem)=>{
+        const result={
+          aTokenbalance:'',
+          bTokenbalance:'',
+          price:''
+          };
+        if((pairItem.pairInfo.tokenAmounts[0].token.symbol==tokensymbolA&&pairItem.pairInfo.tokenAmounts[1].token.symbol==tokensymbolB)||
+           (pairItem.pairInfo.tokenAmounts[1].token.symbol==tokensymbolA&&pairItem.pairInfo.tokenAmounts[0].token.symbol==tokensymbolB)
+        ){
+          return pairItem;
+        }
+        // return result;
+      }); 
+      const data={
+          aTokenbalance:pairItem.aTokenbalance(pledgeBalanceWei),
+          bTokenbalance:pairItem.bTokenbalance(pledgeBalanceWei),
+          price:pairItem.price(tokensymbolA,tokensymbolB).price
+          };
+
       obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
       obj.price = data.price && data.price.toSignificant(6);
       if (tokensymbolA === 'SCASH' && tokensymbolB === 'USDT') {

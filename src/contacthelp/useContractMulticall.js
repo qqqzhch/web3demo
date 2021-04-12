@@ -10,9 +10,11 @@ import ERC20_ABI_tlambbar from "../constants/abis/tlambbar.json";
 
 import { getContractMulticall  } from "./utils.js";
 
-import { abi as IUniswapV2PairABI } from "@uniswap/v2-core/build/IUniswapV2Pair.json";
+// import { abi as IUniswapV2PairABI } from "@uniswap/v2-core/build/IUniswapV2Pair.json";
 
 import ERC20_ABI_StakingRewards from "@/constants/abis/StakingRewards.json";
+
+import IUniswapV2PairABI  from '@/constants/abis/UniswapV2Pair.json';
 
 
 
@@ -52,6 +54,16 @@ export function useStakingRewardsContractMulticall(
   return useContract(
     token.address,
     ERC20_ABI_StakingRewards
+  );
+}
+
+export function useIUniswapV2PairABIContractMulticall(
+  token
+) {
+  // console.info("- -useTokenContract");
+  return useContract(
+    token.address,
+    IUniswapV2PairABI
   );
 }
 
