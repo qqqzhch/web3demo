@@ -16,7 +16,7 @@
 import { mapState } from 'vuex';
 import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
 import event from '@/common/js/event';
-import { readpariInfoNuminfoEarn,pairListEarn } from '@/contactLogic/readpairpool.js';
+import { pairListEarn } from '@/contactLogic/readpairpool.js';
 import web3 from 'web3';
 import _ from 'underscore';
 
@@ -30,8 +30,8 @@ export default {
     };
   },
   components: {
-    airDrop: ()=> import('./components/airDrop.vue'),
-    synth: ()=> import('./components/synth.vue'),
+    airDrop: () => import('./components/airDrop.vue'),
+    synth: () => import('./components/synth.vue'),
     singeMineList: () => import('./components/singleMineList.vue'),
     multiMineList: () => import('./components/multiMineList.vue'),
     loading: () => import('@/components/basic/loading.vue'),
@@ -41,15 +41,16 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
-       const pairListPrise = await pairListEarn( this.ethChainID,this.ethersprovider);
-        // console.log({data});
+
+        // 读取所有的价格信息
+        const pairListPrice = await pairListEarn(this.ethChainID, this.ethersprovider);
+
         const tempLiquidity = data.filter((item) => item.kind === 'multi');
-        // console.log({tempLiquidity});
         const result = [];
         const results = async () => {
           for (let index = 0; index < tempLiquidity.length; index++) {
             const item = tempLiquidity[index];
-            const res = await this.getPriceData(item,pairListPrise);
+            const res = await this.getPriceData(item, pairListPrice);
             result.push({
               ...item,
               poolValue: res.usdtNum,
@@ -59,7 +60,6 @@ export default {
         };
         await results();
         this.liquidityData = result;
-
         this.designatedData = data.filter((item) => item.kind === 'single');
       } catch (error) {
         console.log(error);
@@ -67,45 +67,39 @@ export default {
         this.showLoading = false;
       }
     },
-    async getPriceData(item,pairListPrise) {
-      // console.log({ item });
+    async getPriceData(item, pairListPrice) {
       const obj = {};
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
       const pledgeBalance = item && item.data && item.data.totalSupply;
       const pledgeBalanceWei = web3.utils.toWei(pledgeBalance.toString());
 
-      // const data = await readpariInfoNuminfoEarn(
-      //   this.ethChainID,
-      //   this.ethersprovider,
-      //   tokensymbolA,
-      //   tokensymbolB,
-      //   pledgeBalanceWei
-      // );
-      const pairItem = _.find(pairListPrise,(pairItem)=>{
-        const result={
-          aTokenbalance:'',
-          bTokenbalance:'',
-          price:''
-          };
-        if((pairItem.pairInfo.tokenAmounts[0].token.symbol==tokensymbolA&&pairItem.pairInfo.tokenAmounts[1].token.symbol==tokensymbolB)||
-           (pairItem.pairInfo.tokenAmounts[1].token.symbol==tokensymbolA&&pairItem.pairInfo.tokenAmounts[0].token.symbol==tokensymbolB)
-        ){
+      // 匹配读取价格信息
+      const priceItem = _.find(pairListPrice, (pairItem) => {
+        if (
+          (pairItem.pairInfo.tokenAmounts[0].token.symbol == tokensymbolA &&
+            pairItem.pairInfo.tokenAmounts[1].token.symbol == tokensymbolB) ||
+          (pairItem.pairInfo.tokenAmounts[1].token.symbol == tokensymbolA &&
+            pairItem.pairInfo.tokenAmounts[0].token.symbol == tokensymbolB)
+        ) {
           return pairItem;
         }
-        // return result;
-      }); 
-      const data={
-          aTokenbalance:pairItem.aTokenbalance(pledgeBalanceWei),
-          bTokenbalance:pairItem.bTokenbalance(pledgeBalanceWei),
-          price:pairItem.price(tokensymbolA,tokensymbolB).price
-          };
+      });
+
+      // 构造价格相关信息
+      const data = {
+        aTokenbalance: priceItem.aTokenbalance(pledgeBalanceWei),
+        bTokenbalance: priceItem.bTokenbalance(pledgeBalanceWei),
+        price: priceItem.price(tokensymbolA, tokensymbolB).price,
+      };
 
       obj.usdtNum = data.aTokenbalance.multiply(data.price).add(data.bTokenbalance).toSignificant(6);
       obj.price = data.price && data.price.toSignificant(6);
+
       if (tokensymbolA === 'SCASH' && tokensymbolB === 'USDT') {
         this.$store.commit('changeScashPrice', obj.price);
       }
+
       this.$store.commit('changeEarnPrice', obj.price);
       return obj;
     },

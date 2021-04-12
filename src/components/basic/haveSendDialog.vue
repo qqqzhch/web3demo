@@ -41,6 +41,9 @@ export default {
       this.openSuccesDialog = false;
     },
     open(title){
+      if(!title) {
+        this.title = '';
+      }
       this.openSuccesDialog = true;
       this.title = title;
     }

@@ -57,7 +57,7 @@
 import { getSCUSDVaultContract } from '@/contactLogic/earn/scusdDeposit.js';
 import sythAddressData from '@/constants/synthetix.json';
 import { mapState } from 'vuex';
-import Web3 from 'web3';
+const BigNumber = require('bignumber.js');
 export default {
   data() {
     return {
@@ -95,7 +95,8 @@ export default {
         );
         const recieiveAddress = recieiveItem.address;
         const totalSupply = await contract.balanceOf(recieiveAddress);
-        this.scusdDeposit = Web3.utils.fromWei(totalSupply.toString());
+        const scusdDeposit = new BigNumber(totalSupply.toString()).div('1e18').decimalPlaces(6).toNumber();
+        this.scusdDeposit = scusdDeposit;
       } catch (error) {
         console.log(error);
       }

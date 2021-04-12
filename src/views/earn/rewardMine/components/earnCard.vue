@@ -68,8 +68,6 @@
 
 <script>
 import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 export default {
   props: {
     data: {

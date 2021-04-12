@@ -6,6 +6,7 @@
     </main>
     <!-- <initialWallet /> -->
     <layoutFoot />
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
@@ -15,7 +16,7 @@ import layoutFoot from '@/components/layout/footer.vue';
 
 import initialWallet from '@/components/basic/initialWallet.vue';
 import transactionPool from '@/components/basic/transactionPool.vue';
-
+import event from '@/common/js/event';
 export default {
   mixins: [initialWallet, transactionPool],
   provide() {
@@ -31,6 +32,7 @@ export default {
   components: {
     layoutHead,
     layoutFoot,
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   methods: {
     reload() {
@@ -38,7 +40,11 @@ export default {
       this.$nextTick(() => (this.isRouterAlive = true));
     },
   },
-  mounted() {},
+  mounted() {
+    event.$on('sendSuccess', () => {
+      this.$refs.haveSendtx.open('');
+    });
+  },
 };
 </script>
 <style lang="less" scoped>

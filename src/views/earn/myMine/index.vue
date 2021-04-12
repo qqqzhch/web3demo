@@ -70,14 +70,14 @@
 <script>
 import { mapState } from 'vuex';
 import { StakingRewardListbatch } from '../utils/helpUtils/mineUtilFunc.js';
-import { readpariInfoNuminfoEarn } from '@/contactLogic/readpairpool.js';
+import { pairListEarn } from '@/contactLogic/readpairpool.js';
 import event from '@/common/js/event';
 import { getUnClaimedReward } from '@/contactLogic/earn/Reward.js';
 import { fetchCollateralIndicatorsCurrentDebt } from '@/contactLogic/buildr/create.js';
-import web3 from 'web3';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
 import { getMasterUserInfo, getMasterPendingScash, getmaxExitableAmount } from '@/contactLogic/earn/scusdDeposit.js';
+import _ from 'underscore';
 export default {
   data() {
     return {
@@ -96,19 +96,22 @@ export default {
   methods: {
     async getListData() {
       this.showLoading = true;
+
       try {
-        // const airData = await this.getAirdropList();
-        // const airObj = [
-        //   {
-        //     name: 'LAMB Vault',
-        //     data: {
-        //       balance: airData.staked,
-        //       earned: airData.unclaimReward,
-        //       rewardToken: 'SCASH',
-        //     },
-        //     kind: 'airdrop',
-        //   },
-        // ];
+        // 读取所有的价格信息
+        const pairListPrice = await pairListEarn(this.ethChainID, this.ethersprovider);
+        const airData = await this.getAirdropList();
+        const airObj = [
+          {
+            name: 'LAMB Vault',
+            data: {
+              balance: airData.staked,
+              earned: airData.unclaimReward,
+              rewardToken: 'SCASH',
+            },
+            kind: 'airdrop',
+          },
+        ];
         const scUSDData = await this.getScusdData();
         const scUSDObj = [
           {
@@ -125,12 +128,13 @@ export default {
 
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
 
-        const result = data.concat(scUSDObj);
+        const result = data.concat(airObj).concat(scUSDObj);
         // console.log(data.push(airObj));
         // console.log(data);
         const [scashData] = data.filter((item) => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
         // console.log(scashData);
-        await this.getPriceData(scashData);
+        await this.getPriceData(scashData, pairListPrice);
+
         this.data = result;
       } catch (error) {
         console.log(error);
@@ -138,18 +142,27 @@ export default {
         this.showLoading = false;
       }
     },
-    async getPriceData(item) {
+    async getPriceData(item, pairListPrice) {
       const tokensymbolA = item.symbol[0];
       const tokensymbolB = item.symbol[1];
-      const pledgeBalance = item.data && item.data.totalSupply;
-      const pledgeBalanceWei = web3.utils.toWei(pledgeBalance.toString());
-      const data = await readpariInfoNuminfoEarn(
-        this.ethChainID,
-        this.ethersprovider,
-        tokensymbolA,
-        tokensymbolB,
-        pledgeBalanceWei
-      );
+
+      // 匹配读取价格信息
+      const priceItem = _.find(pairListPrice, (pairItem) => {
+        if (
+          (pairItem.pairInfo.tokenAmounts[0].token.symbol === tokensymbolA &&
+            pairItem.pairInfo.tokenAmounts[1].token.symbol === tokensymbolB) ||
+          (pairItem.pairInfo.tokenAmounts[1].token.symbol === tokensymbolA &&
+            pairItem.pairInfo.tokenAmounts[0].token.symbol === tokensymbolB)
+        ) {
+          return pairItem;
+        }
+      });
+
+      // 构造价格相关信息
+      const data = {
+        price: priceItem.price(tokensymbolA, tokensymbolB).price,
+      };
+
       const price = data.price && data.price.toSignificant(6);
       this.$store.commit('changeScashPrice', price);
     },
