@@ -5,7 +5,7 @@
     </div>
     <template v-else>
       <synth />
-      <airDrop />
+      <!-- <airDrop /> -->
       <singeMineList :data="designatedData" />
       <multiMineList :data="liquidityData" />
     </template>

@@ -100,18 +100,18 @@ export default {
       try {
         // 读取所有的价格信息
         const pairListPrice = await pairListEarn(this.ethChainID, this.ethersprovider);
-        const airData = await this.getAirdropList();
-        const airObj = [
-          {
-            name: 'LAMB Vault',
-            data: {
-              balance: airData.staked,
-              earned: airData.unclaimReward,
-              rewardToken: 'SCASH',
-            },
-            kind: 'airdrop',
-          },
-        ];
+        // const airData = await this.getAirdropList();
+        // const airObj = [
+        //   {
+        //     name: 'LAMB Vault',
+        //     data: {
+        //       balance: airData.staked,
+        //       earned: airData.unclaimReward,
+        //       rewardToken: 'SCASH',
+        //     },
+        //     kind: 'airdrop',
+        //   },
+        // ];
         const scUSDData = await this.getScusdData();
         const scUSDObj = [
           {
@@ -128,7 +128,8 @@ export default {
 
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
 
-        const result = data.concat(airObj).concat(scUSDObj);
+        // const result = data.concat(airObj).concat(scUSDObj);
+        const result = data.concat(scUSDObj);
         // console.log(data.push(airObj));
         // console.log(data);
         const [scashData] = data.filter((item) => item.symbol[0] === 'SCASH' && item.symbol[1] === 'USDT');
