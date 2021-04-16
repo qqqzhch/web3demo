@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "type": "indexes",
+    "baseSymbol": "scBTC",
+    "quoteSymbol": "USDT",
+    "pairCode": "scBTC_USDT",
+    "oracleCode": "WBTC_USDT",
+    "sort": 1,
+    "online": false
+  },
+  {
+    "id": 0,
+    "type": "indexes",
+    "baseSymbol": "scHT",
+    "quoteSymbol": "USDT",
+    "pairCode": "scHT_USDT",
+    "oracleCode": "HT_USDT",
+    "sort": 2,
+    "online": false
+  }
+]

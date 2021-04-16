@@ -1,6 +1,7 @@
 import Vue from "vue";
 import vuex from "vuex";
 import buildrStore from './buildr';
+import synthStore from './synth';
 
 Vue.use(vuex);
 
@@ -63,6 +64,6 @@ const store = new vuex.Store({
   }
 });
 
-[buildrStore].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
+[buildrStore, synthStore].forEach((moduleStore) => store.registerModule(moduleStore.moduleName, moduleStore));
 
 export default store;

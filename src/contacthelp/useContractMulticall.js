@@ -14,9 +14,15 @@ import { getContractMulticall  } from "./utils.js";
 
 import ERC20_ABI_StakingRewards from "@/constants/abis/StakingRewards.json";
 
+
 import IUniswapV2PairABI  from '@/constants/abis/UniswapV2Pair.json';
 
 
+import ABI_NDNProxyInterface from "../constants/abis/NDNProxyInterface.json";
+
+import ABI_scusdDeposit_Exchanger from "../constants/abis/scusdDeposit/Exchanger.json";
+
+import ABI_scusdDeposit_Synth from "../constants/abis/scusdDeposit/Synth.json";
 
 // returns null on errors
 function useContract(
@@ -57,6 +63,7 @@ export function useStakingRewardsContractMulticall(
   );
 }
 
+
 export function useIUniswapV2PairABIContractMulticall(
   token
 ) {
@@ -66,4 +73,37 @@ export function useIUniswapV2PairABIContractMulticall(
     IUniswapV2PairABI
   );
 }
+
+export function useNDNProxyInterfaceContractMulticall(
+  token
+) {
+  // console.info("- -useTokenContract");
+  return useContract(
+    token.address,
+    ABI_NDNProxyInterface
+  );
+}
+
+
+export function useScusdDeposit_ExchangerContractMulticall(
+  token
+) {
+  // console.info("- -useTokenContract");
+  return useContract(
+    token.address,
+    ABI_scusdDeposit_Exchanger
+  );
+}
+
+export function useSscusdDeposit_SynthContractMulticall(
+  token
+) {
+  // console.info("- -useTokenContract");
+  return useContract(
+    token.address,
+    ABI_scusdDeposit_Synth
+  );
+}
+
+
 

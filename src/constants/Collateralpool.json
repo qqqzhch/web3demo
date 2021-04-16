@@ -5,7 +5,7 @@
         "titlei18":"LAMB-A",
         "token":"LAMB",
         "desc":"Lambda",
-        "state":true
+        "state":false
     },
     {
         "name":"ETH",
@@ -21,7 +21,7 @@
         "titlei18":"SCASH-A",
         "token":"SCASH",
         "desc":"SCASH",
-        "state":true
+        "state":false
     },
     {
         "name":"HT",

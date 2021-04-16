@@ -43,6 +43,7 @@ export default {
       Exchange: '交易',
       Earn: '收益挖矿',
       Bridge: '跨链',
+      Synth: '合成资产',
     },
     connectWallet:'连接钱包',
     copyAddress: '复制地址',

@@ -46,4 +46,23 @@ export const getCollateralStateToken = (chainID) => {
   return token || {};
 };
 
+export const getProxyVaultToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'ProxyVault';
+  });
+  return token || {};
+};
 
+export const getExchangerToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'Exchanger';
+  });
+  return token || {};
+};
+
+export const getSynthToken = (chainID) => {
+  const token = synthetixTokens.find((token) => {
+    return chainID === token.chainId && token.name === 'Synth';
+  });
+  return token || {};
+};

@@ -60,6 +60,11 @@ import ABI_scusdDeposit_Master from "../constants/abis/scusdDeposit/Master.json"
 
 import ABI_scusdDeposit_synthetic from "../constants/abis/scusdDeposit/synthetic.json";
 
+import ABI_NDNProxyInterface from "../constants/abis/NDNProxyInterface.json";
+
+import ABI_scusdDeposit_Exchanger from "../constants/abis/scusdDeposit/Exchanger.json";
+
+import ABI_scusdDeposit_Synth from "../constants/abis/scusdDeposit/Synth.json";
 
 // returns null on errors
 function useContract(
@@ -362,6 +367,22 @@ export function useScusdDeposit_VaultContract(
   );
 }
 
+
+export function useNDNProxyInterfaceContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_NDNProxyInterface,
+    withSignerIfPossible
+);
+}
+
 export function useScusdDeposit_MasterContract(
   library,
   account,
@@ -394,10 +415,40 @@ export function useScusdDeposit_syntheticContract(
   );
 }
 
+export function useScusdDepositExchangerContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_scusdDeposit_Exchanger,
+    withSignerIfPossible
+  );
+}
+
+
+export function useScusdDepositSynthContract(
+  library,
+  account,
+  tokenAddress,
+  withSignerIfPossible
+) {
+
+  return useContract(
+    library,
+    account,
+    tokenAddress,
+    ABI_scusdDeposit_Synth,
+    withSignerIfPossible
+  );
+}
 
 //ABI_scusdDeposit_Master
-
-
 
 //ABI_rewarder
 

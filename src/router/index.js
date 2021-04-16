@@ -94,6 +94,13 @@ const routes = [
   {
     path: "/synth",
     component: () => import("@/views/synth/index.vue"),
+    children: [
+      {
+        path: ":productCode",
+        name: "productCode",
+        component: () => import("@/views/synth/index.vue"),
+      },
+    ]
   },
   {
     path: "/buildrtest",

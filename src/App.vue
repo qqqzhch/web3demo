@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <layoutHead />
-    <main class="main-wrapper container mx-auto">
+    <main v-if="isSynth" class="synth-wrapper  mx-auto">
+      <router-view v-if="isRouterAlive" />
+    </main>
+    <main v-else class="main-wrapper container mx-auto">
       <router-view v-if="isRouterAlive" />
     </main>
     <!-- <initialWallet /> -->
@@ -11,12 +14,12 @@
 </template>
 
 <script>
-import layoutHead from '@/components/layout/header.vue';
-import layoutFoot from '@/components/layout/footer.vue';
+import layoutHead from "@/components/layout/header.vue";
+import layoutFoot from "@/components/layout/footer.vue";
 
-import initialWallet from '@/components/basic/initialWallet.vue';
-import transactionPool from '@/components/basic/transactionPool.vue';
-import event from '@/common/js/event';
+import initialWallet from "@/components/basic/initialWallet.vue";
+import transactionPool from "@/components/basic/transactionPool.vue";
+import event from "@/common/js/event";
 export default {
   mixins: [initialWallet, transactionPool],
   provide() {
@@ -27,12 +30,13 @@ export default {
   data() {
     return {
       isRouterAlive: true,
+      isSynth: true,
     };
   },
   components: {
     layoutHead,
     layoutFoot,
-    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
+    haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
   },
   methods: {
     reload() {
@@ -41,9 +45,19 @@ export default {
     },
   },
   mounted() {
-    event.$on('sendSuccess', () => {
-      this.$refs.haveSendtx.open('');
+    event.$on("sendSuccess", () => {
+      this.$refs.haveSendtx.open("");
     });
+  },
+  watch: {
+    $route(to) {
+      const synth = to.path.substr(0,6);
+      if (synth === "/synth") {
+        this.isSynth = true;
+      } else {
+        this.isSynth = false;
+      }
+    },
   },
 };
 </script>
@@ -53,6 +67,10 @@ export default {
   .main-wrapper {
     margin-top: 112px;
     margin-bottom: 60px;
+    min-height: calc(100vh - 208px);
+  }
+  .synth-wrapper {
+    margin: 112px 10px 60px;
     min-height: calc(100vh - 208px);
   }
 }
@@ -66,6 +84,10 @@ export default {
         min-width: 1200px;
       }
       .main-wrapper {
+        margin-top: 0px;
+        min-width: 1200px;
+      }
+      .synth-wrapper {
         margin-top: 0px;
         min-width: 1200px;
       }

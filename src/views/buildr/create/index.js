@@ -91,6 +91,7 @@ export default {
         if(!isCreated && selected === false) {
           this.defaultPool = pool;
           selected = true;
+          this.loadData();
         }
       });
       this.poolsEnable = poolsEnable;

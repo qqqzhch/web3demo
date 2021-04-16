@@ -5,15 +5,15 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.myInput /deep/{
-  .input-inner{
+.myInput /deep/ {
+  .input-inner {
     padding: 20px 15px;
   }
 }
 
 .my-modal /deep/ {
   .ivu-modal-header {
-    border : none;
+    border: none;
     padding: 30px 24px 20px 24px;
   }
 
@@ -22,6 +22,25 @@
   }
 }
 
+.ivu-table-overflowY::-webkit-scrollbar{
+  width:4px;
+}
+.ivu-table-overflowY::-webkit-scrollbar-track{
+  background: rgb(239, 239, 239);
+  border-radius:2px;
+}
+.ivu-table-overflowY::-webkit-scrollbar-thumb{
+  background: #bfbfbf;
+  border-radius:10px;
+}
+.ivu-table-overflowY::-webkit-scrollbar-thumb:hover{
+  background: #666;
+}
+.ivu-table-overflowY::-webkit-scrollbar-corner{
+  background: #bfbfbf;
+}
+
+
 .farm-modal /deep/ {
   .ivu-modal-body {
     padding: 0 0 16px;
@@ -29,44 +48,44 @@
 }
 
 .ivu-modal-content {
-  box-shadow   : 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
   border-radius: 12px;
 }
 
 .ivu-table th {
   background-color: #fff;
-  border          : none;
-  padding         : 8px;
+  border: none;
+  padding: 8px;
 }
 
 .ivu-table td {
-  font-size  : 16px;
+  font-size: 16px;
   font-weight: 500;
-  color      : #14171C;
+  color: #14171C;
   line-height: 19px;
-  height     : 56px;
-  border     : none;
-  box-shadow : 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
+  height: 56px;
+  border: none;
+  box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
 }
 
 .ivu-table-header thead tr th {
-  font-size  : 12px;
+  font-size: 12px;
   font-weight: 500;
-  color      : #828489;
+  color: #828489;
   line-height: 14px;
 }
 
 .ivu-table {
   &:before {
-    content         : '';
-    width           : 100%;
-    height          : 1px;
-    position        : absolute;
-    left            : 0;
-    bottom          : 0;
+    content: '';
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
     background-color: transparent;
-    box-shadow      : 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
-    z-index         : 4;
+    box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
+    z-index: 4;
   }
 }
 
@@ -76,9 +95,10 @@
 
 .ivu-scroll-container::-webkit-scrollbar,
 .ivu-scroll-container::-webkit-scrollbar-thumb {
-  overflow     : visible;
+  overflow: visible;
   border-radius: 4px;
 }
+
 .ivu-scroll-container::-webkit-scrollbar-track {
   display: none;
 }
@@ -90,12 +110,14 @@
 .ivu-select-dropdown {
   padding-top: 0px;
   margin-top: 10px;
-  box-shadow: 0 0 15px 0 rgba(0,0,0,0.06);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.06);
 }
-.ivu-select-selection{
+
+.ivu-select-selection {
   background-color: transparent;
-  border: 1px solid rgba(255,255,255,.3);
+  border: 1px solid rgba(255, 255, 255, .3);
 }
+
 .ivu-select {
   font-size: 16px;
   font-weight: 500;
@@ -103,21 +125,82 @@
   line-height: 19px;
   outline: none;
 }
+
 .ivu-select-item {
   box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
 }
-.ivu-select-visible .ivu-select-selection{
-  border-color: rgba(255,255,255,.3);
+
+.ivu-select-visible .ivu-select-selection {
+  border-color: rgba(255, 255, 255, .3);
 }
-.ivu-notice-desc,.ivu-notice-title{
+
+.ivu-notice-desc,
+.ivu-notice-title {
   word-break: break-all;
 }
-.ivu-notice-title{
+
+.ivu-notice-title {
   white-space: normal;
 }
 
-.ivu-dropdown-item-disabled{
-  span{
+.ivu-dropdown-item-disabled {
+  span {
     color: rgba(130, 132, 137, 0.4) !important;
   }
+}
+
+.mySlider /deep/ {
+  .ivu-slider-wrap {
+    height: 2px;
+
+    .ivu-slider-stop {
+      width: 12px;
+      height: 12px;
+      background: #E0E6EC;
+      border-radius: 50%;
+      top: -5px
+    }
+
+    .ivu-slider-bar {
+      height: 2px;
+      background: #0058FF;
+    }
+
+    .ivu-slider-button-wrap {
+      width: 24px;
+      height: 24px;
+      background: #FFFFFF;
+      box-shadow: 0px 0px 10px 0px rgba(0, 57, 165, 0.2);
+      border-radius: 50%;
+      top: -11px;
+
+      .ivu-slider-button {
+        border-color: #FFF;
+      }
+
+      .ivu-tooltip-popper {
+        top: -70px;
+        left: -23px;
+        .ivu-tooltip-inner {
+          padding: 6px 5px;
+          text-align: center;
+          width: 90px;
+          height: 22px;
+          background: #0058FF;
+          border-radius: 4px;
+          font-size: 12px;
+          font-family: Gilroy-Medium, Gilroy;
+          font-weight: 500;
+          color: #FFFFFF;
+          line-height: 22px;
+        }
+
+        .ivu-tooltip-arrow {
+          border-top-color: #0058FF;
+        }
+
+      }
+    }
+  }
+
 }

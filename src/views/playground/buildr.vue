@@ -62,6 +62,17 @@
     <button @click="lp2Masterwithdraw">
       提取奖励
     </button>
+    <button @click="getPriceinfo">
+      读取单个交易对价格
+    </button>
+    <br>
+    <button @click="History">
+      读取历史记录
+    </button>
+    <br>
+    <button @click="getfetchSynthAssets">
+      批量读取合成资产的余额
+    </button>
   </div>
 </template>
 <script>
@@ -92,8 +103,16 @@ import {fetchCollateralIndicatorsCurrentDebt} from '@/contactLogic/buildr/create
 
 import {getSCUSDVaultContract,getMasterUserInfo,getMasterPendingScash,
 getmaxExitableAmount,Masterwithdraw} from '@/contactLogic/earn/scusdDeposit.js';
+import {getTokenPriceinfo,getTokenListPriceinfo,getTokenHistory} from '@/contactLogic/Oracles.js'
+
+import {fetchSynthAssetsList} from '@/contactLogic/synth/assets.js';
 
 export default {
+  data() {
+    return {
+      id:''
+    }
+  },
   methods: {
    async approve(){
       console.log('- -');
@@ -307,11 +326,11 @@ export default {
       var chainID = this.ethChainID;
       const account = this.ethAddress;
       const library = this.ethersprovider;
-      
+
       var Contract = getSCUSDVaultContract({chainID,account, library});
       const  amount = Web3.utils.toWei('10');
       var tx = await Contract.stake(amount);
-      
+
       console.log(tx)
 
     },
@@ -319,7 +338,7 @@ export default {
       var chainID = this.ethChainID;
       const account = this.ethAddress;
       const library = this.ethersprovider;
-      
+
       var Contract = getSCUSDVaultContract({chainID,account, library});
       console.log(Contract)
       var totalSupply = await Contract.totalSupply()
@@ -330,7 +349,7 @@ export default {
       var chainID = this.ethChainID;
       const account = this.ethAddress;
       const library = this.ethersprovider;
-      
+
       var Contract = getSCUSDVaultContract({chainID,account, library});
       const  amount = Web3.utils.toWei('1');
       var tx = await Contract.exit(account,amount);
@@ -344,7 +363,7 @@ export default {
       const library = this.ethersprovider;
 
       var data = await getMasterUserInfo({chainID,account, library});
-      
+
       console.log(data[0].toString())
       console.log(data[1].toString())
       console.log(data[2].toString())
@@ -364,7 +383,7 @@ export default {
       const library = this.ethersprovider;
 
       // var data = await getMasterUserInfo({chainID,account, library});
-      
+
       // console.log(data[0].toString())
       // console.log(data[1].toString())
       // console.log(data[2].toString())
@@ -377,12 +396,56 @@ export default {
       console.log('存款可以提取的scusd数量',data2.toString())
 
     },
-    async lp2Masterwithdraw(){
+    async lp2Masterwithdraw() {
       var chainID = this.ethChainID;
       const account = this.ethAddress;
       const library = this.ethersprovider;
-      var tx =await Masterwithdraw({chainID,account, library});
+      var tx = await Masterwithdraw({chainID, account, library});
       console.log(tx)
+    },
+   async getPriceinfo(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      var key ='lamb_usdt'
+
+     var result = await getTokenPriceinfo(library,account,chainID,key)
+
+     console.log(result)
+     console.log('币对名',Web3.utils.hexToUtf8(result[0]))
+
+     console.log('价格',Web3.utils.fromWei(result[1].toString()))
+     console.log('时间戳',result[2].toString())
+     console.log('id',result[3].toString())
+
+     this.$data.id = result[3].toString();
+
+      var keys =['lamb_usdt','ht_usdt','eth_usdt']//,'ht_usdt'
+
+     var result = await getTokenListPriceinfo(library,account,chainID,keys)
+
+     console.log('批量读取',result)
+
+    },
+   async History(){
+     var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      var key ='lamb_usdt';
+      var nowid = this.$data.id-0;
+
+      var data = await getTokenHistory(library,account,chainID,key,nowid)
+      console.log(data)
+
+    },
+   async getfetchSynthAssets(){
+      var chainID = this.ethChainID;
+      const account = this.ethAddress;
+      const library = this.ethersprovider;
+      var web3 = this.web3;
+      var tokenList=['sBTC']
+      var data =await fetchSynthAssetsList({web3, chainID, account, library,tokenList})
+      console.log(data)
     }
 
   },

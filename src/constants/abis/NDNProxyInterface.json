@@ -1,0 +1,169 @@
+[
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getDaoAddr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_ocId",
+				"type": "uint256"
+			},
+			{
+				"name": "_symbols",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "_newPrices",
+				"type": "int256[]"
+			},
+			{
+				"name": "_newTimestamp",
+				"type": "uint64"
+			}
+		],
+		"name": "batchUpdateCoinInfo",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_ocId",
+				"type": "uint256"
+			},
+			{
+				"name": "_symbol",
+				"type": "bytes32"
+			},
+			{
+				"name": "_newPrice",
+				"type": "int256"
+			},
+			{
+				"name": "_newTimestamp",
+				"type": "uint64"
+			}
+		],
+		"name": "updateCoinInfo",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_ocId",
+				"type": "uint256"
+			}
+		],
+		"name": "getOracleInfo",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_ocId",
+				"type": "uint256"
+			},
+			{
+				"name": "_symbol",
+				"type": "bytes32"
+			}
+		],
+		"name": "getCoinInfo",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"name": "",
+				"type": "uint64"
+			},
+			{
+				"name": "",
+				"type": "uint64"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_ocId",
+				"type": "uint256"
+			},
+			{
+				"name": "_symbol",
+				"type": "bytes32"
+			},
+			{
+				"name": "_id",
+				"type": "uint64"
+			}
+		],
+		"name": "getCoinInfoById",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"name": "",
+				"type": "uint64"
+			},
+			{
+				"name": "",
+				"type": "uint64"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

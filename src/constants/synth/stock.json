@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "type": "stock",
+    "baseSymbol": "scGOOGL",
+    "quoteSymbol": "USDT",
+    "pairCode": "scGOOG_USDT",
+    "oracleCode": "GOOGL",
+    "sort": 2,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "stock",
+    "baseSymbol": "scBILI",
+    "quoteSymbol": "USDT",
+    "pairCode": "scBILI_USDT",
+    "oracleCode": "BILI",
+    "sort": 3,
+    "online": true
+  }
+]

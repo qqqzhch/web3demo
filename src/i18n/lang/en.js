@@ -43,6 +43,7 @@ export default {
       Exchange:'Exchange',
       Earn:'Earn',
       Bridge:'Bridge',
+      Synth:'Synth',
     },
     connectWallet:'Connect Wallet',
     copyAddress:'Copy Address',

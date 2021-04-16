@@ -62,8 +62,9 @@ export default {
     // 变化后的清算价格
     newLiquidationPrice() {
       const { liquidationRX, pledgeNumber } = this.poolData;
-      const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).plus(this.coinAmount))
-        ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(BigNumber(pledgeNumber).plus(this.coinAmount)).toFixed(6);
+      const coinAmout = BigNumber(pledgeNumber).plus(this.coinAmount).toNumber();
+      const newLiquPrice = (BigNumber(pledgeNumber).isZero() || (!coinAmout))
+        ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(coinAmout).toFixed(6);
 
       return newLiquPrice;
     },

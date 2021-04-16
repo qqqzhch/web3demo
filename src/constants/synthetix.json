@@ -30,6 +30,12 @@
         "chainId": 256
     },
     {
+        "name": "NDNProxyInterface",
+        "address": "0x105031A03C9785A9BB5E6EaDF21CCe93D42e824d",
+        "decimals": 18,
+        "chainId": 256
+    },
+    {
         "name": "ExchangeRates",
         "address": "0xC0C14c6653f3237AB877Ba1ddb20e14d5fcC8270",
         "decimals": 18,
@@ -62,19 +68,19 @@
 ,
     {
         "name": "ExchangeRates",
-        "address": "0x1b07a00C476e0E1bD7306e7BA36d111C3670A309",
+        "address": "0x440ecdCB85682872621106abE690f158CED1f889",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyActions",
-        "address": "0x00fb7365645f94283a0fB6384bed53c40501961A",
+        "address": "0x3915f8721fC83b4E4eE579be8C93447de9de0C81",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "ProxyToActions",
-        "address": "0x3cF2BF36f8849dA37F49f473AFCf2df8933E320D",
+        "address": "0xCFA432B3586097eE8a3CbC809EAcB629F8F54Ed9",
         "decimals": 18,
         "chainId": 4
     },
@@ -92,25 +98,43 @@
     },
     {
         "name": "ProxyVault",
-        "address": "0x36d9c3bA67fa048Ba5138E7Ea8456958d81b1D48",
+        "address": "0x2CE8eBc40Fc24DD4375563b0367F8b6d6bD8F84d",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "MasterChef",
-        "address": "0xEF88AEB30483dbfB10E33E2995474890fb0737b4",
+        "address": "0x00e1BFd4CA92a0991b4eCc2A568A77F1d77dD511",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "Synthetic",
-        "address": "0x2901E8978e5061444F27955A84142e2F240Ede37",
+        "address": "0x854DcF0f7c7c2d7287b8b3c05c7c535315012E73",
         "decimals": 18,
         "chainId": 4
     },
     {
         "name": "Blackhole",
-        "address": "0xE9B8e98256485f63fd72b128acFfb501716ab106",
+        "address": "0x6F91Eb5abfe72f105E39fCFDB6905812Cf62421C",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "NDNProxyInterface",
+        "address": "0x76B049e0Ea1b1DEe8DDf4572c271558745Ca51e1",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "Exchanger",
+        "address": "0x4D21dDf533c84416973f75A612f7AbBdDFD38182",
+        "decimals": 18,
+        "chainId": 4
+    },
+    {
+        "name": "Synth",
+        "address": "",
         "decimals": 18,
         "chainId": 4
     }

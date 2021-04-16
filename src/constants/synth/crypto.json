@@ -1,0 +1,162 @@
+[
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scDOT",
+    "quoteSymbol": "USDT",
+    "pairCode": "scDOT_USDT",
+    "oracleCode": "DOT_USDT",
+    "sort": 1,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scUNI",
+    "quoteSymbol": "USDT",
+    "pairCode": "scUNI_USDT",
+    "oracleCode": "UNI_USDT",
+    "sort": 2,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scBNB",
+    "quoteSymbol": "USDT",
+    "pairCode": "scBNB_USDT",
+    "oracleCode": "BNB_USDT",
+    "sort": 3,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scAAVE",
+    "quoteSymbol": "USDT",
+    "pairCode": "scAAVE_USDT",
+    "oracleCode": "AAVE_USDT",
+    "sort": 4,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scXVS",
+    "quoteSymbol": "USDT",
+    "pairCode": "scXVS_USDT",
+    "oracleCode": "XVS_USDT",
+    "sort": 5,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scCAKE",
+    "quoteSymbol": "USDT",
+    "pairCode": "scCAKE_USDT",
+    "oracleCode": "CAKE_USDT",
+    "sort": 6,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scAUTO",
+    "quoteSymbol": "USDT",
+    "pairCode": "scAUTO_USDT",
+    "oracleCode": "AUTO_USDT",
+    "sort": 7,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scFIL",
+    "quoteSymbol": "USDT",
+    "pairCode": "scFIL_USDT",
+    "oracleCode": "FIL_USDT",
+    "sort": 8,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scBTC",
+    "quoteSymbol": "USDT",
+    "pairCode": "scBTC_USDT",
+    "oracleCode": "BTC_USDT",
+    "sort": 0,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scETH",
+    "quoteSymbol": "USDT",
+    "pairCode": "scETH_USDT",
+    "oracleCode": "ETH_USDT",
+    "sort": 10,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scTRX",
+    "quoteSymbol": "USDT",
+    "pairCode": "scTRX_USDT",
+    "oracleCode": "TRX_USDT",
+    "sort": 11,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scMDX",
+    "quoteSymbol": "USDT",
+    "pairCode": "scMDX_USDT",
+    "oracleCode": "MDX_USDT",
+    "sort": 12,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scFILDA",
+    "quoteSymbol": "USDT",
+    "pairCode": "scFILDA_USDT",
+    "oracleCode": "FILDA_USDT",
+    "sort": 13,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scENJ",
+    "quoteSymbol": "USDT",
+    "pairCode": "scENJ_USDT",
+    "oracleCode": "ENJ_USDT",
+    "sort": 14,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scFLOW",
+    "quoteSymbol": "USDT",
+    "pairCode": "scFLOW_USDT",
+    "oracleCode": "FLOW_USDT",
+    "sort": 15,
+    "online": true
+  },
+  {
+    "id": 0,
+    "type": "crypto",
+    "baseSymbol": "scAXS",
+    "quoteSymbol": "USDT",
+    "pairCode": "scAXS_USDT",
+    "oracleCode": "AXS_USDT",
+    "sort": 16,
+    "online": true
+  }
+]

@@ -91,7 +91,7 @@
                 {{ $t('build-liquidation-price') }}
               </li>
               <li>
-                <span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span
+                <span>1 {{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span
                   :class="{
                     'f-green': liquidationPrice > newLiquidationPrice,
                     'f-danger': liquidationPrice < newLiquidationPrice
