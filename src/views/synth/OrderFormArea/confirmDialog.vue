@@ -41,6 +41,8 @@
 </template>
 
 <script>
+  import { createOrder } from '../../../contactLogic/synth/order';
+
 export default {
   data() {
     return {
@@ -60,8 +62,10 @@ export default {
     onClose() {
       this.isOpen = false;
     },
-    onOrderSubmit() {
-      this.$parent.onOrderSubmit();
+    async onOrderSubmit() {
+      const params = this.$parent.getParams();
+      const tx = await createOrder(params);
+      this.$parent.onOrderSubmit(tx);
       this.onClose();
     }
   }

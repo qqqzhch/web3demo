@@ -23,6 +23,7 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState('synth', ['refresh']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
@@ -47,6 +48,9 @@ export default {
   watch: {
     isReady(val) {
       val && this.getSynthScUSDBalance();
+    },
+    refresh(value) {
+      value && this.getSynthScUSDBalance();
     }
   },
   created() {

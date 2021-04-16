@@ -61,7 +61,7 @@ export default {
           ...asset,
           price
         };
-      });
+      }).sort((a, b) => b.assetAmount - a.assetAmount);
       // 计算资产总价值
       const assetTotalValue = this.synthAssets
         .filter(asset => asset.assetAmount)

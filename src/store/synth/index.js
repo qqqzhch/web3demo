@@ -32,8 +32,8 @@ export default {
     [types.SET_ALL_ASSETS] (state, assets) {
       state.allAssets = assets;
     },
-    [types.SET_REFRESH] (state, assets) {
-      state.refresh = assets;
+    [types.SET_REFRESH] (state, enable) {
+      state.refresh = enable;
     },
   },
   actions: {
@@ -63,8 +63,8 @@ export default {
     setAllAssets({ commit }, assets){
       commit(types.SET_ALL_ASSETS, assets);
     },
-    setRefresh({ commit }, assets){
-      commit(types.SET_REFRESH, assets);
+    setRefresh({ commit }, enable){
+      commit(types.SET_REFRESH, enable);
     },
   }
 };

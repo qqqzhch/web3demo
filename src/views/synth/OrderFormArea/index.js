@@ -2,7 +2,6 @@ import { mapState, mapActions } from "vuex";
 import BigNumber from 'bignumber.js';
 import debounce from 'debounce';
 import event from '@/common/js/event';
-import { createOrder } from '../../../contactLogic/synth/order';
 import { fetchCurrFeeRate } from '../../../contactLogic/synth/assets';
 import i18n from "../../../i18n";
 
@@ -56,7 +55,7 @@ export default {
   },
   mounted() {
     //txsuccess
-    event.$on('txsuccess',()=>{
+    event.$on('txsuccess',() => {
       this.setRefresh(true);
     });
   },
@@ -110,22 +109,18 @@ export default {
         product: this.focusedProduct,
       };
     },
-    async onOrderSubmit() {
-      const params = this.getParams();
-      if(this.isReady) {
-        const tx = await createOrder(params);
-        if(tx && tx.hash){
-          const base = `${this.side} ${this.volume} ${this.focusedProduct.baseSymbol}`;
-          this.$refs.haveSendtx.open(base);
-          event.$emit('sendtx',[tx.response, {
-            okinfo: base + i18n.t('swapConfirm.successCom'),
-            failinfo: base + i18n.t('swapConfirm.failCom')
-          }]);
-        } else {
-          this.$Notice.error({
-            title: i18n.t('交易失败！'),
-          });
-        }
+    async onOrderSubmit(tx) {
+      if(tx && tx.hash){
+        const base = `${this.side} ${this.volume} ${this.focusedProduct.baseSymbol}`;
+        this.$refs.haveSendtx.open(base);
+        event.$emit('sendtx',[tx.response, {
+          okinfo: base + i18n.t('swapConfirm.successCom'),
+          failinfo: base + i18n.t('swapConfirm.failCom')
+        }]);
+      } else {
+        this.$Notice.error({
+          title: i18n.t('交易失败！'),
+        });
       }
     },
     async getCurrFeeRate() {
