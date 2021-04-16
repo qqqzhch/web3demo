@@ -15,9 +15,8 @@ export const createOrder = async ({web3, chainID, library, account, side, volume
   const { baseSymbol } = product;
 
   const sourceKey = getNameHex(web3, 'scUSD');
-  const destKey = getNameHex(web3, 'scBTC');
+  const destKey = getNameHex(web3, baseSymbol);
   const amount = web3.utils.toWei(volume.toString());
-
 
   try {
     let response;
