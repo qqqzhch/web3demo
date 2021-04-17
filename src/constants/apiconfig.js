@@ -81,3 +81,22 @@ export async function pairPrice(pair_address){
 
 
 }
+
+
+export  async function syntheticHistory(account,pageNum=1,showNum=10,chainID){
+  const names =['synthetic_exchange','synthetic_stake'].join(',');
+
+  const data =  await  axios.get(`${baseUrl}api/txs?&category=${names}&from=${account}&pageNum=${pageNum}&showNum=${showNum}`);
+
+//  console.log(data);
+ return data.data;
+
+   /*
+   http://59.110.68.178:8080/api/txs?method_names=*&
+   from=0x7c532C5605EFe372aa78a58a5E6a1863E119Dda9&
+   pageNum=1&showNum=2
+   */
+
+
+
+}

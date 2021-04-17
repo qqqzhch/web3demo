@@ -1,5 +1,5 @@
 
-import {swapHistory,pledgeHistory,buildrHistory} from "@/constants/apiconfig.js";
+import {swapHistory,pledgeHistory,buildrHistory,syntheticHistory} from "@/constants/apiconfig.js";
 import _ from 'underscore';
 import tokens from "@/constants/token.json";
 
@@ -49,14 +49,20 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
     console.log('readPledgeHistory');
 
     data.data.forEach((item)=>{
-        if(item.method_name == 'stake'){
-            item.show = stakeformat(item.txs,chainID);
-        }else if( item.method_name == 'exit'){
-            item.show = exitformat(item.txs,chainID);
-        }else if(item.method_name == 'getReward'){
-            item.show = getRewardformat(item.txs,chainID);
+         if(item.category== "uniswap_stake"){
+            if(item.method_name == 'stake'){
+                item.show = stakeformat(item.txs,chainID);
+            }else if( item.method_name == 'exit'){
+                item.show = exitformat(item.txs,chainID);
+            }else if(item.method_name == 'getReward'){
+                item.show = getRewardformat(item.txs,chainID);
+    
+            }
 
-        }
+         }else{
+            item.show = Syntheticformat(item.txs,chainID);
+         }
+        
 
 
     });
@@ -67,6 +73,8 @@ export  async function readPledgeHistory(chainID,account,pageNum,showNum){
     return data;
 
 }
+
+
 
 export  async function readbuildrHistory(chainID,account,pageNum,showNum){
     const data = await buildrHistory(account,pageNum,showNum,chainID);
@@ -96,6 +104,38 @@ export  async function readbuildrHistory(chainID,account,pageNum,showNum){
     return data;
 
 }
+
+export  async function readSyntheticHistory(chainID,account,pageNum,showNum){
+    console.log('readSyntheticHistory');
+    const data = await syntheticHistory(account,pageNum,showNum,chainID);
+    //['stake','exit','getReward']
+
+    data.data.forEach((item)=>{
+        item.show = Syntheticformat(item.txs,chainID);
+
+        // if(item.method_name == 'proxyMinted'){
+        //     item.show = proxyformat(item.txs,chainID);
+        // }else if( item.method_name == 'proxyBurned'){
+        //     // item.show = exitformat(item.txs,chainID);
+        // }else if(item.method_name == 'proxyJoined'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }else if(item.method_name == 'proxyExited'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }else if(item.method_name == 'approval'){
+        //     // item.show = getRewardformat(item.txs,chainID);
+
+        // }
+
+
+    });
+
+    return data;
+
+}
+
+
 
 function tokenNameByaddress(address,chainID){
     const coinA= _.find(tokens.tokens,(item)=>{
@@ -305,6 +345,24 @@ function proxyformat(item,chainID){
     return {
         amount:inamount,
         tokenA:tokenNameByaddress(tokenADDRESSA,chainID),
+
+    };
+}
+
+function Syntheticformat(item,chainID){
+    const inamount = item[0].amount;
+
+    const  tokenADDRESSA = item[0].amount_token_address ;
+
+    const inamountB = item[1].amount;
+
+    const  tokenADDRESSB = item[1].amount_token_address ;
+    //这里需要配置好加密货币或股票的地址
+    return {
+        amountA:inamount,
+        tokenA:tokenNameByaddress(tokenADDRESSA,chainID)||tokenADDRESSA,
+        amountB:inamount,
+        tokenB:tokenNameByaddress(tokenADDRESSB,chainID)||tokenADDRESSB,
 
     };
 }
