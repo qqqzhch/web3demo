@@ -25,29 +25,49 @@
                 <p v-if="row.method_name==='exit'" class="action">
                   {{ $t('earn.actions.exit') }}
                 </p>
-                <p v-if="row.method_name==='getReward'" class="action">
+                <p v-if="row.method_name==='getReward'||row.method_name==='withdraw'" class="action">
                   {{ $t('earn.actions.getReward') }}
                 </p>
               </div>
             </template>
             <template slot="Amount" slot-scope="{ row }">
-              <div v-if="row.method_name === 'exit'" class="Amount">
-                <p class="amout">
-                  {{ row.show.outamountA | format1e18ValueList }} {{ row.show.tokenA }}
-                </p>
-                <p class="amout">
-                  {{ row.show.outamountB | format1e18ValueList }} {{ row.show.tokenB }}
-                </p>
+              <div v-if="row.category=='uniswap_stake'">
+                <div v-if="row.method_name === 'exit'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.outamountA | format1e18ValueList }} {{ row.show.tokenA }}
+                  </p>
+                  <p class="amout">
+                    {{ row.show.outamountB | format1e18ValueList }} {{ row.show.tokenB }}
+                  </p>
+                </div>
+                <div v-if="row.method_name === 'getReward'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.outamount | format1e18ValueList }} {{ row.show.tokenA }}
+                  </p>
+                </div>
+                <div v-if="row.method_name === 'stake'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.inamount | format1e18ValueList }} {{ row.show.tokenA }}
+                  </p>
+                </div>
               </div>
-              <div v-if="row.method_name === 'getReward'" class="Amount">
-                <p class="amout">
-                  {{ row.show.outamount | format1e18ValueList }} {{ row.show.tokenA }}
-                </p>
-              </div>
-              <div v-if="row.method_name === 'stake'" class="Amount">
-                <p class="amout">
-                  {{ row.show.inamount | format1e18ValueList }} {{ row.show.tokenA }}
-                </p>
+              <div v-else>
+                <div v-if="row.method_name === 'stake'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.amountB | format1e18ValueList }} {{ row.show.tokenB }}
+                    <!-- {{ row.show.amountA | format1e18ValueList }} {{ row.show.tokenA }} -->
+                  </p>
+                </div>
+                <div v-if="row.method_name === 'exit'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.amountB | format1e18ValueList }} {{ row.show.tokenB }}
+                  </p>
+                </div>
+                <div v-if="row.method_name === 'withdraw'" class="Amount">
+                  <p class="amout">
+                    {{ row.show.amountB | format1e18ValueList }} {{ row.show.tokenB }}
+                  </p>
+                </div>
               </div>
             </template>
             <template slot="Status" slot-scope="{ row }">
@@ -121,7 +141,12 @@ export default {
       const [token] = tokenList.filter((item) => {
         return item.address === val;
       });
-      return token.name;
+      if(token){
+        return token.name;
+      }else{
+        return 'scUSD 存款';
+      }
+      
     },
     onreachbottom() {
       // console.log('onreachbottom', this.pageIndex);

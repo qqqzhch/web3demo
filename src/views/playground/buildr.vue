@@ -73,6 +73,10 @@
     <button @click="getfetchSynthAssets">
       批量读取合成资产的余额
     </button>
+    <br>
+    <button @click="readSyntheticHistory">
+      读取资产合成历史记录
+    </button><br>
   </div>
 </template>
 <script>
@@ -88,7 +92,7 @@ getCollateralToken}  from '@/contactLogic/buildr/tokens.js';
 
 import {useTokenApprove} from '@/contacthelp/Approve.js';
 
-import {readbuildrHistory} from '@/contactLogic/history.js';
+import {readbuildrHistory,readSyntheticHistory} from '@/contactLogic/history.js';
 
 
 import Web3 from 'web3';
@@ -291,6 +295,18 @@ export default {
       // readSwapHistory(chainID,account,1,10);
       // readPledgeHistory(chainID,account,1,10);
       readbuildrHistory(chainID,account,1,10);
+    },
+    async readSyntheticHistory(){
+      // const library = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainID = this.ethChainID;
+
+      // readSwapHistory(chainID,account,1,10);
+      // readPledgeHistory(chainID,account,1,10);
+      var data = await readSyntheticHistory(chainID,account,1,10);
+
+      console.log(data)
+
     },
    async chainTokenPrice(){
 
