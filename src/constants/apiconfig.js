@@ -100,3 +100,13 @@ export  async function syntheticHistory(account,pageNum=1,showNum=10,chainID){
 
 
 }
+
+
+export async function oracle24Price(ocid,chain_id){
+  const data =  await  axios.get(`${baseUrl}api/24h_price?ocid=${ocid}&chain_id=${chain_id}`);
+
+//  console.log(data);
+ return data.data;
+
+
+}
