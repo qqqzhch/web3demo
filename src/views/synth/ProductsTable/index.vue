@@ -41,8 +41,8 @@
         </template>
         <template slot="changeRate" slot-scope="{ row }">
           <div class="Change">
-            <p>
-              +{{ row.changeRate }}%
+            <p :style="{color: row.sign ? '#00D075' : '#FF3C00'}">
+              {{ row.sign ? '+' : '-' }}{{ row.change24 }}%
             </p>
           </div>
         </template>

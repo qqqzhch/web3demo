@@ -6,6 +6,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scDOT_USDT",
     "oracleCode": "DOT_USDT",
+    "token": "0xdFe82E5c7f553A678bf152B3959973ed0Ed243B5",
     "sort": 1,
     "online": true
   },
@@ -16,6 +17,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scUNI_USDT",
     "oracleCode": "UNI_USDT",
+    "token": "0x4CEA3AC0dC657a130ea6E4192A522aBb37C1ff9a",
     "sort": 2,
     "online": true
   },
@@ -26,6 +28,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scBNB_USDT",
     "oracleCode": "BNB_USDT",
+    "token": "0x0AF812A7006FcaD26Ee72B7dfadb553A607d987F",
     "sort": 3,
     "online": true
   },
@@ -36,6 +39,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scAAVE_USDT",
     "oracleCode": "AAVE_USDT",
+    "token": "0x702d06921D14D37d8843fbbD2273E53842E0d00c",
     "sort": 4,
     "online": true
   },
@@ -46,6 +50,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scXVS_USDT",
     "oracleCode": "XVS_USDT",
+    "token": "0x1757AEaDd3382cF073ee356a8b286E105b0C6b67",
     "sort": 5,
     "online": true
   },
@@ -56,6 +61,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scCAKE_USDT",
     "oracleCode": "CAKE_USDT",
+    "token": "0x8070bEc1a5640C02C7b885e43AdD1FC9D6500134",
     "sort": 6,
     "online": true
   },
@@ -66,6 +72,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scAUTO_USDT",
     "oracleCode": "AUTO_USDT",
+    "token": "0x46D9d0170765e682E7FE8F81a5Ee76bb16F61B30",
     "sort": 7,
     "online": true
   },
@@ -76,6 +83,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scFIL_USDT",
     "oracleCode": "FIL_USDT",
+    "token": "0x1513482Ddb7D4Dc9CB673D6316413485Cd9AdfC6",
     "sort": 8,
     "online": true
   },
@@ -86,6 +94,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scBTC_USDT",
     "oracleCode": "BTC_USDT",
+    "token": "0x0C97092EFbE04925AaD9336B1D90880690692f0A",
     "sort": 0,
     "online": true
   },
@@ -96,6 +105,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scETH_USDT",
     "oracleCode": "ETH_USDT",
+    "token": "0xc92C74c3BD685038dcFEe08fb883f265C80740EA",
     "sort": 10,
     "online": true
   },
@@ -106,6 +116,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scTRX_USDT",
     "oracleCode": "TRX_USDT",
+    "token": "0xd50C3B7198f5D1116e7C5D916042034aE39A5771",
     "sort": 11,
     "online": true
   },
@@ -116,6 +127,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scMDX_USDT",
     "oracleCode": "MDX_USDT",
+    "token": "0xB737bd59251806515547f021E4d65954E90FE5e7",
     "sort": 12,
     "online": true
   },
@@ -126,6 +138,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scFILDA_USDT",
     "oracleCode": "FILDA_USDT",
+    "token": "0x65681A315b62BF6584871FD24A4dc5360483C7E8",
     "sort": 13,
     "online": true
   },
@@ -136,6 +149,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scENJ_USDT",
     "oracleCode": "ENJ_USDT",
+    "token": "0x90D498e4E9f6E9587F1413fab5d54FAf2B07bB89",
     "sort": 14,
     "online": true
   },
@@ -146,6 +160,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scFLOW_USDT",
     "oracleCode": "FLOW_USDT",
+    "token": "0x3eC8CB67f4b8F511290f9b2B030440C6Ff2568E9",
     "sort": 15,
     "online": true
   },
@@ -156,6 +171,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scAXS_USDT",
     "oracleCode": "AXS_USDT",
+    "token": "0xf604aEFFb8C5D7B821F362bf807E6B2d188C7682",
     "sort": 16,
     "online": true
   }

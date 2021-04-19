@@ -58,7 +58,7 @@ export const fetchSynthAssetsList = async ({web3, chainID, account, library, pro
   const synthAssetsList = await ethcallProvider.all(callList2);
   const synthAssets = products.map((product, index) => {
     const assetAmount = web3.utils.fromWei(synthAssetsList[index].toString());
-
+    // console.log(index, product.baseSymbol, synthAddressList[index], assetAmount);
     return {
       ...product,
       assetAmount

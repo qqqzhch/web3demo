@@ -6,6 +6,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scGOOG_USDT",
     "oracleCode": "GOOGL",
+    "token": "0x4c64E4358F56Ff629fe1e7b53Cb3831d9751f744",
     "sort": 2,
     "online": true
   },
@@ -16,6 +17,7 @@
     "quoteSymbol": "USDT",
     "pairCode": "scBILI_USDT",
     "oracleCode": "BILI",
+    "token": "0x4F5a4164E3ae3a9D01EFB2dA4D53a275086EB0ef",
     "sort": 3,
     "online": true
   }

@@ -6,18 +6,18 @@ const productsCols = [
   {
     title: 'Symbol',
     slot: "symbol",
-    minWidth: 140,
+    minWidth: 160,
   },
   {
     title: 'Last Price',
     slot: "price",
-    minWidth: 100,
+    minWidth: 90,
     // sortable: true,
   },
   {
     title: 'Change',
     slot: "changeRate",
-    minWidth: 80,
+    minWidth: 70,
     // sortable: true,
   },
 ];
@@ -44,12 +44,7 @@ export default {
   methods: {
     ...mapActions('synth', ['getAllProducts', 'setAllProducts', 'getFocusedProduct', 'setFocusedProduct']),
     getProducts() {
-      this.products = this.allProducts.filter((item) => item.type === this.productType).map(item => {
-        return {
-          ...item,
-          changeRate: (30 * Math.random()).toFixed(2), // todo
-        };
-      });
+      this.products = this.allProducts.filter((item) => item.type === this.productType);
     },
     changeProductType(option) {
       this.productType = option.value;
@@ -86,8 +81,8 @@ export default {
     async loopPrices() {
       if(this.isReady) {
         const params = this.getParams();
-
         const allProductsWithPrices = await fetchProductsPrices(params);
+
         this.products = allProductsWithPrices;
         // 计算所有资产价值会用到价格
         this.setAllProducts(allProductsWithPrices);

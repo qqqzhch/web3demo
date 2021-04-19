@@ -74,7 +74,7 @@ export async function getTokenHistory(library,account,chainId,key, oracleId, now
 
   const symbol = getNameHex(Web3,key);
   console.log(nowid);
-  for (let index = 0; index < 100; index++) {
+  for (let index = 0; index < 180; index++) {
 
     if(nowid-index>0){
       const call =  NDNContract.getCoinInfoById(oracleId,symbol,nowid-index);

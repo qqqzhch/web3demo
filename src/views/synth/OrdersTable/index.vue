@@ -1,41 +1,49 @@
 <template>
   <div class="table-warpper">
-    <Table :columns="tableData" :data="list">
-      <template slot="Symbol" slot-scope="{ row }">
-        <div class="Symbol flex items-center">
-          <img width="32" src="../../../assets/img/eth48.png">
-          <p>cUSD/USD</p>
-        </div>
-      </template>
-      <template slot="Action" slot-scope="{ row }">
-        <div class="Action">
-          <p class="Action">
-            {{ row.Action }}
-          </p>
-        </div>
-      </template>
-      <template slot="Amount" slot-scope="{ row }">
-        <div class="Amount">
-          <p>
-            {{ row.Amount }}
-          </p>
-        </div>
-      </template>
-      <template slot="Status" slot-scope="{ row }">
-        <div class="Status">
-          <p :class="row.Status=='Fail'? 'Fail':'Executed'">
-            {{ row.Status }}
-          </p>
-        </div>
-      </template>
-      <template slot="Date" slot-scope="{ row }">
-        <div class="Date">
-          <p>
-            {{ row.Date }}
-          </p>
-        </div>
-      </template>
-    </Table>
+    <div v-if="!ethAddress||list.length==0" class="noData-wapper">
+      <div class="flex flex-col items-center">
+        <img src="../../../assets/img/noData.png" alt="noData">
+        <p> {{ $t('build-No-Data') }}</p>
+      </div>
+    </div>
+    <Scroll v-else :loading-text="'loading....'" :on-reach-bottom="onReachBottom" :height="360">
+      <Table :columns="tableData" :data="list">
+        <template slot="tokenA" slot-scope="{ row }">
+          <div class="Symbol flex items-center">
+            <img width="32" src="../../../assets/img/eth48.png">
+            <p>{{ row.tokenA }}</p>
+          </div>
+        </template>
+        <template slot="actions" slot-scope="{ row }">
+          <div class="Action">
+            <p class="Action">
+              {{ row.actions }}
+            </p>
+          </div>
+        </template>
+        <template slot="amountA" slot-scope="{ row }">
+          <div class="Amount">
+            <p>
+              {{ row.amountA | formatNormalValue }}
+            </p>
+          </div>
+        </template>
+        <template slot="status" slot-scope="{ row }">
+          <div class="Status">
+            <p :class="row.status=='Executed'? 'Executed' : 'Fail'">
+              {{ row.status }}
+            </p>
+          </div>
+        </template>
+        <template slot="date" slot-scope="{ row }">
+          <div class="Date">
+            <p>
+              {{ row.date }}
+            </p>
+          </div>
+        </template>
+      </Table>
+    </Scroll>
   </div>
 </template>
 
@@ -68,6 +76,25 @@
   }
   .Fail {
     color: #ff3c00;
+  }
+}
+.noData-wapper {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    max-width: 80px;
+  }
+  p {
+    margin-top: 8px;
+    height: 16px;
+    font-size: 14px;
+    font-family: Gilroy-Medium, Gilroy;
+    font-weight: 500;
+    color: #8690a8;
+    line-height: 16px;
   }
 }
 </style>
