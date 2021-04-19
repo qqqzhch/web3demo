@@ -1832,6 +1832,12 @@
   dependencies:
     ethers "^5.0.0"
 
+"@webfans/lib-ethers@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/@webfans/lib-ethers/-/lib-ethers-3.2.1.tgz#f3d569eed0527ac068294449b0a2870f4b831805"
+  dependencies:
+    run-s "0.0.0"
+
 "@webfans/uniswapsdk@23.0.3":
   version "23.0.3"
   resolved "https://registry.yarnpkg.com/@webfans/uniswapsdk/-/uniswapsdk-23.0.3.tgz#fc60644761f317f5b6cc9091399b34921e552fa2"
@@ -7658,6 +7664,10 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   resolved "https://registry.yarnpkg.com/run-queue/-/run-queue-1.0.3.tgz#e848396f057d223f24386924618e25694161ec47"
   dependencies:
     aproba "^1.1.1"
+
+run-s@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npmjs.org/run-s/-/run-s-0.0.0.tgz#599912be20c00ba7698655c9936d075d31b71754"
 
 rxjs@^6.6.0, rxjs@^6.6.7:
   version "6.6.7"

@@ -87,7 +87,7 @@
       调整
     </button><br>
     <br>
-    <button @click="testFN">
+    <button @click="closeTrove">
       关闭
     </button>
   </div>
@@ -125,7 +125,7 @@ import {getTokenPriceinfo,getTokenListPriceinfo,getTokenHistory} from '@/contact
 import {fetchSynthAssetsList} from '@/contactLogic/synth/assets.js';
 
 const { Wallet, providers } = require("ethers");
-const { EthersLiquity,  _connectByChainId } = require("@liquity/lib-ethers");
+const { EthersLiquity,  _connectByChainId } = require("@webfans/lib-ethers");
 
 import {
   Percent,
@@ -141,10 +141,23 @@ import {
 export default {
   data() {
     return {
-      id:''
+      id:'',
+      data:{},
+      maxborrowingRate:''
     }
   },
   methods: {
+    /*
+    const feeFrom = (original: Trove, edited: Trove, borrowingRate: Decimal): Decimal => {
+  const change = original.whatChanged(edited, borrowingRate);
+
+  if (change && change.type !== "invalidCreation" && change.params.borrowLUSD) {
+    return change.params.borrowLUSD.mul(borrowingRate);
+  } else {
+    return Decimal.ZERO;
+  }
+}
+    */
     async closeTrove(){
       const provider = this.ethersprovider;
       const account = this.ethAddress;
@@ -157,10 +170,7 @@ export default {
         console.log(connection)
         const liquity = EthersLiquity._from(connection)
 
-        const { newTrove } = await liquity.closeTrove({
-               depositCollateral: 0, // ETH
-               borrowLUSD: 0
-           })
+        const { newTrove } = await liquity.closeTrove({gasLimit:800000})
           console.log(newTrove)
 
     },
@@ -177,9 +187,9 @@ export default {
         const liquity = EthersLiquity._from(connection)
 
         const { newTrove } = await liquity.adjustTrove({
-               depositCollateral: 2.2, // ETH
-               borrowLUSD: 2000
-           })
+               depositCollateral: 7.5, // ETH
+               borrowLUSD: 1800
+           },{gasLimit:800000})
           console.log(newTrove)
 
    },
@@ -194,11 +204,14 @@ export default {
         })
         console.log(connection)
         const liquity = EthersLiquity._from(connection)
+        // const borrowingRate = fees.borrowingRate();
+        const maxBorrowingRate = this.$data.data.maxborrowingRate; // TODO slippage tolerance
+        console.log()
 
         const { newTrove } = await liquity.openTrove({
-               depositCollateral: 2.2, // ETH
-               borrowLUSD: 2000
-           })
+               depositCollateral: 2, // ETH
+               borrowLUSD: 1800
+           },maxBorrowingRate,{gasLimit:800000})
           console.log(newTrove)
 
    },
@@ -224,9 +237,10 @@ export default {
             console.info("Waiting for price drops...");
             console.log(liquity)
             console.log('系统参数',liquity.store.state)
-            console.log(liquity.store.state.accountBalance.toString())
-            console.log(liquity.store.state.price.toString())
-            console.log(liquity.store.state.borrowingRate.toString())
+            console.log('accountBalance',liquity.store.state.accountBalance.toString())
+            console.log('price',liquity.store.state.price.toString())
+            console.log('borrowingRate',liquity.store.state.borrowingRate.toString())
+            this.$data.data.maxborrowingRate= liquity.store.state.borrowingRate.add(0.005).toString()
             
 
             var rate = pram.collateralRatio(liquity.store.state.price)
