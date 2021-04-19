@@ -4,6 +4,7 @@ import indexes from '../../constants/synth/indexes.json';
 import stock from '../../constants/synth/stock.json';
 import { getTokenPriceinfo, getTokenListPriceinfo } from '@/contactLogic/Oracles';
 import { oracleConfig } from '../../constants/oracleConfig';
+import { oracle24Price as  fetchOracle24Price } from '@/constants/apiconfig';
 
 /**
  * 获取预言机的oracleId
@@ -31,6 +32,17 @@ export const allProducts = [
 }).sort((a, b) => a.sort - b.sort);
 
 
+
+const getOracle24Prices = async (chainID) => {
+  const { crypto, stock } = oracleConfig[chainID];
+  const [cryptoPrices, stockPrices ] = await Promise.all([
+    fetchOracle24Price(crypto, chainID),
+    fetchOracle24Price(stock, chainID),
+  ]);
+
+  return cryptoPrices.concat(stockPrices).filter(p => p.symbol);
+};
+
 /**
  *  从预言机(Oracle)中批量获取产品价格信息
  *  pairCodes = ['lamb_usdt','ht_usdt','eth_usdt']
@@ -48,6 +60,8 @@ export const fetchProductsPrices = async ({web3, chainID, account, library, prod
    };
   });
 
+  const oracle24Prices = await getOracle24Prices(chainID);
+
   const result = await getTokenListPriceinfo(library, account, chainID, oracleCodes);
 
   const pricesInfo = result.map((priceInfo) => {
@@ -63,11 +77,18 @@ export const fetchProductsPrices = async ({web3, chainID, account, library, prod
 
   const productsWithPrice = products.map((product) => {
     const productPrice = pricesInfo.find(info => info.oracleCode === product.oracleCode.toLowerCase()) || {};
+    const product24Price = oracle24Prices.find(p => p.symbol === product.oracleCode.toLowerCase()) || {ret_price: 0};
+    const price = productPrice.price;
+    const price24 = web3.utils.fromWei(product24Price.ret_price.toString());
+    const change24 = price ? (((price-price24)/price) * 100).toFixed(2) : 0;
 
     return {
       ...product,
       id: productPrice.id,
-      price: productPrice.price,
+      price,
+      price24,
+      change24,
+      sign: price > price24,
       timestamp: productPrice.timestamp
     };
   });

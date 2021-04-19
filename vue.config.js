@@ -25,4 +25,15 @@ module.exports = {
       },
     },
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: 8080,
+    // disableHostCheck: true,
+    proxy: {
+      '/api': {
+        target: 'http://59.110.68.178:8085/api',
+        changeOrigin: true
+      },
+    }
+  },
 };

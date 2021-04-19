@@ -11,7 +11,7 @@ export default {
         {
           title: 'Symbol',
           slot: "symbol",
-          minWidth: 150,
+          minWidth: 160,
         },
         {
           title: 'Amount',
