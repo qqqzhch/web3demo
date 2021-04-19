@@ -77,6 +77,19 @@
     <button @click="readSyntheticHistory">
       读取资产合成历史记录
     </button><br>
+    <button @click="Getstore">
+      sdk载入系统数据
+    </button><br>
+    <button @click="openTrove">
+      创建
+    </button><br>
+    <button @click="adjustTrove">
+      调整
+    </button><br>
+    <br>
+    <button @click="testFN">
+      关闭
+    </button>
   </div>
 </template>
 <script>
@@ -111,6 +124,20 @@ import {getTokenPriceinfo,getTokenListPriceinfo,getTokenHistory} from '@/contact
 
 import {fetchSynthAssetsList} from '@/contactLogic/synth/assets.js';
 
+const { Wallet, providers } = require("ethers");
+const { EthersLiquity,  _connectByChainId } = require("@liquity/lib-ethers");
+
+import {
+  Percent,
+  Difference,
+  Decimalish,
+  Decimal,
+  Trove,
+  LiquityStoreState,
+  LUSD_LIQUIDATION_RESERVE,
+  LUSD_MINIMUM_DEBT
+} from "@liquity/lib-base";
+
 export default {
   data() {
     return {
@@ -118,6 +145,177 @@ export default {
     }
   },
   methods: {
+    async closeTrove(){
+      const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       var connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: '0xc7B375ce501a2432A25d584dF1f40c73c83f9534',
+          useStore: "blockPolled"
+        })
+        console.log(connection)
+        const liquity = EthersLiquity._from(connection)
+
+        const { newTrove } = await liquity.closeTrove({
+               depositCollateral: 0, // ETH
+               borrowLUSD: 0
+           })
+          console.log(newTrove)
+
+    },
+    async adjustTrove(){
+      const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       var connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: '0xc7B375ce501a2432A25d584dF1f40c73c83f9534',
+          useStore: "blockPolled"
+        })
+        console.log(connection)
+        const liquity = EthersLiquity._from(connection)
+
+        const { newTrove } = await liquity.adjustTrove({
+               depositCollateral: 2.2, // ETH
+               borrowLUSD: 2000
+           })
+          console.log(newTrove)
+
+   },
+   async openTrove(){
+      const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       var connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: '0xc7B375ce501a2432A25d584dF1f40c73c83f9534',
+          useStore: "blockPolled"
+        })
+        console.log(connection)
+        const liquity = EthersLiquity._from(connection)
+
+        const { newTrove } = await liquity.openTrove({
+               depositCollateral: 2.2, // ETH
+               borrowLUSD: 2000
+           })
+          console.log(newTrove)
+
+   },
+  async Getstore(){
+    const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       var connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: '0xc7B375ce501a2432A25d584dF1f40c73c83f9534',
+          useStore: "blockPolled"
+        })
+        console.log(connection)
+
+        const liquity = EthersLiquity._from(connection)
+        var pram = new Trove();
+         pram =pram.setCollateral(2.5)
+         pram =pram.setDebt(2000) ///首次创建有个最小债务量
+         console.log(pram)
+           //创建
+           //如何拼姐参数？
+           liquity.store.onLoaded = () => {
+            console.info("Waiting for price drops...");
+            console.log(liquity)
+            console.log('系统参数',liquity.store.state)
+            console.log(liquity.store.state.accountBalance.toString())
+            console.log(liquity.store.state.price.toString())
+            console.log(liquity.store.state.borrowingRate.toString())
+            
+
+            var rate = pram.collateralRatio(liquity.store.state.price)
+            console.log(rate.toString()*100+"%")
+
+            // tryToLiquidate(liquity);
+          };
+
+          liquity.store.subscribe(({ newState, oldState }) => {
+            // Try to liquidate whenever the price drops
+            if (newState.price.lt(oldState.price)) {
+              // tryToLiquidate(liquity);
+            }
+          });
+
+          liquity.store.start();
+
+
+
+  },
+  async testFN(){
+    console.log('----')
+      const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       var connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: '0xc7B375ce501a2432A25d584dF1f40c73c83f9534',
+          useStore: "blockPolled"
+        })
+        console.log(connection)
+         const liquity = EthersLiquity._from(connection)
+         console.log(liquity)
+         console.log('Trove',Trove)
+         var pram = new Trove();
+         pram =pram.setCollateral(2.5)
+         pram =pram.setDebt(2000) ///首次创建有个最小债务量
+         console.log(pram)
+        
+
+           //创建
+           //如何拼姐参数？
+           liquity.store.onLoaded = () => {
+            console.info("Waiting for price drops...");
+            console.log(liquity)
+            console.log('系统参数',liquity.store.state)
+            console.log(liquity.store.state.accountBalance.toString())
+            console.log(liquity.store.state.price.toString())
+            console.log(liquity.store.state.borrowingRate.toString())
+            
+
+            var rate = pram.collateralRatio(liquity.store.state.price)
+            console.log(rate.toString()*100+"%")
+
+            // tryToLiquidate(liquity);
+          };
+
+          liquity.store.subscribe(({ newState, oldState }) => {
+            // Try to liquidate whenever the price drops
+            if (newState.price.lt(oldState.price)) {
+              // tryToLiquidate(liquity);
+            }
+          });
+
+          liquity.store.start();
+
+           const { newTrove } = await liquity.adjustTrove({
+               depositCollateral: 2.2, // ETH
+               borrowLUSD: 2000
+           })
+          console.log(newTrove)
+          /*
+          const [sendTransaction] = useTransactionFunction(
+    transactionId,
+    change.type === "creation"
+      ? liquity.send.openTrove.bind(liquity.send, change.params, maxBorrowingRate)
+      : change.type === "closure"
+      ? liquity.send.closeTrove.bind(liquity.send)
+      : liquity.send.adjustTrove.bind(liquity.send, change.params, maxBorrowingRate)
+  )
+          
+          */
+          
+
+    //   const wallet = new Wallet('').connect(library);
+    //   const liquity = await EthersLiquity.connect(wallet);
+    //  console.log(liquity)
+
+  },
    async approve(){
       console.log('- -');
       const chainID = this.ethChainID ;

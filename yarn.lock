@@ -841,6 +841,14 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
 
+"@ethersproject/bignumber@5.0.15":
+  version "5.0.15"
+  resolved "https://registry.npmjs.org/@ethersproject/bignumber/-/bignumber-5.0.15.tgz#b089b3f1e0381338d764ac1c10512f0c93b184ed"
+  dependencies:
+    "@ethersproject/bytes" "^5.0.9"
+    "@ethersproject/logger" "^5.0.8"
+    bn.js "^4.4.0"
+
 "@ethersproject/bignumber@5.1.0", "@ethersproject/bignumber@^5.0.7", "@ethersproject/bignumber@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/bignumber/-/bignumber-5.1.0.tgz#966a013a5d871fc03fc67bf33cd8aadae627f0fd"
@@ -849,7 +857,7 @@
     "@ethersproject/logger" "^5.1.0"
     bn.js "^4.4.0"
 
-"@ethersproject/bytes@5.1.0", "@ethersproject/bytes@^5.0.4", "@ethersproject/bytes@^5.1.0":
+"@ethersproject/bytes@5.1.0", "@ethersproject/bytes@^5.0.4", "@ethersproject/bytes@^5.0.9", "@ethersproject/bytes@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/bytes/-/bytes-5.1.0.tgz#55dfa9c4c21df1b1b538be3accb50fb76d5facfd"
   dependencies:
@@ -931,7 +939,7 @@
     "@ethersproject/bytes" "^5.1.0"
     js-sha3 "0.5.7"
 
-"@ethersproject/logger@5.1.0", "@ethersproject/logger@^5.0.5", "@ethersproject/logger@^5.1.0":
+"@ethersproject/logger@5.1.0", "@ethersproject/logger@^5.0.5", "@ethersproject/logger@^5.0.8", "@ethersproject/logger@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.1.0.tgz#4cdeeefac029373349d5818f39c31b82cc6d9bbf"
 
@@ -1130,6 +1138,16 @@
     cssnano "^4.0.0"
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
+
+"@liquity/lib-base@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@liquity/lib-base/-/lib-base-3.0.0.tgz#3a2c1ccf7d147d59ffc48e1b8eb775b363124735"
+  dependencies:
+    "@ethersproject/bignumber" "5.0.15"
+
+"@liquity/lib-ethers@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/@liquity/lib-ethers/-/lib-ethers-3.2.1.tgz#94578d0843042aeedd5b908768ef1aa8783b6356"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
