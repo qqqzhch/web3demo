@@ -3,12 +3,6 @@ import _ from 'underscore';
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
-import { checkeBuilderApprove } from '../guide/checkBuilderApprove';
-import Overview from './overview/index.vue';
-import { getCollateralPools } from '@//contactLogic/buildr/balance';
-import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
-import { fetchPledgeNumber } from '@/contactLogic/buildr/balance';
-import i18n from '../../../i18n/index.js';
 
 export default {
   name: 'balance',
@@ -60,16 +54,17 @@ export default {
 
       return poolsEnable.includes(true);
     },
-    async checkApprove() {
+    async checkLiquityReady() {
       const { chainID, library, account } = this.getParams({});
       this.collateralPools = getCollateralPools(chainID);
-      const isPoolsenable = await this.checkPoolsEnable();
-      const isHaveAllowance = await checkeBuilderApprove(this.$router, chainID, library, account);
-      if(isPoolsenable || isHaveAllowance) {
-        this.loadData();
-      } else {
-        this.$router.push('/vault/create');
-      }
+      this.loadData();
+      // const isPoolsenable = await this.checkPoolsEnable();
+      // const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
+      // if(isPoolsenable || isHaveAllowance) {
+      //   this.loadData();
+      // } else {
+      //   this.$router.push('/vault/create');
+      // }
     },
     getParams(item) {
       return {
@@ -95,19 +90,19 @@ export default {
       this.poolsData = [];
       this.collateralPools.forEach(async (item, index) => {
         const params = this.getParams(item);
-        const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
-          liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
-        const { pledgeNumber } = await fetchPledgeNumber(params);
-        const { currencyPrice } = await fetchCurrencyPrice(params);
-        const currencyNumber = await fetchTokenBalance(params);
-        const { allowanceAmount } = await fetchAllowanceAmount(params);
+        // const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
+        //   liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
+        // const { pledgeNumber } = await fetchPledgeNumber(params);
+        // const { currencyPrice } = await fetchCurrencyPrice(params);
+        // const currencyNumber = await fetchTokenBalance(params);
+        // const { allowanceAmount } = await fetchAllowanceAmount(params);
 
         // 读钱包中scUSD的余额
-        const scashParams = {
-          ...params,
-          tokenName: 'scUSD'
-        };
-        const scUSDNumber = await fetchTokenBalance(scashParams);
+        // const scashParams = {
+        //   ...params,
+        //   tokenName: 'scUSD'
+        // };
+        // const scUSDNumber = await fetchTokenBalance(scashParams);
 
         const itemData = {
           index,
@@ -115,26 +110,29 @@ export default {
           isNative: item.isNative,
           tokenName: item.token,
           tokenTitle: item.title,
-          currencyNumber,
-          unlockedCollateral,
-          targetRatio,
-          targetRX: BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio).toNumber(),
-          collateralisationRatio,
-          currentCollRX: this.getCurrentCollRX(collateralisationRatio),
-          currentDebt,
-          maxMintable,
-          liquidationRatio,
-          liquidationRX: BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio).toNumber(),
-          feeRate,
-          pledgeNumber,
-          currencyPrice,
-          scUSDNumber,
-          allowanceAmount,
+          currencyNumber: 0,
+          unlockedCollateral: 0 ,
+          targetRatio: 0,
+          targetRX: 0, //BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio).toNumber(),
+          collateralisationRatio: 0,
+          currentCollRX: 0,//this.getCurrentCollRX(collateralisationRatio),
+          currentDebt : 0,
+          maxMintable : 0,
+          liquidationRatio: 0,
+          liquidationRX: 0, //BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio).toNumber(),
+          feeRate: 0,
+          pledgeNumber: 0,
+          currencyPrice: 0,
+          scUSDNumber: 0,
+          allowanceAmount: 0,
         };
-        if(BigNumber(pledgeNumber).gt(0)) {
-          this.poolsData = _.chain(this.poolsData.concat(itemData)).sortBy(pool => pool.index).value();
-        }
+        // if(BigNumber(pledgeNumber).gt(0)) {
+        //   this.poolsData = _.chain(this.poolsData.concat(itemData)).sortBy(pool => pool.index).value();
+        // }
+        this.poolsData = [itemData];
+        console.log(this.poolsData, 33366);
       });
+      console.log(444);
     },
     openJoinDialog(poolData) {
       this.$refs.tokenJoin.open(poolData);
@@ -172,7 +170,7 @@ export default {
   watch: {
     isReady(value) {
       if (value) {
-        this.checkApprove();
+        this.checkLiquityReady();
       }
     },
     poolsData(nv) {
@@ -192,7 +190,7 @@ export default {
   },
   created() {
     if(this.isReady) {
-      this.checkApprove();
+      this.checkLiquityReady();
     }
   }
 };

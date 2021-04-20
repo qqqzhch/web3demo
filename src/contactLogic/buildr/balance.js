@@ -19,18 +19,26 @@ import getChainCoinInfo from '../../constants/networkCoinconfig';
 
 export const getCollateralPools = (chainID) => {
   const chainCoinInfo = getChainCoinInfo(chainID);
-  return collPools.map((pool) => {
-    let isERC20 = true;
-    if(pool.token === 'LAMB') {
-      const token = getTokenBySymbol(chainID, pool.token);
-      isERC20 = !(token['erc20standard'] === 'false');
-    }
+  // return collPools.map((pool) => {
+  //   let isERC20 = true;
+  //   if(pool.token === 'LAMB') {
+  //     const token = getTokenBySymbol(chainID, pool.token);
+  //     isERC20 = !(token['erc20standard'] === 'false');
+  //   }
+  //   return {
+  //     ...pool,
+  //     isNative: pool.token === 'LAMB' ? false : chainCoinInfo.coinName === pool.token,
+  //     isERC20
+  //   };
+  // }).filter(v => v.state);
+  return collPools.filter(v => v.state).map((pool) => {
+    const isERC20 = true;
     return {
       ...pool,
-      isNative: pool.token === 'LAMB' ? false : chainCoinInfo.coinName === pool.token,
+      isNative: chainCoinInfo.coinName === pool.token,
       isERC20
     };
-  }).filter(v => v.state);
+  });
 };
 
 /**

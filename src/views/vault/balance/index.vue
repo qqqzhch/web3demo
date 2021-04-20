@@ -4,27 +4,21 @@
       <Overview />
     </div>
     <div class="CDP-content">
-      <div class="title2">
-        {{ $t('build-my-vaults') }}
-      </div>
       <div v-if="!poolsData.length">
         <Loading />
       </div>
       <div v-for="poolItem in poolsData" :key="poolItem.tokenTitle">
         <div class="pool-item-warp">
           <div class="item-top">
-            <div>
-              <span>{{ $t('build-target-coll-ratio') }}</span>
-              <span class="f-green">
-                {{ BigNumber(poolItem.targetRX).times(100).toFixed(2) }}%
-              </span>
-            </div>
-            <div class="text-right">
+            <div class="item-title">
+              <!--<span>{{ $t('build-target-coll-ratio') }}</span>-->
+              <!--<span class="f-green">-->
+              <!--{{ BigNumber(poolItem.targetRX).times(100).toFixed(2) }}%-->
+              <!--</span>-->
               <span>{{ $t('build-liquidation-price') }}: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
               <span>{{ $t('build-liquidation-ratio') }}: <span
                 class="f-warning"
               >{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
-              <span>{{ $t('build-stability-fee') }}: <span class="f-warning">{{ BigNumber(poolItem.feeRate).times(100) }}%</span></span>
             </div>
           </div>
           <div class="CDP-item">
@@ -80,19 +74,19 @@
             </div>
             <div class="small-item text-center">
               <div>
-                <span>{{ $t('build-current-credit-line') }}</span>
+                <span>还可借</span>
                 <p>
-                  {{ BigNumber(poolItem.maxMintable).toFixed(2) }} scUSD
+                  {{ BigNumber(poolItem.maxMintable).toFixed(2) }} LUSD
                 </p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openMintDialog(poolItem)">
-                  {{ $t('build-generate') }}
+                  继续借
                 </button>
               </div>
               <div>
                 <a href="javascript:;" @click="openBurnDialog(poolItem)">{{ $t('build-current-debt') }}
-                  {{ BigNumber(poolItem.currentDebt).toFixed(2) }} scUSD</a>
+                  {{ BigNumber(poolItem.currentDebt).toFixed(2) }} LUSD</a>
               </div>
             </div>
             <div class="btn-warpper" />
@@ -133,18 +127,18 @@
 
 .balance {
   margin-top: 24px;
-  .title2 {
-    height: 24px;
-    font-size: 20px;
-    font-family: Gilroy-Medium, Gilroy;
-    font-weight: 500;
-    color: #14171c;
-    line-height: 24px;
-  }
+  /*.title2 {*/
+    /*height: 24px;*/
+    /*font-size: 20px;*/
+    /*font-family: Gilroy-Medium, Gilroy;*/
+    /*font-weight: 500;*/
+    /*color: #14171c;*/
+    /*line-height: 24px;*/
+  /*}*/
   .CDP-content {
-    margin: 24px 0px 50px 0px;
-    padding: 32px 44px;
-    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    /*margin: 24px 0px 50px 0px;*/
+    /*padding: 32px 44px;*/
+    /*box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);*/
     .pool-item-warp {
       margin-top: 24px;
       padding: 24px;
@@ -159,10 +153,10 @@
       span {
         color: #828489;
       }
-      .text-right {
-        text-align: right;
+      .item-title {
+        /*text-align: right;*/
         > span {
-          margin-left: 20px;
+          margin-right: 20px;
         }
       }
     }

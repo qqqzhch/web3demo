@@ -6,7 +6,9 @@ export default {
   state: {
     poolsData: [],
     currPool: {},
-    allPoolsEnable: false
+    allPoolsEnable: false,
+    liquityState: {},
+    isOpen: false,
   },
   mutations: {
     [types.SET_POOLS_BALANCE_DATA] (state, poolsData) {
@@ -17,6 +19,10 @@ export default {
     },
     [types.SET_All_POOLS_ENABLE] (state, enable) {
       state.allPoolsEnable = enable;
+    },
+    [types.SET_LIQUITY_STATE] (state, data) {
+      state.liquityState = data;
+      state.isOpen = data.trove.status === 'open';
     },
   },
   actions: {
@@ -29,5 +35,9 @@ export default {
     setAllPoolsEnable({ commit }, enable){
       commit(types.SET_All_POOLS_ENABLE, enable);
     },
+    setLiquityState({ commit }, state){
+      commit(types.SET_LIQUITY_STATE, state);
+    },
+
   }
 };

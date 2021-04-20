@@ -3,30 +3,38 @@
     <div class="content-warpper flex items-center">
       <div class="content">
         <div class="total-warpper">
-          <h2>{{ $t('build-total-collateral-value') }}</h2>
-          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> USD</p>
+          <h2>总抵押物价值(TVL)</h2>
+          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> BNB</p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
-            <h2>{{ $t('build-total-debt') }}</h2>
-            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> scUSD </p>
+            <h2>总抵押物</h2>
+            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> LUSD </p>
           </div>
           <div>
-            <h2>{{ $t('build-scUSD-credit-line') }}</h2>
-            <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> scUSD </p>
+            <h2>总债务</h2>
+            <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> LUSD </p>
           </div>
           <div>
-            <h2>{{ $t('build-stability-fee') }}</h2>
-            <p><span>{{ BigNumber(totalFee).toFixed(2) }}</span> scUSD</p>
+            <h2>系统抵押率</h2>
+            <p><span>90%</span></p>
+          </div>
+          <div>
+            <h2>借贷费率</h2>
+            <p><span>0.5%</span></p>
+          </div>
+          <div>
+            <h2>自动偿还费率</h2>
+            <p><span>80%</span></p>
           </div>
         </div>
         <div class="refresh" @click="refresh">
           <img src="../../../../assets/img/refresh.svg" alt="refresh">
         </div>
       </div>
-      <div class="content-gray">
-        <span />
-      </div>
+      <!--<div class="content-gray">-->
+      <!--<span />-->
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -47,7 +55,7 @@
     margin-top: 24px;
     .content {
       margin-right: 24px;
-      width: 56%;
+      width: 100%;
       background: linear-gradient(270deg, #3f5efb 0%, #fc466b 100%);
       border-radius: 12px;
       padding: 24px;
@@ -95,13 +103,13 @@
         top: 20px;
       }
     }
-    .content-gray {
-      flex: 1;
-      width: 20%;
-      height: 184px;
-      background: #2c3340;
-      border-radius: 12px;
-    }
+    /*.content-gray {*/
+      /*flex: 1;*/
+      /*width: 20%;*/
+      /*height: 184px;*/
+      /*background: #2c3340;*/
+      /*border-radius: 12px;*/
+    /*}*/
   }
 }
 </style>
