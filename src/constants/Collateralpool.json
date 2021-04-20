@@ -13,7 +13,7 @@
         "titlei18":"ETH-A",
         "token":"ETH",
         "desc":"ETH",
-        "state":true
+        "state":false
     },
     {
         "name":"SCASH",
@@ -29,5 +29,13 @@
         "titlei18":"HT-A",
         "token":"HT",
         "state":false
+    },
+    {
+        "name":"BNB",
+        "title":"BNB-A",
+        "titlei18":"BNB-A",
+        "token":"BNB",
+        "desc":"BNB",
+        "state":true
     }
 ]

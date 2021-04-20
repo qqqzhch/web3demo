@@ -7,7 +7,7 @@
     </div>
     <div class="grid-2 mrg-tb-20">
       <div class="content-left">
-        <div class="asset-item cursor-pointer" @click="openAsset">
+        <div class="asset-item cursor-pointer">
           <div class="connect flex justify-between items-center">
             <div class="icon-wrapper flex justify-start items-center">
               <template v-for="(item, index) in collateralPools">
@@ -21,9 +21,9 @@
               </template>
               <span>{{ defaultPool.title }}</span>
             </div>
-            <div class="arrow-wrapper">
-              <img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">
-            </div>
+            <!--<div class="arrow-wrapper">-->
+            <!--<img src="../../../assets/img/RightAeeow.svg" alt="right-arrow">-->
+            <!--</div>-->
           </div>
         </div>
         <div class="input-warpper flex justify-between items-center mrg-t-20 mrg-b-5">
@@ -40,9 +40,9 @@
           <ScInput
             class="myInput"
             title=""
-            :default-value="pledgeNumber"
+            :default-value="depositAmount"
             :unit="defaultPool.token"
-            :on-change="onChangePledgeNumber"
+            :on-change="onChangeDepositAmount"
             :is-error="checkValue !== 'ok'"
           />
           <img :src="getTokenImg(defaultPool.token)" :alt="defaultPool.token">
@@ -53,82 +53,74 @@
             <p>{{ checkValue }}</p>
           </div>
         </div>
-        <div class=" flex">
+        <div class="flex">
           <div class="title-build">
-            {{ $t('build-will-get-credit') }}
+            Debt
           </div>
           <div class="pull-right" />
         </div>
         <div class="Input-item">
-          <ScInput class="myInput" title="" unit="scUSD" :default-value="stableNumber" disabled="true" />
-          <img :src="getTokenImg('scUSD')" alt="scUSD">
+          <ScInput
+            class="myInput"
+            title=""
+            unit="LUSD"
+            :default-value="borrowLUSDAmount"
+            :on-change="onChangeLUSDAmount"
+          />
+          <img :src="getTokenImg('LUSD')" alt="LUSD">
         </div>
       </div>
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            {{ $t('build-target-coll-ratio') }}：
-          </p>
-          <div class="text-right f-green f-size-20">
-            {{ BigNumber(targetRX).times(100) }}%
-          </div>
-        </div>
-        <div class="build-grid-2 mrg-b-5">
-          <p class="f-size-20">
             {{ $t('build-Collateral') }}：
           </p>
           <div class="text-right f-size-20">
-            {{ pledgeNumber }} {{ defaultPool.token }}
+            {{ depositAmount }} {{ defaultPool.token }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            {{ $t('build-credit-line') }}：
+            Debt:
           </p>
           <div class="text-right f-size-20">
-            {{ stableNumber }} scUSD
+            {{ borrowLUSDAmount }} LUSD
           </div>
         </div>
 
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>{{ defaultPool.token }} {{ $t('build-current-price') }}：</p>
+          <p>liquidation Reserve：</p>
           <div class="text-right">
-            {{ BigNumber(currencyPrice).toFixed(6) }} USD
+            {{ troveIndicators.liquidationReserve }} LUSD
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>{{ $t('build-liquidation-price') }}：</p>
+          <p>Borrowing Fee：</p>
           <div class="text-right">
-            {{ pledgeNumber ? BigNumber(liquidationRatio).times(stableNumber).div(pledgeNumber) : 0 }} USD
+            {{ troveIndicators.borrowingFee | formatNormalValue }} LUSD ({{ troveIndicators.borrowingRate }})
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>{{ $t('build-liquidation-ratio') }}：</p>
+          <p>liquidation Price: </p>
           <div class="text-right">
-            {{ liquidationRatio * 100 }}%
+            $ {{ troveIndicators.price }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>{{ $t('build-Stability-Ratio') }}：</p>
+          <p>Collateral ratio：</p>
           <div class="text-right">
-            {{ BigNumber(feeRate).times(100) }} %
-          </div>
-        </div>
-        <div class="build-grid-2 mrg-b-5">
-          <p>scUSD {{ $t('build-available-from') }} {{ defaultPool.token }}：</p>
-          <div class="text-right">
-            {{ debtCap }} scUSD
+            {{ troveIndicators.collateralRatio | formatNormalValue }} %
           </div>
         </div>
         <div v-if="!btnloading">
-          <button v-if="isApprove()" class="btn" @click="onApproveClick">
-            {{ $t('build-Approve') }}
-          </button>
-          <button v-else-if="poolsEnable[defaultPool.token]" class="btn btn-disabled">
-            {{ $t('build-vault-created') }}
-          </button>
-          <button v-else class="btn" @click="onJoinClick">
-            {{ $t('build-Get-Credits') }}
+          <!--<button v-if="isApprove()" class="btn" @click="onApproveClick">-->
+          <!--{{ $t('build-Approve') }}-->
+          <!--</button>-->
+          <!--<button v-else-if="poolsEnable[defaultPool.token]" class="btn btn-disabled">-->
+          <!--{{ $t('build-vault-created') }}-->
+          <!--</button>-->
+          <button class="btn" @click="onOpenTroveClick">
+            Open Trove
           </button>
         </div>
         <div v-if="btnloading">
