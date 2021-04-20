@@ -68,7 +68,7 @@ export default {
       if(isPoolsenable || isHaveAllowance) {
         this.loadData();
       } else {
-        this.$router.push('/buildr/guide');
+        this.$router.push('/vault/create');
       }
     },
     getParams(item) {

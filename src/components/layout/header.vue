@@ -4,10 +4,24 @@
       <div class="left-wrapper flex items-center">
         <img src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
-          <router-link class="menu-item" to="/buildr" active-class="active">
-            {{ $t('header.nav.Buildr') }}
+          <router-link class="menu-item" to="/vault" active-class="active">
+            Vault
           </router-link>
-          <router-link class="menu-item" to="/exchange" active-class="active">
+
+          <router-link class="menu-item" to="/stabilityPool" active-class="active">
+            Stability Pool
+          </router-link>
+
+          <router-link class="menu-item" to="/babelPool" active-class="active">
+            Babel Pool
+          </router-link>
+
+          <router-link class="menu-item" to="/lpPool" active-class="active">
+            LP Pool
+          </router-link>
+
+
+          <!-- <router-link class="menu-item" to="/exchange" active-class="active">
             {{ $t('header.nav.Exchange') }}
           </router-link>
           <router-link class="menu-item" to="/earn" active-class="active">
@@ -15,8 +29,8 @@
           </router-link>
           <router-link class="menu-item" to="/synth" active-class="active">
             {{ $t('header.nav.Synth') }}
-          </router-link>
-          <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">{{ $t('header.nav.Bridge') }}</a>
+          </router-link> -->
+          <!-- <a href="http://47.94.197.75:8087/#/" class="menu-item" target="_blank">{{ $t('header.nav.Bridge') }}</a> -->
         </div>
       </div>
 
