@@ -119,8 +119,8 @@ export default {
   name: 'Home',
   components: {
     buttons: () => import('@/components/basic/buttons'),
-    takeoutDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
-    extractDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
+    // takeoutDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
+    // extractDialog: () => import('@/views/earn/myMine/dialog/takeoutDialog.vue'),
   },
   data() {
     return {

@@ -3,7 +3,7 @@ import _ from 'underscore';
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
-import { checkeBulderApprove } from '../guide/checkeBulderApprove';
+import { checkeBuilderApprove } from '../guide/checkBuilderApprove';
 import Overview from './overview/index.vue';
 import { getCollateralPools } from '@//contactLogic/buildr/balance';
 import { fetchCollateralIndicators, fetchCurrencyPrice, fetchTokenBalance, fetchAllowanceAmount } from '@/contactLogic/buildr/create';
@@ -64,7 +64,7 @@ export default {
       const { chainID, library, account } = this.getParams({});
       this.collateralPools = getCollateralPools(chainID);
       const isPoolsenable = await this.checkPoolsEnable();
-      const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
+      const isHaveAllowance = await checkeBuilderApprove(this.$router, chainID, library, account);
       if(isPoolsenable || isHaveAllowance) {
         this.loadData();
       } else {

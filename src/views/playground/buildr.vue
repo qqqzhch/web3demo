@@ -112,7 +112,7 @@ import Web3 from 'web3';
 
 import   {getPrice} from '@/contactLogic/tokenPrice.js';
 
-import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
+// import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
 
 import {getUnClaimedReward} from '@/contactLogic/earn/Reward.js';
 
@@ -241,7 +241,7 @@ export default {
             console.log('price',liquity.store.state.price.toString())
             console.log('borrowingRate',liquity.store.state.borrowingRate.toString())
             this.$data.data.maxborrowingRate= liquity.store.state.borrowingRate.add(0.005).toString()
-            
+
 
             var rate = pram.collateralRatio(liquity.store.state.price)
             console.log(rate.toString()*100+"%")
@@ -279,7 +279,7 @@ export default {
          pram =pram.setCollateral(2.5)
          pram =pram.setDebt(2000) ///首次创建有个最小债务量
          console.log(pram)
-        
+
 
            //创建
            //如何拼姐参数？
@@ -290,7 +290,7 @@ export default {
             console.log(liquity.store.state.accountBalance.toString())
             console.log(liquity.store.state.price.toString())
             console.log(liquity.store.state.borrowingRate.toString())
-            
+
 
             var rate = pram.collateralRatio(liquity.store.state.price)
             console.log(rate.toString()*100+"%")
@@ -321,9 +321,9 @@ export default {
       ? liquity.send.closeTrove.bind(liquity.send)
       : liquity.send.adjustTrove.bind(liquity.send, change.params, maxBorrowingRate)
   )
-          
+
           */
-          
+
 
     //   const wallet = new Wallet('').connect(library);
     //   const liquity = await EthersLiquity.connect(wallet);
@@ -527,13 +527,13 @@ export default {
      console.log(data);
 
     },
-    async getearnList(){
-      const library = this.ethersprovider;
-      const account = this.ethAddress;
-      const chainID = this.ethChainID;
-       StakingRewardListbatch(library, account, chainID)
+    // async getearnList(){
+    //   const library = this.ethersprovider;
+    //   const account = this.ethAddress;
+    //   const chainID = this.ethChainID;
+    //    StakingRewardListbatch(library, account, chainID)
 
-    },
+    // },
     async syncReward(){
       var web3 = this.web3;
       var chainID = this.ethChainID;
