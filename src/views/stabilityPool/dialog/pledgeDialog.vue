@@ -93,7 +93,7 @@ export default {
           gasLimit: this.$globalConfig.gasLimit,
         });
         event.$emit('sendSuccess');
-
+        this.openPledgeDialog = false;
         event.$emit('sendtx', [
           data.rawSentTransaction,
           {

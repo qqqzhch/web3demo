@@ -1,5 +1,5 @@
 // 按需加载ui库组件
-import { Modal, Notice,Spin,Icon,Scroll, Select, Option,Table,Dropdown,DropdownItem,DropdownMenu,Tooltip,Slider } from "view-design";
+import { Modal, Notice,Spin,Icon,Scroll, Select, Option,Table,Dropdown,DropdownItem,DropdownMenu,Tooltip,Slider,Poptip } from "view-design";
 
 export default function(Vue) {
   Vue.component("Modal", Modal);
@@ -15,10 +15,11 @@ export default function(Vue) {
   Vue.component("DropdownItem", DropdownItem);
   Vue.component("DropdownMenu", DropdownMenu);
   Vue.component("Slider", Slider);
+  Vue.component("Poptip", Poptip);
 
   Vue.component("Tooltip", Tooltip);
 
-  
+
 
   Vue.prototype.$Notice = Notice;
 }

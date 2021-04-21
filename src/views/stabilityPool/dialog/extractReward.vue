@@ -2,8 +2,11 @@
   <div class="claim-dialog">
     <Modal v-model="openClaimDialog" class-name="simple-modal" :footer-hide="true" :closable="true">
       <div class="simple-content">
-        <p class="title text-center">
+        <p v-if="method === 'claim'" class="title text-center">
           {{ $t('myPage.claim') }}
+        </p>
+        <p v-else class="title text-center">
+          Claim Babel and move BNB to Trove
         </p>
         <div class="simple-wrapper">
           <div class="title-content">
@@ -25,7 +28,7 @@
         </div>
 
         <div class="btn-wrapper">
-          <Buttons v-if="!extractLoading" height="48px" @click.native="sendExtract">
+          <Buttons v-if="!extractLoading" height="48px" @click.native="handleClaimMethods">
             {{ $t('common.confirm') }}
           </Buttons>
           <Buttons v-else height="48px">
@@ -47,7 +50,8 @@ export default {
       claimAmount: 0,
       data: {},
       extractLoading: false,
-      rewardToken: '',
+      rewardToken: 'Babel',
+      method: '',
     };
   },
   computed: {
@@ -59,19 +63,26 @@ export default {
   },
   methods: {
     open(data) {
+      this.data = {};
       this.data = data;
+      this.claimAmount = data.balance;
+      this.method = data.method;
       this.openClaimDialog = true;
     },
     checkData() {
-      // if (this.claimAmount <= 0) {
-      //   this.$Notice.warning({
-      //     title: this.$t('notice.n'),
-      //     desc: this.$t('notice.n31'),
-      //   });
-      //   return false;
-      // }
+      if (this.claimAmount < 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: this.$t('notice.n31'),
+        });
+        return false;
+      }
       return true;
     },
+    handleClaimMethods() {
+      this.method === 'move' ? this.sendAndMoveExtract() : this.sendExtract();
+    },
+
     // 提取收益
     async sendExtract() {
       if (!this.checkData()) {
@@ -101,7 +112,38 @@ export default {
         this.extractLoading = false;
       }
     },
+
+    // 提取并移动BNB收益
+    async sendAndMoveExtract() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.extractLoading = true;
+      try {
+        const data = await this.liquityInstance.transferCollateralGainToTrove({
+          gasLimit: this.$globalConfig.gasLimit,
+        });
+        event.$emit('sendSuccess');
+        this.openClaimDialog = false;
+        event.$emit('sendtx', [
+          data.rawSentTransaction,
+          {
+            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.claim')} ${this.$t('notice.n43')}`,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+        this.$Notice.error({
+          title: this.$t('notice.n32'),
+        });
+      } finally {
+        this.openClaimDialog = false;
+        this.extractLoading = false;
+      }
+    },
   },
+
   components: {
     Buttons: () => import('@/components/basic/buttons'),
   },

@@ -104,7 +104,7 @@ export default {
           gasLimit: this.$globalConfig.gasLimit,
         });
         event.$emit('sendSuccess');
-
+        this.openTakeDialog = false;
         event.$emit('sendtx', [
           data.rawSentTransaction,
           {

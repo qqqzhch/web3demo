@@ -57,18 +57,26 @@
 
       <div class="pool-btn-wrapper">
         <button class="pool-btn" @click="openPledge">
-          质押LAI
+          Stake LAI
         </button>
 
-        <button class="pool-btn" @click="openExtract">
-          提取收益
-        </button>
+        <Poptip placement="bottom" class="claim-wrapper pool-btn">
+          <div class="claim-content">
+            Claim
+          </div>
+          <div slot="content" class="claim-btn-wrapper">
+            <button class="claim-btn" @click="handleClaim('claim')">
+              Claim BNB and Babel
+            </button>
+
+            <button class="claim-btn ml-4" @click="handleClaim('move')">
+              Claim Babel and move BNB to Trove
+            </button>
+          </div>
+        </Poptip>
 
         <button class="pool-btn" @click="openTake">
-          提取LAI
-        </button>
-        <button class="pool-btn" @click="getData">
-          获取数据
+          UnStake LAI
         </button>
       </div>
     </div>
@@ -93,18 +101,14 @@ export default {
     // 总质押
     totalStake() {
       const val =
-        this.liquityState &&
-        this.liquityState.lusdInStabilityPool &&
-        this.liquityState.lusdInStabilityPool.prettify();
+        this.liquityState && this.liquityState.lusdInStabilityPool && this.liquityState.lusdInStabilityPool.prettify();
       return val;
     },
 
     // 已质押
     haveStake() {
       const val =
-        this.stabilityDeposit &&
-        this.stabilityDeposit.currentLUSD &&
-        this.stabilityDeposit.currentLUSD.prettify();
+        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.prettify();
       return val;
     },
 
@@ -120,9 +124,7 @@ export default {
     // 待提取Babel
     unclaimBabel() {
       const val =
-        this.stabilityDeposit &&
-        this.stabilityDeposit.lqtyReward &&
-        this.stabilityDeposit.lqtyReward.prettify();
+        this.stabilityDeposit && this.stabilityDeposit.lqtyReward && this.stabilityDeposit.lqtyReward.prettify();
       return val;
     },
 
@@ -137,13 +139,10 @@ export default {
 
     // LAI余额
     laiBalance() {
-      const val =
-        this.liquityState &&
-        this.liquityState.lusdBalance &&
-        this.liquityState.lusdBalance.toString();
+      const val = this.liquityState && this.liquityState.lusdBalance && this.liquityState.lusdBalance.toString();
       const balance = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return balance;
-    }
+    },
   },
   components: {
     take: () => import('./dialog/takeoutDialog.vue'),
@@ -154,11 +153,14 @@ export default {
     openPledge() {
       this.$refs.pledge.open(this.laiBalance);
     },
-    openExtract() {
-      this.$refs.extract.open();
-    },
     openTake() {
       this.$refs.take.open(this.haveStake);
+    },
+    handleClaim(val) {
+      const obj = {};
+      obj.balance = this.unclaimBabel;
+      obj.method = val;
+      this.$refs.extract.open(obj);
     },
     getData() {
       console.log(this.liquityState);
