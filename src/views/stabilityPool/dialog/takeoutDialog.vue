@@ -1,6 +1,6 @@
 <template>
   <div class="pledge-dialog">
-    <Modal v-model="openPledgeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
+    <Modal v-model="openTakeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div class="pledge-content">
         <p class="title text-center">
           取出
@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="pledge-wrapper flex">
-            <input v-model.number="pledgeAmount" type="number" class="amount-input" @input="handleInput">
+            <input v-model.number="takeAmount" type="number" class="amount-input" @input="handleInput">
           </div>
 
           <div class="percentage">
@@ -35,12 +35,12 @@
         <div class="price-wrapper">
           <div class="price-item flex justify-between items-center">
             <span>你将取出</span>
-            <p>{{ pledgeAmount || 0 }}</p>
+            <p>{{ takeAmount || 0 }}</p>
           </div>
         </div>
 
         <div class="btn-wrapper">
-          <Buttons v-if="sendLoading === false" height="48px" @click.native="depositScusd">
+          <Buttons v-if="sendLoading === false" height="48px" @click.native="takeout">
             {{ $t('earn.dialog.stakeDialog.confirm') }}
           </Buttons>
           <Buttons v-else height="48px">
@@ -54,16 +54,15 @@
 
 <script>
 import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import event from '@/common/js/event';
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
   },
   data() {
     return {
-      openPledgeDialog: false,
-      pledgeAmount: '',
+      openTakeDialog: false,
+      takeAmount: '',
       data: {},
       previousData: '',
       sendLoading: false,
@@ -71,43 +70,88 @@ export default {
     };
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
+    ...mapState('buildr', ['liquityState']),
+    ...mapState('pool', ['liquity']),
+    liquityInstance() {
+      const val = this.liquity && this.liquity.send;
+      return val;
+    },
+    haveUndercollateralizedTroves() {
+      const val = this.liquityState && this.liquityState.haveUndercollateralizedTroves;
+      return val;
+    }
   },
   methods: {
-    open() {
-      this.pledgeAmount = '';
-      this.openPledgeDialog = true;
+    open(data) {
+      this.takeAmount = '';
+      this.balance = data;
+      this.openTakeDialog = true;
     },
 
     percentage(val) {
-      const balance = new BigNumber(this.balance);
-      const percent = new BigNumber(val);
-      this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+      const balance = this.$BigNumber(this.balance);
+      const percent = this.$BigNumber(val);
+      this.takeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+    },
+
+    async takeout() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.sendLoading = true;
+      try {
+        const data = await this.liquityInstance.withdrawLUSDFromStabilityPool(this.takeAmount, this.AddressZero, {
+          gasLimit: this.$globalConfig.gasLimit,
+        });
+        event.$emit('sendSuccess');
+
+        event.$emit('sendtx', [
+          data.rawSentTransaction,
+          {
+            okinfo: `${this.$t('common.unstake')} ${this.takeAmount} LAI ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.takeAmount} LAI  ${this.$t('notice.n43')}`,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.openTakeDialog = false;
+        this.sendLoading = false;
+      }
     },
 
     // 限制Input输入小数点的长度
     handleInput(e) {
       const stringValue = e.target.value.toString();
       const regex = /^\d*(\.\d{1,6})?$/;
-      if (!stringValue.match(regex) && this.pledgeAmount !== '') {
-        this.pledgeAmount = this.previousData;
+      if (!stringValue.match(regex) && this.takeAmount !== '') {
+        this.takeAmount = this.previousData;
       }
-      this.previousData = this.pledgeAmount;
+      this.previousData = this.takeAmount;
     },
 
     // 检验数据是否合法
     checkData() {
       const balance = this.balance;
-      const bigBalance = new BigNumber(balance);
-      const amount = new BigNumber(this.pledgeAmount);
-      if (this.pledgeAmount === '') {
+      const bigBalance = this.$BigNumber(balance);
+      const amount = this.$BigNumber(this.takeAmount);
+
+      if (this.haveUndercollateralizedTroves) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: "You're not allowed to withdraw LUSD from your Stability Deposit when there are undercollateralized Troves. Please liquidate those Troves or try again later.",
+        });
+        return false;
+      }
+
+      if (this.takeAmount === '') {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n30'),
         });
         return false;
       }
-      if (parseFloat(this.pledgeAmount) <= 0) {
+      if (parseFloat(this.takeAmount) <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),

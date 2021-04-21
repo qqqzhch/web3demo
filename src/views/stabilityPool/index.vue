@@ -36,22 +36,22 @@
 
         <div class="detail-item">
           <span class="title">已质押</span>
-          <span class="value">{{ liquityState.totalStakedLQTY.shorten() }} LAI</span>
+          <span class="value">{{ haveStake }} LAI</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取BNB</span>
-          <span class="value">{{ liquityState.stabilityDeposit.collateralGain.prettify() }} BNB</span>
+          <span class="value">{{ unclaimBNB }} BNB</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取Babel</span>
-          <span class="value">{{ liquityState.stabilityDeposit.lqtyReward.prettify() }} Babel</span>
+          <span class="value">{{ unclaimBabel }} Babel</span>
         </div>
 
         <div class="detail-item">
           <span class="title">未释放Babel</span>
-          <span class="value">{{ liquityState.remainingStabilityPoolLQTYReward.prettify() }} Babel</span>
+          <span class="value">{{ unReleaseBabel }} Babel</span>
         </div>
       </div>
 
@@ -82,14 +82,8 @@
 <script>
 import { mapState } from 'vuex';
 import initLiquity from '@/common/mixin/initLiquity';
-import BigNumber from 'bignumber.js';
 export default {
   mixins: [initLiquity],
-  data() {
-    return {
-      BigNumber,
-    };
-  },
   computed: {
     ...mapState('buildr', ['liquityState']),
     stabilityDeposit() {
@@ -99,14 +93,57 @@ export default {
     // 总质押
     totalStake() {
       const val =
-        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.shorten();
+        this.liquityState &&
+        this.liquityState.lusdInStabilityPool &&
+        this.liquityState.lusdInStabilityPool.prettify();
       return val;
     },
-    unCliaimBNB() {
+
+    // 已质押
+    haveStake() {
       const val =
-        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.shorten();
+        this.stabilityDeposit &&
+        this.stabilityDeposit.currentLUSD &&
+        this.stabilityDeposit.currentLUSD.prettify();
       return val;
     },
+
+    // 待提取BNB
+    unclaimBNB() {
+      const val =
+        this.stabilityDeposit &&
+        this.stabilityDeposit.collateralGain &&
+        this.stabilityDeposit.collateralGain.prettify();
+      return val;
+    },
+
+    // 待提取Babel
+    unclaimBabel() {
+      const val =
+        this.stabilityDeposit &&
+        this.stabilityDeposit.lqtyReward &&
+        this.stabilityDeposit.lqtyReward.prettify();
+      return val;
+    },
+
+    // 未释放Babel
+    unReleaseBabel() {
+      const val =
+        this.liquityState &&
+        this.liquityState.remainingStabilityPoolLQTYReward &&
+        this.liquityState.remainingStabilityPoolLQTYReward.prettify();
+      return val;
+    },
+
+    // LAI余额
+    laiBalance() {
+      const val =
+        this.liquityState &&
+        this.liquityState.lusdBalance &&
+        this.liquityState.lusdBalance.toString();
+      const balance = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return balance;
+    }
   },
   components: {
     take: () => import('./dialog/takeoutDialog.vue'),
@@ -115,13 +152,13 @@ export default {
   },
   methods: {
     openPledge() {
-      this.$refs.pledge.open();
+      this.$refs.pledge.open(this.laiBalance);
     },
     openExtract() {
       this.$refs.extract.open();
     },
     openTake() {
-      this.$refs.take.open();
+      this.$refs.take.open(this.haveStake);
     },
     getData() {
       console.log(this.liquityState);

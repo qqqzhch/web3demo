@@ -44,11 +44,18 @@ export default {
   data() {
     return {
       openClaimDialog: false,
-      claimAmount: '',
+      claimAmount: 0,
       data: {},
       extractLoading: false,
       rewardToken: '',
     };
+  },
+  computed: {
+    ...mapState('pool', ['liquity']),
+    liquityInstance() {
+      const val = this.liquity && this.liquity.send;
+      return val;
+    },
   },
   methods: {
     open(data) {
@@ -56,13 +63,13 @@ export default {
       this.openClaimDialog = true;
     },
     checkData() {
-      if (this.claimAmount <= 0) {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n31'),
-        });
-        return false;
-      }
+      // if (this.claimAmount <= 0) {
+      //   this.$Notice.warning({
+      //     title: this.$t('notice.n'),
+      //     desc: this.$t('notice.n31'),
+      //   });
+      //   return false;
+      // }
       return true;
     },
     // 提取收益
@@ -72,18 +79,13 @@ export default {
       }
       this.extractLoading = true;
       try {
-        // const chainID = this.ethChainID;
-        // const account = this.ethAddress;
-        // const library = this.ethersprovider;
-        // const result = await Masterwithdraw({ chainID, account, library });
-
-        // 合约操作
-
-        let result;
+        const data = await this.liquityInstance.withdrawGainsFromStabilityPool({
+          gasLimit: this.$globalConfig.gasLimit,
+        });
         event.$emit('sendSuccess');
         this.openClaimDialog = false;
         event.$emit('sendtx', [
-          result,
+          data.rawSentTransaction,
           {
             okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.$t('notice.n42')}`,
             failinfo: `${this.$t('common.claim')} ${this.$t('notice.n43')}`,
@@ -102,9 +104,6 @@ export default {
   },
   components: {
     Buttons: () => import('@/components/basic/buttons'),
-  },
-  computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
   },
 };
 </script>

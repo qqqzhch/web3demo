@@ -38,5 +38,6 @@ export default {
       name: 'BSC Test',
       isBan: true
     },
-  }
+  },
+  gasLimit: 800000
 };

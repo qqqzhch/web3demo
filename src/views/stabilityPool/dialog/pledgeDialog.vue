@@ -40,7 +40,7 @@
         </div>
 
         <div class="btn-wrapper">
-          <Buttons v-if="sendLoading === false" height="48px" @click.native="depositScusd">
+          <Buttons v-if="sendLoading === false" height="48px" @click.native="stakeLQTStabilityPool">
             {{ $t('earn.dialog.stakeDialog.confirm') }}
           </Buttons>
           <Buttons v-else height="48px">
@@ -54,8 +54,7 @@
 
 <script>
 import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import event from '@/common/js/event';
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
@@ -71,17 +70,48 @@ export default {
     };
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
+    ...mapState('pool', ['liquity']),
+    liquityInstance() {
+      const val = this.liquity && this.liquity.send;
+      return val;
+    },
   },
   methods: {
-    open() {
+    open(data) {
       this.pledgeAmount = '';
+      this.balance = data;
       this.openPledgeDialog = true;
     },
 
+    async stakeLQTStabilityPool() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.sendLoading = true;
+      try {
+        const data = await this.liquityInstance.depositLUSDInStabilityPool(this.pledgeAmount, this.AddressZero, {
+          gasLimit: this.$globalConfig.gasLimit,
+        });
+        event.$emit('sendSuccess');
+
+        event.$emit('sendtx', [
+          data.rawSentTransaction,
+          {
+            okinfo: `${this.$t('common.stake')} ${this.pledgeAmount} LAI ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.stake')} ${this.pledgeAmount} LAI  ${this.$t('notice.n43')}`,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.openPledgeDialog = false;
+        this.sendLoading = false;
+      }
+    },
+
     percentage(val) {
-      const balance = new BigNumber(this.balance);
-      const percent = new BigNumber(val);
+      const balance = this.$BigNumber(this.balance);
+      const percent = this.$BigNumber(val);
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
     },
 
@@ -98,8 +128,8 @@ export default {
     // 检验数据是否合法
     checkData() {
       const balance = this.balance;
-      const bigBalance = new BigNumber(balance);
-      const amount = new BigNumber(this.pledgeAmount);
+      const bigBalance = this.$BigNumber(balance);
+      const amount = this.$BigNumber(this.pledgeAmount);
       if (this.pledgeAmount === '') {
         this.$Notice.warning({
           title: this.$t('notice.n'),
