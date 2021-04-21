@@ -70,7 +70,7 @@ export default {
       this.openClaimDialog = true;
     },
     checkData() {
-      if (this.claimAmount < 0) {
+      if (this.claimAmount <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
