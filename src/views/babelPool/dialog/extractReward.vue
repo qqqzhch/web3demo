@@ -10,19 +10,19 @@
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
-              <span>{{ claimAmount }} {{ rewardToken }}</span>
+              <span>{{ collateralGain }}  BNB {{ lusdGain }} LAY</span>
             </div>
           </div>
-          <div class="simple-wrapper">
+          <!-- <div class="simple-wrapper">
             <input v-model="claimAmount" readonly type="text" class="amount-input">
-          </div>
+          </div> -->
         </div>
-        <div class="detail-wrapper">
+        <!-- <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
             <p>{{ claimAmount }} {{ rewardToken }}</p>
           </div>
-        </div>
+        </div> -->
 
         <div class="btn-wrapper">
           <Buttons v-if="!extractLoading" height="48px" @click.native="sendExtract">
@@ -34,12 +34,20 @@
         </div>
       </div>
     </Modal>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import event from '@/common/js/event';
+
+import initLiquity from '@/common/mixin/initLiquity';
+const { EthersLiquity,  _connectByChainId } = require("@webfans/lib-ethers");
+import { AddressZero } from "@ethersproject/constants";
+
+
+
 export default {
   data() {
     return {
@@ -67,25 +75,32 @@ export default {
     },
     // 提取收益
     async sendExtract() {
-      if (!this.checkData()) {
-        return false;
-      }
+      // if (!this.checkData()) {
+      //   return false;
+      // }
       this.extractLoading = true;
       try {
-        // const chainID = this.ethChainID;
-        // const account = this.ethAddress;
-        // const library = this.ethersprovider;
-        // const result = await Masterwithdraw({ chainID, account, library });
+        const provider = this.ethersprovider;
+        const account = this.ethAddress;
+        const chainId = this.ethChainID ;
+        const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: AddressZero,
+          useStore: "blockPolled"
+        });
+        console.log(connection);
+        const liquity = EthersLiquity._from(connection);
 
         // 合约操作
+        const transaction = await  liquity.send.withdrawGainsFromStaking({gasLimit:800000});
 
-        let result;
+        
         event.$emit('sendSuccess');
         this.openClaimDialog = false;
         event.$emit('sendtx', [
-          result,
+          transaction.rawSentTransaction,
           {
-            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.$t('notice.n42')}`,
+            okinfo: `${this.$t('common.claim')} ${this.$t('notice.n42')}`,
             failinfo: `${this.$t('common.claim')} ${this.$t('notice.n43')}`,
           },
         ]);
@@ -102,9 +117,17 @@ export default {
   },
   components: {
     Buttons: () => import('@/components/basic/buttons'),
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   computed: {
     ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
+    ...mapState('buildr', ['liquityState']),
+    collateralGain:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.collateralGain.shorten();
+    },
+    lusdGain:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.lusdGain.shorten();
+    }
   },
 };
 </script>

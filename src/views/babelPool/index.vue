@@ -31,22 +31,22 @@
 
         <div class="detail-item">
           <span class="title">Total Stake</span>
-          <span class="value">20000 Babel</span>
+          <span class="value">{{ totalStakedLQTY }} Babel</span>
         </div>
 
         <div class="detail-item">
           <span class="title">已质押</span>
-          <span class="value">1456 Babel</span>
+          <span class="value">{{ stakedLQTY }} Babel</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取BNB</span>
-          <span class="value">1000 BNB</span>
+          <span class="value">{{ collateralGain }} BNB</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取Babel</span>
-          <span class="value">2387 Babel</span>
+          <span class="value">{{ lusdGain }} Babel</span>
         </div>
       </div>
 
@@ -72,15 +72,25 @@
 </template>
 
 <script>
+import initLiquity from '@/common/mixin/initLiquity';
+import BigNumber from 'bignumber.js';
+import { mapState } from 'vuex';
+
 export default {
+  mixins: [initLiquity],
   components: {
     take: () => import('./dialog/takeoutDialog.vue'),
     pledge: () => import('./dialog/pledgeDialog.vue'),
     extract: () => import('./dialog/extractReward.vue'),
   },
+  mounted() {
+    
+    
+  },
   methods: {
     openPledge() {
       this.$refs.pledge.open();
+      
     },
     openExtract() {
       this.$refs.extract.open();
@@ -89,6 +99,29 @@ export default {
       this.$refs.take.open();
     },
   },
+  watch:{
+    liquityReady:function(){
+      
+    }
+  },
+  computed:{
+    ...mapState('buildr', ['liquityState']),
+    totalStakedLQTY:function(){
+      
+      
+      return this.liquityState&&this.liquityState.totalStakedLQTY&&this.liquityState.totalStakedLQTY.shorten();
+
+    },
+    stakedLQTY:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY.shorten();
+    },
+    collateralGain:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.collateralGain.shorten();
+    },
+    lusdGain:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.lusdGain.shorten();
+    }
+  }
 };
 </script>
 

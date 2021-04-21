@@ -24,8 +24,10 @@ export default {
       const liquity = fetchLiquityStore(params);
       console.log({liquity});
       liquity.store.onLoaded = () => {
-        this.liquityReady = true;
+        
         this.setLiquityState(liquity.store.state);
+        this.liquityReady = true;
+        console.log(liquity.store.state);
       };
       liquity.store.start();
     },

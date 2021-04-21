@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }}</span>
+              <span>{{ stakedLQTY }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="btn-wrapper">
-          <Buttons v-if="sendLoading === false" height="48px" @click.native="depositScusd">
+          <Buttons v-if="sendLoading === false" height="48px" @click.native="extract">
             {{ $t('earn.dialog.stakeDialog.confirm') }}
           </Buttons>
           <Buttons v-else height="48px">
@@ -49,6 +49,7 @@
         </div>
       </div>
     </Modal>
+    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
@@ -56,9 +57,17 @@
 import { mapState } from 'vuex';
 const BigNumber = require('bignumber.js');
 BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+
+import initLiquity from '@/common/mixin/initLiquity';
+const { EthersLiquity,  _connectByChainId } = require("@webfans/lib-ethers");
+import { AddressZero } from "@ethersproject/constants";
+import event from '@/common/js/event';
+
+
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
+    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   data() {
     return {
@@ -72,6 +81,10 @@ export default {
   },
   computed: {
     ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
+    ...mapState('buildr', ['liquityState']),
+    stakedLQTY:function(){
+      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY.shorten();
+    }
   },
   methods: {
     open() {
@@ -80,9 +93,15 @@ export default {
     },
 
     percentage(val) {
-      const balance = new BigNumber(this.balance);
+      const stakedLQTY = this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY;
+      if(stakedLQTY== undefined){
+        return ;
+      }
+      const balance = new BigNumber(stakedLQTY.toString());
       const percent = new BigNumber(val);
+
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
+
     },
 
     // 限制Input输入小数点的长度
@@ -97,7 +116,11 @@ export default {
 
     // 检验数据是否合法
     checkData() {
-      const balance = this.balance;
+      const stakedLQTY = this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY;
+      if(stakedLQTY== undefined){
+        return false;
+      }
+      const balance = new BigNumber(stakedLQTY.toString());
       const bigBalance = new BigNumber(balance);
       const amount = new BigNumber(this.pledgeAmount);
       if (this.pledgeAmount === '') {
@@ -125,6 +148,44 @@ export default {
 
       return true;
     },
+    async extract(){
+      if(this.checkData()==false){
+        return ;
+      }
+      console.log(this.$data);
+      const provider = this.ethersprovider;
+      const account = this.ethAddress;
+      const chainId = this.ethChainID ;
+       const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+          userAddress: account,
+          frontendTag: AddressZero,
+          useStore: "blockPolled"
+        });
+        console.log(connection);
+      const liquity = EthersLiquity._from(connection);
+       try {
+         const transaction = await  liquity.send.unstakeLQTY(this.pledgeAmount,{gasLimit:800000});
+      console.log(transaction);
+      const baseTip = `unstake ${this.pledgeAmount} Babel`;
+        this.$refs.haveSendtx.open(baseTip);
+        event.$emit('sendtx', [
+          transaction.rawSentTransaction,
+          {
+            okinfo: baseTip +this.$t('swapConfirm.success'),
+            failinfo: baseTip + this.$t('swapConfirm.fail'),
+          },
+        ]);
+          this.openPledgeDialog = false;
+       } catch (error) {
+           this.$Notice.error({
+          title: this.$t('notice.swapNotice.n3'),
+        });
+         
+       }
+      
+
+
+    }
   },
 };
 </script>
