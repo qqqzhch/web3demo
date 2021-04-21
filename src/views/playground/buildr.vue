@@ -148,7 +148,7 @@
   import {readbuildrHistory,readSyntheticHistory} from '@/contactLogic/history.js';
   import Web3 from 'web3';
   import   {getPrice} from '@/contactLogic/tokenPrice.js';
-  import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
+  // import {StakingRewardListbatch} from '@/views/earn/utils/helpUtils/mineUtilFunc.js';
   import {getUnClaimedReward} from '@/contactLogic/earn/Reward.js';
   import {fetchCollateralIndicatorsCurrentDebt} from '@/contactLogic/buildr/create.js';
   import {getSCUSDVaultContract,getMasterUserInfo,getMasterPendingScash,

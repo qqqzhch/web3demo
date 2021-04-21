@@ -1,8 +1,11 @@
 import BigNumber from "bignumber.js";
-import _ from 'underscore';
 import { mapState, mapActions } from "vuex";
 import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
+import { getCollateralPools } from '@/contactLogic/buildr/balance';
+import i18n from '../../../i18n/index.js';
+import Overview from './overview/index.vue';
+
 
 export default {
   name: 'balance',
@@ -34,26 +37,26 @@ export default {
       return getTokenImg(tokensymbol,chainID);
     },
     // check金库是否已创建
-    async checkPoolsEnable() {
-      const loadList = [];
-      this.collateralPools.forEach((pool) => {
-        const params = Object.assign({}, this.getParams({}), {tokenName: pool.token});
-        loadList.push(fetchPledgeNumber(params));
-      });
-
-      const result = await Promise.all(loadList);
-
-      const poolsEnable = this.collateralPools.map((pool, index) => {
-        const { pledgeNumber } = result[index];
-        return BigNumber(pledgeNumber).gt(0);
-      });
-
-      // 判断是否创建按钮
-      const isAllCreated = poolsEnable.includes(false);
-      this.setAllPoolsEnable(!isAllCreated);
-
-      return poolsEnable.includes(true);
-    },
+    // async checkPoolsEnable() {
+    //   const loadList = [];
+    //   this.collateralPools.forEach((pool) => {
+    //     const params = Object.assign({}, this.getParams({}), {tokenName: pool.token});
+    //     loadList.push(fetchPledgeNumber(params));
+    //   });
+    //
+    //   const result = await Promise.all(loadList);
+    //
+    //   const poolsEnable = this.collateralPools.map((pool, index) => {
+    //     const { pledgeNumber } = result[index];
+    //     return BigNumber(pledgeNumber).gt(0);
+    //   });
+    //
+    //   // 判断是否创建按钮
+    //   const isAllCreated = poolsEnable.includes(false);
+    //   this.setAllPoolsEnable(!isAllCreated);
+    //
+    //   return poolsEnable.includes(true);
+    // },
     async checkLiquityReady() {
       const { chainID, library, account } = this.getParams({});
       this.collateralPools = getCollateralPools(chainID);
