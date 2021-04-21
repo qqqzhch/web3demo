@@ -305,14 +305,14 @@
         const lqtyReward = stabilityDeposit.lqtyReward.prettify().concat(" ", 'xx');
         console.log(collateralGain)
         console.log(lqtyReward)
-        var  originalDeposit= stabilityDeposit;
-        var  editedLUS= stabilityDeposit.currentLUSD;
-        const originalPoolShare = originalDeposit.currentLUSD.mulDiv(100, lusdInStabilityPool);
-        console.log('originalPoolShare',originalPoolShare.toString())
-        const lusdInStabilityPoolAfterChange = lusdInStabilityPool
-          .sub(originalDeposit.currentLUSD)
-          .add(5);
-        const newPoolShare = editedLUSD.mulDiv(100, lusdInStabilityPoolAfterChange);
+        // var  originalDeposit= stabilityDeposit;
+        // var  editedLUS= stabilityDeposit.currentLUSD;
+        // const originalPoolShare = originalDeposit.currentLUSD.mulDiv(100, lusdInStabilityPool);
+        // console.log('originalPoolShare',originalPoolShare.toString())
+        // const lusdInStabilityPoolAfterChange = lusdInStabilityPool
+        //   .sub(originalDeposit.currentLUSD)
+        //   .add(5);
+        // const newPoolShare = editedLUSD.mulDiv(100, lusdInStabilityPoolAfterChange);
       },
       feeFrom  (original, edited, borrowingRate) {
         const change = original.whatChanged(edited, borrowingRate);

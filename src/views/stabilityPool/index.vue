@@ -31,22 +31,27 @@
 
         <div class="detail-item">
           <span class="title">Total Stake</span>
-          <span class="value">20000 LAI</span>
+          <span class="value">{{ totalStake }} LAI</span>
         </div>
 
         <div class="detail-item">
           <span class="title">已质押</span>
-          <span class="value">1456 LAI</span>
+          <span class="value">{{ liquityState.totalStakedLQTY.shorten() }} LAI</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取BNB</span>
-          <span class="value">1000 BNB</span>
+          <span class="value">{{ liquityState.stabilityDeposit.collateralGain.prettify() }} BNB</span>
         </div>
 
         <div class="detail-item">
           <span class="title">待提取Babel</span>
-          <span class="value">2387 Babel</span>
+          <span class="value">{{ liquityState.stabilityDeposit.lqtyReward.prettify() }} Babel</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="title">未释放Babel</span>
+          <span class="value">{{ liquityState.remainingStabilityPoolLQTYReward.prettify() }} Babel</span>
         </div>
       </div>
 
@@ -62,6 +67,9 @@
         <button class="pool-btn" @click="openTake">
           提取LAI
         </button>
+        <button class="pool-btn" @click="getData">
+          获取数据
+        </button>
       </div>
     </div>
 
@@ -72,11 +80,38 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import initLiquity from '@/common/mixin/initLiquity';
+import BigNumber from 'bignumber.js';
 export default {
+  mixins: [initLiquity],
+  data() {
+    return {
+      BigNumber,
+    };
+  },
+  computed: {
+    ...mapState('buildr', ['liquityState']),
+    stabilityDeposit() {
+      const val = this.liquityState && this.liquityState.stabilityDeposit;
+      return val;
+    },
+    // 总质押
+    totalStake() {
+      const val =
+        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.shorten();
+      return val;
+    },
+    unCliaimBNB() {
+      const val =
+        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.shorten();
+      return val;
+    },
+  },
   components: {
-    take: ()=> import('./dialog/takeoutDialog.vue'),
-    pledge: ()=> import('./dialog/pledgeDialog.vue'),
-    extract: ()=> import('./dialog/extractReward.vue')
+    take: () => import('./dialog/takeoutDialog.vue'),
+    pledge: () => import('./dialog/pledgeDialog.vue'),
+    extract: () => import('./dialog/extractReward.vue'),
   },
   methods: {
     openPledge() {
@@ -87,7 +122,10 @@ export default {
     },
     openTake() {
       this.$refs.take.open();
-    }
+    },
+    getData() {
+      console.log(this.liquityState);
+    },
   },
 };
 </script>
