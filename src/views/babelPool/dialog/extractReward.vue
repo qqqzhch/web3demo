@@ -80,19 +80,19 @@ export default {
       // }
       this.extractLoading = true;
       try {
-        const provider = this.ethersprovider;
-        const account = this.ethAddress;
-        const chainId = this.ethChainID ;
-        const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
-          userAddress: account,
-          frontendTag: AddressZero,
-          useStore: "blockPolled"
-        });
-        console.log(connection);
-        const liquity = EthersLiquity._from(connection);
+        // const provider = this.ethersprovider;
+        // const account = this.ethAddress;
+        // const chainId = this.ethChainID ;
+        // const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+        //   userAddress: account,
+        //   frontendTag: AddressZero,
+        //   useStore: "blockPolled"
+        // });
+        // console.log(connection);
+        // const liquity = EthersLiquity._from(connection);
 
         // 合约操作
-        const transaction = await  liquity.send.withdrawGainsFromStaking({gasLimit:800000});
+        const transaction = await  this.liquity.send.withdrawGainsFromStaking({gasLimit:800000});
 
         
         event.$emit('sendSuccess');
@@ -122,6 +122,7 @@ export default {
   computed: {
     ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
     ...mapState('buildr', ['liquityState']),
+    ...mapState('pool', ['liquity']),
     collateralGain:function(){
       return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.collateralGain.shorten();
     },

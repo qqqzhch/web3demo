@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ lqtyBalance }}</span>
+              <span>{{ lqtyBalance }} Babel</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -82,6 +82,7 @@ export default {
   computed: {
     ...mapState(['ethAddress','ethChainID','web3','ethersprovider']),
     ...mapState('buildr', ['liquityState']),
+    ...mapState('pool', ['liquity']),
     lqtyBalance:function(){
     return this.liquityState&&this.liquityState.lqtyBalance&&this.liquityState.lqtyBalance.shorten();
       
@@ -99,18 +100,18 @@ export default {
         return ;
       }
       console.log(this.$data);
-      const provider = this.ethersprovider;
-      const account = this.ethAddress;
-      const chainId = this.ethChainID ;
-       const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
-          userAddress: account,
-          frontendTag: AddressZero,
-          useStore: "blockPolled"
-        });
-        console.log(connection);
-      const liquity = EthersLiquity._from(connection);
+      // const provider = this.ethersprovider;
+      // const account = this.ethAddress;
+      // const chainId = this.ethChainID ;
+      //  const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+      //     userAddress: account,
+      //     frontendTag: AddressZero,
+      //     useStore: "blockPolled"
+      //   });
+      //   console.log(connection);
+      // const liquity = EthersLiquity._from(connection);
        try {
-         const transaction = await  liquity.send.stakeLQTY(this.pledgeAmount,{gasLimit:800000});
+         const transaction = await  this.liquity.send.stakeLQTY(this.pledgeAmount,{gasLimit:800000});
       console.log(transaction);
       const baseTip = `stake ${this.pledgeAmount} Babel`;
         this.$refs.haveSendtx.open(baseTip);
@@ -123,6 +124,7 @@ export default {
         ]);
           this.openPledgeDialog = false;
        } catch (error) {
+         console.log(error);
            this.$Notice.error({
           title: this.$t('notice.swapNotice.n3'),
         });

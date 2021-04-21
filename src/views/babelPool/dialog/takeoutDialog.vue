@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ stakedLQTY }}</span>
+              <span>{{ stakedLQTY }} Babel</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -82,6 +82,7 @@ export default {
   computed: {
     ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
     ...mapState('buildr', ['liquityState']),
+    ...mapState('pool', ['liquity']),
     stakedLQTY:function(){
       return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY.shorten();
     }
@@ -153,18 +154,18 @@ export default {
         return ;
       }
       console.log(this.$data);
-      const provider = this.ethersprovider;
-      const account = this.ethAddress;
-      const chainId = this.ethChainID ;
-       const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
-          userAddress: account,
-          frontendTag: AddressZero,
-          useStore: "blockPolled"
-        });
-        console.log(connection);
-      const liquity = EthersLiquity._from(connection);
+      // const provider = this.ethersprovider;
+      // const account = this.ethAddress;
+      // const chainId = this.ethChainID ;
+      //  const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
+      //     userAddress: account,
+      //     frontendTag: AddressZero,
+      //     useStore: "blockPolled"
+      //   });
+      //   console.log(connection);
+      // const liquity = EthersLiquity._from(connection);
        try {
-         const transaction = await  liquity.send.unstakeLQTY(this.pledgeAmount,{gasLimit:800000});
+         const transaction = await  this.liquity.send.unstakeLQTY(this.pledgeAmount,{gasLimit:800000});
       console.log(transaction);
       const baseTip = `unstake ${this.pledgeAmount} Babel`;
         this.$refs.haveSendtx.open(baseTip);
