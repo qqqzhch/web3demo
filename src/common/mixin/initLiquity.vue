@@ -1,6 +1,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
-import { fetchLiquityStore } from '@/contactLogic/buildr/liquity';
+import { fetchLiquityEntity } from '@/contactLogic/buildr/liquity';
 import { AddressZero } from '@ethersproject/constants';
 import { EthersLiquity, _connectByChainId } from '@webfans/lib-ethers';
 import event from '@/common/js/event';
@@ -39,7 +39,7 @@ export default {
         library: this.ethersprovider,
         account: this.ethAddress,
       };
-      const liquity = fetchLiquityStore(params);
+      const liquity = fetchLiquityEntity(params);
       liquity.store.onLoaded = () => {
         this.setLiquityState(liquity.store.state);
         this.getLiquityInstance();
