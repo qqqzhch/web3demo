@@ -32,7 +32,7 @@
           </div>
           <div class="pull-right">
             <p class="balance">
-              <span>{{ $t('build-balance') }}  </span>{{ currencyNumber }} {{ defaultPool.token }}
+              <span>{{ $t('build-balance') }}  </span>{{ accountBalance | formatNormalValue }} {{ defaultPool.token }}
             </p>
           </div>
         </div>
@@ -109,17 +109,19 @@
         <div class="build-grid-2 mrg-b-5">
           <p>Collateral ratio：</p>
           <div class="text-right">
-            {{ troveIndicators.collateralRatio | formatNormalValue }} %
+            {{ BigNumber(troveIndicators.collateralRatio).times(100).toNumber() | formatNormalValue }} %
           </div>
         </div>
+        <div v-if="errorInfo" class="notice-content">
+          <img src="../../../assets/img/notice-red.png">
+          <p>{{ errorInfo }}</p>
+        </div>
+        <div v-else :style="{height: '47px'}" />
         <div v-if="!btnloading">
-          <!--<button v-if="isApprove()" class="btn" @click="onApproveClick">-->
-          <!--{{ $t('build-Approve') }}-->
-          <!--</button>-->
-          <!--<button v-else-if="poolsEnable[defaultPool.token]" class="btn btn-disabled">-->
-          <!--{{ $t('build-vault-created') }}-->
-          <!--</button>-->
-          <button class="btn" @click="onOpenTroveClick">
+          <button v-if="!errorInfo" class="btn" @click="onOpenTroveClick">
+            Open Trove
+          </button>
+          <button v-if="errorInfo" class="btn btn-disabled">
             Open Trove
           </button>
         </div>
@@ -153,6 +155,13 @@
 }
 .f-green {
   color: #00d075 !important;
+}
+.btn-disabled {
+  cursor: not-allowed;
+  background-color: #999;
+  &:hover {
+    background-color: #999 !important;
+  }
 }
 .create {
   // margin-left: 100px;
@@ -282,6 +291,27 @@
       background-color: #999;
       &:hover {
         background-color: #999 !important;
+      }
+    }
+    .notice-content {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      padding: 9px 30px;
+      width: 100%;
+      height: 32px;
+      line-height: 32px;
+      background: rgba(255, 60, 0, 0.1);
+      border-radius: 4px;
+      img {
+        margin-right: 10px;
+      }
+      p {
+        margin-top: 8px;
+        font-size: 12px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #ff3c00;
       }
     }
   }

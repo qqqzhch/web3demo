@@ -4,10 +4,11 @@ import event from '@/common/js/event';
 import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
 import { getCollateralPools } from '@/contactLogic/buildr/balance';
-import { fetchTokenBalance } from '@/contactLogic/buildr/create';
 import i18n from '../../../i18n/index.js';
 
+import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
 import { openTrove, calcTroveIndicators } from '../../../contactLogic/buildr/liquity';
+import { liquityValidate } from '../../../contactLogic/buildr/validate';
 
 export default {
   name: 'create',
@@ -19,7 +20,8 @@ export default {
       BigNumber,
       btnloading: false,
       depositAmount: 0,
-      borrowAmount: 1800,
+      borrowAmount: 0,
+      errorInfo: null
     };
   },
   components: {
@@ -58,6 +60,9 @@ export default {
     troveIndicators(){
       return calcTroveIndicators(this.liquityState, this.depositAmount, this.borrowAmount);
     },
+    accountBalance() {
+     return this.liquityState.accountBalance.toString();
+    }
   },
   methods: {
     getTokenImg(tokensymbol){
@@ -70,20 +75,36 @@ export default {
         this.$router.push('/vault/balance');
       } else {
         this.getPools();
-        this.loadData();
       }
     },
     getPools() {
-        const collateralPools = getCollateralPools(this.ethChainID);
-        this.collateralPools = collateralPools;
+        this.collateralPools = getCollateralPools(this.ethChainID);
         this.defaultPool = this.collateralPools[0];
-        this.loadData();
-        // this.checkPoolsEnable();
+    },
+    validate() {
+      const params = {
+        state: this.liquityState,
+        trove: this.liquityState.trove,
+        borrowingRate: this.liquityState.borrowingRate,
+        depositAmount: this.depositAmount,
+        borrowAmount: this.borrowAmount,
+      };
+      this.errorInfo = liquityValidate(params);
+    },
+    onChangeDepositAmount(val) {
+      this.depositAmount = val || '';
+      if (this.depositAmount) {
+        this.borrowAmount = LUSD_MINIMUM_DEBT;
+      }
+      this.validate();
+    },
+    onChangeBorrowAmount(val) {
+      this.borrowAmount = val || '';
+      this.validate();
     },
     getParams() {
-      const { isNative, token } = this.defaultPool;
+      const { token } = this.defaultPool;
       return {
-        isNative,
         tokenName: token,
         chainID: this.ethChainID,
         library: this.ethersprovider,
@@ -91,19 +112,15 @@ export default {
         web3: this.web3,
       };
     },
-    async getCurrencyNumber() {
-      const params = this.getParams();
-      this.currencyNumber = await fetchTokenBalance(params);
-    },
-
-    onChangeDepositAmount(val) {
-      this.depositAmount = val || '';
-      if (this.depositAmount) {
-        this.borrowAmount = 2000;
-      }
-    },
-    onChangeBorrowAmount(val) {
-      this.borrowAmount = val || '';
+    async onOpenTroveClick() {
+      const params = {
+        ...this.getParams(),
+        depositAmount: this.depositAmount,
+        borrowLUSDAmount: this.borrowAmount,
+        liquityState: this.liquityState,
+      };
+      const tx = await openTrove(params);
+      this.sendtx(tx);
     },
     sendtx(tx) {
       if(tx && tx.base){
@@ -117,19 +134,6 @@ export default {
           title: i18n.t('notice.buidrNotice.n3'),
         });
       }
-    },
-    async onOpenTroveClick() {
-      const params = {
-        ...this.getParams(),
-        depositAmount: this.depositAmount,
-        borrowLUSDAmount: this.borrowAmount,
-        liquityState: this.liquityState,
-      };
-      const tx = await openTrove(params);
-      this.sendtx(tx);
-    },
-    loadData() {
-      this.getCurrencyNumber();
     },
   },
   watch: {

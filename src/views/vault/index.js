@@ -1,7 +1,6 @@
 import { mapState, mapActions } from "vuex";
 import { fetchLiquityEntity } from "../../contactLogic/buildr/liquity";
 
-
 export default {
   name: 'Vault',
   data() {

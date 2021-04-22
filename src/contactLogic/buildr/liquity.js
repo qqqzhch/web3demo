@@ -134,7 +134,11 @@ export const calcTroveIndicators = (liquityState, depositAmount, debtAmount) => 
 /**
  * adjust Balance
  *
- * type: deposit
+ * type:
+ * deposit 存
+ * Withdraw 取
+ * Borrow 借
+ * Repay 还
  * */
 
 const typeOptions = {
