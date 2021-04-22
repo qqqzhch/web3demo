@@ -45,6 +45,11 @@ const routes = [
     name: "lpPool",
     component: () => import("@/views/lpPool/index.vue"),
   },
+  {
+    path: "/troves",
+    name: "troves",
+    component: () => import("@/views/troves/index.vue"),
+  },
 
 
   {

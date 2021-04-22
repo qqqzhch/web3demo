@@ -20,6 +20,10 @@
             LP Pool
           </router-link>
 
+          <router-link class="menu-item" to="/troves" active-class="active">
+            Troves
+          </router-link>
+
 
           <!-- <router-link class="menu-item" to="/exchange" active-class="active">
             {{ $t('header.nav.Exchange') }}

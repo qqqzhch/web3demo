@@ -54,7 +54,7 @@
   .content-warpper {
     margin-top: 24px;
     .content {
-      /*margin-right: 24px;*/
+      // margin-right: 24px;
       width: 100%;
       background: linear-gradient(270deg, #3f5efb 0%, #fc466b 100%);
       border-radius: 12px;
