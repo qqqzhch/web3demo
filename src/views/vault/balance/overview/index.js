@@ -9,18 +9,26 @@ export default {
     };
   },
   computed: {
-    ...mapState('buildr', ['poolsData']),
+    ...mapState('buildr', ['liquityState']),
+    price() {
+      return this.liquityState.price.toString();
+    },
     totalValue() {
-      return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(BigNumber(pool.pledgeNumber).times(pool.currencyPrice)),  0);
+      return this.liquityState.trove.collateral.toString();
     },
     totalDebt() {
-      return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(pool.currentDebt),  0);
+      return this.liquityState.trove.debt.toString();
     },
-    totalMaxMintable() {
-      return this.poolsData.reduce((acc, pool) => BigNumber(acc).plus(pool.maxMintable),  0);
+    borrowingRate() {
+      return this.liquityState.borrowingRate.toString();
     },
-    totalFee() {
-      return this.poolsData.reduce((acc, pool) => BigNumber(pool.currentDebt).times(pool.feeRate).plus(acc),  0);
+    totalCollateralRatio() {
+      const { total, price } = this.liquityState;
+      const totalRatio = total.collateralRatio(price).toString();
+      return totalRatio;
+    },
+    redemptionRate() {
+      return this.liquityState.redemptionRate.toString();
     }
   },
   methods: {

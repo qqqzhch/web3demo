@@ -15,6 +15,7 @@ import {
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);
 
+/**********Liquity config start***************/
 // 这个是什么地址？
 const frontendTag = '0xc7B375ce501a2432A25d584dF1f40c73c83f9534';
 // 最低费率0.5%
@@ -22,41 +23,24 @@ const minFeeRate = 0.005;
 // Gas Limit
 const gasLimit = 800000;
 
+const stableName = 'LUSD';
+
+const liquidationRatio = 1.1;
+
+/**********Liquity config end***************/
+
 /**
- * open Trove
+ * 获取最大借贷利率
  * */
-
-export const openTrove = async ({library, account, chainID, depositAmount, borrowLUSDAmount, liquityState}) => {
-
-  const maxBorrowingRate = liquityState.borrowingRate.add(minFeeRate).toString();
-
-  const connection =  _connectByChainId(library, library.getSigner(account), chainID, {
-    userAddress: account,
-    frontendTag,
-    useStore: "blockPolled"
-  });
-  // console.log(connection);
-
-  const liquity = EthersLiquity._from(connection);
-  const { newTrove } = await liquity.openTrove({
-    depositCollateral: depositAmount,
-    borrowLUSD: borrowLUSDAmount,
-  }, maxBorrowingRate,{ gasLimit: gasLimit });
-
-  // console.log(newTrove);
-
-  return {
-    base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} LUSD`,
-    newTrove
-  };
+export const getMaxBorrowingRate = (liquityState) => {
+  return liquityState.borrowingRate.add(minFeeRate).toString();
 };
 
 /**
- * fetch Liquity Store
+ * fetch Liquity Entity
  *
  * */
-
-export const fetchLiquityStore = ({library, account, chainID}) => {
+export const fetchLiquityEntity = ({library, account, chainID}) => {
   const connection =  _connectByChainId(library, library.getSigner(account), chainID, {
     userAddress: account,
     frontendTag,
@@ -68,8 +52,49 @@ export const fetchLiquityStore = ({library, account, chainID}) => {
   return liquity;
 };
 
+
+/**
+ * open Trove
+ * */
+
+export const openTrove = async ({library, account, chainID, depositAmount, borrowLUSDAmount, liquityState}) => {
+  const liquity = fetchLiquityEntity({library, account, chainID});
+  const maxBorrowingRate = getMaxBorrowingRate(liquityState);
+
+  const transaction = await liquity.send.openTrove({
+    depositCollateral: depositAmount,
+    borrowLUSD: borrowLUSDAmount,
+  }, maxBorrowingRate,{ gasLimit: gasLimit });
+
+  return {
+    base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} LUSD`,
+    transaction
+  };
+};
+
+/**
+ * close Trove
+ * */
+
+export const closeTrove = async ({library, account, chainID}) => {
+  const liquity = fetchLiquityEntity({library, account, chainID});
+  const transaction = await liquity.send.closeTrove({gasLimit: gasLimit});
+  return {
+    base: `Close Trove`,
+    transaction
+  };
+};
+
+
+
 /**
  * calc fee
+ * liquidationReserve : 清算准备金 200 LUSD
+ * price：清算价格
+ * borrowingRate： 借贷利率
+ * borrowingFee： 借贷费用
+ * collateralRatio： 当前抵押率
+ * liquidationRatio: 清算抵押率
  * */
 
 const feeFrom  = (original, edited, borrowingRate) => {
@@ -81,14 +106,14 @@ const feeFrom  = (original, edited, borrowingRate) => {
   }
 };
 
-export const calcTroveIndicators = (liquityState, depositAmount, borrowLUSDAmount) => {
+export const calcTroveIndicators = (liquityState, depositAmount, debtAmount) => {
   const originalTrove = liquityState.trove;
   let edited = new Trove(originalTrove.collateral, originalTrove.debt);
 
   const { price, borrowingRate } = liquityState;
 
   edited = edited.setCollateral(depositAmount);
-  edited = edited.setDebt(borrowLUSDAmount);
+  edited = edited.setDebt(debtAmount);
 
   const borrowingFee = feeFrom(originalTrove, edited, borrowingRate).toString();
   const collateralRatio = !edited.isEmpty ? edited.collateralRatio(price).toString() : '';
@@ -96,12 +121,44 @@ export const calcTroveIndicators = (liquityState, depositAmount, borrowLUSDAmoun
   // const collateralRatioChange = Difference.between(collateralRatio, originalCollateralRatio);
 
   return {
+    stableName,
     liquidationReserve: LUSD_LIQUIDATION_RESERVE.toString(),
     price,
     borrowingRate,
     borrowingFee,
-    collateralRatio
+    collateralRatio,
+    liquidationRatio
   };
 };
 
+/**
+ * adjust Balance
+ *
+ * type: deposit
+ * */
 
+const typeOptions = {
+  deposit: 'Deposit',
+  withdraw: 'Withdraw',
+  borrow: 'Borrow',
+  repay: 'Repay',
+};
+
+export const fetchAdjustBalanace = async ({library, account, chainID, liquityState, type, coinAmount, unit}) => {
+  const liquity = fetchLiquityEntity({library, account, chainID});
+  const maxBorrowingRate = getMaxBorrowingRate(liquityState);
+
+  let params = {};
+  switch (type) {
+    case 'deposit': params = { depositCollateral: coinAmount }; break;
+    case 'withdraw': params = { withdrawCollateral: coinAmount }; break;
+    case 'borrow': params = { borrowLUSD: coinAmount }; break;
+    case 'repay': params = { repayLUSD: coinAmount }; break;
+  }
+
+  const transaction = await liquity.send.adjustTrove(params, maxBorrowingRate,{ gasLimit });
+  return {
+    base: `${typeOptions[type]} ${coinAmount} ${unit}`,
+    transaction,
+  };
+};

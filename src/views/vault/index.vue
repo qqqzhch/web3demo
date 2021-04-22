@@ -1,29 +1,29 @@
 <template>
   <div v-if="liquityReady" class="buildr-wrap">
-    <div class="tab">
-      <div
-        :class="{'tab-item': true, 'tab-active': nav === 'balance'}"
-        @click="toPage('balance')"
-      >
-        {{ $t('build-manage') }}
-      </div>
-      <div v-if="isOpen">
-        <button
-          class="btn create-btn"
-          @click="toPage('close')"
-        >
-          关闭
-        </button>
-      </div>
-      <div v-else>
-        <button
-          class="btn create-btn"
-          @click="toPage('create')"
-        >
-          + {{ $t('build-create-vault') }}
-        </button>
-      </div>
-    </div>
+    <!--<div class="tab">-->
+    <!--<div-->
+    <!--:class="{'tab-item': true, 'tab-active': nav === 'balance'}"-->
+    <!--@click="toPage('balance')"-->
+    <!--&gt;-->
+    <!--{{ $t('build-manage') }}-->
+    <!--</div>-->
+    <!--<div v-if="isOpen">-->
+    <!--<button-->
+    <!--class="btn create-btn"-->
+    <!--@click="toPage('close')"-->
+    <!--&gt;-->
+    <!--关闭-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--<div v-else>-->
+    <!--<button-->
+    <!--class="btn create-btn"-->
+    <!--@click="toPage('create')"-->
+    <!--&gt;-->
+    <!--+ {{ $t('build-create-vault') }}-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--</div>-->
     <div class="buildr-content">
       <router-view />
     </div>

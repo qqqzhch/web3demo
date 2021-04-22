@@ -1,5 +1,5 @@
 import ScInput from '../../../components/ScInput.vue';
-import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
+import { fetchAdjustBalanace } from '@/contactLogic/buildr/liquity';
 import {mapState} from "vuex";
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
@@ -12,7 +12,6 @@ export default {
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
-      unit: 'scUSD',
       BigNumber,
     };
   },
@@ -21,48 +20,20 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    // 可用额度
-    unlockedCollateral() {
-      return BigNumber(this.poolData.unlockedCollateral).toFixed(6);
+    // 计算减少的存款额度
+    newDeposit() {
+      return BigNumber(this.poolData.depositAmount).minus(this.coinAmount).toNumber();
     },
-    // 铸造额度
-    currMaxMintable() {
-      const { maxMintable, targetRatio, currencyPrice } = this.poolData;
-
-      let currMaxMintable = BigNumber(maxMintable).minus(BigNumber(this.coinAmount).times(currencyPrice).times(targetRatio));
-      currMaxMintable = BigNumber(currMaxMintable).lt(0) ? 0 : currMaxMintable;
-
-      return currMaxMintable;
-    },
-    // 已有债务
-    existingDebt() {
-      return BigNumber(this.poolData.currentDebt);
-    },
-    // 抵押率
-    newCollRX() {
-      const { pledgeNumber, currencyPrice } = this.poolData;
-
-      const existingDebt = BigNumber(this.existingDebt).isZero() ? 0 : this.existingDebt;
-      return existingDebt ? BigNumber(pledgeNumber).minus(this.coinAmount).times(currencyPrice).div(existingDebt).toNumber() : 0;
-    },
-    // 初始清算价格
-    liquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-
-      return liquPrice;
-    },
-    // 变化后的清算价格
-    newLiquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const newLiquPrice = BigNumber(pledgeNumber).isZero() && (!BigNumber(pledgeNumber).minus(this.coinAmount))
-        ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(BigNumber(pledgeNumber).minus(this.coinAmount)).toFixed(6);
-
-      return newLiquPrice;
+    // 新的抵押率
+    newCollateralRatio() {
+      const { debtAmount } = this.poolData;
+      const isValid = BigNumber(this.coinAmount).lte(this.poolData.depositAmount) && BigNumber(this.coinAmount).gte(0);
+      const { collateralRatio } = isValid ? this.$parent.getTroveIndicators(this.newDeposit, debtAmount) : {collateralRatio: 0};
+      return collateralRatio;
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.unlockedCollateral) || BigNumber(this.coinAmount).isLessThan(0)) {
+      if(BigNumber(this.coinAmount).gt(this.poolData.depositAmount) || BigNumber(this.coinAmount).isLessThan(0)) {
         return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
@@ -103,10 +74,9 @@ export default {
       this.step = 2;
     },
     async onExitClick() {
-      this.isOpen = false;
-      const { isNative } = this.poolData;
       const params = {
-        type: isNative ? 'exitNative' : 'exit',
+        type: 'withdraw',
+        liquityState: this.poolData.liquityState,
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
@@ -115,8 +85,9 @@ export default {
         coinAmount: this.coinAmount,
         unit: this.poolData.tokenName,
       };
-      const tx = await fetchBalanaceChange(params);
+      const tx = await fetchAdjustBalanace(params);
       this.$parent.sendtx(tx);
+      this.isOpen = false;
     }
   },
 };

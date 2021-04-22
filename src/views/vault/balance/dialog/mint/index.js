@@ -1,6 +1,6 @@
 import { mapState, mapActions } from "vuex";
 import ScInput from '../../../components/ScInput.vue';
-import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
+import { fetchAdjustBalanace } from '@/contactLogic/buildr/liquity';
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
 
@@ -11,7 +11,6 @@ export default {
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
-      unit: 'scUSD',
       BigNumber,
     };
   },
@@ -20,47 +19,24 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    feeRate() { // 稳定费率
-      return `${BigNumber(this.poolData.feeRate).times(100)}%`;
+    // 计算Fee
+    debtFee() {
+      const feeRate = this.poolData.borrowingRate ? this.poolData.borrowingRate : 0;
+      return BigNumber(this.coinAmount).times(feeRate);
     },
-    // 已有债务
-    existingDebt() {
-      return BigNumber(this.poolData.currentDebt);
-    },
-    // 增加后的债务
+    // 计算增加的存款额度
     newDebt() {
-      return BigNumber(this.existingDebt).plus(this.coinAmount);
+      return BigNumber(this.poolData.debtAmount).plus(this.coinAmount).plus(this.debtFee).toNumber();
     },
-    // 当前额度
-    maxMintable() {
-      return BigNumber(this.poolData.maxMintable);
-    },
-    // 铸造额度
-    currMaxMintable() {
-      const { maxMintable } = this.poolData;
-      return BigNumber(maxMintable).minus(this.coinAmount);
-    },
-    // 抵押率
-    newCollRX() {
-      const { pledgeNumber, currencyPrice } = this.poolData;
-      return BigNumber(pledgeNumber).times(currencyPrice).div(this.newDebt);
-    },
-    // 初始清算价格
-    liquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-
-      return liquPrice;
-    },
-    // 变化后的清算价格
-    newLiquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-      return newLiquPrice;
+    // 新的抵押率
+    newCollateralRatio() {
+      const { depositAmount } = this.poolData;
+      const { collateralRatio } = this.$parent.getTroveIndicators(depositAmount, this.newDebt);
+      return collateralRatio;
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.maxMintable) || BigNumber(this.coinAmount).isLessThan(0)) {
+      if(BigNumber(this.coinAmount).isLessThan(0)) {
         return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
@@ -102,21 +78,22 @@ export default {
       this.step = 2;
     },
     async onMintClick() {
-      this.isOpen = false;
       this.setCurrentPool({});
       const params = {
-        type: 'mint',
+        type: 'borrow',
+        liquityState: this.poolData.liquityState,
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-        unit: this.unit,
+        unit:this.poolData.stableName,
       };
 
-      const tx = await fetchBalanaceChange(params);
+      const tx = await fetchAdjustBalanace(params);
       this.$parent.sendtx(tx);
+      this.isOpen = false;
     }
   },
 };

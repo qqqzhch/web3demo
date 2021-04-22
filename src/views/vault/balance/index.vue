@@ -3,7 +3,7 @@
     <div class="overview-warpper">
       <Overview />
     </div>
-    <div class="CDP-content">
+    <div v-if="isOpen" class="CDP-content">
       <div v-if="!poolsData.length">
         <Loading />
       </div>
@@ -11,14 +11,15 @@
         <div class="pool-item-warp">
           <div class="item-top">
             <div class="item-title">
-              <!--<span>{{ $t('build-target-coll-ratio') }}</span>-->
-              <!--<span class="f-green">-->
-              <!--{{ BigNumber(poolItem.targetRX).times(100).toFixed(2) }}%-->
-              <!--</span>-->
-              <span>{{ $t('build-liquidation-price') }}: <span class="f-danger">{{ getLiquidationPrice(poolItem) }} USD</span></span>
+              <span>{{ $t('build-liquidation-price') }}: <span class="f-danger">$ {{ getLiquidationPrice(poolItem) }}</span></span>
               <span>{{ $t('build-liquidation-ratio') }}: <span
                 class="f-warning"
-              >{{ BigNumber(poolItem.liquidationRX).times(100) }}%</span></span>
+              >{{ BigNumber(poolItem.liquidationRatio).times(100) }}%</span></span>
+            </div>
+            <div class="text-right">
+              <button class="btn create-btn" @click="openCloseDialog(poolItem)">
+                关闭
+              </button>
             </div>
           </div>
           <div class="CDP-item">
@@ -32,26 +33,26 @@
                 <div class="circle-wapper">
                   <span
                     :class="{
-                      'bg-green': poolItem.currentCollRX >= 5,
-                      'bg-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
-                      'bg-danger': poolItem.currentCollRX <= 2
+                      'bg-green': poolItem.collateralRatio >= 1.5,
+                      'bg-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
+                      'bg-danger': poolItem.collateralRatio <= 1.1
                     }"
                   />
                   <p
                     :class="{
-                      'f-green': poolItem.currentCollRX >= 5,
-                      'f-warning': poolItem.currentCollRX < 5 && poolItem.currentCollRX > 2,
-                      'f-danger': poolItem.currentCollRX <= 2
+                      'f-green': poolItem.collateralRatio >= 1.5,
+                      'f-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
+                      'f-danger': poolItem.collateralRatio <= 1.1
                     }"
                   >
-                    {{ BigNumber(poolItem.currentCollRX).times(100).toFixed(2) }}%
+                    {{ BigNumber(poolItem.collateralRatio).times(100).toFixed(2) }}%
                   </p>
                 </div>
               </div>
               <div class="mrg-tb-20">
                 <span>{{ $t('build-current-price') }}</span>
                 <p class="f-green">
-                  {{ BigNumber(poolItem.currencyPrice).toFixed(6) }} USD
+                  $ {{ poolItem.currencyPrice }}
                 </p>
               </div>
             </div>
@@ -59,7 +60,7 @@
               <div>
                 <span>{{ $t('build-Deposited') }}</span>
                 <p>
-                  {{ BigNumber(poolItem.pledgeNumber) }} {{ poolItem.tokenName }}
+                  {{ poolItem.depositAmount }} {{ poolItem.tokenName }}
                 </p>
               </div>
               <div class="mrg-tb-10">
@@ -68,15 +69,14 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openExitDialog(poolItem)">{{ $t('build-avail-to-withdraw') }}
-                  {{ BigNumber(poolItem.unlockedCollateral).toFixed(2) }} {{ poolItem.tokenName }}</a>
+                <a href="javascript:;" @click="openExitDialog(poolItem)">释放</a>
               </div>
             </div>
             <div class="small-item text-center">
               <div>
-                <span>还可借</span>
+                <span>当前债务</span>
                 <p>
-                  {{ BigNumber(poolItem.maxMintable).toFixed(2) }} LUSD
+                  {{ poolItem.debtAmount | formatNormalValue }} LUSD
                 </p>
               </div>
               <div class="mrg-tb-10">
@@ -85,8 +85,9 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openBurnDialog(poolItem)">{{ $t('build-current-debt') }}
-                  {{ BigNumber(poolItem.currentDebt).toFixed(2) }} LUSD</a>
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">
+                  偿还
+                </a>
               </div>
             </div>
             <div class="btn-warpper" />
@@ -94,11 +95,19 @@
         </div>
       </div>
     </div>
+    <div v-else class="CDP-content">
+      <div class="create-vault-content">
+        <button class="btn create-btn" @click="toPage('create')">
+          创建金库
+        </button>
+      </div>
+    </div>
     <div class="modal-wrapper">
       <JoinDialog ref="tokenJoin" />
       <MintDialog ref="tokenMint" />
       <BurnDialog ref="tokenBurn" />
       <ExitDialog ref="tokenExit" />
+      <CloseDialog ref="tokenClose" />
     </div>
     <haveSendDialog ref="haveSendtx" />
   </div>
@@ -124,6 +133,9 @@
 .bg-danger {
   background-color: #ff3c00 !important;
 }
+.ivu-modal-body {
+  padding: 0px;
+}
 
 .balance {
   margin-top: 24px;
@@ -139,10 +151,32 @@
     /*margin: 24px 0px 50px 0px;*/
     /*padding: 32px 44px;*/
     /*box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);*/
-    .pool-item-warp {
+    .pool-item-warp, .create-vault-content {
       margin-top: 24px;
       padding: 24px;
       box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    }
+    .create-vault-content {
+      position: relative;
+      min-height: 200px;
+      line-height: 200px;
+      text-align: center;
+      .create-btn {
+        position: absolute;
+        left: 45%;
+        top: 40%;
+        width: 120px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #0058FF;
+        background: rgba(0, 88, 255, 0.1);
+        border-radius: 16px;
+        &:hover{
+          background: rgba(0, 88, 255, 0.2);
+        }
+      }
     }
     .item-top {
       display: grid;
@@ -157,6 +191,25 @@
         /*text-align: right;*/
         > span {
           margin-right: 20px;
+        }
+      }
+      .text-right {
+        position: relative;
+        .create-btn {
+          position: absolute;
+          right: 0px;
+          top: -5px;
+          width: 120px;
+          height: 32px;
+          line-height: 32px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #0058FF;
+          background: rgba(0, 88, 255, 0.1);
+          border-radius: 16px;
+          &:hover{
+            background: rgba(0, 88, 255, 0.2);
+          }
         }
       }
     }

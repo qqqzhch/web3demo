@@ -1,8 +1,9 @@
 import { mapState } from "vuex";
 import ScInput from '../../../components/ScInput.vue';
-import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
+import { fetchAdjustBalanace } from '@/contactLogic/buildr/liquity';
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
+import event from '@/common/js/event';
 
 export default {
   data() {
@@ -11,8 +12,8 @@ export default {
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
-      unit: 'scUSD',
       BigNumber,
+      loading: false,
     };
   },
   components: {
@@ -20,57 +21,19 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    // 可用额度
-    currencyNumber() {
-      return BigNumber(this.poolData.currencyNumber).toFixed(6);
+    // 计算增加的存款额度
+    newDeposit() {
+      return BigNumber(this.poolData.depositAmount).plus(this.coinAmount).toNumber();
     },
-    // 已有债务
-    existingDebt() {
-      return BigNumber(this.poolData.currentDebt);
-    },
-    // 铸造额度
-    currMaxMintable() {
-      const { maxMintable, currentCollRX, targetRatio, targetRX, currencyPrice, pledgeNumber } = this.poolData;
-
-      let currMaxMintable = 0;
-      if(BigNumber(currentCollRX).gt(targetRX)) {
-        currMaxMintable = BigNumber(this.coinAmount).times(currencyPrice).times(targetRatio).plus(maxMintable);
-      } else {
-        // 达到目标抵押率需要的数量,如果coinAmount> targetAmount 增加额度，否则增加额度为0;
-        const targetAmount = BigNumber(this.existingDebt).times(targetRX).div(currencyPrice).minus(pledgeNumber);
-
-        const netAmount = BigNumber(this.coinAmount).gt(targetAmount) ? BigNumber(this.coinAmount).minus(targetAmount) : 0;
-        currMaxMintable = BigNumber(netAmount).times(currencyPrice).times(targetRatio).plus(maxMintable);
-      }
-      return currMaxMintable;
-    },
-    // 抵押率
-    newCollRX() {
-      const { pledgeNumber, currencyPrice } = this.poolData;
-
-      const existingDebt = BigNumber(this.existingDebt).isZero() ? 0 : this.existingDebt;
-      return existingDebt ? BigNumber(pledgeNumber).plus(this.coinAmount).times(currencyPrice).div(existingDebt).toNumber() : 0;
-    },
-
-    // 初始清算价格
-    liquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-
-      return liquPrice;
-    },
-    // 变化后的清算价格
-    newLiquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const coinAmout = BigNumber(pledgeNumber).plus(this.coinAmount).toNumber();
-      const newLiquPrice = (BigNumber(pledgeNumber).isZero() || (!coinAmout))
-        ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(coinAmout).toFixed(6);
-
-      return newLiquPrice;
+    // 新的抵押率
+    newCollateralRatio() {
+      const { debtAmount } = this.poolData;
+      const { collateralRatio } = this.$parent.getTroveIndicators(this.newDeposit, debtAmount);
+      return collateralRatio;
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.currencyNumber) || BigNumber(this.coinAmount).isLessThan(0)) {
+      if(BigNumber(this.coinAmount).gt(this.poolData.accountBalance) || BigNumber(this.coinAmount).isLessThan(0)) {
         return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
@@ -112,11 +75,9 @@ export default {
       this.step = 2;
     },
     async onJoinClick() {
-      this.isOpen = false;
-      const { isNative, isERC20 } = this.poolData;
-      const type = isNative ? 'joinNative' : isERC20 ? 'joinERC20' :'join';
       const params = {
-        type,
+        type: 'deposit',
+        liquityState: this.poolData.liquityState,
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
@@ -125,8 +86,9 @@ export default {
         coinAmount: this.coinAmount,
         unit: this.poolData.tokenName,
       };
-      const tx = await fetchBalanaceChange(params);
+      const tx = await fetchAdjustBalanace(params);
       this.$parent.sendtx(tx);
+      this.isOpen = false;
     }
   },
 };

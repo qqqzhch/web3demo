@@ -64,8 +64,8 @@
             class="myInput"
             title=""
             unit="LUSD"
-            :default-value="borrowLUSDAmount"
-            :on-change="onChangeLUSDAmount"
+            :default-value="borrowAmount"
+            :on-change="onChangeBorrowAmount"
           />
           <img :src="getTokenImg('LUSD')" alt="LUSD">
         </div>
@@ -84,7 +84,7 @@
             Debt:
           </p>
           <div class="text-right f-size-20">
-            {{ borrowLUSDAmount }} LUSD
+            {{ borrowAmount }} LUSD
           </div>
         </div>
 
