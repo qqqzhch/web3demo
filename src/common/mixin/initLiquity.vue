@@ -43,6 +43,7 @@ export default {
       liquity.store.onLoaded = () => {
         this.setLiquityState(liquity.store.state);
         this.getLiquityInstance();
+        console.log(liquity.store.state);
       };
 
       liquity.store.subscribe(({ newState, oldState }) => {
