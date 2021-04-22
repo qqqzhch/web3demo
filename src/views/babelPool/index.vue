@@ -9,7 +9,10 @@
       </p>
     </div>
 
-    <div class="pool-content">
+    <div v-if="showLoading">
+      <loading />
+    </div>
+    <div v-else class="pool-content">
       <h2 class="title">
         Babel
       </h2>
@@ -73,55 +76,74 @@
 
 <script>
 import initLiquity from '@/common/mixin/initLiquity';
-import BigNumber from 'bignumber.js';
 import { mapState } from 'vuex';
-
 export default {
   mixins: [initLiquity],
+  data() {
+    return {
+      showLoading: false
+    };
+  },
   components: {
     take: () => import('./dialog/takeoutDialog.vue'),
     pledge: () => import('./dialog/pledgeDialog.vue'),
     extract: () => import('./dialog/extractReward.vue'),
-  },
-  mounted() {
-    
-    
+    loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
     openPledge() {
-      this.$refs.pledge.open();
-      
+      this.$refs.pledge.open(this.lqtyBalance);
     },
     openExtract() {
-      this.$refs.extract.open();
+      const obj = {
+        lusdGain: this.lusdGain,
+        collateralGain: this.collateralGain,
+      };
+      this.$refs.extract.open(obj);
     },
     openTake() {
-      this.$refs.take.open();
+      this.$refs.take.open(this.stakedLQTY);
+    },
+    getData() {
+      this.showLoading = true;
+      setTimeout(() => {
+        this.showLoading = false;
+      }, 500);
     },
   },
-  watch:{
-    liquityReady:function(){
-      
-    }
-  },
-  computed:{
+  computed: {
     ...mapState('buildr', ['liquityState']),
-    totalStakedLQTY:function(){
-      
-      
-      return this.liquityState&&this.liquityState.totalStakedLQTY&&this.liquityState.totalStakedLQTY.shorten();
-
+    totalStakedLQTY() {
+      const val =
+        this.liquityState && this.liquityState.totalStakedLQTY && this.liquityState.totalStakedLQTY.toString();
+      const total = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return total;
     },
-    stakedLQTY:function(){
-      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.stakedLQTY.shorten();
+    stakedLQTY() {
+      const val = this.liquityState && this.liquityState.lqtyStake && this.liquityState.lqtyStake.stakedLQTY.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
     },
-    collateralGain:function(){
-      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.collateralGain.shorten();
+    collateralGain() {
+      const val =
+        this.liquityState && this.liquityState.lqtyStake && this.liquityState.lqtyStake.collateralGain.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
     },
-    lusdGain:function(){
-      return this.liquityState&&this.liquityState.lqtyStake&&this.liquityState.lqtyStake.lusdGain.shorten();
-    }
-  }
+    lusdGain() {
+      const val = this.liquityState && this.liquityState.lqtyStake && this.liquityState.lqtyStake.lusdGain.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
+    },
+    lqtyBalance() {
+      const val = this.liquityState && this.liquityState.lqtyBalance && this.liquityState.lqtyBalance.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
+    },
+  },
+  mounted() {
+    this.getData();
+  },
 };
 </script>
 

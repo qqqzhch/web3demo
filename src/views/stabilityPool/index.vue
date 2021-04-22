@@ -8,8 +8,10 @@
         Stability Pool
       </p>
     </div>
-
-    <div class="pool-content">
+    <div v-if="showLoading">
+      <loading />
+    </div>
+    <div v-else class="pool-content">
       <h2 class="title">
         LAI
       </h2>
@@ -92,6 +94,11 @@ import { mapState } from 'vuex';
 import initLiquity from '@/common/mixin/initLiquity';
 export default {
   mixins: [initLiquity],
+  data() {
+    return {
+      showLoading: false
+    };
+  },
   computed: {
     ...mapState('buildr', ['liquityState']),
     stabilityDeposit() {
@@ -150,6 +157,7 @@ export default {
     take: () => import('./dialog/takeoutDialog.vue'),
     pledge: () => import('./dialog/pledgeDialog.vue'),
     extract: () => import('./dialog/extractReward.vue'),
+    loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
     openPledge() {
@@ -166,8 +174,14 @@ export default {
       this.$refs.extract.open(obj);
     },
     getData() {
-      console.log(this.liquityState);
+      this.showLoading = true;
+      setTimeout(() => {
+        this.showLoading = false;
+      }, 500);
     },
+  },
+  mounted () {
+    this.getData();
   },
 };
 </script>

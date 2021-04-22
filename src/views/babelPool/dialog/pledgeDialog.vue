@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ lqtyBalance }} Babel</span>
+              <span>{{ balance }} Babel</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -49,25 +49,15 @@
         </div>
       </div>
     </Modal>
-    <haveSendDialog ref="haveSendtx" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
-import initLiquity from '@/common/mixin/initLiquity';
-const { EthersLiquity,  _connectByChainId } = require("@webfans/lib-ethers");
-import { AddressZero } from "@ethersproject/constants";
-
 import event from '@/common/js/event';
-
-
 export default {
   components: {
     Buttons: () => import('@/components/basic/buttons'),
-    haveSendDialog: () => import('@/components/basic/haveSendDialog.vue'),
   },
   data() {
     return {
@@ -80,68 +70,48 @@ export default {
     };
   },
   computed: {
-    ...mapState(['ethAddress','ethChainID','web3','ethersprovider']),
-    ...mapState('buildr', ['liquityState']),
     ...mapState('pool', ['liquity']),
-    lqtyBalance:function(){
-    return this.liquityState&&this.liquityState.lqtyBalance&&this.liquityState.lqtyBalance.shorten();
-      
-      
-      
-    }
+    liquityInstance() {
+      const val = this.liquity && this.liquity.send;
+      return val;
+    },
   },
   methods: {
-    open() {
+    open(data) {
       this.pledgeAmount = '';
+      this.balance = data;
       this.openPledgeDialog = true;
     },
-   async depositScusd(){
-      if(this.checkData()==false){
-        return ;
+    async depositScusd() {
+      if (!this.checkData()) {
+        return false;
       }
-      console.log(this.$data);
-      // const provider = this.ethersprovider;
-      // const account = this.ethAddress;
-      // const chainId = this.ethChainID ;
-      //  const connection =  _connectByChainId(provider, provider.getSigner(account), chainId, {
-      //     userAddress: account,
-      //     frontendTag: AddressZero,
-      //     useStore: "blockPolled"
-      //   });
-      //   console.log(connection);
-      // const liquity = EthersLiquity._from(connection);
-       try {
-         const transaction = await  this.liquity.send.stakeLQTY(this.pledgeAmount,{gasLimit:800000});
-      console.log(transaction);
-      const baseTip = `stake ${this.pledgeAmount} Babel`;
-        this.$refs.haveSendtx.open(baseTip);
+      this.sendLoading = true;
+      try {
+        const transaction = await this.liquityInstance.stakeLQTY(this.pledgeAmount, { gasLimit: this.$globalConfig.gasLimit });
+        const baseTip = `stake ${this.pledgeAmount} Babel`;
+        event.$emit('sendSuccess');
+        this.openPledgeDialog = false;
         event.$emit('sendtx', [
           transaction.rawSentTransaction,
           {
-            okinfo: baseTip +this.$t('swapConfirm.success'),
+            okinfo: baseTip + this.$t('swapConfirm.success'),
             failinfo: baseTip + this.$t('swapConfirm.fail'),
           },
         ]);
-          this.openPledgeDialog = false;
-       } catch (error) {
-         console.log(error);
-           this.$Notice.error({
+      } catch (error) {
+        console.log(error);
+        this.$Notice.error({
           title: this.$t('notice.swapNotice.n3'),
         });
-         
-       }
-      
-
-
+      }finally{
+        this.openPledgeDialog = false;
+        this.sendLoading = false;
+      }
     },
     percentage(val) {
-      const lqtyBalance = this.liquityState&&this.liquityState.lqtyBalance&&this.liquityState.lqtyBalance;
-      if(lqtyBalance){
-        this.balance = lqtyBalance.toString();
-
-      }
-      const balance = new BigNumber(this.balance);
-      const percent = new BigNumber(val);
+      const balance = this.$BigNumber(this.balance);
+      const percent = this.$BigNumber(val);
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
     },
 
@@ -157,10 +127,9 @@ export default {
 
     // 检验数据是否合法
     checkData() {
-      const lqtyBalance = this.liquityState&&this.liquityState.lqtyBalance&&this.liquityState.lqtyBalance;
-      const balance = lqtyBalance.toString();
-      const bigBalance = new BigNumber(balance);
-      const amount = new BigNumber(this.pledgeAmount);
+      const balance = this.balance;
+      const bigBalance = this.$BigNumber(balance);
+      const amount = this.$BigNumber(this.pledgeAmount);
       if (this.pledgeAmount === '') {
         this.$Notice.warning({
           title: this.$t('notice.n'),
@@ -186,7 +155,7 @@ export default {
 
       return true;
     },
-  }
+  },
 };
 </script>
 
