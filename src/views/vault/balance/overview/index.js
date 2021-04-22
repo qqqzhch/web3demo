@@ -1,10 +1,12 @@
 import { mapState } from "vuex";
 import BigNumber from "bignumber.js";
+import { stableName } from '../../../../contactLogic/buildr/liquity';
 
 export default {
   name: 'overview',
   data() {
     return {
+      stableName,
       BigNumber
     };
   },
@@ -32,8 +34,8 @@ export default {
     }
   },
   methods: {
-    refresh() {
-      this.$parent.loadData();
-    }
+    // refresh() {
+      // this.$parent.loadData();
+    // }
   }
 };

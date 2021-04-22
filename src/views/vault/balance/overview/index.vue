@@ -13,7 +13,7 @@
           </div>
           <div>
             <h2>总债务</h2>
-            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> LUSD </p>
+            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> {{ stableName }} </p>
           </div>
           <div>
             <h2>系统抵押率</h2>
@@ -28,9 +28,9 @@
             <p><span>{{ BigNumber(redemptionRate).times(100).toFixed(2) }}%</span></p>
           </div>
         </div>
-        <div class="refresh" @click="refresh">
-          <img src="../../../../assets/img/refresh.svg" alt="refresh">
-        </div>
+        <!--<div class="refresh" @click="refresh">-->
+        <!--<img src="../../../../assets/img/refresh.svg" alt="refresh">-->
+        <!--</div>-->
       </div>
       <!--<div class="content-gray">-->
       <!--<span />-->

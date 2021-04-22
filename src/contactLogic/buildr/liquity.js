@@ -23,7 +23,7 @@ const minFeeRate = 0.005;
 // Gas Limit
 const gasLimit = 800000;
 
-const stableName = 'LUSD';
+export const stableName = 'LAY';
 
 const liquidationRatio = 1.1;
 

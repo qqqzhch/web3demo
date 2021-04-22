@@ -11,7 +11,7 @@
         <div class="img-warpper text-center">
           <img src="../../../assets/img/check-green-64.png">
         </div>
-        <h1> Deposit: {{ data.depositAmount }} BNB,  Borrow: {{ data.borrowAmount }} LUSD {{ $t('build-vault-created') }}.</h1>
+        <h1> Deposit: {{ data.depositAmount }} BNB,  Borrow: {{ data.borrowAmount }} {{ data.stableName }} {{ $t('build-vault-created') }}.</h1>
         <Buttons @click.native="onClose">
           关闭
         </Buttons>

@@ -33,12 +33,12 @@ export default {
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.poolData.depositAmount) || BigNumber(this.coinAmount).isLessThan(0)) {
+      if(BigNumber(this.coinAmount).isLessThan(0)) {
         return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
       } else {
-        return 'ok';
+        return this.$parent.validate(this.newDeposit, this.poolData.debtAmount);
       }
     }
   },

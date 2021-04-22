@@ -77,7 +77,9 @@
             <div class="small-item text-center">
               <div>
                 <span>当前债务</span>
-                <p>{{ poolItem.debtAmount | formatNormalValue }} LUSD</p>
+                <p>
+                  {{ poolItem.debtAmount | formatNormalValue }} {{ poolItem.stableName }}
+                </p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openMintDialog(poolItem)">

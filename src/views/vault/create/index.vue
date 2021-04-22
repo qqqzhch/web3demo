@@ -63,11 +63,11 @@
           <ScInput
             class="myInput"
             title=""
-            unit="LUSD"
+            :unit="stableName"
             :default-value="borrowAmount"
             :on-change="onChangeBorrowAmount"
           />
-          <img :src="getTokenImg('LUSD')" alt="LUSD">
+          <img :src="getTokenImg(stableName)" :alt="stableName">
         </div>
       </div>
       <div class="content-right">
@@ -84,20 +84,20 @@
             Debt:
           </p>
           <div class="text-right f-size-20">
-            {{ borrowAmount }} LUSD
+            {{ borrowAmount }} {{ stableName }}
           </div>
         </div>
 
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
           <p>liquidation Reserve：</p>
           <div class="text-right">
-            {{ troveIndicators.liquidationReserve }} LUSD
+            {{ troveIndicators.liquidationReserve }} {{ stableName }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
           <p>Borrowing Fee：</p>
           <div class="text-right">
-            {{ troveIndicators.borrowingFee | formatNormalValue }} LUSD ({{ troveIndicators.borrowingRate }})
+            {{ troveIndicators.borrowingFee | formatNormalValue }} {{ stableName }} ({{ troveIndicators.borrowingRate }})
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
@@ -116,7 +116,7 @@
           <img src="../../../assets/img/notice-red.png">
           <p>{{ errorInfo }}</p>
         </div>
-        <div v-else :style="{height: '47px'}" />
+        <div v-if="!errorInfo" :style="{height: '47px'}" />
         <div v-if="!btnloading">
           <button v-if="!errorInfo" class="btn" @click="onOpenTroveClick">
             Open Trove

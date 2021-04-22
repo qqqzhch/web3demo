@@ -5,13 +5,15 @@ import { getTokenImg } from '@/contactLogic/readbalance.js';
 import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
 import Overview from './overview/index.vue';
-import { calcTroveIndicators } from '../../../contactLogic/buildr/liquity';
+import { calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
+import { liquityValidate } from "../../../contactLogic/buildr/validate";
 
 
 export default {
   name: 'balance',
   data() {
     return {
+      stableName,
       collateralPools: [],
       poolsData: [],
       BigNumber,
@@ -66,9 +68,9 @@ export default {
           index,
           tokenName: item.token,
           tokenTitle: item.title,
+          stableName: this.stableName,
           liquityState: this.liquityState,
           collateralRatio: troveIndicators.collateralRatio,
-          stableName: troveIndicators.stableName,
           borrowingRate: troveIndicators.borrowingRate,
           liquidationRatio: troveIndicators.liquidationRatio,
           accountBalance,
@@ -108,13 +110,24 @@ export default {
         });
       }
     },
+    validate(depositAmount, borrowAmount) {
+      const params = {
+        state: this.liquityState,
+        trove: this.liquityState.trove,
+        borrowingRate: this.liquityState.borrowingRate,
+        depositAmount,
+        borrowAmount,
+      };
+      return liquityValidate(params);
+    },
+
     // 首次创建金库，引导用于去铸造, 只出现一次
-    gotoGenerate() {
-      if(this.currPool.token) {
-        const [ poolData ] = this.poolsData.filter(pool => pool.tokenName === this.currPool.token);
-        poolData && this.openMintDialog(poolData);
-      }
-    }
+    // gotoGenerate() {
+    //   if(this.currPool.token) {
+    //     const [ poolData ] = this.poolsData.filter(pool => pool.tokenName === this.currPool.token);
+    //     poolData && this.openMintDialog(poolData);
+    //   }
+    // }
   },
   watch: {
     isReady(value) {
@@ -122,11 +135,11 @@ export default {
         this.checkLiquityReady();
       }
     },
-    poolsData(nv) {
-      this.poolsData = nv;
-      this.setPoolsData(nv);
-      this.gotoGenerate();
-    },
+    // poolsData(nv) {
+    //   this.poolsData = nv;
+    //   this.setPoolsData(nv);
+    //   this.gotoGenerate();
+    // },
     liquityState: {
       deep: true,
       handler() {

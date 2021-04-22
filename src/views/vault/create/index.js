@@ -7,13 +7,14 @@ import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
 
 import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
-import { openTrove, calcTroveIndicators } from '../../../contactLogic/buildr/liquity';
+import { openTrove, calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from '../../../contactLogic/buildr/validate';
 
 export default {
   name: 'create',
   data() {
     return {
+      stableName,
       currencyNumber: 0, // 资产数量
       collateralPools: [], // 合约池
       defaultPool: {},
@@ -34,11 +35,11 @@ export default {
     //txsuccess
     event.$on('txsuccess',() => {
       const data = {
+        stableName: this.stableName,
         depositAmount: this.depositAmount,
         borrowAmount: this.borrowAmount
       };
       this.$refs.haveSendtx.open(data, 'ok');
-      this.loadData();
     });
   },
   computed: {
@@ -93,7 +94,7 @@ export default {
     },
     onChangeDepositAmount(val) {
       this.depositAmount = val || '';
-      if (this.depositAmount) {
+      if (this.depositAmount && !this.borrowAmount) {
         this.borrowAmount = LUSD_MINIMUM_DEBT;
       }
       this.validate();
@@ -113,6 +114,7 @@ export default {
       };
     },
     async onOpenTroveClick() {
+      this.btnloading = true;
       const params = {
         ...this.getParams(),
         depositAmount: this.depositAmount,
@@ -121,6 +123,7 @@ export default {
       };
       const tx = await openTrove(params);
       this.sendtx(tx);
+      this.btnloading = false;
     },
     sendtx(tx) {
       if(tx && tx.base){

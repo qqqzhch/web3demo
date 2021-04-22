@@ -3,7 +3,6 @@ import ScInput from '../../../components/ScInput.vue';
 import { fetchAdjustBalanace } from '@/contactLogic/buildr/liquity';
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
-import event from '@/common/js/event';
 
 export default {
   data() {
@@ -14,6 +13,7 @@ export default {
       poolData: {},  // 父组件传过来的数据
       BigNumber,
       loading: false,
+      errorInfo: '',
     };
   },
   components: {
@@ -28,17 +28,17 @@ export default {
     // 新的抵押率
     newCollateralRatio() {
       const { debtAmount } = this.poolData;
-      const { collateralRatio } = this.$parent.getTroveIndicators(this.newDeposit, debtAmount);
+      const { collateralRatio } = this.checkValue ? {collateralRatio: 0} : this.$parent.getTroveIndicators(this.newDeposit, debtAmount);
       return collateralRatio;
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.poolData.accountBalance) || BigNumber(this.coinAmount).isLessThan(0)) {
-        return i18n.t('notice.swapNotice.n2');
-      } else if (isNaN(this.coinAmount)) {
+      if (isNaN(Number(this.coinAmount))) {
         return i18n.t('notice.buidrNotice.n1');
+      } else if(BigNumber(this.coinAmount).isLessThan(0)) {
+        return i18n.t('notice.swapNotice.n2');
       } else {
-        return 'ok';
+        return this.$parent.validate(this.newDeposit, this.poolData.debtAmount);
       }
     }
   },

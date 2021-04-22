@@ -28,10 +28,10 @@
               <p><span>{{ $t('build-balance') }}：</span> {{ poolData.accountBalance | formatNormalValue }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
-              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
+              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue" />
               <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
             </div>
-            <div v-if="checkValue !== 'ok'" class="notice-warpper">
+            <div v-if="checkValue" class="notice-warpper">
               <div class="notice-content">
                 <img src="../../../../../assets/img/notice-red.png">
                 <p>{{ checkValue }}</p>
@@ -107,14 +107,11 @@
             <!--</ul>-->
           </div>
           <div class="button-warpper">
-            <button v-if="step === 1 && checkValue === 'ok'" class="btn" @click="onNextClick">
+            <button v-if="step === 1 && !checkValue" class="btn" @click="onNextClick">
               {{ $t('build-next') }}
             </button>
-            <button v-if="step === 1 && checkValue !== 'ok'" class="btn btn-disabled">
+            <button v-if="step === 1 && checkValue" class="btn btn-disabled">
               {{ $t('build-next') }}
-            </button>
-            <button v-if="step === 2" class="btn">
-              loading...
             </button>
             <button v-if="step === 2" class="btn" @click="onJoinClick">
               {{ $t('build-confirm') }}

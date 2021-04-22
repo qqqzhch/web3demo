@@ -27,17 +27,17 @@ export default {
     // 新的抵押率
     newCollateralRatio() {
       const { depositAmount } = this.poolData;
-      const { collateralRatio } = this.$parent.getTroveIndicators(depositAmount, this.newDebt);
+      const { collateralRatio } = this.checkValue ? {collateralRatio: 0} : this.$parent.getTroveIndicators(depositAmount, this.newDebt);
       return collateralRatio;
     },
     // 验证输入值
     checkValue() {
-      if(BigNumber(this.coinAmount).gt(this.poolData.debtAmount) || BigNumber(this.coinAmount).isLessThan(0)) {
+      if(BigNumber(this.coinAmount).isLessThan(0)) {
         return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
       } else {
-        return 'ok';
+        return this.$parent.validate(this.poolData.depositAmount, this.newDebt);
       }
     }
   },
