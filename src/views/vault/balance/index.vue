@@ -11,10 +11,14 @@
         <div class="pool-item-warp">
           <div class="item-top">
             <div class="item-title">
-              <span>{{ $t('build-liquidation-price') }}: <span class="f-danger">$ {{ getLiquidationPrice(poolItem) }}</span></span>
-              <span>{{ $t('build-liquidation-ratio') }}: <span
-                class="f-warning"
-              >{{ BigNumber(poolItem.liquidationRatio).times(100) }}%</span></span>
+              <span>
+                {{ $t('build-liquidation-price') }}:
+                <span class="f-danger">$ {{ getLiquidationPrice(poolItem) }}</span>
+              </span>
+              <span>
+                {{ $t('build-liquidation-ratio') }}:
+                <span class="f-warning">{{ BigNumber(poolItem.liquidationRatio).times(100) }}%</span>
+              </span>
             </div>
             <div class="text-right">
               <button class="btn create-btn" @click="openCloseDialog(poolItem)">
@@ -35,14 +39,14 @@
                     :class="{
                       'bg-green': poolItem.collateralRatio >= 1.5,
                       'bg-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
-                      'bg-danger': poolItem.collateralRatio <= 1.1
+                      'bg-danger': poolItem.collateralRatio <= 1.1,
                     }"
                   />
                   <p
                     :class="{
                       'f-green': poolItem.collateralRatio >= 1.5,
                       'f-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
-                      'f-danger': poolItem.collateralRatio <= 1.1
+                      'f-danger': poolItem.collateralRatio <= 1.1,
                     }"
                   >
                     {{ BigNumber(poolItem.collateralRatio).times(100).toFixed(2) }}%
@@ -59,9 +63,7 @@
             <div class="small-item text-center">
               <div>
                 <span>{{ $t('build-Deposited') }}</span>
-                <p>
-                  {{ poolItem.depositAmount }} {{ poolItem.tokenName }}
-                </p>
+                <p>{{ poolItem.depositAmount }} {{ poolItem.tokenName }}</p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openJoinDialog(poolItem)">
@@ -75,9 +77,7 @@
             <div class="small-item text-center">
               <div>
                 <span>当前债务</span>
-                <p>
-                  {{ poolItem.debtAmount | formatNormalValue }} LUSD
-                </p>
+                <p>{{ poolItem.debtAmount | formatNormalValue }} LUSD</p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openMintDialog(poolItem)">
@@ -85,9 +85,7 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openBurnDialog(poolItem)">
-                  偿还
-                </a>
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">偿还</a>
               </div>
             </div>
             <div class="btn-warpper" />
@@ -133,25 +131,29 @@
 .bg-danger {
   background-color: #ff3c00 !important;
 }
-.ivu-modal-body {
-  padding: 0px;
+
+.valut-modal {
+  .ivu-modal-body {
+    padding: 0px;
+  }
 }
 
 .balance {
   margin-top: 24px;
   /*.title2 {*/
-    /*height: 24px;*/
-    /*font-size: 20px;*/
-    /*font-family: Gilroy-Medium, Gilroy;*/
-    /*font-weight: 500;*/
-    /*color: #14171c;*/
-    /*line-height: 24px;*/
+  /*height: 24px;*/
+  /*font-size: 20px;*/
+  /*font-family: Gilroy-Medium, Gilroy;*/
+  /*font-weight: 500;*/
+  /*color: #14171c;*/
+  /*line-height: 24px;*/
   /*}*/
   .CDP-content {
     /*margin: 24px 0px 50px 0px;*/
     /*padding: 32px 44px;*/
     /*box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);*/
-    .pool-item-warp, .create-vault-content {
+    .pool-item-warp,
+    .create-vault-content {
       margin-top: 24px;
       padding: 24px;
       box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
@@ -170,10 +172,10 @@
         line-height: 32px;
         font-size: 14px;
         font-weight: 500;
-        color: #0058FF;
+        color: #0058ff;
         background: rgba(0, 88, 255, 0.1);
         border-radius: 16px;
-        &:hover{
+        &:hover {
           background: rgba(0, 88, 255, 0.2);
         }
       }
@@ -204,10 +206,10 @@
           line-height: 32px;
           font-size: 14px;
           font-weight: 500;
-          color: #0058FF;
+          color: #0058ff;
           background: rgba(0, 88, 255, 0.1);
           border-radius: 16px;
-          &:hover{
+          &:hover {
             background: rgba(0, 88, 255, 0.2);
           }
         }
@@ -259,7 +261,7 @@
         position: relative;
       }
       .line::after {
-        content: "";
+        content: '';
         width: 2px;
         height: 90px;
         background: rgba(0, 0, 0, 0.06);
@@ -267,7 +269,7 @@
         right: 90px;
         top: 23px;
       }
-      .pool-wapper{
+      .pool-wapper {
         width: 18%;
       }
 

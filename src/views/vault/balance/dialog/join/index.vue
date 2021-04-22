@@ -1,8 +1,8 @@
 <template>
-  <div class="join-dialog-wrap">
+  <div class="dialog-wrap">
     <Modal
       v-model="isOpen"
-      class-name="farm-modal"
+      class-name="valut-modal"
       :transfer="true"
       title=""
       :footer-hide="true"
