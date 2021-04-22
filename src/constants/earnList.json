@@ -118,11 +118,11 @@
   },
 
   {
-    "name": "LUSD/BNB  LP",
-    "address": "0x847161FA5D7801eAD1D1CA1FF2bF84c82C9b7661",
+    "name": "LAY/BNB  LP",
+    "address": "0x3DFA0402b9F66363b3AcB0f5090fE4C70Fbeeb84",
     "decimals": 18,
     "chainId": 97,
-    "kind": "multi",
+    "kind": "liquity",
     "symbol": [
       "LAY",
       "BNB"

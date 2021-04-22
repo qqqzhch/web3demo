@@ -20,7 +20,7 @@
     "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v2-periphery": "^1.1.0-beta.0",
     "@webfans/ethers-multicall": "^0.1.8",
-    "@webfans/lib-ethers": "^3.2.2",
+    "@webfans/lib-ethers": "^3.2.3",
     "@webfans/uniswapsdk": "23.0.3",
     "autoprefixer": "^9",
     "axios": "^0.21.1",

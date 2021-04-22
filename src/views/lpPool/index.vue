@@ -95,6 +95,7 @@ export default {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
+        console.log(data);
         // 读取所有的价格信息
         // const pairListPrice = await pairListEarn(this.ethChainID, this.ethersprovider);
         const [tempLiquidity] = data.filter((item) => item.kind === 'liquity');
@@ -113,6 +114,7 @@ export default {
         // await results();
         // this.liquidityData = result;
         // console.log({result});
+        console.log(tempLiquidity);
         this.liquidityData = tempLiquidity;
         // console.log({ tempLiquidity });
       } catch (error) {

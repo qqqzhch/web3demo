@@ -34,9 +34,9 @@ export async function StakingRewardListbatch(library, account, chainID) {
   result.forEach((element) => {
     const TokenAContract = useStakingRewardsContractMulticall(element);
     callList.push(TokenAContract.rewardRate());
-    callList.push(TokenAContract.stakingToken());
+    callList.push(TokenAContract.uniToken());
     callList.push(TokenAContract.totalSupply());
-    callList.push(TokenAContract.rewardsToken());
+    callList.push(TokenAContract.lqtyToken());
   });
 
   // callList.push(TokenAContract.rewardRate());

@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     open(data) {
+      console.log(data);
       this.data = {};
       this.data = data;
       this.pledgeAmount = '';
