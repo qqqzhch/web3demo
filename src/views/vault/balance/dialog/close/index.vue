@@ -8,63 +8,25 @@
       :closable="false"
     >
       <div class="modal-content">
-        <div v-if="step === 1" class="flex">
-          <div class="tab-warpper">
-            <button class="tab tab-disabled" @click="onJoinClick">
-              {{ $t('build-Deposit') }}
-            </button>
-          </div>
-          <div class="tab-warpper">
-            <button class="tab">
-              {{ $t('build-withdraw') }}
-            </button>
-          </div>
-        </div>
         <div class="padding-warpper">
-          <div v-if="step === 1" class="step-one">
-            <div class="grid-2">
-              <h2>{{ $t('build-Amount') }}</h2>
-              <p><span>{{ $t('build-balance') }}：</span> {{ poolData.depositAmount | formatNormalValue }} {{ poolData.tokenName }}</p>
-            </div>
-            <div class="input-warpper">
-              <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
-              <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
-            </div>
-            <div v-if="checkValue !== 'ok'" class="notice-warpper">
-              <div class="notice-content">
-                <img src="../../../../../assets/img/notice-red.png">
-                <p>{{ checkValue }}</p>
-              </div>
-            </div>
-            <!--<div v-if="checkValue==='ok'" class="notice">-->
-            <!--<span>{{ $t('build-withdraw-collateral') }} {{ poolData.tokenName }} {{ $t('build-will-reduce') }}</span>-->
-            <!--<img src="../../../../../assets/img/wenhao.svg" alt="?">-->
-            <!--</div>-->
-          </div>
-          <div v-if="step === 2" class="step-two">
+          <div class="step-two">
             <div class="title-warpper">
-              <img src="../../../../../assets/img/arrow-left.svg" alt="arrow" @click="changeStep">
-              <h2>{{ $t('build-confirm') }}</h2>
+              <h2>Close Trove</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img :src="getTokenImg(poolData.tokenName)" :alt="poolData.tokenName">
-              <h2>{{ coinAmount }}</h2>
-              <p>{{ poolData.tokenName }}</p>
-              <span>{{ $t('build-will-send') }}</span>
+              <img :src="getTokenImg(poolData.stableName)">
+              <h2>{{ poolData.depositAmount }}</h2>
+              <p>{{ poolData.stableName }}</p>
+              <span>{{ $t('build-will-payback') }}</span>
             </div>
           </div>
           <div class="items-content">
             <ul>
               <li class="title">
-                {{ $t('build-credit-line') }}：
+                {{ $t('build-debt') }}：
               </li>
               <li>
-                <span>{{ poolData.depositAmount }} </span> {{ $t('build-to') }} <span
-                  :class="{
-                    'f-green': coinAmount < poolData.depositAmount,
-                    'f-danger': coinAmount > poolData.depositAmount
-                  }"
-                >{{ newDeposit | formatNormalValue }} {{ poolData.tokenName }}</span>
+                <span>{{ poolData.debtAmount | formatNormalValue }} {{ poolData.stableName }}</span>
               </li>
             </ul>
             <ul>
@@ -79,44 +41,19 @@
                     'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
                     'f-danger': poolData.collateralRatio <= 1.1
                   }"
-                >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
-                  :class="{
-                    'f-green': poolData.collateralRatio >= 1.5,
-                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
-                    'f-danger': poolData.collateralRatio <= 1.1
-                  }"
-                >{{ BigNumber(newCollateralRatio).times(100).toFixed(2) }}%</span>
+                >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span>
               </li>
               <li v-else>
                 <span>0% {{ $t('build-to') }} 0%</span>
               </li>
             </ul>
-            <!--<ul>-->
-            <!--<li class="title">-->
-            <!--{{ $t('build-liquidation-price') }}-->
-            <!--</li>-->
-            <!--<li>-->
-            <!--<span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span-->
-            <!--:class="{-->
-            <!--'f-green': liquidationPrice > newLiquidationPrice,-->
-            <!--'f-danger': liquidationPrice < newLiquidationPrice-->
-            <!--}"-->
-            <!--&gt;{{ newLiquidationPrice }} USD</span>-->
-            <!--</li>-->
-            <!--</ul>-->
           </div>
           <div class="button-warpper">
-            <button v-if="step === 1 && checkValue === 'ok'" class="btn" @click="onNextClick">
-              {{ $t('build-next') }}
-            </button>
-            <button v-if="step === 1 && checkValue !== 'ok'" class="btn btn-disabled">
-              {{ $t('build-next') }}
-            </button>
-            <button v-if="step === 2" class="btn" @click="onExitClick">
+            <button class="btn" @click="onCloseTroveClick">
               {{ $t('build-confirm') }}
             </button>
           </div>
-          <div v-if="step === 1" class="close-warpper">
+          <div class="close-warpper">
             <img src="../../../../../assets/img/closeBtn.svg" alt="closeBtn" @click="closeDialog">
           </div>
         </div>
@@ -159,13 +96,13 @@
   padding: 0 0 10px;
 
   .tab-warpper {
-    width: 50%;
+    width: 100%;
     .tab {
       width: 100%;
       cursor: not-allowed;
       height: 60px;
       background: #ffffff;
-      border-radius: 0px 12px 0px 0px;
+      border-radius: 12px 12px 0px 0px;
     }
     .tab-disabled {
       width: 100%;
@@ -173,7 +110,7 @@
       height: 60px;
       color: #999;
       background: #f7f8f9;
-      border-radius: 12px 0px 0px 0px;
+      border-radius: 12px 12px 0px 0px;
     }
   }
   .padding-warpper {

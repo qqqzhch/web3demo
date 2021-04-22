@@ -1,6 +1,6 @@
 import { mapState } from "vuex";
 import ScInput from '../../../components/ScInput.vue';
-import { fetchBalanaceChange } from '@/contactLogic/buildr/balance';
+import { fetchAdjustBalanace, getMaxBorrowingRate } from '@/contactLogic/buildr/liquity';
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
 
@@ -12,7 +12,6 @@ export default {
       isOpen: false,
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
-      unit: 'scUSD',
       BigNumber,
     };
   },
@@ -21,62 +20,22 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    currFee() { // 稳定费
-      const { feeRate } = this.poolData;
-      return `${ BigNumber(this.coinAmount).times(feeRate)} csUSD`;
-    },
-    // 当前额度
-    scUSDNumber() {
-      return this.poolData.scUSDNumber;
-    },
-    // 扣掉手续费后数量
-    netAmount() {
-      const { feeRate } = this.poolData;
-      return BigNumber(this.coinAmount).times(BigNumber(1).minus(feeRate));
-    },
-    // 已有债务
-    existingDebt() {
-      return BigNumber(this.poolData.currentDebt);
-    },
-    // 减少后的债务
+    // 计算增加的存款额度
     newDebt() {
-      return BigNumber(this.existingDebt).minus(this.netAmount);
+      return BigNumber(this.poolData.debtAmount).minus(this.coinAmount).toNumber();
     },
-    // 铸造额度
-    currMaxMintable() {
-      const { maxMintable } = this.poolData;
-      return BigNumber(maxMintable).plus(this.netAmount);
+    // 新的抵押率
+    newCollateralRatio() {
+      const { depositAmount } = this.poolData;
+      const { collateralRatio } = this.$parent.getTroveIndicators(depositAmount, this.newDebt);
+      return collateralRatio;
     },
-    // 抵押率
-    newCollRX() {
-      const { pledgeNumber, currencyPrice } = this.poolData;
-      const newDebt = BigNumber(this.newDebt).isZero() ? 0 : this.newDebt;
-      return newDebt ? BigNumber(pledgeNumber).times(currencyPrice).div(newDebt): 0;
-    },
-    // 初始清算价格
-    liquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const liquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.existingDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-
-      return liquPrice;
-    },
-    // 变化后的清算价格
-    newLiquidationPrice() {
-      const { liquidationRX, pledgeNumber } = this.poolData;
-      const newLiquPrice = BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(this.newDebt).times(liquidationRX).div(pledgeNumber).toFixed(6);
-      return newLiquPrice;
-    },
-    // 验证输入值, 输入的最大值是min[现有债务，当前额度]-fee
+    // 验证输入值
     checkValue() {
-      const debt = BigNumber(this.existingDebt).isLessThan(this.scUSDNumber) ? this.existingDebt : this.scUSDNumber;
-
-      const fee = BigNumber(this.coinAmount).times(this.poolData.feeRate);
-      const netDebt = BigNumber(debt).plus(fee);
-
-      if(BigNumber(this.coinAmount).gt(netDebt) || BigNumber(this.coinAmount).isLessThan(0)) {
-        return i18n.t('notice.buidrNotice.n4');
+      if(BigNumber(this.coinAmount).gt(this.poolData.debtAmount) || BigNumber(this.coinAmount).isLessThan(0)) {
+        return i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.coinAmount)) {
-        return i18n.$t('notice.buidrNotice.n1');
+        return i18n.t('notice.buidrNotice.n1');
       } else {
         return 'ok';
       }
@@ -116,19 +75,20 @@ export default {
       this.step = 2;
     },
     async onBurnClick() {
-      this.isOpen = false;
       const params = {
-        type: 'burn',
+        type: 'repay',
+        liquityState: this.poolData.liquityState,
         tokenName: this.poolData.tokenName,
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
         web3: this.web3,
         coinAmount: this.coinAmount,
-        unit: this.unit,
+        unit:this.poolData.stableName,
       };
-      const tx = await fetchBalanaceChange(params);
+      const tx = await fetchAdjustBalanace(params);
       this.$parent.sendtx(tx);
+      this.isOpen = false;
     }
   },
 };

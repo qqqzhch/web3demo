@@ -1,5 +1,5 @@
 import { mapState, mapActions } from "vuex";
-import { fetchLiquityStore } from "../../contactLogic/buildr/liquity";
+import { fetchLiquityEntity } from "../../contactLogic/buildr/liquity";
 
 
 export default {
@@ -26,7 +26,7 @@ export default {
         library: this.ethersprovider,
         account:  this.ethAddress,
       };
-      const liquity = fetchLiquityStore(params);
+      const liquity = fetchLiquityEntity(params);
 
       liquity.store.onLoaded = () => {
         // console.log(liquity.store.state.price.toString(), 9999)
@@ -34,34 +34,15 @@ export default {
         this.setLiquityState(liquity.store.state);
       };
 
-      // liquity.store.subscribe(({ newState, oldState }) => {
-      //   console.log(oldState.price.toString(), newState.price.toString(), 888)
-      //   // Try to liquidate whenever the price drops
-      //   if (newState.price.lt(oldState.price)) {
-      //     // tryToLiquidate(liquity);
-      //   }
-      // });
+      liquity.store.subscribe(({ newState, oldState }) => {
+        this.setLiquityState(newState);
+        console.log(oldState.price.toString(), newState.price.toString(), 888);
+        // Try to liquidate whenever the price drops
+        // if (newState.price.lt(oldState.price)) {
+        //   // tryToLiquidate(liquity);
+        // }
+      });
       liquity.store.start();
-    },
-    toPage(name) {
-      this.nav = name;
-      switch (name) {
-        case 'balance':
-          this.$router.push(`/vault/balance`);
-          break;
-
-        case 'create':
-          this.$router.push(`/vault/create`);
-          break;
-
-        // case 'history':
-        //   this.$router.push(`/buildr/history`);
-        //   break;
-
-        default:
-          this.$router.push(`/vault/balance`);
-          break;
-      }
     },
   },
   components: {

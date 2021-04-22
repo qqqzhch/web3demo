@@ -4,28 +4,28 @@
       <div class="content">
         <div class="total-warpper">
           <h2>总抵押物价值(TVL)</h2>
-          <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> BNB</p>
+          <p><span>$ {{ BigNumber(totalValue).times(price).toFixed(2) }}</span></p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
             <h2>总抵押物</h2>
-            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> LUSD </p>
+            <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> BNB </p>
           </div>
           <div>
             <h2>总债务</h2>
-            <p><span>{{ BigNumber(totalMaxMintable).toFixed(2) }}</span> LUSD </p>
+            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> LUSD </p>
           </div>
           <div>
             <h2>系统抵押率</h2>
-            <p><span>90%</span></p>
+            <p><span>{{ BigNumber(totalCollateralRatio).times(100).toFixed(2) }}%</span></p>
           </div>
           <div>
             <h2>借贷费率</h2>
-            <p><span>0.5%</span></p>
+            <p><span>{{ BigNumber(borrowingRate).times(100).toFixed(2) }}%</span></p>
           </div>
           <div>
             <h2>自动偿还费率</h2>
-            <p><span>80%</span></p>
+            <p><span>{{ BigNumber(redemptionRate).times(100).toFixed(2) }}%</span></p>
           </div>
         </div>
         <div class="refresh" @click="refresh">
@@ -54,7 +54,7 @@
   .content-warpper {
     margin-top: 24px;
     .content {
-      margin-right: 24px;
+      /*margin-right: 24px;*/
       width: 100%;
       background: linear-gradient(270deg, #3f5efb 0%, #fc466b 100%);
       border-radius: 12px;

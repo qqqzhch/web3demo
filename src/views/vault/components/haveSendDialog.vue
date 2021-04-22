@@ -11,9 +11,9 @@
         <div class="img-warpper text-center">
           <img src="../../../assets/img/check-green-64.png">
         </div>
-        <h1>{{ $t('build-Deposited') }} {{ currPool.pledgeNumber }} LAMB, {{ $t('build-vault-created') }}.</h1>
+        <h1> Deposit: {{ data.depositAmount }} BNB,  Borrow: {{ data.borrowAmount }} LUSD {{ $t('build-vault-created') }}.</h1>
         <Buttons @click.native="onClose">
-          {{ $t('build-generate') }} scUSD
+          关闭
         </Buttons>
       </div>
       <div v-if="status==='created'" class="modal-content">
@@ -27,8 +27,6 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
-
   export default {
     components: {
       Buttons: () => import("@/components/basic/buttons"),
@@ -37,22 +35,20 @@
     data() {
       return {
         openSuccesDialog: false,
-        currPool:'',
+        data:'',
         status: ''
       };
     },
     methods: {
-      ...mapActions('buildr', ['setCurrentPool']),
       onClose(){
         this.openSuccesDialog = false;
-        // 引导去铸造
-        this.setCurrentPool(this.currPool);
-        this.$router.push(`/buildr/balance`);
+        // 引导
+        this.$router.push(`/vault/balance`);
       },
-      open(currPool, status){
+      open(data, status){
         this.openSuccesDialog = true;
         this.status = status;
-        this.currPool = currPool;
+        this.data = data;
       }
     },
   };

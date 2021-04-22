@@ -11,7 +11,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab tab-disabled" @click="onMintClick">
-              {{ $t('build-generate') }}
+              借贷
             </button>
           </div>
           <div class="tab-warpper">
@@ -24,11 +24,11 @@
           <div v-if="step === 1" class="step-one">
             <div class="grid-2">
               <h2>{{ $t('build-Amount') }}</h2>
-              <p><span>{{ $t('build-balance') }}：</span> {{ BigNumber(scUSDNumber).toFixed(6) }} scUSD</p>
+              <p><span>{{ $t('build-balance') }}：</span> {{ poolData.debtAmount | formatNormalValue }} {{ poolData.stableName }}</p>
             </div>
             <div class="input-warpper">
-              <ScInput unit="scUSD" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
-              <img :src="getTokenImg('scUSD')" alt="scUSD">
+              <ScInput :unit="poolData.stableName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
+              <img :src="getTokenImg(poolData.stableName)">
             </div>
             <div v-if="checkValue !== 'ok'" class="notice-warpper">
               <div class="notice-content">
@@ -47,9 +47,9 @@
               <h2>{{ $t('build-confirm') }}</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img :src="getTokenImg('scUSD')" alt="scUSD">
+              <img :src="getTokenImg(poolData.stableName)">
               <h2>{{ coinAmount }}</h2>
-              <p>scUSD</p>
+              <p>{{ poolData.stableName }}</p>
               <span>{{ $t('build-will-payback') }}</span>
             </div>
           </div>
@@ -59,63 +59,37 @@
                 {{ $t('build-debt') }}：
               </li>
               <li>
-                <span>{{ BigNumber(existingDebt).toFixed(2) }} </span> {{ $t('build-to') }} <span
+                <span>{{ poolData.debtAmount | formatNormalValue }}</span> {{ $t('build-to') }} <span
                   :class="{
-                    'f-green': existingDebt < newDebt,
-                    'f-danger': existingDebt > newDebt
+                    'f-green': newDebt > poolData.debtAmount,
+                    'f-danger': newDebt < poolData.debtAmount
                   }"
-                >{{ BigNumber(newDebt).toFixed(2) }} {{ unit }}</span>
-              </li>
-            </ul>
-            <ul>
-              <li class="title">
-                {{ $t('build-credit-line') }}：
-              </li>
-              <li>
-                <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> {{ $t('build-to') }} <span
-                  :class="{
-                    'f-green': poolData.maxMintable < currMaxMintable,
-                    'f-danger': poolData.maxMintable > currMaxMintable
-                  }"
-                >{{ BigNumber(currMaxMintable).toFixed(2) }} {{ unit }}</span>
+                >{{ newDebt | formatNormalValue }} {{ poolData.stableName }}</span>
               </li>
             </ul>
             <ul>
               <li class="title flex">
-                <span> {{ $t('build-coll-ratio') }}</span>
+                <span>{{ $t('build-coll-ratio') }}:</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
-              <li v-if="existingDebt">
-                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
+              <li v-if="poolData.collateralRatio">
+                <span
                   :class="{
-                    'f-green': newCollRX >= 5,
-                    'f-warning': newCollRX < 5 && newCollRX > 2,
-                    'f-danger': newCollRX <= 2
+                    'f-green': poolData.collateralRatio >= 1.5,
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
+                    'f-danger': poolData.collateralRatio <= 1.1
                   }"
-                >{{ BigNumber(newCollRX).times(100).toFixed(2) }}%</span>
+                >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
+                  :class="{
+                    'f-green': poolData.collateralRatio >= 1.5,
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
+                    'f-danger': poolData.collateralRatio <= 1.1
+                  }"
+                >{{ BigNumber(newCollateralRatio).times(100).toFixed(2) }}%</span>
               </li>
               <li v-else>
                 <span>0% {{ $t('build-to') }} 0%</span>
               </li>
-            </ul>
-            <ul>
-              <li class="title">
-                {{ $t('build-liquidation-price') }}
-              </li>
-              <li>
-                <span>1{{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span
-                  :class="{
-                    'f-green': liquidationPrice > newLiquidationPrice,
-                    'f-danger': liquidationPrice < newLiquidationPrice
-                  }"
-                >{{ newLiquidationPrice }} USD</span>
-              </li>
-            </ul>
-            <ul v-if="step===2">
-              <li class="title">
-                {{ $t('build-fee') }}
-              </li>
-              <li><span>{{ currFee }}</span> scUSD</li>
             </ul>
           </div>
           <div class="button-warpper">

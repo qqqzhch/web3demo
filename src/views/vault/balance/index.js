@@ -5,6 +5,7 @@ import { getTokenImg } from '@/contactLogic/readbalance.js';
 import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
 import Overview from './overview/index.vue';
+import { calcTroveIndicators } from '../../../contactLogic/buildr/liquity';
 
 
 export default {
@@ -19,123 +20,65 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress', 'currPool']),
-    ...mapState('buildr', ['currPool']),
+    ...mapState('buildr', ['currPool', 'liquityState', 'isOpen']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
   },
-  mounted() {
-    //txsuccess
-    event.$on('txsuccess',()=>{
-      this.loadData();
-    });
-  },
   methods: {
     ...mapActions('buildr', ['setPoolsData', 'setAllPoolsEnable']),
+    toPage(name) {
+      switch (name) {
+        case 'balance':
+          this.$router.push(`/vault/balance`);
+          break;
+
+        case 'create':
+          this.$router.push(`/vault/create`);
+          break;
+      }
+    },
     getTokenImg(tokensymbol){
       const chainID = this.ethChainID;
       return getTokenImg(tokensymbol,chainID);
     },
-    // check金库是否已创建
-    // async checkPoolsEnable() {
-    //   const loadList = [];
-    //   this.collateralPools.forEach((pool) => {
-    //     const params = Object.assign({}, this.getParams({}), {tokenName: pool.token});
-    //     loadList.push(fetchPledgeNumber(params));
-    //   });
-    //
-    //   const result = await Promise.all(loadList);
-    //
-    //   const poolsEnable = this.collateralPools.map((pool, index) => {
-    //     const { pledgeNumber } = result[index];
-    //     return BigNumber(pledgeNumber).gt(0);
-    //   });
-    //
-    //   // 判断是否创建按钮
-    //   const isAllCreated = poolsEnable.includes(false);
-    //   this.setAllPoolsEnable(!isAllCreated);
-    //
-    //   return poolsEnable.includes(true);
-    // },
-    async checkLiquityReady() {
-      const { chainID, library, account } = this.getParams({});
+    checkLiquityReady() {
+      const chainID = this.ethChainID;
       this.collateralPools = getCollateralPools(chainID);
       this.loadData();
-      // const isPoolsenable = await this.checkPoolsEnable();
-      // const isHaveAllowance = await checkeBulderApprove(this.$router, chainID, library, account);
-      // if(isPoolsenable || isHaveAllowance) {
-      //   this.loadData();
-      // } else {
-      //   this.$router.push('/vault/create');
-      // }
-    },
-    getParams(item) {
-      return {
-        isNative: item.isNative,
-        tokenName: item.token,
-        chainID: this.ethChainID,
-        library: this.ethersprovider,
-        account:  this.ethAddress,
-        web3: this.web3,
-      };
-    },
-    // 计算当前抵押倍数
-    getCurrentCollRX(collateralisationRatio) {
-      const currentCollRX = BigNumber(collateralisationRatio).isZero() ? 0 : BigNumber(1).div(collateralisationRatio).toNumber();
-      return currentCollRX;
     },
     getLiquidationPrice(poolData){
-      const { liquidationRatio, pledgeNumber, currentDebt } = poolData;
-      const liquRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
-      return BigNumber(pledgeNumber).isZero() ? 0 : BigNumber(currentDebt).times(liquRatio).div(pledgeNumber).toFixed(6);
+      const { currencyPrice, liquidationRatio, collateralRatio } = poolData;
+      return BigNumber(currencyPrice).times(liquidationRatio).div(collateralRatio).toNumber();
+    },
+    getTroveIndicators(depositAmount, debtAmount) {
+      return calcTroveIndicators(this.liquityState, depositAmount, debtAmount);
     },
     loadData() {
       this.poolsData = [];
-      this.collateralPools.forEach(async (item, index) => {
-        const params = this.getParams(item);
-        // const { unlockedCollateral, targetRatio, collateralisationRatio, currentDebt, maxMintable,
-        //   liquidationRatio, feeRate } = await fetchCollateralIndicators(params);
-        // const { pledgeNumber } = await fetchPledgeNumber(params);
-        // const { currencyPrice } = await fetchCurrencyPrice(params);
-        // const currencyNumber = await fetchTokenBalance(params);
-        // const { allowanceAmount } = await fetchAllowanceAmount(params);
-
-        // 读钱包中scUSD的余额
-        // const scashParams = {
-        //   ...params,
-        //   tokenName: 'scUSD'
-        // };
-        // const scUSDNumber = await fetchTokenBalance(scashParams);
+      this.collateralPools.forEach((item, index) => {
+        const depositAmount = this.liquityState.trove.collateral.toString();  // 已质押BNB数量
+        const debtAmount = this.liquityState.trove.debt.toString();           // 当前债务
+        const accountBalance = this.liquityState.accountBalance.toString();   // 账户余额BNB数量
+        const troveIndicators = this.getTroveIndicators(depositAmount, debtAmount);
 
         const itemData = {
           index,
-          isERC20: item.isERC20,
-          isNative: item.isNative,
           tokenName: item.token,
           tokenTitle: item.title,
-          currencyNumber: 0,
-          unlockedCollateral: 0 ,
-          targetRatio: 0,
-          targetRX: 0, //BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio).toNumber(),
-          collateralisationRatio: 0,
-          currentCollRX: 0,//this.getCurrentCollRX(collateralisationRatio),
-          currentDebt : 0,
-          maxMintable : 0,
-          liquidationRatio: 0,
-          liquidationRX: 0, //BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio).toNumber(),
-          feeRate: 0,
-          pledgeNumber: 0,
-          currencyPrice: 0,
-          scUSDNumber: 0,
-          allowanceAmount: 0,
+          liquityState: this.liquityState,
+          collateralRatio: troveIndicators.collateralRatio,
+          stableName: troveIndicators.stableName,
+          borrowingRate: troveIndicators.borrowingRate,
+          liquidationRatio: troveIndicators.liquidationRatio,
+          accountBalance,
+          depositAmount,
+          debtAmount,
+          currencyPrice: this.liquityState.price.toString(),               // 当前价格
         };
-        // if(BigNumber(pledgeNumber).gt(0)) {
-        //   this.poolsData = _.chain(this.poolsData.concat(itemData)).sortBy(pool => pool.index).value();
-        // }
+
         this.poolsData = [itemData];
-        console.log(this.poolsData, 33366);
       });
-      console.log(444);
     },
     openJoinDialog(poolData) {
       this.$refs.tokenJoin.open(poolData);
@@ -149,10 +92,13 @@ export default {
     openExitDialog(poolData) {
       this.$refs.tokenExit.open(poolData);
     },
+    openCloseDialog(poolData) {
+      this.$refs.tokenClose.open(poolData);
+    },
     sendtx(tx) {
       if(tx && tx.base){
         this.$refs.haveSendtx.open(tx.base);
-        event.$emit('sendtx',[tx.response, {
+        event.$emit('sendtx',[tx.transaction.rawSentTransaction, {
           okinfo: tx.base + i18n.t('swapConfirm.successCom'),
           failinfo: tx.base + i18n.t('swapConfirm.failCom')
         }]);
@@ -180,6 +126,12 @@ export default {
       this.poolsData = nv;
       this.setPoolsData(nv);
       this.gotoGenerate();
+    },
+    liquityState: {
+      deep: true,
+      handler() {
+        this.loadData();
+      }
     }
   },
   components: {
@@ -188,6 +140,7 @@ export default {
     MintDialog: () => import('./dialog/mint/index.vue'),
     BurnDialog: () => import('./dialog/burn/index.vue'),
     ExitDialog: () => import('./dialog/exit/index.vue'),
+    CloseDialog: () => import('./dialog/close/index.vue'),
     haveSendDialog: () => import("@/components/basic/haveSendDialog.vue"),
     Loading: () => import("@/components/basic/loading.vue"),
   },

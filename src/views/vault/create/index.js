@@ -19,7 +19,7 @@ export default {
       BigNumber,
       btnloading: false,
       depositAmount: 0,
-      borrowLUSDAmount: 1800,
+      borrowAmount: 1800,
     };
   },
   components: {
@@ -31,17 +31,17 @@ export default {
   mounted() {
     //txsuccess
     event.$on('txsuccess',() => {
-      const currPool = {
-        ...this.defaultPool,
-        depositAmount: this.depositAmount
+      const data = {
+        depositAmount: this.depositAmount,
+        borrowAmount: this.borrowAmount
       };
-      this.$refs.haveSendtx.open(currPool, 'ok');
+      this.$refs.haveSendtx.open(data, 'ok');
       this.loadData();
     });
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
-    ...mapState('buildr', ['liquityState']),
+    ...mapState('buildr', ['liquityState', "isOpen"]),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
@@ -56,7 +56,7 @@ export default {
       }
     },
     troveIndicators(){
-      return calcTroveIndicators(this.liquityState, this.depositAmount, this.borrowLUSDAmount);
+      return calcTroveIndicators(this.liquityState, this.depositAmount, this.borrowAmount);
     },
   },
   methods: {
@@ -65,32 +65,14 @@ export default {
       return getTokenImg(tokensymbol,chainID);
     },
     // check金库是否已创建
-    // async checkPoolsEnable() {
-      // const loadList = [];
-      // this.collateralPools.forEach((pool) => {
-      //   const params = Object.assign({}, this.getParams(), {tokenName: pool.token});
-      //   loadList.push(fetchPledgeNumber(params));
-      // });
-      // const result = await Promise.all(loadList);
-
-      // const poolsEnable = {};
-      // let selected = false;
-      // this.collateralPools.forEach((pool, index) => {
-        // const { pledgeNumber } = result[index];
-        // const isCreated = BigNumber(pledgeNumber).gt(0);
-        // poolsEnable[pool.token] = isCreated;
-        // if(!isCreated && selected === false) {
-        //   this.defaultPool = pool;
-          // selected = true;
-          // this.loadData();
-        // }
-      // });
-      // this.poolsEnable = poolsEnable;
-      // 如果都已传教返回管理页面
-      // if(selected === false) {
-      //   this.$router.push('/buildr/balance');
-      // }
-    // },
+    checkIsOpen() {
+      if(this.isOpen) {
+        this.$router.push('/vault/balance');
+      } else {
+        this.getPools();
+        this.loadData();
+      }
+    },
     getPools() {
         const collateralPools = getCollateralPools(this.ethChainID);
         this.collateralPools = collateralPools;
@@ -113,71 +95,20 @@ export default {
       const params = this.getParams();
       this.currencyNumber = await fetchTokenBalance(params);
     },
-    // async getIndicators() {
-    //   const params = this.getParams();
-    //   const { targetRatio, liquidationRatio, feeRate, debtCap } = await fetchCollateralIndicators(params);
-    //
-    //   this.targetRX = BigNumber(targetRatio).isZero() ? 0 : BigNumber(1).div(targetRatio);
-    //   this.liquidationRatio = BigNumber(liquidationRatio).isZero() ? 0 : BigNumber(1).div(liquidationRatio);
-    //   this.feeRate = feeRate;
-    //   this.debtCap = debtCap;
-    // },
-    // async getCurrencyPrice() {
-    //   const params = this.getParams();
-    //   const { currencyPrice } = await fetchCurrencyPrice(params);
-    //
-    //   this.currencyPrice = currencyPrice;
-    // },
+
     onChangeDepositAmount(val) {
       this.depositAmount = val || '';
       if (this.depositAmount) {
-        this.borrowLUSDAmount = 2000;
+        this.borrowAmount = 2000;
       }
-      // this.pledgeNumber = (BigNumber(val).isNaN() || BigNumber(val).isZero()) ? 0 : val;
-      // this.stableNumber = this.pledgeNumber ? BigNumber(this.pledgeNumber).times(this.currencyPrice).div(this.targetRX) : '';
     },
-    onChangeLUSDAmount(val) {
-      this.borrowLUSDAmount = val || '';
+    onChangeBorrowAmount(val) {
+      this.borrowAmount = val || '';
     },
-    // async onApproveClick() {
-    //   if(!this.pledgeNumber) return;
-    //
-    //   const params = Object.assign({}, this.getParams(), {
-    //     pledgeNumber: this.pledgeNumber,
-    //   });
-    //
-    //   // 标准的ERC20合约授权
-    //   // 非标准的ERC20 token 需要单独授权，目前只有LAMB
-    //   // 原生代币不需要授权
-    //   let transaction;
-    //   this.btnloading = true;
-    //   if(this.defaultPool.isERC20) {
-    //     transaction = await fetchApprove(params);
-    //   } else if(this.defaultPool.token === 'LAMB'){
-    //     transaction = await fetchLambdaApprove(params);
-    //   }
-    //
-    //   if (transaction && transaction.hash) {
-    //     const waitdata = await transaction.wait([1]);
-    //     this.btnloading = false;
-    //     // 需要更新数据
-    //     this.loadData(true);
-    //   } else {
-    //     this.$Notice.error({
-    //       title: i18n.t('notice.buidrNotice.n2'),
-    //     });
-    //     this.btnloading = false;
-    //   }
-    // },
-    // async getAllowanceAmount(){
-    //   const params = this.getParams();
-    //   const { allowanceAmount } = await fetchAllowanceAmount(params);
-    //   this.allowanceAmount = allowanceAmount;
-    // },
     sendtx(tx) {
       if(tx && tx.base){
-        this.$refs.haveSendtx.open(this.defaultPool, 'created');
-        event.$emit('sendtx',[tx.response, {
+        this.$refs.haveSendtx.open(tx.base, 'created');
+        event.$emit('sendtx',[tx.transaction.rawSentTransaction, {
           okinfo: tx.base+ i18n.t('swapConfirm.successCom'),
           failinfo: tx.base+ i18n.t('swapConfirm.failCom')
         }]);
@@ -187,27 +118,11 @@ export default {
         });
       }
     },
-    // Join
-    // async onJoinClick() {
-    //   const params = this.getParams();
-    //   const { isNative, isERC20 } = this.defaultPool;
-    //   const type = isNative ? 'joinNative' : isERC20 ? 'joinERC20' :'join';
-    //   const joinParams = {
-    //     ...params,
-    //     type,
-    //     coinAmount: this.pledgeNumber,
-    //     unit: this.defaultPool.token,
-    //   };
-    //   if(this.pledgeNumber) {
-    //     const tx = await fetchBalanaceChange(joinParams);
-    //     this.sendtx(tx);
-    //   }
-    // },
     async onOpenTroveClick() {
       const params = {
         ...this.getParams(),
         depositAmount: this.depositAmount,
-        borrowLUSDAmount: this.borrowLUSDAmount,
+        borrowLUSDAmount: this.borrowAmount,
         liquityState: this.liquityState,
       };
       const tx = await openTrove(params);
@@ -220,15 +135,13 @@ export default {
   watch: {
     isReady(value) {
       if (value) {
-        this.getPools();
-        this.loadData();
+        this.checkIsOpen();
       }
     },
   },
   created() {
     if(this.isReady) {
-      this.getPools();
-      this.loadData();
+      this.checkIsOpen();
     }
   }
 };

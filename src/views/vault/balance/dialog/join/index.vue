@@ -25,7 +25,7 @@
           <div v-if="step === 1" class="step-one">
             <div class="grid-2">
               <h2>{{ $t('build-Amount') }}</h2>
-              <p><span>{{ $t('build-balance') }}：</span> {{ currencyNumber }} {{ poolData.tokenName }}</p>
+              <p><span>{{ $t('build-balance') }}：</span> {{ poolData.accountBalance | formatNormalValue }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
               <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue !== 'ok'" />
@@ -37,10 +37,10 @@
                 <p>{{ checkValue }}</p>
               </div>
             </div>
-            <div v-if="checkValue==='ok'" class="notice">
-              <span>{{ $t('build-Deposit') }} {{ poolData.tokenName }} {{ $t('build-will-increase') }}</span>
-              <img src="../../../../../assets/img/wenhao.svg">
-            </div>
+            <!--<div v-if="checkValue==='ok'" class="notice">-->
+            <!--<span>{{ $t('build-Deposit') }} {{ poolData.tokenName }} {{ $t('build-will-increase') }}</span>-->
+            <!--<img src="../../../../../assets/img/wenhao.svg">-->
+            <!--</div>-->
           </div>
           <div v-if="step === 2" class="step-two">
             <div class="title-warpper">
@@ -60,12 +60,12 @@
                 {{ $t('build-credit-line') }}：
               </li>
               <li>
-                <span>{{ BigNumber(poolData.maxMintable).toFixed(2) }} </span> {{ $t('build-to') }} <span
+                <span>{{ poolData.depositAmount }}</span> {{ $t('build-to') }} <span
                   :class="{
-                    'f-green': poolData.maxMintable < currMaxMintable,
-                    'f-danger': poolData.maxMintable > currMaxMintable
+                    'f-green': coinAmount < poolData.accountBalance,
+                    'f-danger': coinAmount > poolData.accountBalance
                   }"
-                >{{ BigNumber(currMaxMintable).toFixed(2) }} {{ unit }}</span>
+                >{{ newDeposit | formatNormalValue }} {{ poolData.tokenName }}</span>
               </li>
             </ul>
             <ul>
@@ -73,32 +73,38 @@
                 <span>{{ $t('build-coll-ratio') }}:</span>
                 <img src="../../../../../assets/img/wenhao.svg">
               </li>
-              <li v-if="existingDebt">
-                <span>{{ BigNumber(poolData.currentCollRX).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
+              <li v-if="poolData.collateralRatio">
+                <span
                   :class="{
-                    'f-green': newCollRX >= 5,
-                    'f-warning': newCollRX < 5 && newCollRX > 2,
-                    'f-danger': newCollRX <= 2
+                    'f-green': poolData.collateralRatio >= 1.5,
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
+                    'f-danger': poolData.collateralRatio <= 1.1
                   }"
-                >{{ BigNumber(newCollRX).times(100).toFixed(2) }}%</span>
+                >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
+                  :class="{
+                    'f-green': poolData.collateralRatio >= 1.5,
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
+                    'f-danger': poolData.collateralRatio <= 1.1
+                  }"
+                >{{ BigNumber(newCollateralRatio).times(100).toFixed(2) }}%</span>
               </li>
               <li v-else>
                 <span>0% {{ $t('build-to') }} 0%</span>
               </li>
             </ul>
-            <ul>
-              <li class="title">
-                {{ $t('build-liquidation-price') }}
-              </li>
-              <li>
-                <span>1 {{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span
-                  :class="{
-                    'f-green': liquidationPrice > newLiquidationPrice,
-                    'f-danger': liquidationPrice < newLiquidationPrice
-                  }"
-                >{{ newLiquidationPrice }} USD</span>
-              </li>
-            </ul>
+            <!--<ul>-->
+            <!--<li class="title">-->
+            <!--{{ $t('build-liquidation-price') }}-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<span>1 {{ poolData.tokenName }} = {{ liquidationPrice }}</span> USD {{ $t('build-to') }} <span-->
+            <!--:class="{-->
+            <!--'f-green': liquidationPrice > newLiquidationPrice,-->
+            <!--'f-danger': liquidationPrice < newLiquidationPrice-->
+            <!--}"-->
+            <!--&gt;{{ newLiquidationPrice }} USD</span>-->
+            <!--</li>-->
+            <!--</ul>-->
           </div>
           <div class="button-warpper">
             <button v-if="step === 1 && checkValue === 'ok'" class="btn" @click="onNextClick">
@@ -106,6 +112,9 @@
             </button>
             <button v-if="step === 1 && checkValue !== 'ok'" class="btn btn-disabled">
               {{ $t('build-next') }}
+            </button>
+            <button v-if="step === 2" class="btn">
+              loading...
             </button>
             <button v-if="step === 2" class="btn" @click="onJoinClick">
               {{ $t('build-confirm') }}
