@@ -50,7 +50,7 @@ export default {
       coinName: '',
       extractLoading: false,
       fee: '',
-      rewardToken: 'Babel'
+      rewardToken: 'Babel',
     };
   },
   methods: {
@@ -79,11 +79,10 @@ export default {
       const tokenJson = this.data;
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const esGas = await stakingRewardsContract.estimateGas.getReward();
-        const result = await stakingRewardsContract.getReward({ gasLimit: esGas });
-        this.$Notice.success({
-          title: this.$t('notice.n33'),
-        });
+        const esGas = await stakingRewardsContract.estimateGas.claimReward();
+        const result = await stakingRewardsContract.claimReward({ gasLimit: esGas });
+        event.$emit('sendSuccess');
+        this.openClaimDialog = false;
         event.$emit('sendtx', [
           result,
           {
@@ -108,7 +107,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3','scashPrice']),
+    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3', 'scashPrice']),
   },
 };
 </script>

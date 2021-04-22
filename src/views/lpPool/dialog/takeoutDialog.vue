@@ -78,8 +78,8 @@ export default {
       const tokenJson = this.data;
       try {
         const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
-        const esGas = await stakingRewardsContract.estimateGas.exit();
-        const result = await stakingRewardsContract.exit({ gasLimit: esGas });
+        const esGas = await stakingRewardsContract.estimateGas.withdrawAndClaim();
+        const result = await stakingRewardsContract.withdrawAndClaim({ gasLimit: esGas });
         event.$emit('sendSuccess');
         this.openRemoveDialog = false;
         event.$emit('sendtx', [
