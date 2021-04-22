@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }}</span>
+              <span>{{ data.data && data.data.LPTokenbalance }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -32,101 +32,35 @@
             </div>
           </div>
         </div>
-        <div class="price-wrapper">
+        <div class="price-wrapper mb-4">
           <div class="price-item flex justify-between items-center">
             <span>{{ $t('earn.dialog.stakeDialog.willStake') }}</span>
             <p>{{ pledgeAmount || 0 }}</p>
           </div>
         </div>
 
-        <div class="btn-wrapper">
-          <Buttons v-if="sendLoading === false" height="48px" @click.native="depositScusd">
-            {{ $t('earn.dialog.stakeDialog.confirm') }}
-          </Buttons>
-          <Buttons v-else height="48px">
-            {{ $t('earn.dialog.loading') }}
-          </Buttons>
+        <div class="btn-warpper">
+          <template v-if="needApprove">
+            <Buttons v-if="approveLoading" height="48px" class="dialogBtn">
+              {{ $t('earn.dialog.loading') }}
+            </Buttons>
+            <Buttons v-else height="48px" class="dialogBtn" @click.native="approveTx">
+              {{ $t('earn.dialog.stakeDialog.approve') }}
+            </Buttons>
+          </template>
+
+          <template v-if="!needApprove">
+            <Buttons height="48px" @click.native="confirmSendTx">
+              {{ $t('common.confirm') }}
+            </Buttons>
+          </template>
         </div>
       </div>
     </Modal>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
-export default {
-  components: {
-    Buttons: () => import('@/components/basic/buttons'),
-  },
-  data() {
-    return {
-      openPledgeDialog: false,
-      pledgeAmount: '',
-      data: {},
-      previousData: '',
-      sendLoading: false,
-      balance: 0,
-    };
-  },
-  computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
-  },
-  methods: {
-    open() {
-      this.pledgeAmount = '';
-      this.openPledgeDialog = true;
-    },
-
-    percentage(val) {
-      const balance = new BigNumber(this.balance);
-      const percent = new BigNumber(val);
-      this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
-    },
-
-    // 限制Input输入小数点的长度
-    handleInput(e) {
-      const stringValue = e.target.value.toString();
-      const regex = /^\d*(\.\d{1,6})?$/;
-      if (!stringValue.match(regex) && this.pledgeAmount !== '') {
-        this.pledgeAmount = this.previousData;
-      }
-      this.previousData = this.pledgeAmount;
-    },
-
-    // 检验数据是否合法
-    checkData() {
-      const balance = this.balance;
-      const bigBalance = new BigNumber(balance);
-      const amount = new BigNumber(this.pledgeAmount);
-      if (this.pledgeAmount === '') {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n30'),
-        });
-        return false;
-      }
-      if (parseFloat(this.pledgeAmount) <= 0) {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n31'),
-        });
-        return false;
-      }
-      // console.log(amount.toNumber(),bigBalance.toNumber(),amount.isGreaterThan(bigBalance));
-      if (amount.isGreaterThan(bigBalance)) {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n29'),
-        });
-        return false;
-      }
-
-      return true;
-    },
-  },
-};
+<script src="./pledge.js">
 </script>
 
 <style lang="less" scoped>
@@ -136,7 +70,7 @@ export default {
   border-radius: 12px;
   .pledge-content {
     .title {
-      font-size: 24px;
+      font-size: 18px;
       line-height: 28px;
       margin-bottom: 24px;
     }

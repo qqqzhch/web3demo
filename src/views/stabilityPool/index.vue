@@ -117,15 +117,17 @@ export default {
       const val =
         this.stabilityDeposit &&
         this.stabilityDeposit.collateralGain &&
-        this.stabilityDeposit.collateralGain.prettify();
-      return val;
+        this.stabilityDeposit.collateralGain.toString();
+      const bnb = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bnb;
     },
 
     // 待提取Babel
     unclaimBabel() {
       const val =
-        this.stabilityDeposit && this.stabilityDeposit.lqtyReward && this.stabilityDeposit.lqtyReward.prettify();
-      return val;
+        this.stabilityDeposit && this.stabilityDeposit.lqtyReward && this.stabilityDeposit.lqtyReward.toString();
+      const babel = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return babel;
     },
 
     // 未释放Babel
@@ -160,6 +162,7 @@ export default {
       const obj = {};
       obj.balance = this.unclaimBabel;
       obj.method = val;
+      obj.unclaimBNB = this.unclaimBNB;
       this.$refs.extract.open(obj);
     },
     getData() {

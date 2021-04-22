@@ -1,50 +1,35 @@
 <template>
-  <div class="pledge-dialog">
-    <Modal v-model="openPledgeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
-      <div class="pledge-content">
+  <div class="remove-dialog">
+    <Modal v-model="openRemoveDialog" class-name="simple-modal" :footer-hide="true" :closable="true">
+      <div class="simple-content">
         <p class="title text-center">
-          取出
+          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
         </p>
-        <div class="pledge-wrapper">
+        <div class="simple-wrapper">
           <div class="title-content">
-            <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
+            <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ coinName }}</span>
+              <span>{{ stakeVal }}</span>
             </div>
           </div>
-          <div class="pledge-wrapper flex">
-            <input v-model.number="pledgeAmount" type="number" class="amount-input" @input="handleInput">
-          </div>
-
-          <div class="percentage">
-            <div @click="percentage(0.25)">
-              25%
-            </div>
-            <div @click="percentage(0.5)">
-              50%
-            </div>
-            <div @click="percentage(0.75)">
-              75%
-            </div>
-            <div @click="percentage(1)">
-              {{ $t('earn.dialog.stakeDialog.max') }}
-            </div>
+          <div class="simple-wrapper flex">
+            <input v-model="stakeVal" readonly type="text" class="amount-input">
           </div>
         </div>
-        <div class="price-wrapper">
-          <div class="price-item flex justify-between items-center">
-            <span>你将取出</span>
-            <p>{{ pledgeAmount || 0 }}</p>
+        <div class="detail-wrapper">
+          <div class="detail-item">
+            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}</span>
+            <p>{{ stakeVal }} {{ coinName }}</p>
           </div>
         </div>
 
         <div class="btn-wrapper">
-          <Buttons v-if="sendLoading === false" height="48px" @click.native="depositScusd">
-            {{ $t('earn.dialog.stakeDialog.confirm') }}
+          <Buttons v-if="!takeLoading" height="48px" @click.native="sendTakeout">
+            {{ $t('common.confirm') }}
           </Buttons>
           <Buttons v-else height="48px">
-            {{ $t('earn.dialog.loading') }}
+            {{ $t('common.loading') }}...
           </Buttons>
         </div>
       </div>
@@ -54,157 +39,76 @@
 
 <script>
 import { mapState } from 'vuex';
-const BigNumber = require('bignumber.js');
-BigNumber.config({ DECIMAL_PLACES: 6, ROUNDING_MODE: BigNumber.ROUND_DOWN });
+import { useStakingRewardsContractSigna } from '@/contactLogic/earn/lpPool/allowances.js';
+import event from '@/common/js/event';
 export default {
-  components: {
-    Buttons: () => import('@/components/basic/buttons'),
-  },
+  inject: ['reload'],
   data() {
     return {
-      openPledgeDialog: false,
-      pledgeAmount: '',
+      openRemoveDialog: false,
       data: {},
-      previousData: '',
-      sendLoading: false,
-      balance: 0,
+      coinName: '',
+      stakeVal: '',
+      takeLoading: false,
     };
   },
-  computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3', 'chainTokenPrice']),
-  },
   methods: {
-    open() {
-      this.pledgeAmount = '';
-      this.openPledgeDialog = true;
+    open(data) {
+      this.data = data;
+      this.stakeVal = data && data.data && data.data.balance;
+      this.coinName = data && data.name;
+      this.openRemoveDialog = true;
     },
-
-    percentage(val) {
-      const balance = new BigNumber(this.balance);
-      const percent = new BigNumber(val);
-      this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();
-    },
-
-    // 限制Input输入小数点的长度
-    handleInput(e) {
-      const stringValue = e.target.value.toString();
-      const regex = /^\d*(\.\d{1,6})?$/;
-      if (!stringValue.match(regex) && this.pledgeAmount !== '') {
-        this.pledgeAmount = this.previousData;
-      }
-      this.previousData = this.pledgeAmount;
-    },
-
-    // 检验数据是否合法
     checkData() {
-      const balance = this.balance;
-      const bigBalance = new BigNumber(balance);
-      const amount = new BigNumber(this.pledgeAmount);
-      if (this.pledgeAmount === '') {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n30'),
-        });
-        return false;
-      }
-      if (parseFloat(this.pledgeAmount) <= 0) {
+      if (this.stakeVal <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
         });
         return false;
       }
-      // console.log(amount.toNumber(),bigBalance.toNumber(),amount.isGreaterThan(bigBalance));
-      if (amount.isGreaterThan(bigBalance)) {
-        this.$Notice.warning({
-          title: this.$t('notice.n'),
-          desc: this.$t('notice.n29'),
-        });
-        return false;
-      }
-
       return true;
     },
+    // 取出LP
+    async sendTakeout() {
+      if (!this.checkData()) {
+        return false;
+      }
+      this.takeLoading = true;
+      const tokenJson = this.data;
+      try {
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const esGas = await stakingRewardsContract.estimateGas.exit();
+        const result = await stakingRewardsContract.exit({ gasLimit: esGas });
+        event.$emit('sendSuccess');
+        this.openRemoveDialog = false;
+        event.$emit('sendtx', [
+          result,
+          {
+            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+        this.$Notice.error({
+          title: this.$t('notice.n32'),
+        });
+      } finally {
+        this.openRemoveDialog = false;
+        this.takeLoading = false;
+      }
+    },
+  },
+  components: {
+    Buttons: () => import('@/components/basic/buttons'),
+  },
+  computed: {
+    ...mapState(['ethersprovider', 'ethAddress']),
   },
 };
 </script>
 
 <style lang="less" scoped>
-.pledge-modal {
-  background: #ffffff;
-  box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
-  .pledge-content {
-    .title {
-      font-size: 24px;
-      line-height: 28px;
-      margin-bottom: 24px;
-    }
-    .pledge-wrapper {
-      .title-content {
-        overflow: hidden;
-        margin: 24px 0 8px;
-        span {
-          float: left;
-        }
-        .balance-item {
-          float: right;
-          font-size: 12px;
-          line-height: 14px;
-        }
-      }
-      .pledge-wrapper {
-        width: 100%;
-        height: 72px;
-        background: #f7f8f9;
-        border-radius: 6px;
-        position: relative;
-        .amount-input-error {
-          &:focus {
-            border: 1px solid #ff3c00;
-            border-radius: 4px;
-          }
-        }
-      }
-      .percentage {
-        margin-top: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        div {
-          cursor: pointer;
-          width: 23%;
-          height: 36px;
-          border-radius: 6px;
-          border: 1px solid rgba(0, 0, 0, 0.06);
-          font-size: 14px;
-          color: #828489;
-          line-height: 36px;
-          text-align: center;
-        }
-        :hover {
-          border-color: #0058ff;
-          color: #0058ff;
-        }
-      }
-    }
-    .price-wrapper {
-      margin-top: 30px;
-      span {
-        font-size: 12px;
-        color: #828489;
-        line-height: 14px;
-      }
-      p {
-        font-size: 12px;
-        color: #14171c;
-        line-height: 14px;
-        margin-bottom: 8px;
-      }
-    }
-    .btn-wrapper {
-      margin-top: 16px;
-    }
-  }
-}
+@import '../../../common/css/dialog.less';
 </style>

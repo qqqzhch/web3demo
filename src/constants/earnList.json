@@ -104,5 +104,28 @@
       "SCASH",
       "ETH"
     ]
+  },
+  {
+    "name": "SCASH/ETH  LP",
+    "address": "0x3A0a8e7e6ad5A1A6d76180f81b292c4EF663F68a",
+    "decimals": 18,
+    "chainId": 4,
+    "kind": "liquity",
+    "symbol": [
+      "SCASH",
+      "ETH"
+    ]
+  },
+
+  {
+    "name": "LUSD/BNB  LP",
+    "address": "0x847161FA5D7801eAD1D1CA1FF2bF84c82C9b7661",
+    "decimals": 18,
+    "chainId": 97,
+    "kind": "multi",
+    "symbol": [
+      "LUSD",
+      "BNB"
+    ]
   }
 ]

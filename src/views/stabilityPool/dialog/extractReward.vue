@@ -67,9 +67,10 @@ export default {
       this.data = data;
       this.claimAmount = data.balance;
       this.method = data.method;
+      this.unclaimBNB = data.unclaimBNB;
       this.openClaimDialog = true;
     },
-    checkData() {
+    checkData(val) {
       if (this.claimAmount <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
@@ -77,6 +78,16 @@ export default {
         });
         return false;
       }
+
+      // 移动操作必须确保BNB余额大于0
+      if (val === 'move' && this.unclaimBNB <= 0) {
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: 'The balance of BNB needs to be greater than 0',
+        });
+        return false;
+      }
+
       return true;
     },
     handleClaimMethods() {
@@ -115,7 +126,7 @@ export default {
 
     // 提取并移动BNB收益
     async sendAndMoveExtract() {
-      if (!this.checkData()) {
+      if (!this.checkData('move')) {
         return false;
       }
       this.extractLoading = true;

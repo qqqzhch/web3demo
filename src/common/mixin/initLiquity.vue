@@ -3,13 +3,13 @@ import { mapState, mapActions } from 'vuex';
 import { fetchLiquityStore } from '@/contactLogic/buildr/liquity';
 import { AddressZero } from '@ethersproject/constants';
 import { EthersLiquity, _connectByChainId } from '@webfans/lib-ethers';
-import event from "@/common/js/event";
+import event from '@/common/js/event';
 export default {
   inject: ['reload'],
   data() {
     return {
       liquityReady: false,
-      AddressZero
+      AddressZero,
     };
   },
   computed: {
@@ -17,7 +17,6 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
-
   },
   methods: {
     ...mapActions('buildr', ['setLiquityState']),
@@ -42,10 +41,14 @@ export default {
       };
       const liquity = fetchLiquityStore(params);
       liquity.store.onLoaded = () => {
-
         this.setLiquityState(liquity.store.state);
         this.getLiquityInstance();
       };
+
+      liquity.store.subscribe(({ newState, oldState }) => {
+        this.setLiquityState(newState);
+      });
+
       liquity.store.start();
     },
   },
@@ -60,7 +63,7 @@ export default {
     }
   },
   mounted() {
-    event.$on("txsuccess", () => {
+    event.$on('txsuccess', () => {
       this.reload();
     });
   },

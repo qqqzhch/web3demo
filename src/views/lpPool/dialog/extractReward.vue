@@ -39,6 +39,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { useStakingRewardsContractSigna } from '@/contactLogic/earn/lpPool/allowances.js';
 import event from '@/common/js/event';
 export default {
   data() {
@@ -46,13 +47,17 @@ export default {
       openClaimDialog: false,
       claimAmount: '',
       data: {},
+      coinName: '',
       extractLoading: false,
-      rewardToken: '',
+      fee: '',
+      rewardToken: 'Babel'
     };
   },
   methods: {
     open(data) {
       this.data = data;
+      this.coinName = data && data.name;
+      this.claimAmount = data && data.data && data.data.earned;
       this.openClaimDialog = true;
     },
     checkData() {
@@ -71,22 +76,19 @@ export default {
         return false;
       }
       this.extractLoading = true;
+      const tokenJson = this.data;
       try {
-        // const chainID = this.ethChainID;
-        // const account = this.ethAddress;
-        // const library = this.ethersprovider;
-        // const result = await Masterwithdraw({ chainID, account, library });
-
-        // 合约操作
-
-        let result;
-        event.$emit('sendSuccess');
-        this.openClaimDialog = false;
+        const stakingRewardsContract = useStakingRewardsContractSigna(this.ethersprovider, this.ethAddress, tokenJson);
+        const esGas = await stakingRewardsContract.estimateGas.getReward();
+        const result = await stakingRewardsContract.getReward({ gasLimit: esGas });
+        this.$Notice.success({
+          title: this.$t('notice.n33'),
+        });
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.claim')} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.claim')} ${this.claimAmount} ${this.coinName} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.claim')} ${this.coinName} ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {
@@ -95,8 +97,10 @@ export default {
           title: this.$t('notice.n32'),
         });
       } finally {
-        this.openClaimDialog = false;
-        this.extractLoading = false;
+        const timer = setTimeout(() => {
+          (this.openClaimDialog = false), (this.extractLoading = false);
+          clearTimeout(timer);
+        }, 1000);
       }
     },
   },
@@ -104,7 +108,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID']),
+    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3','scashPrice']),
   },
 };
 </script>
