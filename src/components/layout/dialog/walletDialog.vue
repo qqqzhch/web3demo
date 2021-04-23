@@ -137,7 +137,7 @@ export default {
     }
   }
   .wallet-content-active {
-    border: 1px solid #0058ff;
+    border: 1px solid #605AA5;
     .img-wapper {
       display: block;
     }

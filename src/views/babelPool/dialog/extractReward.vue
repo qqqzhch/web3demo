@@ -61,7 +61,7 @@ export default {
       this.openClaimDialog = true;
     },
     checkData() {
-      if (this.collateralGain < 0 && this.lusdGain<0) {
+      if (this.collateralGain <= 0 && this.lusdGain <= 0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),
@@ -78,7 +78,9 @@ export default {
       this.extractLoading = true;
       try {
         // 合约操作
-        const transaction = await this.liquityInstance.withdrawGainsFromStaking({ gasLimit: this.$globalConfig.gasLimit });
+        const transaction = await this.liquityInstance.withdrawGainsFromStaking({
+          gasLimit: this.$globalConfig.gasLimit,
+        });
         event.$emit('sendSuccess');
         this.openClaimDialog = false;
         event.$emit('sendtx', [

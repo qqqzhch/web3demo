@@ -281,7 +281,7 @@
       line-height: 48px;
       height: 48px;
       border-radius: 24px;
-      background-color: #0058ff;
+      background-color: #605AA5;
       color: #ffffff;
       &:hover {
         background-color: #0547ff;

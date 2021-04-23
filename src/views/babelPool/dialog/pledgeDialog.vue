@@ -3,7 +3,7 @@
     <Modal v-model="openPledgeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div class="pledge-content">
         <p class="title text-center">
-          存入
+          {{ $t('stability.stake') }}
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
@@ -213,8 +213,8 @@ export default {
           text-align: center;
         }
         :hover {
-          border-color: #0058ff;
-          color: #0058ff;
+          border-color: #605AA5;
+          color: #605AA5;
         }
       }
     }

@@ -6,7 +6,7 @@
           {{ $t('myPage.claim') }}
         </p>
         <p v-else class="title text-center">
-          Claim BABEL and move BNB to Trove
+          {{ $t('stability.claimAndMove') }}
         </p>
         <div class="simple-wrapper">
           <div class="title-content">
@@ -71,7 +71,7 @@ export default {
       this.openClaimDialog = true;
     },
     checkData(val) {
-      if (this.claimAmount <= 0) {
+      if (this.claimAmount <= 0 && this.unclaimBNB <=0) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
           desc: this.$t('notice.n31'),

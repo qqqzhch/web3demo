@@ -174,7 +174,7 @@
         line-height: 32px;
         font-size: 14px;
         font-weight: 500;
-        color: #0058ff;
+        color: #605AA5;
         background: rgba(0, 88, 255, 0.1);
         border-radius: 16px;
         &:hover {
@@ -208,7 +208,7 @@
           line-height: 32px;
           font-size: 14px;
           font-weight: 500;
-          color: #0058ff;
+          color: #605AA5;
           background: rgba(0, 88, 255, 0.1);
           border-radius: 16px;
           &:hover {
@@ -281,7 +281,7 @@
         height: 36px;
         line-height: 36px;
         border-radius: 18px;
-        background-color: #0058ff;
+        background-color: #605AA5;
         color: rgb(255, 255, 255);
         &:hover {
           background-color: #0025ff;

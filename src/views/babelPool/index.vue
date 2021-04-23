@@ -2,10 +2,10 @@
   <div class="pool-wrapper">
     <div class="pool-title flex justify-between items-center">
       <p class="title">
-        BABEL Pool
+        {{ $t('babel.pool') }}
       </p>
       <p class="subTitle">
-        BABEL Pool
+        {{ $t('babel.subTitle') }}
       </p>
     </div>
 
@@ -19,10 +19,10 @@
 
       <div class="tag-wrapper flex justify-center items-center">
         <div class="tag-item tag1">
-          Borrowing Fee
+          {{ $t('babel.borrow') }}
         </div>
         <div class="tag-item tag2">
-          Redemption Fee
+          {{ $t('babel.redemption') }}
         </div>
       </div>
 
@@ -33,22 +33,22 @@
         </div> -->
 
         <div class="detail-item">
-          <span class="title">Total Stake</span>
+          <span class="title">{{ $t('stability.total') }}</span>
           <span class="value">{{ totalStakedLQTY }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Staked</span>
+          <span class="title">{{ $t('stability.staked') }}</span>
           <span class="value">{{ stakedLQTY }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaim BNB</span>
+          <span class="title">{{ $t('stability.unclaim') }} BNB</span>
           <span class="value">{{ collateralGain }} BNB</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaim LAI</span>
+          <span class="title">{{ $t('stability.unclaim') }} LAI</span>
           <span class="value">{{ lusdGain }} LAI</span>
         </div>
       </div>
@@ -56,29 +56,29 @@
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
           <button class="pool-btn" @click="openPledge">
-            Stake BABEL
+            {{ $t('stability.stake') }} BABEL
           </button>
 
           <button class="pool-btn" @click="openExtract">
-            Claim
+            {{ $t('stability.claim') }}
           </button>
 
           <button class="pool-btn" @click="openTake">
-            Unstake BABEL
+            {{ $t('stability.unstake') }} BABEL
           </button>
         </template>
 
         <template v-else>
           <button class="pool-btn disableBtn">
-            Stake BABEL
+            {{ $t('stability.stake') }} BABEL
           </button>
 
           <button class="pool-btn disableBtn">
-            Claim
+            {{ $t('stability.claim') }}
           </button>
 
           <button class="pool-btn disableBtn">
-            Unstake BABEL
+            {{ $t('stability.unstake') }} BABEL
           </button>
         </template>
       </div>

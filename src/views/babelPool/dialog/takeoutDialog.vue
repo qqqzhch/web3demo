@@ -3,7 +3,7 @@
     <Modal v-model="openTakeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div class="pledge-content">
         <p class="title text-center">
-          Unstake
+          {{ $t('stability.unstake') }}
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
@@ -34,7 +34,7 @@
         </div>
         <div class="price-wrapper">
           <div class="price-item flex justify-between items-center">
-            <span>You will unStake</span>
+            <span>{{ $t('stability.willUnstake') }}</span>
             <p>{{ takeAmount || 0 }} BABEL</p>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default {
       if (this.haveUndercollateralizedTroves) {
         this.$Notice.warning({
           title: this.$t('notice.n'),
-          desc: "You're not allowed to withdraw LUSD from your Stability Deposit when there are undercollateralized Troves. Please liquidate those Troves or try again later.",
+          desc: this.$t('stability.notice'),
         });
         return false;
       }
@@ -227,8 +227,8 @@ export default {
           text-align: center;
         }
         :hover {
-          border-color: #0058ff;
-          color: #0058ff;
+          border-color: #605AA5;
+          color: #605AA5;
         }
       }
     }

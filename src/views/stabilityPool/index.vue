@@ -2,10 +2,10 @@
   <div class="pool-wrapper">
     <div class="pool-title flex justify-between items-center">
       <p class="title">
-        Stability Pool
+        {{ $t('stability.pool') }}
       </p>
       <p class="subTitle">
-        Stability Pool
+        {{ $t('stability.subTitle') }}
       </p>
     </div>
     <div v-if="showLoading">
@@ -21,7 +21,7 @@
           BABEL
         </div>
         <div class="tag-item tag2">
-          Liquidation Fee
+          {{ $t('stability.fee') }}
         </div>
       </div>
 
@@ -32,27 +32,27 @@
         </div> -->
 
         <div class="detail-item">
-          <span class="title">Total Stake</span>
+          <span class="title">{{ $t('stability.total') }}</span>
           <span class="value">{{ totalStake }} LAI</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Staked</span>
+          <span class="title">{{ $t('stability.staked') }}</span>
           <span class="value">{{ haveStake }} LAI</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaim BNB</span>
+          <span class="title">{{ $t('stability.unclaim') }} BNB</span>
           <span class="value">{{ unclaimBNB }} BNB</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaim BABEL</span>
+          <span class="title">{{ $t('stability.unclaim') }} BABEL</span>
           <span class="value">{{ unclaimBabel }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">Remaining BABEL</span>
+          <span class="title">{{ $t('stability.remain') }} BABEL</span>
           <span class="value">{{ unReleaseBabel }} BABEL</span>
         </div>
       </div>
@@ -60,40 +60,40 @@
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
           <button class="pool-btn" @click="openPledge">
-            Stake LAI
+            {{ $t('stability.stake') }}  LAI
           </button>
 
           <Poptip placement="bottom" class="claim-wrapper pool-btn">
             <div class="claim-content">
-              Claim
+              {{ $t('stability.claim') }}
             </div>
             <div slot="content" class="claim-btn-wrapper">
               <button class="claim-btn" @click="handleClaim('claim')">
-                Claim BNB and BABEL
+                {{ $t('stability.claimReward') }}
               </button>
 
               <button class="claim-btn ml-4" @click="handleClaim('move')">
-                Claim BABEL and move BNB to Trove
+                {{ $t('stability.claimAndMove') }}
               </button>
             </div>
           </Poptip>
 
           <button class="pool-btn" @click="openTake">
-            UnStake LAI
+            {{ $t('stability.unstake') }}  LAI
           </button>
         </template>
 
         <template v-else>
           <button class="pool-btn disableBtn">
-            Stake LAI
+            {{ $t('stability.stake') }}  LAI
           </button>
 
           <button class="pool-btn disableBtn">
-            Claim
+            {{ $t('stability.claim') }}
           </button>
 
           <button class="pool-btn disableBtn">
-            UnStake LAI
+            {{ $t('stability.unstake') }}  LAI
           </button>
         </template>
       </div>

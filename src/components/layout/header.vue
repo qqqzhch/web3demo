@@ -2,26 +2,26 @@
   <header class="header-wrapper header-wrapper-bg">
     <nav class="nav-wrapper container mx-auto flex justify-between items-center">
       <div class="left-wrapper flex items-center">
-        <img src="../../assets/logo.svg" alt="logo">
+        <img class="logo" src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
           <router-link class="menu-item" to="/vault" active-class="active">
-            Vault
+            {{ $t('header.nav.vault') }}
           </router-link>
 
           <router-link class="menu-item" to="/stabilityPool" active-class="active">
-            Stability POOL
+            {{ $t('header.nav.stPool') }}
           </router-link>
 
           <router-link class="menu-item" to="/babelPool" active-class="active">
-            BABEL POOL
+            {{ $t('header.nav.babelPool') }}
           </router-link>
 
           <router-link class="menu-item" to="/lpPool" active-class="active">
-            LP POOL
+            {{ $t('header.nav.lpPool') }}
           </router-link>
 
           <router-link class="menu-item" to="/troves" active-class="active">
-            Risky Troves
+            {{ $t('header.nav.troves') }}
           </router-link>
 
 
@@ -271,17 +271,22 @@ export default {
   z-index: 10;
   background-color: #ffffff;
   .nav-wrapper {
+    width: 100%;
     height: 100%;
     .left-wrapper {
+      width: 70%;
       height: 100%;
+      .logo{
+        max-width: 150px;
+      }
       .menu-wrapper {
-        margin-left: 80px;
+        margin-left: 50px;
         .menu-item {
           display: inline-block;
           text-align: center;
           padding: 0px 16px;
           height: 28px;
-          margin-right: 24px;
+          margin-right: 16px;
           font-size: 16px;
           font-weight: 500;
           color: #14171c;
@@ -290,7 +295,7 @@ export default {
           display: inline-block;
           height: 28px;
           text-align: center;
-          background: #0058ff;
+          background: #605AA5;
           border-radius: 14px;
           font-size: 16px;
           font-weight: 500;
@@ -317,7 +322,7 @@ export default {
         .changeBtn {
           width: 148px;
           height: 40px;
-          border: 1px solid #0058ff;
+          border: 1px solid #605AA5;
           font-size: 16px;
           font-weight: 500;
           color: #14171c;
@@ -402,7 +407,7 @@ export default {
   border-radius: 20px;
   line-height: 19px;
   font-size: 16px;
-  color: #0058ff;
-  border: 1px solid #0058ff;
+  color: #605AA5;
+  border: 1px solid #605AA5;
 }
 </style>

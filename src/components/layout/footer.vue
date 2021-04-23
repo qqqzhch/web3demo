@@ -5,7 +5,7 @@
         <div class="logo-wrapper">
           <img src="../../assets/footlogo.svg" alt="logo">
         </div>
-        <p>© 2021 SuperCash All rights reserved</p>
+        <p>© 2021 BABEL All rights reserved</p>
       </div>
       <div class="right-wrapper flex">
         <div class="contact-wrapper flex justify-between items-center">

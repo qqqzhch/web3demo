@@ -44,6 +44,11 @@ export default {
       Earn:'Earn',
       Bridge:'Bridge',
       Synth:'Synth',
+      vault: 'Vault',
+      stPool: 'Stability POOL',
+      babelPool: 'BABEL POOL',
+      lpPool: 'LP POOL',
+      troves: 'Risky Troves'
     },
     connectWallet:'Connect Wallet',
     copyAddress:'Copy Address',
