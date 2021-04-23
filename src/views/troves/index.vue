@@ -57,9 +57,9 @@
           <template slot="Coll.Liquidate" slot-scope="{row}">
             <div class=" Coll.Ratio">
               <p>
-                <img v-if="row.disable==false" src="../../assets/img/backspace.svg" alt="delete">
+                <img v-if="row.disable==false" src="../../assets/img/backspace.svg" alt="delete" @click="cleartrove(row.ownerAddress,row.disable)">
                 <Tooltip v-else :content="row.disable" placement="left">
-                  <img src="../../assets//img/delete-b.svg" alt="delete" @click="cleartrove(row.ownerAddress,row.disable)">
+                  <img src="../../assets//img/delete-b.svg" alt="delete">
                 </Tooltip>
               
               <!-- <img src="../../assets/img/Trash.svg" alt="delete" @click="cleartrove(row.ownerAddress,row.disable)"> -->
@@ -246,6 +246,17 @@ export default {
   mounted() {
     console.log('---');
     const _this=this;
+    event.$on('txsuccess',()=>{
+      setTimeout(() => {
+
+        _this.$data.clampedPage=0;
+        _this.$data.troveList=[];
+        _this.list();
+
+      }, 3000);
+
+    });
+
    var id = setInterval(() => {
      if(_this.liquityState&&_this.liquityState.blockTag&&this.liquity){
        clearInterval(id);
