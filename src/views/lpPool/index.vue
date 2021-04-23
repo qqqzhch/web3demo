@@ -44,7 +44,7 @@
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaim BABEL</span>
+          <span class="title">Unclaimed BABEL</span>
           <span class="value">{{ unclaim || 0 }} BABEL</span>
         </div>
       </div>

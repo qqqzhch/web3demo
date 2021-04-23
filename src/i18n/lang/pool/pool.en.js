@@ -12,7 +12,7 @@ export default {
     claim: 'Claim',
     claimReward: 'Claim BNB and BABEL',
     claimAndMove: 'Claim BABEL and BNB move to vault',
-    willUnstake: 'You will unStake',
+    willUnstake: 'You will unstake',
     notice: "You're not allowed to withdraw LAI from your Stability Deposit when there are undercollateralized Troves. Please liquidate those Troves or try again later."
   },
   babel: {

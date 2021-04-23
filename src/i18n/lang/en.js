@@ -48,7 +48,7 @@ export default {
       stPool: 'Stability POOL',
       babelPool: 'BABEL POOL',
       lpPool: 'LP POOL',
-      troves: 'Risky valut'
+      troves: 'Risky Vaults'
     },
     connectWallet:'Connect Wallet',
     copyAddress:'Copy Address',
