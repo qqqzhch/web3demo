@@ -73,7 +73,7 @@
       <div class="content-right">
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            {{ $t('build-Collateral') }}：
+            {{ $t('vault-collateral') }}：
           </p>
           <div class="text-right f-size-20">
             {{ depositAmount }} {{ defaultPool.token }}
@@ -128,7 +128,7 @@
         </div>
         <div v-if="btnloading">
           <button class="btn">
-            {{ $t('build-Loading') }}...
+            {{ $t('vault-Loading') }}...
           </button>
         </div>
       </div>

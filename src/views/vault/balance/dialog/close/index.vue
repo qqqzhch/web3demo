@@ -11,13 +11,21 @@
         <div v-if="!loading" class="padding-warpper">
           <div class="step-two">
             <div class="title-warpper">
-              <h2>Close Trove</h2>
+              <h2>Close Vault</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img :src="getTokenImg(poolData.tokenName)">
-              <h2>{{ poolData.depositAmount | formatNormalValue }}</h2>
-              <p>{{ poolData.tokenName }}</p>
-              <span>{{ $t('build-will-payback') }}</span>
+              <div>
+                <img :src="getTokenImg(poolData.stableName)" width="48px">
+                <h2>{{ poolData.debtAmount | formatNormalValue }}</h2>
+                <p>{{ poolData.stableName }}</p>
+                <span>{{ $t('build-will-payback') }}</span>
+              </div>
+              <div>
+                <img :src="getTokenImg(poolData.tokenName)">
+                <h2>{{ poolData.depositAmount | formatNormalValue }}</h2>
+                <p>{{ poolData.tokenName }}</p>
+                <span>{{ $t('vault-will-withdraw') }}</span>
+              </div>
             </div>
           </div>
           <div class="items-content">
@@ -67,7 +75,7 @@
           <div v-if="shortDebt < 0" class="notice-warpper">
             <div class="notice-content">
               <img src="../../../../../assets/img/notice-red.png">
-              <p>{{ `You need ${-shortDebt} ${poolData.stableName} more to close your Trove` }}</p>
+              <p>{{ `You need ${Number(-shortDebt).toFixed(6)} ${poolData.stableName} more to close your Vault` }}</p>
             </div>
           </div>
 
@@ -231,6 +239,15 @@
       }
       .confirm-content {
         margin-top: 32px;
+        display: grid;
+        grid-template-columns: 50% 50%;
+        justify-content: space-between;
+        div {
+          img {
+            margin-left: 38%;
+          }
+          text-align: center;
+        }
         h2 {
           height: 47px;
           font-size: 40px;

@@ -11,16 +11,16 @@
         <div class="img-warpper text-center">
           <img src="../../../assets/img/check-green-64.png">
         </div>
-        <h1> Deposit: {{ data.depositAmount }} BNB,  Borrow: {{ data.borrowAmount }} {{ data.stableName }} {{ $t('build-vault-created') }}.</h1>
+        <h1> Deposit {{ data.depositAmount }} BNB,  Borrow {{ data.borrowAmount }} {{ data.stableName }} {{ $t('vault-created') }}.</h1>
         <Buttons @click.native="onClose">
-          关闭
+          Close
         </Buttons>
       </div>
       <div v-if="status==='created'" class="modal-content">
         <div class="text-center">
           <Loading />
         </div>
-        <h1>{{ $t('build-please-wait') }}....</h1>
+        <h1>{{ $t('vault-please-wait') }}....</h1>
       </div>
     </Modal>
   </div>

@@ -2,7 +2,7 @@ export default {
   'build-manage': 'Mange',
   'build-buildr': 'Borrow',
   'build-history': 'History',
-  'build-create-vault': 'Open Vault',
+  'build-create-vault': 'Create Vault',
   'build-deposit-digital-assets': 'Deposit digital assets, create your Vaults to borrow LAI！',
   'build-total-collateral-value': 'Total Value Locked',
   'build-total-debt': 'Total Collateral',
@@ -59,11 +59,16 @@ export default {
   'vault-redemption-fee': 'Redemption Fee',
   'vault-close-trove': 'Close Vault',
   'vault-current-debt': 'Debt',
-  'vault-withdrawal': 'Redeem',
+  'vault-withdrawal': 'Withdraw',
   'vault-add-borrow': 'Borrow',
   'vault-repay': 'Repay',
   'vault-creted': 'Create Vault',
 
   'vault-lai-balance': 'LAI balance',
   'vault-liquidation-reserve': 'Liquidation Reserve',
+  'vault-collateral': 'Collateral',
+  'vault-will-withdraw': 'will be withdrawn',
+  'vault-Loading': 'Loading',
+  'vault-created': 'Vault Created',
+  'vault-please-wait': 'Please wait...'
 };

@@ -17,7 +17,7 @@
           </div>
           <div class="tab-warpper">
             <button class="tab  tab-disabled" @click="onExitClick">
-              {{ $t('build-withdraw') }}
+              {{ $t('vault-withdrawal') }}
             </button>
           </div>
         </div>
@@ -60,7 +60,7 @@
                 {{ $t('build-credit-line') }}：
               </li>
               <li>
-                <span>{{ poolData.depositAmount }}</span> {{ $t('build-to') }} <span
+                <span>{{ poolData.depositAmount | formatNormalValue }}</span> {{ $t('build-to') }} <span
                   :class="{
                     'f-green': coinAmount < poolData.accountBalance,
                     'f-danger': coinAmount > poolData.accountBalance
