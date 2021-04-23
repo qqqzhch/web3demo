@@ -10,6 +10,7 @@ import i18n from '../../../i18n/index.js';
 import { openTrove, calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from '../../../contactLogic/buildr/validate';
 
+
 const LUSD_MINIMUM_DEBT = 200;
 
 export default {
@@ -65,6 +66,11 @@ export default {
     },
     accountBalance() {
      return this.liquityState.accountBalance.toString();
+    },
+    // 计算借贷净值 = Debt - 清算准备金 - 净值*借贷费率
+    borrowLUSDAmount() {
+      const { liquidationReserve, borrowingRate } = this.troveIndicators;
+      return BigNumber(this.borrowAmount).minus(liquidationReserve).div(BigNumber(1).plus(borrowingRate)).toNumber();
     }
   },
   methods: {
@@ -119,10 +125,11 @@ export default {
       this.btnloading = true;
       const params = {
         ...this.getParams(),
+        borrowLUSDAmount: this.borrowLUSDAmount,
         depositAmount: this.depositAmount,
-        borrowLUSDAmount: this.borrowAmount,
         liquityState: this.liquityState,
       };
+
       const tx = await openTrove(params);
       this.sendtx(tx);
       this.btnloading = false;

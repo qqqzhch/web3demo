@@ -24,14 +24,17 @@ export default {
       const feeRate = this.poolData.borrowingRate ? this.poolData.borrowingRate : 0;
       return BigNumber(this.coinAmount).times(feeRate);
     },
-    // 计算增加的存款额度
     newDebt() {
-      return BigNumber(this.poolData.debtAmount).plus(this.coinAmount).plus(this.debtFee).toNumber();
+      return BigNumber(this.coinAmount).div(BigNumber(1).plus(this.poolData.borrowingRate)).toNumber();
+    },
+    // 计算总借款额度
+    totalDebt() {
+      return BigNumber(this.poolData.debtAmount).plus(this.coinAmount).toNumber();
     },
     // 新的抵押率
     newCollateralRatio() {
       const { depositAmount } = this.poolData;
-      const { collateralRatio } = this.checkValue ? {collateralRatio: 0} : this.$parent.getTroveIndicators(depositAmount, this.newDebt);
+      const { collateralRatio } = this.checkValue ? {collateralRatio: 0} : this.$parent.getTroveIndicators(depositAmount, this.totalDebt);
       return collateralRatio;
     },
     // 验证输入值
@@ -41,7 +44,7 @@ export default {
       } else if (isNaN(this.coinAmount)) {
         return i18n.t('notice.buidrNotice.n1');
       } else {
-        return this.$parent.validate(this.poolData.depositAmount, this.newDebt);
+        return this.$parent.validate(this.poolData.depositAmount, this.totalDebt);
       }
     }
   },
@@ -87,7 +90,7 @@ export default {
         library: this.ethersprovider,
         account:  this.ethAddress,
         web3: this.web3,
-        coinAmount: this.coinAmount,
+        coinAmount: this.newDebt,
         unit:this.poolData.stableName,
       };
 

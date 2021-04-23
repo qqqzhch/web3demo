@@ -1,10 +1,14 @@
 import {
   Percent,
   Trove,
-  LUSD_MINIMUM_DEBT, //系统最小债务
+  // LUSD_MINIMUM_DEBT, //系统最小债务
   MINIMUM_COLLATERAL_RATIO,
   CRITICAL_COLLATERAL_RATIO,
 } from "@liquity/lib-base";
+
+const LUSD_MINIMUM_DEBT = 200;
+
+import { stableName } from './liquity';
 
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);
@@ -16,7 +20,7 @@ const validateTroveCreation = ({ depositCollateral }, {
 }, state) => {
   const { accountBalance, price } = state;
   if (resultingTrove.debt.lt(LUSD_MINIMUM_DEBT)) {
-    return `Debt must be at least ${LUSD_MINIMUM_DEBT.toString()}`;
+    return `Debt must be at least ${LUSD_MINIMUM_DEBT.toString()} ${stableName}`;
   }
   if (recoveryMode){
     if (!resultingTrove.isOpenableInRecoveryMode(price)) {
@@ -50,7 +54,7 @@ const validateTroveClosure = ({ repayLUSD },{recoveryMode,wouldTriggerRecoveryMo
     return `You're not allowed to close your Trove during recovery mode.`;
   }
   if (repayLUSD?.gt(lusdBalance)) {
-    return`You need ${repayLUSD.sub(lusdBalance).prettify()} more to close your Trove` ;
+    return`You need ${repayLUSD.sub(lusdBalance).prettify()} ${stableName} more to close your Trove` ;
   }
   if (wouldTriggerRecoveryMode) {
     return `You're not allowed to close a Trove if it would cause the Total Collateralization Ratio to
@@ -89,7 +93,7 @@ const validateTroveAdjustment = ({ depositCollateral, withdrawCollateral, borrow
   }
   if (repayLUSD) {
     if (resultingTrove.debt.lt(LUSD_MINIMUM_DEBT)) {
-      return ` Debt must be at least ${LUSD_MINIMUM_DEBT.toString()}` ;
+      return ` Debt must be at least ${LUSD_MINIMUM_DEBT.toString()} ${stableName}` ;
     }
     if (repayLUSD.gt(lusdBalance)) {
       return `The amount you're trying to repay exceeds your balance by ${repayLUSD.sub(lusdBalance).prettify()}`;
@@ -97,7 +101,7 @@ const validateTroveAdjustment = ({ depositCollateral, withdrawCollateral, borrow
   }
   if (depositCollateral&&depositCollateral.gt(accountBalance)) {
     return `The amount you're trying to deposit exceeds your balance by
-                ${depositCollateral.sub(accountBalance).prettify()} ETH`;
+                ${depositCollateral.sub(accountBalance).prettify()} BNB`;
   }
   return null;
 };

@@ -66,10 +66,10 @@
               <li>
                 <span>{{ poolData.debtAmount | formatNormalValue }}</span> {{ $t('build-to') }} <span
                   :class="{
-                    'f-green': newDebt > poolData.debtAmount,
-                    'f-danger': newDebt < poolData.debtAmount
+                    'f-green': totalDebt > poolData.debtAmount,
+                    'f-danger': totalDebt < poolData.debtAmount
                   }"
-                >{{ newDebt | formatNormalValue }} {{ poolData.stableName }}</span>
+                >{{ totalDebt | formatNormalValue }} {{ poolData.stableName }}</span>
               </li>
             </ul>
             <ul>

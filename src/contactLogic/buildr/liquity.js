@@ -6,18 +6,20 @@ import {
   Decimal,
   Trove,
   LiquityStoreState,
-  LUSD_LIQUIDATION_RESERVE,
+  // LUSD_LIQUIDATION_RESERVE,
   LUSD_MINIMUM_DEBT, //系统最小债务
   MINIMUM_COLLATERAL_RATIO,
   CRITICAL_COLLATERAL_RATIO,
 } from "@liquity/lib-base";
+import { AddressZero } from '@ethersproject/constants';
 
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);
 
 /**********Liquity config start***************/
-// 这个是什么地址？
-const frontendTag = '0xc7B375ce501a2432A25d584dF1f40c73c83f9534';
+// 业务地址
+// const frontendTag = '0xc7B375ce501a2432A25d584dF1f40c73c83f9534';
+const frontendTag = AddressZero;
 // 最低费率0.5%
 const minFeeRate = 0.005;
 // Gas Limit
@@ -26,6 +28,8 @@ const gasLimit = 800000;
 export const stableName = 'LAI';
 
 const liquidationRatio = 1.1;
+// 清算保证金
+const LUSD_LIQUIDATION_RESERVE = 20;
 
 /**********Liquity config end***************/
 
@@ -122,7 +126,7 @@ export const calcTroveIndicators = (liquityState, depositAmount, debtAmount) => 
 
   return {
     stableName,
-    liquidationReserve: LUSD_LIQUIDATION_RESERVE.toString(),
+    liquidationReserve: LUSD_LIQUIDATION_RESERVE,
     price,
     borrowingRate,
     borrowingFee,

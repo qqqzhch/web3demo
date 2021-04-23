@@ -1831,9 +1831,9 @@
   dependencies:
     ethers "^5.0.0"
 
-"@webfans/lib-ethers@^3.2.2":
-  version "3.2.2"
-  resolved "https://registry.npmjs.org/@webfans/lib-ethers/-/lib-ethers-3.2.2.tgz#ae9294e7ad950bbd641972a30523fd36319425d7"
+"@webfans/lib-ethers@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@webfans/lib-ethers/-/lib-ethers-3.2.3.tgz#4bbd3406b175a112e2854577fe283621deb5967e"
   dependencies:
     run-s "0.0.0"
 
