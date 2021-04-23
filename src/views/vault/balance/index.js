@@ -7,7 +7,6 @@ import i18n from '../../../i18n/index.js';
 import Overview from './overview/index.vue';
 import { calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from "../../../contactLogic/buildr/validate";
-import { fetchTokenBalance } from '@/contactLogic/buildr/create';
 
 
 export default {
@@ -57,24 +56,13 @@ export default {
     getTroveIndicators(depositAmount, debtAmount) {
       return calcTroveIndicators(this.liquityState, depositAmount, debtAmount);
     },
-    async getLAIBalance() {
-      const params = {
-        tokenName: 'LAI',
-        chainID: this.ethChainID,
-        library: this.ethersprovider,
-        account:  this.ethAddress,
-        web3: this.web3,
-      };
-      return await fetchTokenBalance(params);
-    },
     loadData() {
       this.poolsData = [];
-      this.collateralPools.forEach(async (item, index) => {
+      this.collateralPools.forEach((item, index) => {
         const depositAmount = this.liquityState.trove.collateral.toString();  // 已质押BNB数量
         const debtAmount = this.liquityState.trove.debt.toString();           // 当前债务
         const accountBalance = this.liquityState.accountBalance.toString();   // 账户余额BNB数量
         const troveIndicators = this.getTroveIndicators(depositAmount, debtAmount);
-        const LAIBalance = await this.getLAIBalance();
 
         const itemData = {
           index,
@@ -86,7 +74,6 @@ export default {
           borrowingRate: troveIndicators.borrowingRate,
           liquidationRatio: troveIndicators.liquidationRatio,
           liquidationReserve: troveIndicators.liquidationReserve,
-          LAIBalance,
           accountBalance,
           depositAmount,
           debtAmount,

@@ -8,7 +8,7 @@
       :closable="false"
     >
       <div class="modal-content">
-        <div class="padding-warpper">
+        <div v-if="!loading" class="padding-warpper">
           <div class="step-two">
             <div class="title-warpper">
               <h2>Close Trove</h2>
@@ -34,7 +34,7 @@
                 {{ $t('vault-lai-balance') }}：
               </li>
               <li>
-                <span>{{ poolData.LAIBalance | formatNormalValue }} {{ poolData.stableName }}</span>
+                <span>{{ LAIBalance | formatNormalValue }} {{ poolData.stableName }}</span>
               </li>
             </ul>
             <ul>
@@ -82,6 +82,9 @@
           <div class="close-warpper">
             <img src="../../../../../assets/img/closeBtn.svg" alt="closeBtn" @click="closeDialog">
           </div>
+        </div>
+        <div v-if="loading" class="padding-warpper">
+          <Loading />
         </div>
       </div>
     </Modal>
