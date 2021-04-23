@@ -29,7 +29,10 @@
     </div>
     <div class="list-wapper">
       <h2>{{ $t('troves.tableTitle') }}</h2>
-      <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
+      <div v-if="showLoading">
+        <loading />
+      </div>
+      <Scroll v-else :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
         <Table :columns="getColumns" :data="troveList">
           <template slot="Owner" slot-scope="{ row }">
             <div class="Owner">
@@ -93,6 +96,7 @@ export default {
       troveList: [],
       shortAdress: '',
       clampedPage: 0,
+      showLoading:false
     };
   },
   methods: {
@@ -187,6 +191,7 @@ export default {
   },
   mounted() {
     console.log('---');
+    this.$data.showLoading =true;
     const _this = this;
     event.$on('txsuccess', () => {
       setTimeout(() => {
@@ -197,9 +202,16 @@ export default {
     });
 
     var id = setInterval(() => {
-      if (_this.liquityState && _this.liquityState.blockTag && this.liquity) {
+      if (_this.liquityState && _this.liquityState.price && this.liquity&&this.liquity.getTroves) {
         clearInterval(id);
-        _this.list();
+        try {
+          
+          _this.list();
+        } catch (error) {
+          console.log(error);
+        }
+        this.$data.showLoading = false;
+        
       }
     }, 100);
   },
@@ -240,6 +252,9 @@ export default {
       ];
       return columns;
     }
+  },
+  components: {
+    loading: () => import('@/components/basic/loading.vue'),
   },
 };
 </script>
