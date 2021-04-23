@@ -14,9 +14,9 @@
               <h2>Close Trove</h2>
             </div>
             <div class="confirm-content flex flex-col items-center">
-              <img :src="getTokenImg(poolData.stableName)">
-              <h2>{{ poolData.depositAmount }}</h2>
-              <p>{{ poolData.stableName }}</p>
+              <img :src="getTokenImg(poolData.tokenName)">
+              <h2>{{ poolData.depositAmount | formatNormalValue }}</h2>
+              <p>{{ poolData.tokenName }}</p>
               <span>{{ $t('build-will-payback') }}</span>
             </div>
           </div>
@@ -27,6 +27,22 @@
               </li>
               <li>
                 <span>{{ poolData.debtAmount | formatNormalValue }} {{ poolData.stableName }}</span>
+              </li>
+            </ul>
+            <ul>
+              <li class="title">
+                {{ $t('vault-lai-balance') }}：
+              </li>
+              <li>
+                <span>{{ poolData.LAIBalance | formatNormalValue }} {{ poolData.stableName }}</span>
+              </li>
+            </ul>
+            <ul>
+              <li class="title">
+                {{ $t('vault-liquidation-reserve') }}：
+              </li>
+              <li>
+                <span>{{ poolData.liquidationReserve | formatNormalValue }} {{ poolData.stableName }}</span>
               </li>
             </ul>
             <ul>
@@ -48,11 +64,21 @@
               </li>
             </ul>
           </div>
+          <div v-if="shortDebt < 0" class="notice-warpper">
+            <div class="notice-content">
+              <img src="../../../../../assets/img/notice-red.png">
+              <p>{{ `You need ${-shortDebt} ${poolData.stableName} more to close your Trove` }}</p>
+            </div>
+          </div>
+
           <div class="button-warpper">
-            <button class="btn" @click="onCloseTroveClick">
+            <button v-if="shortDebt >= 0" class="btn" @click="onCloseTroveClick">
               {{ $t('build-confirm') }}
             </button>
           </div>
+          <button v-if="shortDebt < 0" class="btn btn-disabled">
+            {{ $t('build-confirm') }}
+          </button>
           <div class="close-warpper">
             <img src="../../../../../assets/img/closeBtn.svg" alt="closeBtn" @click="closeDialog">
           </div>

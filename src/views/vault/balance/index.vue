@@ -63,7 +63,7 @@
             <div class="small-item text-center">
               <div>
                 <span>{{ $t('build-Deposited') }}</span>
-                <p>{{ poolItem.depositAmount }} {{ poolItem.tokenName }}</p>
+                <p>{{ poolItem.depositAmount | formatNormalValue }} {{ poolItem.tokenName }}</p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openJoinDialog(poolItem)">

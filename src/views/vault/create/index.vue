@@ -81,7 +81,7 @@
         </div>
         <div class="build-grid-2 mrg-b-5">
           <p class="f-size-20">
-            Debt:
+            {{ $t('build-debt') }}：
           </p>
           <div class="text-right f-size-20">
             {{ borrowAmount }} {{ stableName }}
@@ -89,26 +89,26 @@
         </div>
 
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>liquidation Reserve：</p>
+          <p>{{ $t('vault-liquidation-reserve') }}：</p>
           <div class="text-right">
             {{ troveIndicators.liquidationReserve }} {{ stableName }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Borrowing Fee：</p>
+          <p>{{ $t('vault-borrowing-fee') }}：</p>
           <div class="text-right">
             {{ troveIndicators.borrowingFee | formatNormalValue }} {{ stableName }}
             ({{ BigNumber(troveIndicators.borrowingRate).times(100) }}%)
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>liquidation Price: </p>
+          <p>{{ $t('build-liquidation-price') }}： </p>
           <div class="text-right">
             $ {{ troveIndicators.price }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>Collateral ratio：</p>
+          <p>{{ $t('build-liquidation-ratio') }}：</p>
           <div class="text-right">
             {{ BigNumber(troveIndicators.collateralRatio).times(100).toNumber() | formatNormalValue }} %
           </div>
@@ -120,10 +120,10 @@
         <div v-if="!errorInfo" :style="{height: '47px'}" />
         <div v-if="!btnloading">
           <button v-if="!errorInfo" class="btn" @click="onOpenTroveClick">
-            Open Trove
+            {{ $t('build-create-vault') }}
           </button>
           <button v-if="errorInfo" class="btn btn-disabled">
-            Open Trove
+            {{ $t('build-create-vault') }}
           </button>
         </div>
         <div v-if="btnloading">

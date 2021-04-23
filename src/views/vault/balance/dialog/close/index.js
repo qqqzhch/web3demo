@@ -13,6 +13,10 @@ export default {
   },
   computed: {
     ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    shortDebt() {
+      const { debtAmount, LAIBalance, liquidationReserve } = this.poolData;
+     return BigNumber(LAIBalance).minus(BigNumber(debtAmount).minus(liquidationReserve));
+    }
   },
   methods: {
     getTokenImg(token) {
@@ -22,6 +26,7 @@ export default {
     open(poolData) {
       this.poolData = poolData;
       this.isOpen = true;
+      this.shortDebt();
     },
     //关闭弹窗
     closeDialog(){

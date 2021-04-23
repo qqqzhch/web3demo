@@ -35,7 +35,8 @@ export default {
 
       liquity.store.subscribe(({ newState, oldState }) => {
         this.setLiquityState(newState);
-        console.log(oldState.price.toString(), newState.price.toString(), 888);
+
+        console.log(newState, oldState.price.toString(), newState.price.toString(), 888);
         // Try to liquidate whenever the price drops
         // if (newState.price.lt(oldState.price)) {
         //   // tryToLiquidate(liquity);
