@@ -12,7 +12,7 @@
         <div v-if="step === 1" class="flex">
           <div class="tab-warpper">
             <button class="tab">
-              借贷
+              {{ $t('build-buildr') }}
             </button>
           </div>
           <div class="tab-warpper">

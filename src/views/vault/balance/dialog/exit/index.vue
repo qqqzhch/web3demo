@@ -56,7 +56,7 @@
           <div class="items-content">
             <ul>
               <li class="title">
-                {{ $t('build-credit-line') }}：
+                {{ $t('vault-collateral') }}：
               </li>
               <li>
                 <span>{{ poolData.depositAmount | formatNormalValue }} </span> {{ $t('build-to') }} <span
