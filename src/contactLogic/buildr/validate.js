@@ -136,7 +136,7 @@ export const liquityValidate = ({trove, borrowingRate, state, depositAmount, bor
   console.log(sysNextInfocontext);
   if (change.type === "invalidCreation") {
     // Trying to create a Trove with negative net debt
-    return [undefined,`Debt must be at least ${LUSD_MINIMUM_DEBT.toString()}`];
+    return `Debt must be at least ${LUSD_MINIMUM_DEBT.toString()}`;
   }
 
   const errorDescription =
