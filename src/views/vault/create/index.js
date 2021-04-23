@@ -69,7 +69,7 @@ export default {
     // 计算借贷净值 = Debt - 清算准备金 - 净值*借贷费率 + 0.000001(精度问题)
     borrowLUSDAmount() {
       const { liquidationReserve, borrowingRate } = this.troveIndicators;
-      return BigNumber(this.borrowAmount).minus(liquidationReserve).div(BigNumber(1).plus(borrowingRate)).plus(0.000001).toNumber();
+      return this.borrowAmount < 20 ? 0 : BigNumber(this.borrowAmount).minus(liquidationReserve).div(BigNumber(1).plus(borrowingRate)).plus(0.000001).toNumber();
     }
   },
   methods: {

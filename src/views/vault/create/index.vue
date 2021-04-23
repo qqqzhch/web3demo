@@ -97,7 +97,7 @@
         <div class="build-grid-2 mrg-b-5">
           <p>{{ $t('vault-borrowing-fee') }}：</p>
           <div class="text-right">
-            {{ troveIndicators.borrowingFee | formatNormalValue }} {{ stableName }}
+            {{ BigNumber(borrowLUSDAmount).times(troveIndicators.borrowingRate) | formatNormalValue }} {{ stableName }}
             ({{ BigNumber(troveIndicators.borrowingRate).times(100) }}%)
           </div>
         </div>
