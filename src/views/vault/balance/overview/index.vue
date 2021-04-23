@@ -3,28 +3,28 @@
     <div class="content-warpper flex items-center">
       <div class="content">
         <div class="total-warpper">
-          <h2>总抵押物价值(TVL)</h2>
+          <h2>{{ $t('vault-total-value-locked') }}</h2>
           <p><span>$ {{ BigNumber(totalValue).times(price).toFixed(2) }}</span></p>
         </div>
         <div class="other-warpper flex items-center">
           <div>
-            <h2>总抵押物</h2>
+            <h2>{{ $t('vault-total-collateral') }}</h2>
             <p><span>{{ BigNumber(totalValue).toFixed(2) }}</span> BNB </p>
           </div>
           <div>
-            <h2>总债务</h2>
+            <h2>{{ $t('vault-total-debt') }}</h2>
             <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> {{ stableName }} </p>
           </div>
           <div>
-            <h2>系统抵押率</h2>
+            <h2>{{ $t('vault-total-collateral-ratio') }}</h2>
             <p><span>{{ BigNumber(totalCollateralRatio).times(100).toFixed(2) }}%</span></p>
           </div>
           <div>
-            <h2>借贷费率</h2>
+            <h2>{{ $t('vault-borrowing-fee') }}</h2>
             <p><span>{{ BigNumber(borrowingRate).times(100).toFixed(2) }}%</span></p>
           </div>
           <div>
-            <h2>自动偿还费率</h2>
+            <h2>{{ $t('vault-redemption-fee') }}</h2>
             <p><span>{{ BigNumber(redemptionRate).times(100).toFixed(2) }}%</span></p>
           </div>
         </div>

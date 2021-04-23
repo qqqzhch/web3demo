@@ -63,5 +63,18 @@ export default {
   'build-vault-created': 'vault created',
   'build-please-wait': 'Creating your Vault, please wait',
   'build-No-Data': 'No Data',
- 
+
+  'vault-total-value-locked': 'Total Value Locked(TVL)',
+  'vault-total-collateral': 'Total collateral',
+  'vault-total-debt': 'Lai Supply',
+  'vault-total-collateral-ratio': 'Total Collateral Ratio',
+  'vault-borrowing-fee': 'Borrowing Fee',
+  'vault-redemption-fee': 'Redemption Fee',
+  'vault-close-trove': 'Close Trove',
+  'vault-current-debt': 'Debt',
+  'vault-withdrawal': 'Withdrawal',
+  'vault-add-borrow': 'Borrow',
+  'vault-repay': 'Repay',
+  'vault-creted': 'Creted Vault',
+
 };

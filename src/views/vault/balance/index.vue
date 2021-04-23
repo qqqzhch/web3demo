@@ -22,7 +22,7 @@
             </div>
             <div class="text-right">
               <button class="btn create-btn" @click="openCloseDialog(poolItem)">
-                关闭
+                {{ $t('vault-close-trove') }}
               </button>
             </div>
           </div>
@@ -71,23 +71,23 @@
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openExitDialog(poolItem)">释放</a>
+                <a href="javascript:;" @click="openExitDialog(poolItem)">{{ $t('vault-withdrawal') }}</a>
               </div>
             </div>
             <div class="small-item text-center">
               <div>
-                <span>当前债务</span>
+                <span>{{ $t('vault-current-debt') }}</span>
                 <p>
                   {{ poolItem.debtAmount | formatNormalValue }} {{ poolItem.stableName }}
                 </p>
               </div>
               <div class="mrg-tb-10">
                 <button class="btn" @click="openMintDialog(poolItem)">
-                  继续借
+                  {{ $t('vault-add-borrow') }}
                 </button>
               </div>
               <div>
-                <a href="javascript:;" @click="openBurnDialog(poolItem)">偿还</a>
+                <a href="javascript:;" @click="openBurnDialog(poolItem)">{{ $t('vault-repay') }}</a>
               </div>
             </div>
             <div class="btn-warpper" />
@@ -98,7 +98,7 @@
     <div v-else class="CDP-content">
       <div class="create-vault-content">
         <button class="btn create-btn" @click="toPage('create')">
-          创建金库
+          {{ $t('vault-creted') }}
         </button>
       </div>
     </div>
@@ -184,7 +184,7 @@
     }
     .item-top {
       display: grid;
-      grid-template-columns: 30% 70%;
+      grid-template-columns: 50% 50%;
       justify-content: space-between;
       padding-bottom: 20px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);

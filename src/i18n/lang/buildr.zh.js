@@ -51,4 +51,19 @@ export default {
   'build-trade-BTC': '交易 BTC、TSLA 股票等全球最热主流资产',
   'build-create-vaults': '创建金库',
   'build-get-huge': '领取 SCASH 空投奖励 !',
+
+  'vault-total-value-locked': '总抵押物价值(TVL)',
+  'vault-total-collateral': '总抵押物',
+  'vault-total-debt': '总债务',
+  'vault-total-collateral-ratio': '系统抵押率',
+  'vault-borrowing-fee': '借贷费率',
+  'vault-redemption-fee': '自动偿还费率',
+  'vault-close-trove': '关闭金库',
+  'vault-current-debt': '债务',
+  'vault-withdrawal': '提现',
+  'vault-add-borrow': '继续借',
+  'vault-repay': '偿还',
+  'vault-creted': '创建金库',
+
+
 };
