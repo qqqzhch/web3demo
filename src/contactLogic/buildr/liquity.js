@@ -23,7 +23,7 @@ const minFeeRate = 0.005;
 // Gas Limit
 const gasLimit = 800000;
 
-export const stableName = 'LAY';
+export const stableName = 'LAI';
 
 const liquidationRatio = 1.1;
 

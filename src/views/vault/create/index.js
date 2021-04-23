@@ -6,9 +6,11 @@ import ScInput from '../components/ScInput.vue';
 import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
 
-import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
+// import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
 import { openTrove, calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from '../../../contactLogic/buildr/validate';
+
+const LUSD_MINIMUM_DEBT = 200;
 
 export default {
   name: 'create',
