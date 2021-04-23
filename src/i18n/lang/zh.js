@@ -19,7 +19,7 @@ export default {
     n37: '钱包未连接',
     n38: '请先连接钱包',
     n39: '网络连接不一致',
-    n40: '请在MetaMask钱包中切换至Ethereum主网',
+    n40: '请在MetaMask钱包中切换至对应网络',
     n41: 'MetaMask已连接',
     n42: '成功',
     n43: '失败',

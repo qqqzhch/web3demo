@@ -2,10 +2,10 @@
   <div class="pool-wrapper">
     <div class="pool-title flex justify-between items-center">
       <p class="title">
-        Babel Pool
+        BABEL Pool
       </p>
       <p class="subTitle">
-        Babel Pool
+        BABEL Pool
       </p>
     </div>
 
@@ -14,7 +14,7 @@
     </div>
     <div v-else class="pool-content">
       <h2 class="title">
-        Babel
+        BABEL
       </h2>
 
       <div class="tag-wrapper flex justify-center items-center">
@@ -27,44 +27,60 @@
       </div>
 
       <div class="pool-detail">
-        <div class="detail-item">
+        <!-- <div class="detail-item">
           <span class="title">APY</span>
           <span class="value text-success">10000%</span>
-        </div>
+        </div> -->
 
         <div class="detail-item">
           <span class="title">Total Stake</span>
-          <span class="value">{{ totalStakedLQTY }} Babel</span>
+          <span class="value">{{ totalStakedLQTY }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">已质押</span>
-          <span class="value">{{ stakedLQTY }} Babel</span>
+          <span class="title">Staked</span>
+          <span class="value">{{ stakedLQTY }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">待提取BNB</span>
+          <span class="title">Unclaim BNB</span>
           <span class="value">{{ collateralGain }} BNB</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">待提取Babel</span>
-          <span class="value">{{ lusdGain }} Babel</span>
+          <span class="title">Unclaim LAI</span>
+          <span class="value">{{ lusdGain }} LAI</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
-        <button class="pool-btn" @click="openPledge">
-          质押BABEL
-        </button>
+        <template v-if="ethAddress">
+          <button class="pool-btn" @click="openPledge">
+            Stake BABEL
+          </button>
 
-        <button class="pool-btn" @click="openExtract">
-          提取收益
-        </button>
+          <button class="pool-btn" @click="openExtract">
+            Claim
+          </button>
 
-        <button class="pool-btn" @click="openTake">
-          提取BABEL
-        </button>
+          <button class="pool-btn" @click="openTake">
+            Unstake BABEL
+          </button>
+        </template>
+
+        <template v-else>
+          <button class="pool-btn disableBtn">
+            Stake BABEL
+          </button>
+
+          <button class="pool-btn disableBtn">
+            Claim
+          </button>
+
+          <button class="pool-btn disableBtn">
+            Unstake BABEL
+          </button>
+        </template>
       </div>
     </div>
 
@@ -81,7 +97,7 @@ export default {
   mixins: [initLiquity],
   data() {
     return {
-      showLoading: false
+      showLoading: false,
     };
   },
   components: {

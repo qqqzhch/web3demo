@@ -39,28 +39,44 @@
         </div>
 
         <div class="detail-item">
-          <span class="title">已质押</span>
-          <span class="value">{{ haveStake }} LP</span>
+          <span class="title">Staked</span>
+          <span class="value">{{ haveStake || 0 }} LP</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">待提取Babel</span>
-          <span class="value">{{ unclaim }} Babel</span>
+          <span class="title">Unclaim BABEL</span>
+          <span class="value">{{ unclaim || 0 }} BABEL</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
-        <button class="pool-btn" @click="openPledge">
-          质押LP
-        </button>
+        <template v-if="ethAddress">
+          <button class="pool-btn" @click="openPledge">
+            Stake LP
+          </button>
 
-        <button class="pool-btn" @click="openExtract">
-          提取收益
-        </button>
+          <button class="pool-btn" @click="openExtract">
+            Claim
+          </button>
 
-        <button class="pool-btn" @click="openTake">
-          提取LP
-        </button>
+          <button class="pool-btn" @click="openTake">
+            Unstake LP
+          </button>
+        </template>
+
+        <template v-else>
+          <button class="pool-btn disableBtn">
+            Stake LP
+          </button>
+
+          <button class="pool-btn disableBtn">
+            Claim
+          </button>
+
+          <button class="pool-btn disableBtn">
+            Unstake LP
+          </button>
+        </template>
       </div>
     </div>
 

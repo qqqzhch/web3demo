@@ -6,7 +6,7 @@
           {{ $t('myPage.claim') }}
         </p>
         <p v-else class="title text-center">
-          Claim Babel and move BNB to Trove
+          Claim BABEL and move BNB to Trove
         </p>
         <div class="simple-wrapper">
           <div class="title-content">
@@ -50,7 +50,7 @@ export default {
       claimAmount: 0,
       data: {},
       extractLoading: false,
-      rewardToken: 'Babel',
+      rewardToken: 'BABEL',
       method: '',
     };
   },

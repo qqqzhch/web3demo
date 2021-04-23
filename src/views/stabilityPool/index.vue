@@ -26,10 +26,10 @@
       </div>
 
       <div class="pool-detail">
-        <div class="detail-item">
+        <!-- <div class="detail-item">
           <span class="title">APY</span>
           <span class="value text-success">10000%</span>
-        </div>
+        </div> -->
 
         <div class="detail-item">
           <span class="title">Total Stake</span>
@@ -37,49 +37,65 @@
         </div>
 
         <div class="detail-item">
-          <span class="title">已质押</span>
+          <span class="title">Staked</span>
           <span class="value">{{ haveStake }} LAI</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">待提取BNB</span>
+          <span class="title">Unclaim BNB</span>
           <span class="value">{{ unclaimBNB }} BNB</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">待提取Babel</span>
-          <span class="value">{{ unclaimBabel }} Babel</span>
+          <span class="title">Unclaim BABEL</span>
+          <span class="value">{{ unclaimBabel }} BABEL</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">未释放Babel</span>
-          <span class="value">{{ unReleaseBabel }} Babel</span>
+          <span class="title">Remaining BABEL</span>
+          <span class="value">{{ unReleaseBabel }} BABEL</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
-        <button class="pool-btn" @click="openPledge">
-          Stake LAI
-        </button>
+        <template v-if="ethAddress">
+          <button class="pool-btn" @click="openPledge">
+            Stake LAI
+          </button>
 
-        <Poptip placement="bottom" class="claim-wrapper pool-btn">
-          <div class="claim-content">
+          <Poptip placement="bottom" class="claim-wrapper pool-btn">
+            <div class="claim-content">
+              Claim
+            </div>
+            <div slot="content" class="claim-btn-wrapper">
+              <button class="claim-btn" @click="handleClaim('claim')">
+                Claim BNB and BABEL
+              </button>
+
+              <button class="claim-btn ml-4" @click="handleClaim('move')">
+                Claim BABEL and move BNB to Trove
+              </button>
+            </div>
+          </Poptip>
+
+          <button class="pool-btn" @click="openTake">
+            UnStake LAI
+          </button>
+        </template>
+
+        <template v-else>
+          <button class="pool-btn disableBtn">
+            Stake LAI
+          </button>
+
+          <button class="pool-btn disableBtn">
             Claim
-          </div>
-          <div slot="content" class="claim-btn-wrapper">
-            <button class="claim-btn" @click="handleClaim('claim')">
-              Claim BNB and Babel
-            </button>
+          </button>
 
-            <button class="claim-btn ml-4" @click="handleClaim('move')">
-              Claim Babel and move BNB to Trove
-            </button>
-          </div>
-        </Poptip>
-
-        <button class="pool-btn" @click="openTake">
-          UnStake LAI
-        </button>
+          <button class="pool-btn disableBtn">
+            UnStake LAI
+          </button>
+        </template>
       </div>
     </div>
 
@@ -96,10 +112,11 @@ export default {
   mixins: [initLiquity],
   data() {
     return {
-      showLoading: false
+      showLoading: false,
     };
   },
   computed: {
+    ...mapState(['ethAddress']),
     ...mapState('buildr', ['liquityState']),
     stabilityDeposit() {
       const val = this.liquityState && this.liquityState.stabilityDeposit;
@@ -108,15 +125,17 @@ export default {
     // 总质押
     totalStake() {
       const val =
-        this.liquityState && this.liquityState.lusdInStabilityPool && this.liquityState.lusdInStabilityPool.prettify();
-      return val;
+        this.liquityState && this.liquityState.lusdInStabilityPool && this.liquityState.lusdInStabilityPool.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      return bigValue;
     },
 
     // 已质押
     haveStake() {
       const val =
-        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.prettify();
-      return val;
+        this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      return bigValue;
     },
 
     // 待提取BNB
@@ -125,7 +144,7 @@ export default {
         this.stabilityDeposit &&
         this.stabilityDeposit.collateralGain &&
         this.stabilityDeposit.collateralGain.toString();
-      const bnb = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      const bnb = this.$BigNumber(val).decimalPlaces(6).toNumber();
       return bnb;
     },
 
@@ -133,7 +152,7 @@ export default {
     unclaimBabel() {
       const val =
         this.stabilityDeposit && this.stabilityDeposit.lqtyReward && this.stabilityDeposit.lqtyReward.toString();
-      const babel = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      const babel = this.$BigNumber(val).decimalPlaces(6).toNumber();
       return babel;
     },
 
@@ -142,14 +161,15 @@ export default {
       const val =
         this.liquityState &&
         this.liquityState.remainingStabilityPoolLQTYReward &&
-        this.liquityState.remainingStabilityPoolLQTYReward.prettify();
-      return val;
+        this.liquityState.remainingStabilityPoolLQTYReward.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      return bigValue;
     },
 
     // LAI余额
     laiBalance() {
       const val = this.liquityState && this.liquityState.lusdBalance && this.liquityState.lusdBalance.toString();
-      const balance = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      const balance = this.$BigNumber(val).decimalPlaces(6).toNumber();
       return balance;
     },
   },
@@ -180,7 +200,7 @@ export default {
       }, 500);
     },
   },
-  mounted () {
+  mounted() {
     this.getData();
   },
 };

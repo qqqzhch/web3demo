@@ -50,7 +50,7 @@ export default {
       coinName: '',
       extractLoading: false,
       fee: '',
-      rewardToken: 'Babel',
+      rewardToken: 'BABEL',
     };
   },
   methods: {

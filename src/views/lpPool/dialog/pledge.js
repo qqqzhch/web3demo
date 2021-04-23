@@ -20,7 +20,8 @@ export default {
       tokenObj: {},
       amountApproveObj: {},
       sendLoading: false,
-      fee: ''
+      fee: '',
+      coinName: ''
     };
   },
   computed: {
@@ -32,6 +33,7 @@ export default {
       this.data = {};
       this.data = data;
       this.pledgeAmount = '';
+      this.coinName = data && data.name;
       this.openPledgeDialog = true;
     },
 

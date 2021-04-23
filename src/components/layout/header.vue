@@ -9,15 +9,15 @@
           </router-link>
 
           <router-link class="menu-item" to="/stabilityPool" active-class="active">
-            Stability Pool
+            Stability POOL
           </router-link>
 
           <router-link class="menu-item" to="/babelPool" active-class="active">
-            Babel Pool
+            BABEL POOL
           </router-link>
 
           <router-link class="menu-item" to="/lpPool" active-class="active">
-            LP Pool
+            LP POOL
           </router-link>
 
           <router-link class="menu-item" to="/troves" active-class="active">
@@ -139,20 +139,40 @@ export default {
       if (val === 'change') {
         this.openWalletDialog();
       }
-      // if (val === 'disconnect') {
-      //   this.disconnectWallet();
-      // }
     },
 
-    // async disconnectWallet() {
-    //   console.log('disconnect');
-    // },
+    // 添加并且切换网络类型
+    addChain() {
+      const defaultNet = config.defaultNet[config.defaultChainID];
+      const param = {
+        chainId: defaultNet.chainIDHex,
+        chainName: defaultNet.netName,
+        nativeCurrency: {
+          name: defaultNet.symbolNet,
+          symbol: defaultNet.symbol,
+          decimals: defaultNet.decimals,
+        },
+        rpcUrls: defaultNet.rpcUrl,
+        blockExplorerUrls: defaultNet.explorerUrl,
+      };
+      const ethereum = window.ethereum;
+      ethereum
+        .request({ method: 'wallet_addEthereumChain', params: [param] })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
 
     getStatus() {
-      const targetID = parseInt(jscookie.get('targetNet'));
+      const targetID = parseInt(jscookie.get('targetNet')) || config.defaultChainID;
 
-      this.network = jscookie.get('net') || 'Ethereum';
-
+      this.network = jscookie.get('net');
+      if (!this.network) {
+        this.network = this.netInfo[config.defaultChainID].name;
+      }
       // console.log(targetID, this.ethChainID, this.network);
       if (!this.ethAddress) {
         this.statusVal = 'notConnect';
@@ -166,8 +186,9 @@ export default {
         this.$Notice.error({
           title: this.$t('notice.n39'),
           desc: this.$t('notice.n40'),
-          duration: 30
+          duration: 30,
         });
+        this.addChain();
       }
 
       if (this.ethAddress && targetID === this.ethChainID) {

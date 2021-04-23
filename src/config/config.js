@@ -6,7 +6,7 @@ export default {
     '1': {
       imgSrc: require('../assets/img/eth48.png'),
       name: 'Ethereum',
-      isBan: false
+      isBan: true
     },
     '3': {
       imgSrc: require('../assets/img/eth48.png'),
@@ -21,7 +21,7 @@ export default {
     '256': {
       imgSrc: require('../assets/img/huobi48.svg'),
       name: 'Heco Test',
-      isBan: false
+      isBan: true
     },
     '128': {
       imgSrc: require('../assets/img/huobi48.svg'),
@@ -31,13 +31,24 @@ export default {
     '56': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Main',
-      isBan: true
+      isBan: false
     },
     '97': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Test',
-      isBan: true
+      isBan: false
     },
   },
-  gasLimit: 800000
+  gasLimit: 800000,
+  defaultNet: {
+    '97': {
+      chainIDHex: '0x61',
+      netName: 'BSC TEST NET',
+      symbolNet: 'bsc',
+      symbol: 'BNB',
+      decimals: 18,
+      rpcUrl: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+      explorerUrl: ['https://testnet.bscscan.com/']
+    }
+  }
 };

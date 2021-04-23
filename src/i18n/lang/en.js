@@ -19,7 +19,7 @@ export default {
     n37:'Wallet not connected',
     n38:'Please connect to your wallet',
     n39:'Network not matched',
-    n40:'Please switch to Ethereum Network in Metamask.',
+    n40:'Please switch Network in Metamask.',
     n41: 'Metamask Connected',
     n42: 'success',
     n43: 'fail',

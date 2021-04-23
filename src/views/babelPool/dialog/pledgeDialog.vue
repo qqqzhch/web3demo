@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }} Babel</span>
+              <span>{{ balance }} BABEL</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -89,7 +89,7 @@ export default {
       this.sendLoading = true;
       try {
         const transaction = await this.liquityInstance.stakeLQTY(this.pledgeAmount, { gasLimit: this.$globalConfig.gasLimit });
-        const baseTip = `stake ${this.pledgeAmount} Babel`;
+        const baseTip = `stake ${this.pledgeAmount} BABEL `;
         event.$emit('sendSuccess');
         this.openPledgeDialog = false;
         event.$emit('sendtx', [

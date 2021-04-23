@@ -3,14 +3,14 @@
     <Modal v-model="openTakeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div class="pledge-content">
         <p class="title text-center">
-          取出
+          Unstake
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }}</span>
+              <span>{{ balance }} LAI</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -34,8 +34,8 @@
         </div>
         <div class="price-wrapper">
           <div class="price-item flex justify-between items-center">
-            <span>你将取出</span>
-            <p>{{ takeAmount || 0 }}</p>
+            <span>You will unStake</span>
+            <p>{{ takeAmount || 0 }} LAI</p>
           </div>
         </div>
 
