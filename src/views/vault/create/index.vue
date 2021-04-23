@@ -108,9 +108,15 @@
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
-          <p>{{ $t('build-liquidation-ratio') }}：</p>
+          <p>Collateral Ratio：</p>
           <div class="text-right">
             {{ BigNumber(troveIndicators.collateralRatio).times(100).toNumber() | formatNormalValue }} %
+          </div>
+        </div>
+        <div class="build-grid-2 mrg-b-5">
+          <p>{{ $t('build-liquidation-ratio') }}：</p>
+          <div class="text-right">
+            110%
           </div>
         </div>
         <div v-if="errorInfo" class="notice-content">
