@@ -21,7 +21,7 @@
           </router-link>
 
           <router-link class="menu-item" to="/troves" active-class="active">
-            Troves
+            Risky Troves
           </router-link>
 
 

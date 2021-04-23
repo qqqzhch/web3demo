@@ -12,7 +12,7 @@
           likely.
         </p>
       </div>
-      <div class="liquidata">
+      <!-- <div class="liquidata">
         <div class="title-content">
           <img src="../../assets/img/paper.svg" alt="liquidata">
           <h2>Liquidate</h2>
@@ -21,12 +21,12 @@
           <p>Up to</p>
           <div class="input-item">
             <input type="number">
-          </div>
+          </div> -->
 
-          <p>Troves</p>
-          <img src="../../assets/img/delete.svg" alt="delete">
-        </div>
-      </div>
+      <!-- <p>Troves</p> -->
+      <!-- <img src="../../assets/img/delete.svg" alt="delete"> -->
+      <!-- </div>
+      </div> -->
     </div>
     <div class="list-wapper">
       <h2>Risky Troves</h2>
@@ -43,7 +43,7 @@
         </template>
         <template slot="Debt" slot-scope="{row}">
           <div class=" Debt">
-            <p>{{ row.Debt }} LAY</p>
+            <p>{{ row.Debt }} LAI</p>
           </div>
         </template>
         <template slot="Coll.Ratio" slot-scope="{row}">
@@ -56,7 +56,8 @@
         <template slot="Coll.Liquidate" slot-scope="{row}">
           <div class=" Coll.Ratio">
             <p>
-              <img src="../../assets/img/Trash.svg" alt="delete">
+              <img v-if="1" src="../../assets/img/backspace.svg" alt="delete">
+              <img v-else src="../../assets//img/delete-b.svg" alt="delete">
             </p>
           </div>
         </template>
@@ -91,7 +92,7 @@ export default {
         {
           title: "Owner",
           slot: "Owner",
-          minWidth:300,
+          minWidth:350,
         },
         {
           title: "Collateral",
@@ -106,7 +107,7 @@ export default {
         {
           title: "Coll.Ratio",
           slot: "Coll.Ratio",
-          minWidth: 200,
+          minWidth: 100,
         },
         {
           title: "Liquidate",
@@ -115,7 +116,8 @@ export default {
         },
       ],
       
-      troveList:[]
+      troveList:[],
+      shortAdress:''
     };
   },
   methods: {
@@ -167,6 +169,7 @@ export default {
         // }      
       });
       this.$data.troveList  =data;
+      this.shortAdress = `${this.troveList.ownerAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
       console.log(this.$data.troveList);
           
           
@@ -232,10 +235,11 @@ export default {
   font-family: Gilroy-Bold, Gilroy;
   color: #ffffff;
   h2 {
-    height: 40px;
     font-size: 26px;
-    font-weight: bold;
-    line-height: 40px;
+    font-family: Gilroy-Bold, Gilroy;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 38px;
   }
   .title-content {
     margin: 8px 0 16px;
@@ -254,9 +258,11 @@ export default {
     position: relative;
     .title-warpper {
       p {
-        height: 20px;
-        font-size: 18px;
-        line-height: 20px;
+        font-size: 16px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: #ffffff;
+        line-height: 16px;
         margin: 8px 0 16px;
       }
     }
@@ -269,8 +275,8 @@ export default {
           font-size: 24px;
         }
         .input-item {
-          width: 50%;
-          height: 40px;
+          width: 60%;
+          height: 34px;
           margin: 0 10px;
           border-radius: 10px;
           overflow: hidden;
@@ -292,14 +298,18 @@ export default {
       }
     }
   }
-  .list-wapper{
-      margin-top: 30px;
-      box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
-      padding: 24px;
-      h2{
-          color: #333;
-          margin-bottom: 16px;
-      }
+  .list-wapper {
+    margin-top: 30px;
+    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+    padding: 24px;
+    border-radius: 12px;
+    h2 {
+      color: #333;
+      margin-bottom: 16px;
+    }
+    img{
+      max-width: 30px;
+    }
   }
 }
 .success{
