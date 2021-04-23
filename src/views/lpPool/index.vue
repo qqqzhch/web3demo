@@ -189,16 +189,19 @@ export default {
       return this.ethAddress;
     },
     totalStake() {
-      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.totalSupply;
-      return val;
+      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.totalSupply.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
     },
     haveStake() {
-      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.balance;
-      return val;
+      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.balance.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
     },
     unclaim() {
-      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.earned;
-      return val;
+      const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.earned.toString();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
+      return bigValue;
     },
   },
   watch: {

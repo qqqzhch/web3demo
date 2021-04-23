@@ -45,21 +45,22 @@ function initLangKey() {
   let langkey = jscookie.get("langkey");
   // 如果未初始化，通过浏览器判断应该设置成啥语言
   if (!langkey) {
-    const lang = (navigator.language || navigator.browserLanguage)
-      .toLowerCase()
-      .substring(0, 2);
-    switch (lang) {
-      case "en":
-        langkey = "en";
-        break;
-      case "zh":
-        langkey = "zh";
-        break;
+    // const lang = (navigator.language || navigator.browserLanguage)
+    //   .toLowerCase()
+    //   .substring(0, 2);
+    // switch (lang) {
+    //   case "en":
+    //     langkey = "en";
+    //     break;
+    //   case "zh":
+    //     langkey = "zh";
+    //     break;
 
-      default:
-        langkey = "en";
-        break;
-    }
+    //   default:
+    //     langkey = "en";
+    //     break;
+    // }
+    langkey = 'en';
   } else if (!langList.includes(langkey)) {
     // 如果不是en,zh,默认en
     langkey = "en";

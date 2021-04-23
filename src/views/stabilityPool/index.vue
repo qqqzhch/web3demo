@@ -126,7 +126,7 @@ export default {
     totalStake() {
       const val =
         this.liquityState && this.liquityState.lusdInStabilityPool && this.liquityState.lusdInStabilityPool.toString();
-      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return bigValue;
     },
 
@@ -134,7 +134,7 @@ export default {
     haveStake() {
       const val =
         this.stabilityDeposit && this.stabilityDeposit.currentLUSD && this.stabilityDeposit.currentLUSD.toString();
-      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return bigValue;
     },
 
@@ -144,7 +144,7 @@ export default {
         this.stabilityDeposit &&
         this.stabilityDeposit.collateralGain &&
         this.stabilityDeposit.collateralGain.toString();
-      const bnb = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const bnb = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return bnb;
     },
 
@@ -152,7 +152,7 @@ export default {
     unclaimBabel() {
       const val =
         this.stabilityDeposit && this.stabilityDeposit.lqtyReward && this.stabilityDeposit.lqtyReward.toString();
-      const babel = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const babel = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return babel;
     },
 
@@ -162,14 +162,14 @@ export default {
         this.liquityState &&
         this.liquityState.remainingStabilityPoolLQTYReward &&
         this.liquityState.remainingStabilityPoolLQTYReward.toString();
-      const bigValue = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return bigValue;
     },
 
     // LAI余额
     laiBalance() {
       const val = this.liquityState && this.liquityState.lusdBalance && this.liquityState.lusdBalance.toString();
-      const balance = this.$BigNumber(val).decimalPlaces(6).toNumber();
+      const balance = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return balance;
     },
   },

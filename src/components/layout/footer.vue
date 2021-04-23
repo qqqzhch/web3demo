@@ -5,7 +5,7 @@
         <div class="logo-wrapper">
           <img src="../../assets/footlogo.svg" alt="logo">
         </div>
-        <p>© 2021 BABEL All rights reserved ┃ <a href="">Docs</a></p>
+        <p>© 2021 BABEL All rights reserved</p>
       </div>
       <!-- <div class="right-wrapper flex">
         <div class="contact-wrapper flex justify-between items-center">
@@ -63,7 +63,7 @@ export default {
     },
   },
   mounted() {
-    this.getKey();
+    // this.getKey();
   },
 };
 </script>
