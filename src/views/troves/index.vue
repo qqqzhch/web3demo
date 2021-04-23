@@ -30,38 +30,44 @@
     </div>
     <div class="list-wapper">
       <h2>Risky Troves</h2>
-      <Table :columns="columns1" :data="troveList">
-        <template slot="Owner" slot-scope="{row}">
-          <div class=" Owner">
-            <p>{{ row.ownerAddress }}</p>
-          </div>
-        </template>
-        <template slot="Collateral" slot-scope="{row}">
-          <div class=" Collateral">
-            <p>{{ row.collateral }} BNB</p>
-          </div>
-        </template>
-        <template slot="Debt" slot-scope="{row}">
-          <div class=" Debt">
-            <p>{{ row.Debt }} LAI</p>
-          </div>
-        </template>
-        <template slot="Coll.Ratio" slot-scope="{row}">
-          <div class=" Coll.Ratio">
-            <p :class="row.color">
-              {{ row.collateralRatio }}
-            </p>
-          </div>
-        </template>
-        <template slot="Coll.Liquidate" slot-scope="{row}">
-          <div class=" Coll.Ratio">
-            <p>
-              <img v-if="1" src="../../assets/img/backspace.svg" alt="delete">
-              <img v-else src="../../assets//img/delete-b.svg" alt="delete">
-            </p>
-          </div>
-        </template>
-      </Table>
+      <Scroll :loading-text="'loading....'" :on-reach-bottom="onreachbottom" :height="400">
+        <Table :columns="columns1" :data="troveList">
+          <template slot="Owner" slot-scope="{row}">
+            <div class=" Owner">
+              <p>{{ row.ownerAddress }}</p>
+            </div>
+          </template>
+          <template slot="Collateral" slot-scope="{row}">
+            <div class=" Collateral">
+              <p>{{ row.collateral }} BNB</p>
+            </div>
+          </template>
+          <template slot="Debt" slot-scope="{row}">
+            <div class=" Debt">
+              <p>{{ row.Debt }} LAI</p>
+            </div>
+          </template>
+          <template slot="Coll.Ratio" slot-scope="{row}">
+            <div class=" Coll.Ratio">
+              <p :class="row.color">
+                {{ row.collateralRatio }}
+              </p>
+            </div>
+          </template>
+          <template slot="Coll.Liquidate" slot-scope="{row}">
+            <div class=" Coll.Ratio">
+              <p>
+                <img v-if="row.disable==false" src="../../assets/img/backspace.svg" alt="delete">
+                <Tooltip v-else :content="row.disable" placement="left">
+                  <img src="../../assets//img/delete-b.svg" alt="delete" @click="cleartrove(row.ownerAddress,row.disable)">
+                </Tooltip>
+              
+              <!-- <img src="../../assets/img/Trash.svg" alt="delete" @click="cleartrove(row.ownerAddress,row.disable)"> -->
+              </p>
+            </div>
+          </template>
+        </Table>
+      </Scroll>
     </div>
   </div>
 </template>
@@ -117,14 +123,54 @@ export default {
       ],
       
       troveList:[],
-      shortAdress:''
+      shortAdress:'',
+      clampedPage:0
     };
   },
   methods: {
+    async  cleartrove(ownerAddress,disable){
+      console.log('ownerAddress');
+      if(disable == false){
+        try{
+          const  data = await this.liquity.send.liquidate(ownerAddress, { gasLimit: this.$globalConfig.gasLimit });
+        event.$emit('sendSuccess');
+        
+        event.$emit('sendtx', [
+          data.rawSentTransaction,
+          {
+            okinfo: `Liquidation ${ownerAddress} success`,
+            failinfo: `Liquidation ${ownerAddress} fail`,
+          },
+        ]);
+        
+
+        }catch(ex){
+          console.log(ex);
+
+        }
+        // this.list();
+        
+
+
+      }else{
+        this.$Notice.warning({
+          title: this.$t('notice.n'),
+          desc: disable,
+        });
+
+      }
+      
+    
+  },
+  onreachbottom(){
+    this.$data.clampedPage+=1;
+    this.list();
+
+  },
   async  list(){
     
-    const pageSize=10;
-   const clampedPage =0;
+   const pageSize=20;
+   const clampedPage =this.$data.clampedPage;
    const {numberOfTroves,
       price,
       total,
@@ -168,8 +214,8 @@ export default {
           
         // }      
       });
-      this.$data.troveList  =data;
-      this.shortAdress = `${this.troveList.ownerAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
+      this.$data.troveList  =this.$data.troveList.concat(data) ;
+      // this.shortAdress = `${this.troveList.ownerAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
       console.log(this.$data.troveList);
           
           
@@ -178,9 +224,9 @@ export default {
     const collateralRatio = trove.collateralRatio(price);
   if (collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) && collateralRatio.lt(totalCollateralRatio)) {
     if(trove.debt.lte(lusdInStabilityPool)){
-      return "There's not enough LUSD in the Stability pool to cover the debt";
+      return false ;
     }else{
-      return false;
+      return "There's not enough LAY in the Stability pool to cover the debt";
     }
   } else {
     return this.liquidatableInNormalMode(trove, price);
@@ -188,9 +234,9 @@ export default {
   },
   liquidatableInNormalMode(trove,price){
     if(trove.collateralRatioIsBelowMinimum(price)){
-        return "Collateral ratio not low enough";
+        return  false;
     }else{
-       return false;
+       return "Collateral ratio not low enough";
     }
     
     
@@ -201,7 +247,7 @@ export default {
     console.log('---');
     const _this=this;
    var id = setInterval(() => {
-     if(_this.liquityState&&_this.liquityState.blockTag){
+     if(_this.liquityState&&_this.liquityState.blockTag&&this.liquity){
        clearInterval(id);
       _this.list();
 
@@ -316,7 +362,7 @@ export default {
  color:green
 }
 .warning{
-color:yellow
+color:#ffd77a;
 }
 .danger{
 color:red
