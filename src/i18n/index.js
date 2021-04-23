@@ -16,6 +16,9 @@ import buildren from "./lang/buildr.en.js";
 import earnEN from './lang/earn.en.js';
 import earnZH from './lang/earn.zh.js';
 
+import poolzh from './lang/pool/pool.zh.js';
+import poolen from './lang/pool/pool.en.js';
+
 Vue.use(VueI18n);
 const langList = ["en", "zh"];
 
@@ -24,8 +27,8 @@ const initKey = initLangKey();
 const i18n = new VueI18n({
   locale: initKey,
   messages: {
-    en: Object.assign({}, iviewen,en,swapen,earnEN, buildren),
-    zh: Object.assign({}, iviewzh,cn,swapzh,earnZH, buildrzh),
+    en: Object.assign({}, iviewen,en,swapen,earnEN, buildren,poolen),
+    zh: Object.assign({}, iviewzh,cn,swapzh,earnZH, buildrzh,poolzh),
   },
 });
 
