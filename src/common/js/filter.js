@@ -44,7 +44,7 @@ const format1e18ValueList = (value) => {
   return returnVal;
 };
 
-const formatNormalValue = (value, decimal = 6) => {
+const formatNormalValue = (value, decimal = 2) => {
   if (!value) {
     return 0;
   }

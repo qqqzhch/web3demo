@@ -75,7 +75,7 @@
           <div v-if="shortDebt < 0" class="notice-warpper">
             <div class="notice-content">
               <img src="../../../../../assets/img/notice-red.png">
-              <p>{{ `You need ${Number(-shortDebt).toFixed(6)} ${poolData.stableName} more to close your Vault` }}</p>
+              <p>{{ `You need ${Number(-shortDebt).toFixed(2)} ${poolData.stableName} more to close your Vault` }}</p>
             </div>
           </div>
 

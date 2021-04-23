@@ -102,9 +102,9 @@
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5 mrg-t-20">
-          <p>{{ $t('build-liquidation-price') }}： </p>
+          <p> BNB Price： </p>
           <div class="text-right">
-            $ {{ troveIndicators.price }}
+            $ {{ troveIndicators.price | formatNormalValue }}
           </div>
         </div>
         <div class="build-grid-2 mrg-b-5">
