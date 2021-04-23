@@ -30,25 +30,34 @@
     </div>
     <div class="list-wapper">
       <h2>Risky Troves</h2>
-      <Table :columns="columns1" :data="data1">
+      <Table :columns="columns1" :data="troveList">
         <template slot="Owner" slot-scope="{row}">
           <div class=" Owner">
-            <p>{{ row.Owner }}</p>
+            <p>{{ row.ownerAddress }}</p>
           </div>
         </template>
         <template slot="Collateral" slot-scope="{row}">
           <div class=" Collateral">
-            <p>{{ row.Collateral }}</p>
+            <p>{{ row.collateral }} BNB</p>
           </div>
         </template>
         <template slot="Debt" slot-scope="{row}">
           <div class=" Debt">
-            <p>{{ row.Debt }}</p>
+            <p>{{ row.Debt }} LAY</p>
           </div>
         </template>
         <template slot="Coll.Ratio" slot-scope="{row}">
           <div class=" Coll.Ratio">
-            <p>{{ row.Coll }}</p>
+            <p :class="row.color">
+              {{ row.collateralRatio }}
+            </p>
+          </div>
+        </template>
+        <template slot="Coll.Liquidate" slot-scope="{row}">
+          <div class=" Coll.Ratio">
+            <p>
+              <img src="../../assets/img/Trash.svg" alt="delete">
+            </p>
           </div>
         </template>
       </Table>
@@ -57,64 +66,164 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import event from '@/common/js/event';
+import initLiquity from '@/common/mixin/initLiquity';
+
+import {
+  Percent,
+  Difference,
+  Decimalish,
+  Decimal,
+  Trove,
+  LiquityStoreState,
+  LUSD_LIQUIDATION_RESERVE,
+  LUSD_MINIMUM_DEBT,//系统最小债务
+  MINIMUM_COLLATERAL_RATIO,
+  CRITICAL_COLLATERAL_RATIO,
+} from "@liquity/lib-base";
+
 export default {
+  mixins: [initLiquity],
   data() {
     return {
       columns1: [
         {
           title: "Owner",
           slot: "Owner",
-          minWidth: 100,
+          minWidth:300,
         },
         {
           title: "Collateral",
           slot: "Collateral",
-          minWidth: 200,
+          minWidth: 50,
         },
         {
           title: "Debt",
           slot: "Debt",
-          minWidth: 100,
+          minWidth: 50,
         },
         {
           title: "Coll.Ratio",
           slot: "Coll.Ratio",
           minWidth: 200,
         },
-      ],
-      data1: [
         {
-          Owner: "0xEAA0...F50D",
-          Collateral: "1.0000",
-          address: "New York No. 1 Lake Park",
-          Debt: "2,000.00",
-          Coll: "124.8%",
-        },
-        {
-          Owner: "0xEAA0...F50D",
-          Collateral: "1.0000",
-          address: "New York No. 1 Lake Park",
-          Debt: "2,000.00",
-          Coll: "124.8%",
-        },
-        {
-          Owner: "0xEAA0...F50D",
-          Collateral: "1.0000",
-          address: "New York No. 1 Lake Park",
-          Debt: "2,000.00",
-          Coll: "124.8%",
-        },
-        {
-          Owner: "0xEAA0...F50D",
-          Collateral: "1.0000",
-          address: "New York No. 1 Lake Park",
-          Debt: "2,000.00",
-          Coll: "124.8%",
+          title: "Liquidate",
+          slot: "Coll.Liquidate",
+          minWidth: 50,
         },
       ],
+      
+      troveList:[]
     };
   },
-  methods: {},
+  methods: {
+  async  list(){
+    
+    const pageSize=10;
+   const clampedPage =0;
+   const {numberOfTroves,
+      price,
+      total,
+      lusdInStabilityPool,
+      blockTag} =  this.liquityState;
+      const recoveryMode= total.collateralRatioIsBelowCritical(price);
+      const totalCollateralRatio= total.collateralRatio(price);
+      const  data =  await this.liquity
+          .getTroves(
+            {
+              first: pageSize,
+              sortedBy: "ascendingCollateralRatio",
+              startingAt: clampedPage * pageSize
+            },
+            { blockTag });
+              data.forEach((trove)=>{
+        if(recoveryMode){
+          trove.disable = this.liquidatableInRecoveryMode(
+                                  trove,
+                                  price,
+                                  totalCollateralRatio,
+                                  lusdInStabilityPool
+                                );
+        }else{
+          trove.disable = this.liquidatableInNormalMode(trove, price);
+        }
+        
+       const collateralRatio = trove.collateralRatio(price);
+       
+      trove.color =collateralRatio.gt(CRITICAL_COLLATERAL_RATIO)
+                    ? "success"
+                    : collateralRatio.gt(1.2)
+                    ? "warning"
+                    : "danger";
+        trove.collateral = trove.collateral.prettify();
+        trove.Debt = trove.debt.prettify();
+        trove.collateralRatio = collateralRatio.mul(100).prettify()+"%";
+        
+        
+        // if(collateralRatio.lt(1.1)){
+          
+        // }      
+      });
+      this.$data.troveList  =data;
+      console.log(this.$data.troveList);
+          
+          
+    },
+  liquidatableInRecoveryMode(trove,price,totalCollateralRatio,lusdInStabilityPool){
+    const collateralRatio = trove.collateralRatio(price);
+  if (collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) && collateralRatio.lt(totalCollateralRatio)) {
+    if(trove.debt.lte(lusdInStabilityPool)){
+      return "There's not enough LUSD in the Stability pool to cover the debt";
+    }else{
+      return false;
+    }
+  } else {
+    return this.liquidatableInNormalMode(trove, price);
+  }
+  },
+  liquidatableInNormalMode(trove,price){
+    if(trove.collateralRatioIsBelowMinimum(price)){
+        return "Collateral ratio not low enough";
+    }else{
+       return false;
+    }
+    
+    
+  }
+
+  },
+  mounted() {
+    console.log('---');
+    const _this=this;
+   var id = setInterval(() => {
+     if(_this.liquityState&&_this.liquityState.blockTag){
+       clearInterval(id);
+      _this.list();
+
+    }
+      
+    }, 100);
+    
+    
+  },
+  wacth:{
+    // liquityReady:function(){
+    //   if(this.liquityState&&this.liquityState.blockTag){
+    //     this.list();
+    //   }
+
+    // }
+  },
+  computed: {
+    ...mapState('pool', ['liquity']),
+    ...mapState('buildr', ['liquityState','liquityReady']),
+    liquityInstance() {
+      const val = this.liquity && this.liquity.send;
+      return val;
+    },
+  }
 };
 </script>
 
@@ -192,5 +301,14 @@ export default {
           margin-bottom: 16px;
       }
   }
+}
+.success{
+ color:green
+}
+.warning{
+color:yellow
+}
+.danger{
+color:red
 }
 </style>
