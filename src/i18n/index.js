@@ -6,18 +6,21 @@ import iviewen from "view-design/dist/locale/en-US";
 import iviewzh from "view-design/dist/locale/zh-CN";
 import jscookie from "js-cookie";
 
-import swapzh from "./lang/swap.zh.js";
-import swapen from "./lang/swap.en.js";
+import swapzh from "./lang/swap/swap.zh.js";
+import swapen from "./lang/swap/swap.en.js";
 
-import buildrzh from "./lang/buildr.zh.js";
-import buildren from "./lang/buildr.en.js";
+import buildrzh from "./lang/buildr/buildr.zh.js";
+import buildren from "./lang/buildr/buildr.en.js";
 
 
-import earnEN from './lang/earn.en.js';
-import earnZH from './lang/earn.zh.js';
+import earnEN from './lang/earn/earn.en.js';
+import earnZH from './lang/earn/earn.zh.js';
 
 import poolzh from './lang/pool/pool.zh.js';
 import poolen from './lang/pool/pool.en.js';
+
+import troveszh from './lang/troves/troves.zh.js';
+import trovesen from './lang/troves/troves.en.js';
 
 Vue.use(VueI18n);
 const langList = ["en", "zh"];
@@ -27,8 +30,8 @@ const initKey = initLangKey();
 const i18n = new VueI18n({
   locale: initKey,
   messages: {
-    en: Object.assign({}, iviewen,en,swapen,earnEN, buildren,poolen),
-    zh: Object.assign({}, iviewzh,cn,swapzh,earnZH, buildrzh,poolzh),
+    en: Object.assign({}, iviewen,en,swapen,earnEN, buildren,poolen,trovesen),
+    zh: Object.assign({}, iviewzh,cn,swapzh,earnZH, buildrzh,poolzh,troveszh),
   },
 });
 
