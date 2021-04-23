@@ -4,7 +4,7 @@ export default {
     subTitle: 'Stability Pool',
     total: 'Total Stake',
     staked: 'Staked',
-    unclaim: 'Unclaim',
+    unclaim: 'Unclaimed',
     remain: 'Remaining',
     fee: 'Liquidation Fee',
     stake: 'Stake',

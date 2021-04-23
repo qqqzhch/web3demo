@@ -5,9 +5,9 @@
         <div class="logo-wrapper">
           <img src="../../assets/footlogo.svg" alt="logo">
         </div>
-        <p>© 2021 BABEL All rights reserved</p>
+        <p>© 2021 BABEL All rights reserved ┃ <a href="">Docs</a></p>
       </div>
-      <div class="right-wrapper flex">
+      <!-- <div class="right-wrapper flex">
         <div class="contact-wrapper flex justify-between items-center">
           <div class="contact-item mr">
             <a href="/" target="_blank">
@@ -33,7 +33,7 @@
             English
           </Option>
         </Select>
-      </div>
+      </div> -->
     </div>
   </footer>
 </template>

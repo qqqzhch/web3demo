@@ -23,7 +23,7 @@
           BABEL
         </div>
         <div class="tag-item tag2">
-          Liquidation Fee
+          Transfer Fee
         </div>
       </div>
 
