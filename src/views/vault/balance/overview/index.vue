@@ -13,7 +13,7 @@
           </div>
           <div>
             <h2>{{ $t('vault-total-debt') }}</h2>
-            <p><span>-{{ BigNumber(totalDebt).toFixed(2) }}</span> {{ stableName }} </p>
+            <p><span>{{ BigNumber(totalDebt).toFixed(2) }}</span> {{ stableName }} </p>
           </div>
           <div>
             <h2>{{ $t('vault-total-collateral-ratio') }}</h2>
