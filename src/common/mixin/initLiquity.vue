@@ -4,6 +4,9 @@ import { fetchLiquityEntity } from '@/contactLogic/buildr/liquity';
 import { AddressZero } from '@ethersproject/constants';
 import { EthersLiquity, _connectByChainId } from '@webfans/lib-ethers';
 import event from '@/common/js/event';
+
+const debounce = require('debounce');
+
 export default {
   inject: ['reload'],
   data() {
@@ -38,7 +41,9 @@ export default {
       const liquity = EthersLiquity._from(connection);
       this.setLiquityMethods(liquity);
     },
-    init() {
+    init: debounce(function() {
+      console.log('init');
+
       const params = {
         chainID: this.ethChainID,
         library: this.ethersprovider,
@@ -57,11 +62,12 @@ export default {
       };
 
       liquity.store.subscribe(({ newState, oldState }) => {
+        console.log(newState, oldState );
         this.setLiquityState(newState);
       });
 
       liquity.store.start();
-    },
+    },1000),
   },
   watch: {
     isReady(value) {
@@ -79,9 +85,9 @@ export default {
     }
   },
   mounted() {
-    event.$on('txsuccess', () => {
-      this.reload();
-    });
+    // event.$on('txsuccess', () => {
+    //   this.reload();
+    // });
   },
 };
 </script>

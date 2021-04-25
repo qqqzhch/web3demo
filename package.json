@@ -28,7 +28,7 @@
     "bignumber.js": "^9.0.1",
     "core-js": "^3.8.3",
     "dayjs": "^1.9.6",
-    "debounce": "^1.2.0",
+    "debounce": "^1.2.1",
     "ethers": "^5.0.19",
     "js-cookie": "^2.2.1",
     "lightweight-charts": "^3.3.0",
