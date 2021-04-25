@@ -124,17 +124,12 @@
           <p>{{ errorInfo }}</p>
         </div>
         <div v-if="!errorInfo" :style="{height: '47px'}" />
-        <div v-if="!btnloading">
+        <div>
           <button v-if="!errorInfo" class="btn" @click="onOpenTroveClick">
             {{ $t('build-create-vault') }}
           </button>
           <button v-if="errorInfo" class="btn btn-disabled">
             {{ $t('build-create-vault') }}
-          </button>
-        </div>
-        <div v-if="btnloading">
-          <button class="btn">
-            {{ $t('vault-Loading') }}...
           </button>
         </div>
       </div>

@@ -21,7 +21,6 @@ export default {
       collateralPools: [], // 合约池
       defaultPool: {},
       BigNumber,
-      btnloading: false,
       depositAmount: 0,
       borrowAmount: 0,
       errorInfo: null
@@ -121,9 +120,6 @@ export default {
       };
     },
     async onOpenTroveClick() {
-      this.btnloading = true;
-
-
       const params = {
         ...this.getParams(),
         borrowLUSDAmount: this.borrowLUSDAmount,
@@ -133,14 +129,13 @@ export default {
 
       const tx = await openTrove(params);
       this.sendtx(tx);
-      this.btnloading = false;
     },
     sendtx(tx) {
       if(tx && tx.base){
         this.$refs.haveSendtx.open(tx.base, 'created');
         event.$emit('sendtx',[tx.transaction.rawSentTransaction, {
-          okinfo: tx.base+ i18n.t('vault-success'),
-          failinfo: tx.base+ i18n.t('vault-Fail')
+          okinfo: tx.base+' '+i18n.t('vault-success'),
+          failinfo: tx.base+' '+i18n.t('vault-Fail')
         }]);
       } else {
         this.$Notice.error({
