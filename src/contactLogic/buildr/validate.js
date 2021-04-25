@@ -6,9 +6,7 @@ import {
   CRITICAL_COLLATERAL_RATIO,
 } from "@liquity/lib-base";
 
-const LUSD_MINIMUM_DEBT = 200;
-
-import { stableName } from './liquity';
+import { stableName, LUSD_MINIMUM_DEBT } from './liquity';
 
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);

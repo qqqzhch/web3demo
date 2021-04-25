@@ -7,7 +7,7 @@ import {
   Trove,
   LiquityStoreState,
   // LUSD_LIQUIDATION_RESERVE,
-  LUSD_MINIMUM_DEBT, //系统最小债务
+  // LUSD_MINIMUM_DEBT, //系统最小债务
   MINIMUM_COLLATERAL_RATIO,
   CRITICAL_COLLATERAL_RATIO,
 } from "@liquity/lib-base";
@@ -30,6 +30,8 @@ export const stableName = 'LAI';
 const liquidationRatio = 1.1;
 // 清算保证金
 const LUSD_LIQUIDATION_RESERVE = 20;
+
+export const LUSD_MINIMUM_DEBT = 200;
 
 /**********Liquity config end***************/
 
@@ -84,7 +86,7 @@ export const closeTrove = async ({library, account, chainID}) => {
   const liquity = fetchLiquityEntity({library, account, chainID});
   const transaction = await liquity.send.closeTrove({gasLimit: gasLimit});
   return {
-    base: `Close Trove`,
+    base: `Close Vault`,
     transaction
   };
 };

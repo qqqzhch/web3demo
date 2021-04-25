@@ -139,8 +139,8 @@ export default {
       if(tx && tx.base){
         this.$refs.haveSendtx.open(tx.base, 'created');
         event.$emit('sendtx',[tx.transaction.rawSentTransaction, {
-          okinfo: tx.base+ i18n.t('swapConfirm.successCom'),
-          failinfo: tx.base+ i18n.t('swapConfirm.failCom')
+          okinfo: tx.base+ i18n.t('vault-success'),
+          failinfo: tx.base+ i18n.t('vault-Fail')
         }]);
       } else {
         this.$Notice.error({
