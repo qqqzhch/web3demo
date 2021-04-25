@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       nav: '',
-      liquityReady: false,
+      liquityReady: true,
       isCreate: false,
     };
   },

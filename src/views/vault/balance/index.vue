@@ -97,7 +97,10 @@
     </div>
     <div v-else class="CDP-content">
       <div class="create-vault-content">
-        <button class="btn create-btn" @click="toPage('create')">
+        <button v-if="ethAddress" class="btn create-btn" @click="toPage('create')">
+          {{ $t('vault-creted') }}
+        </button>
+        <button v-else class="btn create-btn disableBtn">
           {{ $t('vault-creted') }}
         </button>
       </div>
