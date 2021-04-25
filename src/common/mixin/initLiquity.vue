@@ -46,8 +46,13 @@ export default {
       };
       const liquity = fetchLiquityEntity(params);
       liquity.store.onLoaded = () => {
+
         this.setLiquityState(liquity.store.state);
+
+        this.liquityReady = true;
+
         this.getLiquityInstance();
+
         console.log(liquity.store.state);
       };
 
@@ -60,11 +65,11 @@ export default {
   },
   watch: {
     isReady(value) {
-      console.log('isReady');
+      // console.log('isReady');
       if (value) this.init();
     },
     isConnect(value) {
-      console.log('isConnect');
+      // console.log('isConnect');
       if (value) this.init();
     }
   },
