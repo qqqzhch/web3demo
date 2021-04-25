@@ -47,7 +47,7 @@ export const getMaxBorrowingRate = (liquityState) => {
  *
  * */
 export const fetchLiquityEntity = ({library, account, chainID}) => {
-  const connection =  _connectByChainId(library, library.getSigner(account), chainID, {
+  const connection =  _connectByChainId(library, account?library.getSigner(account):undefined, chainID, {
     userAddress: account,
     frontendTag,
     useStore: "blockPolled"

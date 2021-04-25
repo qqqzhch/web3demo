@@ -15,7 +15,7 @@ export default {
   computed: {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
     isReady() {
-      return this.ethersprovider && this.ethChainID && this.ethAddress;
+      return this.ethersprovider && this.ethChainID ;
     },
   },
   methods: {
@@ -25,7 +25,8 @@ export default {
       const provider = this.ethersprovider;
       const account = this.ethAddress;
       const chainId = this.ethChainID;
-      const connection = _connectByChainId(provider, provider.getSigner(account), chainId, {
+      
+      const connection = _connectByChainId(provider, account?provider.getSigner(account):undefined, chainId, {
         userAddress: account,
         frontendTag: AddressZero,
         useStore: 'blockPolled',

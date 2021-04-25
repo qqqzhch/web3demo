@@ -205,7 +205,7 @@ export default {
     },
   },
   watch: {
-    isConnect(value) {
+    isReady(value) {
       if (value) {
         this.getListData();
       }
