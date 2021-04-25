@@ -13,17 +13,17 @@
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
-              <span>{{ claimAmount }} {{ rewardToken }}</span>
+              <span>{{ claimAmount }} {{ rewardToken }} , {{ unclaimBNB }} BNB</span>
             </div>
           </div>
           <div class="simple-wrapper">
-            <input v-model="claimAmount" readonly type="text" class="amount-input">
+            <input v-model="amountClaim" readonly type="text" class="amount-input">
           </div>
         </div>
         <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
-            <p>{{ claimAmount }} {{ rewardToken }}</p>
+            <p>{{ claimAmount }} {{ rewardToken }} , {{ unclaimBNB }} BNB</p>
           </div>
         </div>
 
@@ -52,6 +52,7 @@ export default {
       extractLoading: false,
       rewardToken: 'BABEL',
       method: '',
+      unclaimBNB: ''
     };
   },
   computed: {
@@ -60,6 +61,9 @@ export default {
       const val = this.liquity && this.liquity.send;
       return val;
     },
+    amountClaim() {
+      return `${this.claimAmount} BABEL,${this.unclaimBNB} BNB`;
+    }
   },
   methods: {
     open(data) {

@@ -268,6 +268,7 @@ export default {
       this.statusVal = 'notConnect';
       // 设置默认网络
       this.network = this.netInfo[config.defaultChainID].name;
+      this.addChain();
     }
   },
 };

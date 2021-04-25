@@ -14,9 +14,15 @@
     </div>
 
     <div v-else class="pool-content">
-      <a class="title" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">
-        BNB-LAI
-      </a>
+      <div class="lp-title-wrapper">
+        <div class="img-wrapper">
+          <img src="../../../public/tokenlogo/bnb48.svg" alt="bnb">
+          <img src="../../../public/tokenlogo/LAI.svg" class="imgRight" alt="lai">
+        </div>
+        <h2 class="title" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">
+          BNB-LAI
+        </h2>
+      </div>
 
       <div class="tag-wrapper flex justify-center items-center">
         <div class="tag-item tag1">
@@ -26,6 +32,8 @@
           Transfer Fee
         </div>
       </div>
+
+      <a class="pancake" href="https://exchange.pancakeswap.finance/#/pool">Get Pancake LP</a>
 
       <div class="pool-detail">
         <!-- <div class="detail-item">

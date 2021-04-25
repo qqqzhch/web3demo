@@ -10,13 +10,17 @@ export default {
     return {
       liquityReady: false,
       AddressZero,
+      undefinedAddress: 'undefined'
     };
   },
   computed: {
     ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
     isReady() {
-      return this.ethersprovider && this.ethChainID ;
+      return this.ethersprovider && this.ethChainID && this.undefinedAddress;
     },
+    isConnect() {
+      return this.ethersprovider && this.ethChainID && this.ethAddress;
+    }
   },
   methods: {
     ...mapActions('buildr', ['setLiquityState']),
@@ -25,7 +29,7 @@ export default {
       const provider = this.ethersprovider;
       const account = this.ethAddress;
       const chainId = this.ethChainID;
-      
+
       const connection = _connectByChainId(provider, account?provider.getSigner(account):undefined, chainId, {
         userAddress: account,
         frontendTag: AddressZero,
@@ -56,8 +60,13 @@ export default {
   },
   watch: {
     isReady(value) {
+      console.log('isReady');
       if (value) this.init();
     },
+    isConnect(value) {
+      console.log('isConnect');
+      if (value) this.init();
+    }
   },
   created() {
     if (this.isReady) {

@@ -36,27 +36,27 @@
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.total') }}</span>
-          <span class="value">{{ totalStake || '--' }} LAI</span>
+          <span class="value">{{ totalStake }} LAI</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.staked') }}</span>
-          <span class="value">{{ haveStake || '--' }} LAI</span>
+          <span class="value">{{ haveStake }} LAI</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.unclaim') }} BNB</span>
-          <span class="value">{{ unclaimBNB || '--' }} BNB</span>
+          <span class="value">{{ unclaimBNB }} BNB</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.unclaim') }} BABEL</span>
-          <span class="value">{{ unclaimBabel || '--' }} BABEL</span>
+          <span class="value">{{ unclaimBabel }} BABEL</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.remain') }} BABEL</span>
-          <span class="value">{{ unReleaseBabel || '--' }} BABEL</span>
+          <span class="value">{{ unReleaseBabel }} BABEL</span>
         </div>
       </div>
 

@@ -13,16 +13,16 @@
               <span>{{ collateralGain }} BNB {{ lusdGain }} LAI</span>
             </div>
           </div>
-          <!-- <div class="simple-wrapper">
-            <input v-model="claimAmount" readonly type="text" class="amount-input">
-          </div> -->
+          <div class="simple-wrapper">
+            <input v-model="amountClaim" readonly type="text" class="amount-input">
+          </div>
         </div>
-        <!-- <div class="detail-wrapper">
+        <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
-            <p>{{ claimAmount }} {{ rewardToken }}</p>
+            <p>{{ collateralGain }} BNB {{ lusdGain }} LAI</p>
           </div>
-        </div> -->
+        </div>
 
         <div class="btn-wrapper">
           <Buttons v-if="!extractLoading" height="48px" @click.native="sendExtract">
@@ -109,6 +109,9 @@ export default {
     liquityInstance() {
       const val = this.liquity && this.liquity.send;
       return val;
+    },
+    amountClaim() {
+      return `${this.collateralGain} BNB,${this.lusdGain} LAI`;
     },
   },
 };
