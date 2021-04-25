@@ -146,7 +146,7 @@ export default {
     // eth初始化
     async initEth() {
       try {
-        // console.log('initEth');
+        console.log('initEth');
         let web3Provider;
         let  usewalletname = Cookies.get('usewalletname');
         if(usewalletname==undefined||usewalletname==''){
@@ -196,6 +196,7 @@ export default {
                     }
                     
                   }
+                  
 
         }
 
@@ -206,7 +207,9 @@ export default {
            ethersprovider = new ethers.providers.Web3Provider(web3Provider);
         }else{
           ethersprovider = getethProvider({chainId:chainConfig.defaultChainID });
-          web3 = new Web3(chainConfig.walletconnectRPC);
+          web3 = new Web3(chainConfig.walletconnectRPC[chainConfig.defaultChainID]);
+          this.$store.commit('changeEthChainID', chainConfig.defaultChainID);
+          console.log(chainConfig.defaultChainID,ethersprovider);
         }
 
         this.$store.commit('changeweb3', { web3, ethersprovider });

@@ -66,7 +66,8 @@
         <template v-else>
           <Dropdown trigger="click" class="func-wrapper" @on-click="choseFunc">
             <div class="connected-content flex justify-start items-center">
-              <img src="../../assets/img/metamask18.svg" alt="metamask">
+              <img v-if="WalletName=='metamask'" src="../../assets/img/metamask18.svg" alt="metamask">
+              <img v-else src="../../assets/img/walletconnect-hexagon-blue.svg" alt="walletconnect">
               <span>{{ getShortAddress }}</span>
               <img class="arrow" src="../../assets/img/down.svg" alt="down">
             </div>
