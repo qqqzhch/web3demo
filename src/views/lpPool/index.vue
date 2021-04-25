@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <a class="pancake" href="https://exchange.pancakeswap.finance/#/pool">Get Pancake LP</a>
+      <a class="pancake" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">Get Pancake LP</a>
 
       <div class="pool-detail">
         <!-- <div class="detail-item">
