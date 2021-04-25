@@ -26,7 +26,7 @@ export default {
     },
     totalCollateralRatio() {
       const { total, price } = this.liquityState;
-      const totalRatio = total.collateralRatio(price).toString();
+      const totalRatio = total ?  total.collateralRatio(price).toString() : 0;
       return totalRatio;
     },
     redemptionRate() {

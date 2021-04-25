@@ -7,7 +7,15 @@ export default {
     poolsData: [],
     currPool: {},
     allPoolsEnable: false,
-    liquityState: {},
+    liquityState: {
+      price: 0,
+      trove: {
+        collateral: 0,
+        debt: 0,
+      },
+      borrowingRate: 0,
+      redemptionRate: 0,
+    },
     isOpen: false,
   },
   mutations: {
