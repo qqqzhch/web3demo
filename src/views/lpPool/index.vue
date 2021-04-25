@@ -35,17 +35,17 @@
 
         <div class="detail-item">
           <span class="title">Total Stake</span>
-          <span class="value">{{ totalStake }} LP</span>
+          <span class="value">{{ totalStake || '--' }} LP</span>
         </div>
 
         <div class="detail-item">
           <span class="title">Staked</span>
-          <span class="value">{{ haveStake || 0 }} LP</span>
+          <span class="value">{{ haveStake || '--' }} LP</span>
         </div>
 
         <div class="detail-item">
           <span class="title">Unclaimed BABEL</span>
-          <span class="value">{{ unclaim || 0 }} BABEL</span>
+          <span class="value">{{ unclaim || '--' }} BABEL</span>
         </div>
       </div>
 
