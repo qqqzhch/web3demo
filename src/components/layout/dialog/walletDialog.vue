@@ -103,6 +103,10 @@ export default {
         this.reload();
       } catch (error) {
         console.log(error);
+        this.$Notice.warning({
+                title: this.$t('notice.n'),
+                desc: this.$t('notice.n11'),
+              });
       }
     },
 
