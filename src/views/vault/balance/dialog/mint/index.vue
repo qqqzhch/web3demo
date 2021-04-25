@@ -141,7 +141,7 @@
   background-color: #605AA5;
   color: #ffffff;
   &:hover {
-    background-color: #0547ff;
+    background-color: #6c66b2;
   }
 }
 .btn-disabled {

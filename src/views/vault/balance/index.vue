@@ -287,7 +287,7 @@
         background-color: #605AA5;
         color: rgb(255, 255, 255);
         &:hover {
-          background-color: #0025ff;
+          background-color: #6c66b2;
         }
       }
     }
