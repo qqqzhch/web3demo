@@ -3,6 +3,7 @@ import ScInput from '../../../components/ScInput.vue';
 import { fetchAdjustBalanace } from '@/contactLogic/buildr/liquity';
 import BigNumber from "bignumber.js";
 import i18n from '../../../../../i18n/index.js';
+import { fetchTokenBalance } from '@/contactLogic/buildr/create';
 
 export default {
   data() {
@@ -12,6 +13,7 @@ export default {
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
       BigNumber,
+      LAIBalance: 0,  // 账户余额
     };
   },
   components: {
@@ -57,6 +59,17 @@ export default {
       this.poolData = poolData;
       this.isOpen = true;
       this.step = 1;
+      this.getLAIBalance();
+    },
+    async getLAIBalance() {
+      const params = {
+        tokenName: 'LAI',
+        chainID: this.ethChainID,
+        library: this.ethersprovider,
+        account:  this.ethAddress,
+        web3: this.web3,
+      };
+      this.LAIBalance = await fetchTokenBalance(params);
     },
     //关闭弹窗,去掉首次引导
     closeDialog(){

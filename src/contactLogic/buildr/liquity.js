@@ -71,7 +71,7 @@ export const openTrove = async ({library, account, chainID, depositAmount, borro
   }, maxBorrowingRate,{ gasLimit: gasLimit });
 
   return {
-    base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} LUSD`,
+    base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} ${stableName}`,
     transaction
   };
 };
