@@ -7,10 +7,9 @@ import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
 
 // import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
-import { openTrove, calcTroveIndicators, stableName } from '../../../contactLogic/buildr/liquity';
+import { openTrove, calcTroveIndicators, stableName, LUSD_MINIMUM_DEBT } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from '../../../contactLogic/buildr/validate';
 
-const LUSD_MINIMUM_DEBT = 200;
 
 export default {
   name: 'create',
@@ -23,7 +22,7 @@ export default {
       BigNumber,
       depositAmount: 0,
       borrowAmount: 0,
-      errorInfo: null
+      errorInfo: null,
     };
   },
   components: {
@@ -99,14 +98,14 @@ export default {
       this.errorInfo = liquityValidate(params);
     },
     onChangeDepositAmount(val) {
-      this.depositAmount = val || '';
+      this.depositAmount = val || 0;
       if (this.depositAmount && !this.borrowAmount) {
         this.borrowAmount = LUSD_MINIMUM_DEBT;
       }
       this.validate();
     },
     onChangeBorrowAmount(val) {
-      this.borrowAmount = val || '';
+      this.borrowAmount = val || 0;
       this.validate();
     },
     getParams() {
