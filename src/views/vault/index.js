@@ -1,9 +1,9 @@
 import { mapState, mapActions } from "vuex";
-// import { fetchLiquityEntity } from "../../contactLogic/buildr/liquity";
-import initLiquity from '@/common/mixin/initLiquity';
+import { fetchLiquityEntity } from "../../contactLogic/buildr/liquity";
+// import initLiquity from '@/common/mixin/initLiquity';
 export default {
   name: 'Vault',
-  mixins: [initLiquity],
+  // mixins: [initLiquity],
   data() {
     return {
       nav: '',
@@ -12,53 +12,53 @@ export default {
     };
   },
   computed: {
-    // ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress']),
     ...mapState('buildr', ['allPoolsEnable', "isOpen"]),
 
-    // isReady() {
-    //   return this.ethersprovider && this.ethChainID && this.ethAddress;
-    // },
+    isReady() {
+      return this.ethersprovider && this.ethChainID && this.ethAddress;
+    },
   },
   methods: {
-    // ...mapActions('buildr', ['setLiquityState']),
-    // init() {
-    //   const params = {
-    //     chainID: this.ethChainID,
-    //     library: this.ethersprovider,
-    //     account:  this.ethAddress,
-    //   };
-    //   const liquity = fetchLiquityEntity(params);
+    ...mapActions('buildr', ['setLiquityState']),
+    init() {
+      const params = {
+        chainID: this.ethChainID,
+        library: this.ethersprovider,
+        account:  this.ethAddress,
+      };
+      const liquity = fetchLiquityEntity(params);
 
-    //   liquity.store.onLoaded = () => {
-    //     // console.log(liquity.store.state.price.toString(), 9999)
-    //     this.liquityReady = true;
-    //     this.setLiquityState(liquity.store.state);
-    //   };
+      liquity.store.onLoaded = () => {
+        // console.log(liquity.store.state.price.toString(), 9999)
+        this.liquityReady = true;
+        this.setLiquityState(liquity.store.state);
+      };
 
-    //   liquity.store.subscribe(({ newState, oldState }) => {
-    //     this.setLiquityState(newState);
+      liquity.store.subscribe(({ newState, oldState }) => {
+        this.setLiquityState(newState);
 
-    //     // console.log(newState, oldState.price.toString(), newState.price.toString(), 888);
-    //     // Try to liquidate whenever the price drops
-    //     // if (newState.price.lt(oldState.price)) {
-    //     //   // tryToLiquidate(liquity);
-    //     // }
-    //   });
-    //   liquity.store.start();
-    // },
+        // console.log(newState, oldState.price.toString(), newState.price.toString(), 888);
+        // Try to liquidate whenever the price drops
+        // if (newState.price.lt(oldState.price)) {
+        //   // tryToLiquidate(liquity);
+        // }
+      });
+      liquity.store.start();
+    },
   },
   components: {
     Loading: () => import("@/components/basic/loading.vue"),
   },
-  // watch: {
-  //   isReady(value) {
-  //     if(value) this.init();
-  //   }
-  // },
+  watch: {
+    isReady(value) {
+      if(value) this.init();
+    }
+  },
   created() {
     this.nav = this.$route.name;
-    // if (this.isReady) {
-    //   this.init();
-    // }
+    if (this.isReady) {
+      this.init();
+    }
   }
 };
