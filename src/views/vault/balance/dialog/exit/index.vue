@@ -24,7 +24,7 @@
           <div v-if="step === 1" class="step-one">
             <div class="grid-2">
               <h2>{{ $t('build-Amount') }}</h2>
-              <p><span>{{ $t('build-balance') }}：</span> {{ poolData.depositAmount | formatNormalValue }} {{ poolData.tokenName }}</p>
+              <p><span>{{ $t('build-balance') }}：</span> {{ poolData.accountBalance | formatNormalValue }} {{ poolData.tokenName }}</p>
             </div>
             <div class="input-warpper">
               <ScInput :unit="poolData.tokenName" :on-change="onChangeValue" :is-error="checkValue" />

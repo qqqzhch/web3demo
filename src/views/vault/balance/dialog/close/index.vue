@@ -15,16 +15,16 @@
             </div>
             <div class="confirm-content flex flex-col items-center">
               <div>
-                <img :src="getTokenImg(poolData.stableName)" width="48px">
-                <h2>{{ poolData.debtAmount | formatNormalValue }}</h2>
-                <p>{{ poolData.stableName }}</p>
-                <span>{{ $t('build-will-payback') }}</span>
-              </div>
-              <div>
                 <img :src="getTokenImg(poolData.tokenName)">
                 <h2>{{ poolData.depositAmount | formatNormalValue }}</h2>
                 <p>{{ poolData.tokenName }}</p>
                 <span>{{ $t('vault-will-withdraw') }}</span>
+              </div>
+              <div>
+                <img :src="getTokenImg(poolData.stableName)" width="48px">
+                <h2>{{ poolData.debtAmount | formatNormalValue }}</h2>
+                <p>{{ poolData.stableName }}</p>
+                <span>{{ $t('build-will-payback') }}</span>
               </div>
             </div>
           </div>
