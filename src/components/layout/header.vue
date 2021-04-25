@@ -79,10 +79,10 @@
                 <img src="../../assets/img/changeWallet.svg" alt="change">
                 <span>{{ $t('header.changeWallet') }}</span>
               </DropdownItem>
-              <!-- <DropdownItem class="list-item" name="disconnect">
+              <DropdownItem v-if="WalletConnectprovider" class="list-item" name="disconnect">
                 <img src="../../assets/img/disconnect16.svg" alt="disconnect">
                 <span>{{ $t('header.Disconnect') }}</span>
-              </DropdownItem> -->
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </template>
@@ -98,6 +98,7 @@ import { mapState } from 'vuex';
 import config from '@/config/config.js';
 import jscookie from 'js-cookie';
 export default {
+  inject: ['reload'],
   components: {
     walletdialog: () => import('./dialog/walletDialog'),
   },
@@ -139,6 +140,16 @@ export default {
       if (val === 'change') {
         this.openWalletDialog();
       }
+      if (val === 'disconnect') {
+        this.disconnectWallet();
+      }
+    },
+    async disconnectWallet() {
+      console.log('disconnect');
+      await this.WalletConnectprovider.disconnect();
+      this.$store.commit('changeEthAddress', '');
+      this.$store.commit('changeWalletConnectprovider', null);
+      this.reload();
     },
 
     // 添加并且切换网络类型
@@ -202,7 +213,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethAddress', 'ethChainID']),
+    ...mapState(['ethAddress', 'ethChainID','WalletConnectprovider','WalletName']),
     getShortAddress() {
       return `${this.ethAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
     },

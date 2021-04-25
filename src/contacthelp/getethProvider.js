@@ -46,6 +46,10 @@ export default function(Tokencoin){
 
        return new ethers.providers.JsonRpcProvider('https://http-testnet.hecochain.com');
 
+    }else if(Tokencoin.chainId==97){
+        return new ethers.providers.JsonRpcProvider('https://data-seed-prebsc-1-s1.binance.org:8545');
+    }else if(Tokencoin.chainId==56){
+        return new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org');
     } else{
         //https://eth-ropsten.alchemyapi.io/v2/EfE4GgSS1wdCAGanz3uOt3SiBA0g4m9R
 

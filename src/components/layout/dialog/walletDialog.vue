@@ -28,20 +28,20 @@
             <img src="../../../assets/img/check-blue-24.png">
           </div>
         </div>
-        <!-- <div
+        <div
           class="wallet-content flex items-center justify-between"
-          :class="wallet == 'lambda' ? 'wallet-content-active' : ''"
-          @click="selectWallet('lambda')"
+          :class="wallet == 'walletconnect' ? 'wallet-content-active' : ''"
+          @click="selectWallet('walletconnect')"
         >
           <div class="logo flex items-center text-warpper">
-            <img src="../../../assets/img/lambda48.svg">
-            <p>LAMB Wallet</p>
+            <img src="../../../assets/img/walletconnect-hexagon-blue.svg">
+            <p>WalletConnect</p>
           </div>
 
           <div class="img-wapper">
             <img src="../../../assets/img/check-blue-24.png">
           </div>
-        </div> -->
+        </div>
         <Buttons @click.native="connectWallet(wallet)">
           Connect Wallet
         </Buttons>
@@ -53,6 +53,11 @@
 </template>
 
 <script>
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Cookies from 'js-cookie';
+import event from '@/common/js/event';
+import chainConfig from '@/config/config.js';
+
 export default {
   inject: ['reload'],
   components: {
@@ -67,12 +72,24 @@ export default {
   methods: {
     selectWallet(wallet) {
       this.wallet = wallet;
+      Cookies.set('usewalletname', wallet, { expires: 365, path: '/' });
+      
+      this.$store.commit('WalletName', wallet);
     },
     open() {
       this.openWalletDialog = true;
+      const usewalletname = Cookies.get('usewalletname');
+        if(usewalletname){
+          this.wallet = usewalletname;
+        }
     },
     connectWallet(name) {
-      name === 'metamask' ? this.getEthAuth() : this.getLambAuth();
+      if(name === 'metamask'){
+         this.getEthAuth();
+       }else if(name === 'walletconnect'){
+         this.getwalletconnectAuth();
+       }
+      
     },
 
     // 获取metamask授权
@@ -92,6 +109,29 @@ export default {
     getLambAuth() {
       console.log('lambda');
     },
+    async getwalletconnectAuth() {
+      try {
+        // 请求用户授权
+        const provider = new WalletConnectProvider({
+          rpc: chainConfig.walletconnectRPC,
+          chainId:chainConfig.defaultChainID 
+        });
+        console.log('provider',provider);
+        // await provider.disconnect();
+        const res = await provider.enable();
+        this.$store.commit('changeEthAddress', res[0]);
+        this.$store.commit('changeWalletConnectprovider', provider);
+        
+        event.$emit('initpageEth');
+        this.openWalletDialog = false;
+        this.reload();
+      } catch (error) {
+        event.$emit('initpageEth');
+        
+        console.log(error);
+        this.reload();
+      }
+    }
   },
 };
 </script>

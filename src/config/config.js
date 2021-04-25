@@ -50,5 +50,14 @@ export default {
       rpcUrl: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
       explorerUrl: ['https://testnet.bscscan.com/']
     }
+  },
+  walletconnectRPC:{
+    128: "https://http-mainnet-node.huobichain.com",
+    256:'https://http-testnet.hecochain.com',
+    4:"https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82",
+    1:"https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82",
+    97:'https://data-seed-prebsc-1-s1.binance.org:8545',
+    56:'https://bsc-dataseed.binance.org',
+
   }
 };
