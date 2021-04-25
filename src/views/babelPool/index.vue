@@ -13,9 +13,12 @@
       <loading />
     </div>
     <div v-else class="pool-content">
-      <h2 class="title">
-        BABEL
-      </h2>
+      <div class="title-wrapper flex justify-center items-center">
+        <img src="../../../public/tokenlogo/babel.svg" alt="babel">
+        <h2 class="title">
+          BABEL
+        </h2>
+      </div>
 
       <div class="tag-wrapper flex justify-center items-center">
         <div class="tag-item tag1">
