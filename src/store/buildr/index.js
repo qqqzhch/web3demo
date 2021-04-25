@@ -15,6 +15,7 @@ export default {
       },
       borrowingRate: 0,
       redemptionRate: 0,
+      accountBalance: 0,
     },
     isOpen: false,
   },
