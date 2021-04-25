@@ -85,9 +85,9 @@ export default {
     }
   },
   mounted() {
-    // event.$on('txsuccess', () => {
-    //   this.reload();
-    // });
+    event.$on('txsuccess', () => {
+      this.reload();
+    });
   },
 };
 </script>
