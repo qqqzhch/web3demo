@@ -20,7 +20,7 @@
             {{ $t('header.nav.lpPool') }}
           </router-link>
 
-          <router-link class="menu-item" to="/troves" active-class="active">
+          <router-link class="menu-item" to="/riskyVaults" active-class="active">
             {{ $t('header.nav.troves') }}
           </router-link>
 
