@@ -1,22 +1,22 @@
 <template>
   <div class="pool-wrapper">
-    <div class="pool-title flex justify-between items-center">
+    <!-- <div class="pool-title flex justify-between items-center">
       <p class="title">
         LP Pool
       </p>
       <p class="subTitle">
         LP Pool
       </p>
-    </div>
+    </div> -->
 
     <div v-if="showLoading">
       <loading />
     </div>
 
     <div v-else class="pool-content">
-      <h2 class="title">
+      <a class="title" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">
         BNB-LAI
-      </h2>
+      </a>
 
       <div class="tag-wrapper flex justify-center items-center">
         <div class="tag-item tag1">

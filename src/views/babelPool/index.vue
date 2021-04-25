@@ -1,13 +1,13 @@
 <template>
   <div class="pool-wrapper">
-    <div class="pool-title flex justify-between items-center">
+    <!-- <div class="pool-title flex justify-between items-center">
       <p class="title">
         {{ $t('babel.pool') }}
       </p>
       <p class="subTitle">
         {{ $t('babel.subTitle') }}
       </p>
-    </div>
+    </div> -->
 
     <div v-if="showLoading">
       <loading />

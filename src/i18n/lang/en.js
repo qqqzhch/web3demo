@@ -20,7 +20,7 @@ export default {
     n38:'Please connect to your wallet',
     n39:'Network not matched',
     n40:'Please switch Network in Metamask.',
-    n41: 'Metamask Connected',
+    n41: 'Wallet Connected',
     n42: 'success',
     n43: 'fail',
     swapNotice:{
