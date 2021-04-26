@@ -214,8 +214,9 @@ export default {
       return bigValue;
     },
     getAddress() {
+      const _this=this;
       const [item] = tokenList.tokens.filter((item) => {
-        return item.symbol === 'LAI' && item.chainId === this.ethChainID;
+        return item.symbol === 'LAI' && item.chainId === _this.ethChainID;
       });
       // https://exchange.pancakeswap.finance/#/add/BNB/0x6020CBa45Ce63BE22f904C76047a944Ee85c41c0
       const url = `https://exchange.pancakeswap.finance/#/add/BNB/${item.address}`;
