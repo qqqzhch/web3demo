@@ -113,8 +113,11 @@
             <button v-if="step === 1 && checkValue" class="btn btn-disabled">
               {{ $t('build-next') }}
             </button>
-            <button v-if="step === 2" class="btn" @click="onJoinClick">
+            <button v-if="step === 2 && !btnLoading" class="btn" @click="onJoinClick">
               {{ $t('build-confirm') }}
+            </button>
+            <button v-if="step === 2 && btnLoading" class="btn">
+              Loading...
             </button>
           </div>
           <div v-if="step === 1" class="close-warpper">

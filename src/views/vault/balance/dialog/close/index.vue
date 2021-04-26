@@ -80,8 +80,11 @@
           </div>
 
           <div class="button-warpper">
-            <button v-if="shortDebt >= 0" class="btn" @click="onCloseTroveClick">
+            <button v-if="shortDebt >= 0 && !btnLoading" class="btn" @click="onCloseTroveClick">
               {{ $t('build-confirm') }}
+            </button>
+            <button v-if="shortDebt >= 0 && btnLoading" class="btn">
+              Loading...
             </button>
           </div>
           <button v-if="shortDebt < 0" class="btn btn-disabled">
