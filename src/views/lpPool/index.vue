@@ -19,7 +19,7 @@
           <img src="../../../public/tokenlogo/bnb48.svg" alt="bnb">
           <img src="../../../public/tokenlogo/LAI.svg" class="imgRight" alt="lai">
         </div>
-        <h2 class="title" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">
+        <h2 class="title" target="_blank">
           BNB-LAI
         </h2>
       </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <a class="pancake" href="https://exchange.pancakeswap.finance/#/pool" target="_blank">Get Pancake LP</a>
+      <a class="pancake" :href="getAddress" target="_blank">Get Pancake LP</a>
 
       <div class="pool-detail">
         <!-- <div class="detail-item">
@@ -101,6 +101,7 @@ import { mapState } from 'vuex';
 import event from '@/common/js/event';
 import web3 from 'web3';
 import _ from 'underscore';
+import tokenList from '@/constants/token.json';
 export default {
   data() {
     return {
@@ -210,6 +211,14 @@ export default {
       const val = this.liquidityData && this.liquidityData.data && this.liquidityData.data.earned.toString();
       const bigValue = this.$BigNumber(val).decimalPlaces(2).toNumber();
       return bigValue;
+    },
+    getAddress() {
+      const [item] = tokenList.tokens.filter((item) => {
+        return item.symbol === 'LAI' && item.chainId === this.ethChainID;
+      });
+      // https://exchange.pancakeswap.finance/#/add/BNB/0x6020CBa45Ce63BE22f904C76047a944Ee85c41c0
+      const url = `https://exchange.pancakeswap.finance/#/add/BNB/${item.address}`;
+      return url;
     },
   },
   watch: {
