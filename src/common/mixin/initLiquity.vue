@@ -46,7 +46,7 @@ export default {
     },
     init: debounce(function() {
       console.log('init');
-     
+
           const params = {
             chainID: this.ethChainID,
             library: this.ethersprovider,
@@ -66,7 +66,7 @@ export default {
             console.log(liquity.store.state);
           };
 
-          
+
             liquity.store.subscribe(({ newState, oldState }) => {
               console.log(newState, oldState );
               this.setLiquityState(newState);
@@ -76,7 +76,7 @@ export default {
       }else{
         this.liquityReady = true;
       }
-      
+
     },1000),
   },
   watch: {
@@ -99,7 +99,7 @@ export default {
       if(this.$route.name=='lpPool'){
         this.reload();
       }
-      
+
     });
   },
 };

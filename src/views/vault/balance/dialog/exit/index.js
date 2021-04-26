@@ -13,6 +13,7 @@ export default {
       coinAmount: 0,  // 当前抵押资产的数量
       poolData: {},  // 父组件传过来的数据
       BigNumber,
+      btnLoading: false,
     };
   },
   components: {
@@ -85,9 +86,15 @@ export default {
         coinAmount: this.coinAmount,
         unit: this.poolData.tokenName,
       };
-      const tx = await fetchAdjustBalanace(params);
-      this.$parent.sendtx(tx);
-      this.isOpen = false;
+
+      this.btnLoading = true;
+      try {
+        const tx = await fetchAdjustBalanace(params);
+        this.$parent.sendtx(tx);
+        this.isOpen = false;
+      } catch (e) {
+        this.btnLoading = false;
+      }
     }
   },
 };

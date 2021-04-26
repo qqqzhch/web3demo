@@ -23,6 +23,7 @@ export default {
       depositAmount: 0,
       borrowAmount: 0,
       errorInfo: null,
+      btnLoading: false
     };
   },
   components: {
@@ -39,7 +40,9 @@ export default {
         depositAmount: this.depositAmount,
         borrowAmount: this.borrowLUSDAmount
       };
-      this.$refs.haveSendtx.open(data, 'ok');
+      if(this.$route.name === 'create') {
+        this.$refs.haveSendtx.open(data, 'ok');
+      }
     });
   },
   computed: {
@@ -126,8 +129,13 @@ export default {
         liquityState: this.liquityState,
       };
 
-      const tx = await openTrove(params);
-      this.sendtx(tx);
+      this.btnLoading = true;
+      try {
+        const tx = await openTrove(params);
+        this.sendtx(tx);
+      } catch (e) {
+        this.btnLoading = false;
+      }
     },
     sendtx(tx) {
       if(tx && tx.base){

@@ -15,6 +15,7 @@ export default {
       poolData: {},  // 父组件传过来的数据
       BigNumber,
       LAIBalance: 0,  // 账户余额
+      btnLoading: false,
     };
   },
   components: {
@@ -99,9 +100,15 @@ export default {
         coinAmount: this.coinAmount,
         unit:this.poolData.stableName,
       };
-      const tx = await fetchAdjustBalanace(params);
-      this.$parent.sendtx(tx);
-      this.isOpen = false;
+
+      this.btnLoading = true;
+      try {
+        const tx = await fetchAdjustBalanace(params);
+        this.$parent.sendtx(tx);
+        this.isOpen = false;
+      } catch (e) {
+        this.btnLoading = false;
+      }
     }
   },
 };

@@ -14,6 +14,7 @@ export default {
       BigNumber,
       loading: false,
       errorInfo: '',
+      btnLoading: false,
     };
   },
   components: {
@@ -86,9 +87,15 @@ export default {
         coinAmount: this.coinAmount,
         unit: this.poolData.tokenName,
       };
-      const tx = await fetchAdjustBalanace(params);
-      this.$parent.sendtx(tx);
-      this.isOpen = false;
+
+      this.btnLoading = true;
+      try {
+        const tx = await fetchAdjustBalanace(params);
+        this.$parent.sendtx(tx);
+        this.isOpen = false;
+      } catch (e) {
+        this.btnLoading = false;
+      }
     }
   },
 };

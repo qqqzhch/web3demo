@@ -12,6 +12,7 @@ export default {
       BigNumber,
       LAIBalance: 0,
       loading: true,
+      btnLoading: false,
     };
   },
   components: {
@@ -50,14 +51,21 @@ export default {
       this.isOpen = false;
     },
     async onCloseTroveClick() {
-      this.isOpen = false;
       const params = {
         chainID: this.ethChainID,
         library: this.ethersprovider,
         account:  this.ethAddress,
       };
-      const tx = await closeTrove(params);
-      this.$parent.sendtx(tx);
+
+      this.btnLoading = true;
+      try {
+        const tx = await closeTrove(params);
+        this.$parent.sendtx(tx);
+        this.isOpen = false;
+      } catch (e) {
+        this.btnLoading = false;
+      }
+
     },
   },
 };
