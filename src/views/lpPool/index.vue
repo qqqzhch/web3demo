@@ -33,7 +33,8 @@
         </div>
       </div>
 
-      <a class="pancake" :href="getAddress" target="_blank">Get Pancake LP</a>
+      <!-- <a class="pancake" :href="getAddress" target="_blank">Get Pancake LP</a> -->
+      <a style="    color: #c3c2c7;" class="pancake" target="_blank">Get Pancake LP</a>
 
       <div class="pool-detail">
         <!-- <div class="detail-item">
