@@ -16,10 +16,10 @@ export default {
       return this.liquityState.price.toString();
     },
     totalValue() {
-      return this.liquityState.trove.collateral.toString();
+      return this.liquityState.total.collateral.toString();
     },
     totalDebt() {
-      return this.liquityState.trove.debt.toString();
+      return this.liquityState.total.debt.toString();
     },
     borrowingRate() {
       return this.liquityState.borrowingRate.toString();
