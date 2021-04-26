@@ -13,6 +13,10 @@ export default {
         collateral: 0,
         debt: 0,
       },
+      total: {
+        collateral: 0,
+        debt: 0,
+      },
       borrowingRate: 0,
       redemptionRate: 0,
       accountBalance: 0,
