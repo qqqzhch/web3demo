@@ -43,14 +43,14 @@
             :default-value="depositAmount"
             :unit="defaultPool.token"
             :on-change="onChangeDepositAmount"
-            :is-error="checkValue !== 'ok'"
+            :is-error="errorInfo"
           />
           <img :src="getTokenImg(defaultPool.token)" :alt="defaultPool.token">
         </div>
-        <div v-if="checkValue !== 'ok'" class="notice-warpper">
+        <div v-if="errorInfo" class="notice-warpper">
           <div class="notice-content">
             <img src="../../../assets/img/notice-red.png">
-            <p>{{ checkValue }}</p>
+            <p>{{ errorInfo }}</p>
           </div>
         </div>
         <div class="flex">

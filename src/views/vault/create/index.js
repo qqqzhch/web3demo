@@ -51,16 +51,6 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
-    // 验证输入值
-    checkValue() {
-      if(BigNumber(this.depositAmount).isLessThan(0)) {
-        return i18n.t('notice.swapNotice.n2');
-      } else if (isNaN(this.depositAmount)) {
-        return i18n.t('notice.buidrNotice.n1');
-      } else {
-        return 'ok';
-      }
-    },
     troveIndicators(){
       return calcTroveIndicators(this.liquityState, this.depositAmount, this.borrowAmount);
     },
@@ -91,14 +81,22 @@ export default {
         this.defaultPool = this.collateralPools[0];
     },
     validate() {
-      const params = {
-        state: this.liquityState,
-        trove: this.liquityState.trove,
-        borrowingRate: this.liquityState.borrowingRate,
-        depositAmount: this.depositAmount,
-        borrowAmount: this.borrowAmount,
-      };
-      this.errorInfo = liquityValidate(params);
+      let errorInfo = '';
+      if(BigNumber(this.depositAmount).isLessThan(0)) {
+        errorInfo = i18n.t('notice.swapNotice.n2');
+      } else if (isNaN(this.depositAmount)) {
+        errorInfo = i18n.t('notice.buidrNotice.n1');
+      } else {
+        const params = {
+          state: this.liquityState,
+          trove: this.liquityState.trove,
+          borrowingRate: this.liquityState.borrowingRate,
+          depositAmount: this.depositAmount,
+          borrowAmount: this.borrowAmount,
+        };
+        errorInfo = liquityValidate(params);
+      }
+      this.errorInfo = errorInfo;
     },
     onChangeDepositAmount(val) {
       this.depositAmount = val || 0;
