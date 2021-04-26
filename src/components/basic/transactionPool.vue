@@ -8,6 +8,7 @@ export default {
     };
   },
   mounted() {
+    console.log('-----!');
     event.$on('sendtx', (txinfo) => {
       console.log('sendtx', txinfo);
       this.txpoollist.push({ tx: txinfo[0], info: txinfo[1], state: 'new' });
@@ -15,7 +16,9 @@ export default {
   },
   methods: {
     async txstate(tx) {
-      const txlast = await tx.tx.wait([1]);
+      console.log('-----');
+      try{
+        const txlast = await tx.tx.wait([1]);
       console.log('Status after confirmation', txlast);
       if (txlast.status == 1) {
         this.$Notice.success({
@@ -30,6 +33,16 @@ export default {
           desc: tx.info.failinfo,
         });
       }
+
+      }catch(ex){
+        this.$Notice.error({
+          title: this.$t('swapConfirm.failCom'),
+          desc: ex,
+          duration: 30
+        });
+
+      }
+      
     },
   },
   watch: {
