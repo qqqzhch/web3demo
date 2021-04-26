@@ -119,7 +119,7 @@ export default {
         depositAmount,
         borrowAmount,
       };
-      return liquityValidate(params);
+      return depositAmount && borrowAmount ? liquityValidate(params) : '';
     },
 
     // 首次创建金库，引导用于去铸造, 只出现一次

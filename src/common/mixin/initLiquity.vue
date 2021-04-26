@@ -4,8 +4,11 @@ import { fetchLiquityEntity } from '@/contactLogic/buildr/liquity';
 import { AddressZero } from '@ethersproject/constants';
 import { EthersLiquity, _connectByChainId } from '@webfans/lib-ethers';
 import event from '@/common/js/event';
+import Vue from 'vue';
 
 const debounce = require('debounce');
+
+let isSubscribe = false;
 
 export default {
   inject: ['reload'],
@@ -43,30 +46,37 @@ export default {
     },
     init: debounce(function() {
       console.log('init');
+     
+          const params = {
+            chainID: this.ethChainID,
+            library: this.ethersprovider,
+            account: this.ethAddress,
+          };
+          const liquity = fetchLiquityEntity(params);
+        if(isSubscribe === false && liquity.store) {
+          console.log('init store');
+          liquity.store.onLoaded = () => {
 
-      const params = {
-        chainID: this.ethChainID,
-        library: this.ethersprovider,
-        account: this.ethAddress,
-      };
-      const liquity = fetchLiquityEntity(params);
-      liquity.store.onLoaded = () => {
+            this.setLiquityState(liquity.store.state);
 
-        this.setLiquityState(liquity.store.state);
+            this.liquityReady = true;
 
+            this.getLiquityInstance();
+
+            console.log(liquity.store.state);
+          };
+
+          
+            liquity.store.subscribe(({ newState, oldState }) => {
+              console.log(newState, oldState );
+              this.setLiquityState(newState);
+            });
+            isSubscribe = true;
+            liquity.store.start();
+      }else{
         this.liquityReady = true;
-
-        this.getLiquityInstance();
-
-        console.log(liquity.store.state);
-      };
-
-      liquity.store.subscribe(({ newState, oldState }) => {
-        console.log(newState, oldState );
-        this.setLiquityState(newState);
-      });
-
-      liquity.store.start();
+      }
+      
     },1000),
   },
   watch: {
@@ -86,7 +96,10 @@ export default {
   },
   mounted() {
     event.$on('txsuccess', () => {
-      this.reload();
+      if(this.$route.name=='lpPool'){
+        this.reload();
+      }
+      
     });
   },
 };

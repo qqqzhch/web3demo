@@ -1,7 +1,7 @@
 <template>
   <div class="overview-warp">
     <div class="content-warpper flex items-center">
-      <div class="content">
+      <div v-if="liquityState&&liquityState.price" class="content">
         <div class="total-warpper">
           <h2>{{ $t('vault-total-value-locked') }}</h2>
           <p><span>$ {{ BigNumber(totalValue).times(price).toFixed(2) }}</span></p>
