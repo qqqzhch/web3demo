@@ -22,7 +22,7 @@ export default {
       BigNumber,
       depositAmount: 0,
       borrowAmount: 0,
-      errorInfo: null,
+      errorInfo: '',
       btnLoading: false
     };
   },
@@ -82,7 +82,7 @@ export default {
     },
     validate() {
       let errorInfo = '';
-      if(BigNumber(this.depositAmount).isLessThan(0)) {
+      if(BigNumber(this.depositAmount).lt(0)) {
         errorInfo = i18n.t('notice.swapNotice.n2');
       } else if (isNaN(this.depositAmount)) {
         errorInfo = i18n.t('notice.buidrNotice.n1');
@@ -120,6 +120,11 @@ export default {
       };
     },
     async onOpenTroveClick() {
+      if(!this.depositAmount || !this.borrowLUSDAmount) {
+        this.errorInfo = i18n.t('notice.swapNotice.n2');
+        return ;
+      }
+
       const params = {
         ...this.getParams(),
         borrowLUSDAmount: this.borrowLUSDAmount,
