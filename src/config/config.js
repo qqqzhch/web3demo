@@ -39,7 +39,7 @@ export default {
       isBan: false
     },
   },
-  gasLimit: 800000,
+  gasLimit: 8000000,
   defaultNet: {
     '97': {
       chainIDHex: '0x61',

@@ -12,6 +12,7 @@ import {
   CRITICAL_COLLATERAL_RATIO,
 } from "@liquity/lib-base";
 import { AddressZero } from '@ethersproject/constants';
+import config  from '@/config/config.js';
 
 const mcrPercent = new Percent(MINIMUM_COLLATERAL_RATIO).toString(0);
 const ccrPercent = new Percent(CRITICAL_COLLATERAL_RATIO).toString(0);
@@ -23,7 +24,8 @@ const frontendTag = AddressZero;
 // 最低费率0.5%
 const minFeeRate = 0.005;
 // Gas Limit
-const gasLimit = 800000;
+console.log('gasLimit');
+const gasLimit = config.gasLimit;
 
 export const stableName = 'LAI';
 

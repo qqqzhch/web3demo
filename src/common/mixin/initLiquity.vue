@@ -77,7 +77,11 @@ export default {
         this.liquityReady = true;
       }
 
-    },1000),
+      
+    },2000),
+
+
+
   },
   watch: {
     isReady(value) {
