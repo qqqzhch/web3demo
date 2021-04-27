@@ -70,10 +70,26 @@ export const openTrove = async ({library, account, chainID, depositAmount, borro
   const liquity = fetchLiquityEntity({library, account, chainID});
   const maxBorrowingRate = getMaxBorrowingRate(liquityState);
 
+
+  const tx = await liquity.populate.openTrove({
+    depositCollateral: depositAmount,
+    borrowLUSD: borrowLUSDAmount,
+  });
+
+  let originalGasEstimate;
+
+  try {
+    originalGasEstimate = await library.estimateGas(tx.rawPopulatedTransaction);
+    originalGasEstimate = originalGasEstimate.add(50000).toString();
+    console.log('originalGasEstimate',originalGasEstimate, originalGasEstimate.toString(), 99999);
+  } catch (e) {
+    console.log(e, 8888);
+  }
+
   const transaction = await liquity.send.openTrove({
     depositCollateral: depositAmount,
     borrowLUSD: borrowLUSDAmount,
-  }, maxBorrowingRate,{ gasLimit: openGasLimit });
+  }, maxBorrowingRate,{ gasLimit: originalGasEstimate });
 
   return {
     base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} ${stableName}`,
