@@ -38,15 +38,15 @@
                   <span
                     :class="{
                       'bg-green': poolItem.collateralRatio >= 1.5,
-                      'bg-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
-                      'bg-danger': poolItem.collateralRatio <= 1.1,
+                      'bg-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio >= 1.2,
+                      'bg-danger': poolItem.collateralRatio < 1.2,
                     }"
                   />
                   <p
                     :class="{
                       'f-green': poolItem.collateralRatio >= 1.5,
-                      'f-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.1,
-                      'f-danger': poolItem.collateralRatio <= 1.1,
+                      'f-warning': poolItem.collateralRatio < 1.5 && poolItem.collateralRatio > 1.2,
+                      'f-danger': poolItem.collateralRatio < 1.2,
                     }"
                   >
                     {{ BigNumber(poolItem.collateralRatio).times(100).toFixed(2) }}%

@@ -77,14 +77,14 @@
                 <span
                   :class="{
                     'f-green': poolData.collateralRatio >= 1.5,
-                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
-                    'f-danger': poolData.collateralRatio <= 1.1
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio >= 1.2,
+                    'f-danger': poolData.collateralRatio < 1.2
                   }"
                 >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
                   :class="{
                     'f-green': poolData.collateralRatio >= 1.5,
-                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio > 1.1,
-                    'f-danger': poolData.collateralRatio <= 1.1
+                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio >= 1.2,
+                    'f-danger': poolData.collateralRatio < 1.2
                   }"
                 >{{ BigNumber(newCollateralRatio).times(100).toFixed(2) }}%</span>
               </li>
