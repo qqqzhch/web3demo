@@ -26,6 +26,7 @@ const minFeeRate = 0.005;
 // Gas Limit
 console.log('gasLimit');
 const gasLimit = config.gasLimit;
+const openGasLimit = 2000000;
 
 export const stableName = 'LAI';
 
@@ -72,7 +73,7 @@ export const openTrove = async ({library, account, chainID, depositAmount, borro
   const transaction = await liquity.send.openTrove({
     depositCollateral: depositAmount,
     borrowLUSD: borrowLUSDAmount,
-  }, maxBorrowingRate,{ gasLimit: gasLimit });
+  }, maxBorrowingRate,{ gasLimit: openGasLimit });
 
   return {
     base: `Deposit: ${depositAmount} BNB, Debt: ${borrowLUSDAmount} ${stableName}`,
