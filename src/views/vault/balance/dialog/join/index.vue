@@ -71,7 +71,7 @@
             <ul>
               <li class="title flex">
                 <span>{{ $t('build-coll-ratio') }}:</span>
-                <img src="../../../../../assets/img/wenhao.svg">
+                <!--<img src="../../../../../assets/img/wenhao.svg">-->
               </li>
               <li v-if="poolData.collateralRatio">
                 <span
@@ -82,9 +82,9 @@
                   }"
                 >{{ BigNumber(poolData.collateralRatio).times(100).toFixed(2) }}%</span> {{ $t('build-to') }} <span
                   :class="{
-                    'f-green': poolData.collateralRatio >= 1.5,
-                    'f-warning': poolData.collateralRatio < 1.5 && poolData.collateralRatio >= 1.2,
-                    'f-danger': poolData.collateralRatio < 1.2
+                    'f-green': newCollateralRatio >= 1.5,
+                    'f-warning': newCollateralRatio < 1.5 && newCollateralRatio >= 1.2,
+                    'f-danger': newCollateralRatio < 1.2
                   }"
                 >{{ BigNumber(newCollateralRatio).times(100).toFixed(2) }}%</span>
               </li>
