@@ -27,6 +27,10 @@
             <h2>{{ $t('vault-redemption-fee') }}</h2>
             <p><span>{{ BigNumber(redemptionRate).times(100).toFixed(2) }}%</span></p>
           </div>
+          <div>
+            <h2>{{ $t('vault-total-vaults') }}</h2>
+            <p><span>{{ totalVaults }}</span></p>
+          </div>
         </div>
         <!--<div class="refresh" @click="refresh">-->
         <!--<img src="../../../../assets/img/refresh.svg" alt="refresh">-->

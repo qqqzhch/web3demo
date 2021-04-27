@@ -26,7 +26,7 @@ const minFeeRate = 0.005;
 // Gas Limit
 console.log('gasLimit');
 const gasLimit = config.gasLimit;
-const openGasLimit = 2000000;
+const openGasLimit = 8000000;
 
 export const stableName = 'LAI';
 

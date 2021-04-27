@@ -73,4 +73,5 @@ export default {
   'vault-please-wait': 'Please wait...',
   'vault-success': 'Success!',
   'vault-fail': 'Fail!',
+  'vault-total-vaults': 'Active Vaults',
 };

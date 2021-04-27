@@ -31,7 +31,10 @@ export default {
     },
     redemptionRate() {
       return this.liquityState.redemptionRate.toString();
-    }
+    },
+    totalVaults() {
+      return this.liquityState.numberOfTroves.toString();
+    },
   },
   methods: {
     // refresh() {

@@ -70,5 +70,8 @@ export default {
   'vault-will-withdraw': 'will be withdrawn',
   'vault-Loading': 'Loading',
   'vault-created': 'Vault Created',
-  'vault-please-wait': 'Please wait...'
+  'vault-please-wait': 'Please wait...',
+  'vault-success': 'Success!',
+  'vault-fail': 'Fail!',
+  'vault-total-vaults': 'Active Vaults',
 };
