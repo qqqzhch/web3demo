@@ -5,10 +5,9 @@ import { getTokenImg } from '@/contactLogic/readbalance.js';
 import ScInput from '../components/ScInput.vue';
 import { getCollateralPools } from '@/contactLogic/buildr/balance';
 import i18n from '../../../i18n/index.js';
-
-// import { LUSD_MINIMUM_DEBT } from "@liquity/lib-base";
-import { openTrove, calcTroveIndicators, stableName, LUSD_MINIMUM_DEBT } from '../../../contactLogic/buildr/liquity';
+import { openTrove, calcTroveIndicators, stableName, LUSD_MINIMUM_DEBT, getGasEstimate } from '../../../contactLogic/buildr/liquity';
 import { liquityValidate } from '../../../contactLogic/buildr/validate';
+import { getGasPrice } from '@/contacthelp/ethusdt';
 
 
 export default {
@@ -23,7 +22,10 @@ export default {
       depositAmount: 0,
       borrowAmount: 0,
       errorInfo: '',
-      btnLoading: false
+      btnLoading: false,
+      gasAmount: 0,
+      gasPrice: 0,
+      gasErrorMsg: '',
     };
   },
   components: {
@@ -69,16 +71,18 @@ export default {
       return getTokenImg(tokensymbol,chainID);
     },
     // check金库是否已创建
-    checkIsOpen() {
+    async checkIsOpen() {
       if(this.isOpen) {
         this.$router.push('/vault/balance');
       } else {
         this.getPools();
+        this.gasPrice = await getGasPrice(this.ethersprovider);
       }
     },
     getPools() {
         this.collateralPools = getCollateralPools(this.ethChainID);
         this.defaultPool = this.collateralPools[0];
+
     },
     validate() {
       let errorInfo = '';
@@ -98,16 +102,42 @@ export default {
       }
       this.errorInfo = errorInfo;
     },
+    async calcGasEstimate() {
+      const params = {
+        ...this.getParams(),
+        borrowLUSDAmount: this.borrowLUSDAmount,
+        depositAmount: this.depositAmount,
+        liquityState: this.liquityState,
+      };
+      this.btnLoading = true;
+      try {
+        this.gasAmount = await getGasEstimate(params);
+        this.btnLoading = false;
+      } catch (e) {
+        this.gasErrorMsg = e && e.data && e.data.message;
+        this.btnLoading = false;
+      }
+    },
     onChangeDepositAmount(val) {
-      this.depositAmount = val || 0;
+      this.gasAmount = 0;
+      this.gasErrorMsg = '';
+      this.depositAmount = val || '';
       if (this.depositAmount && !this.borrowAmount) {
         this.borrowAmount = LUSD_MINIMUM_DEBT;
       }
       this.validate();
+      if(!this.errorInfo) {
+        this.calcGasEstimate();
+      }
     },
     onChangeBorrowAmount(val) {
-      this.borrowAmount = val || 0;
+      this.gasAmount = 0;
+      this.gasErrorMsg = '';
+      this.borrowAmount = val || '';
       this.validate();
+      if(!this.errorInfo) {
+        this.calcGasEstimate();
+      }
     },
     getParams() {
       const { token } = this.defaultPool;

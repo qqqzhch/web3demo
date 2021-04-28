@@ -119,19 +119,28 @@
             110%
           </div>
         </div>
-        <div v-if="errorInfo" class="notice-content">
+        <div v-if="errorInfo || gasErrorMsg" class="notice-content">
           <img src="../../../assets/img/notice-red.png">
-          <p>{{ errorInfo }}</p>
+          <p>{{ errorInfo || gasErrorMsg }}</p>
         </div>
-        <div v-if="!errorInfo" :style="{height: '47px'}" />
+        <div v-if="gasAmount && !gasErrorMsg" class="notice-content-gas">
+          <div>
+            Gas Fee: {{ BigNumber(gasAmount).times(gasPrice).div("1e18").toString() }}BNB <br>Adjusting the quantity of "Deposit" and "Debt" will effectively reduce the Gas Fee.
+          </div>
+        </div>
+        <div v-if="gasErrorMsg" class="notice-content-gas">
+          <div>
+            Adjusting the quantity of "Deposit" and "Debt" will effectively reduce the Gas Fee.
+          </div>
+        </div>
         <div>
-          <button v-if="!errorInfo && !btnLoading" class="btn" @click="onOpenTroveClick">
+          <button v-if="!(errorInfo || gasErrorMsg) && !btnLoading" class="btn" @click="onOpenTroveClick">
             {{ $t('build-create-vault') }}
           </button>
-          <button v-if="!errorInfo && btnLoading" class="btn">
+          <button v-if="!(errorInfo || gasErrorMsg) && btnLoading" class="btn">
             Loading...
           </button>
-          <button v-if="errorInfo" class="btn btn-disabled">
+          <button v-if="(errorInfo || gasErrorMsg)" class="btn btn-disabled">
             {{ $t('build-create-vault') }}
           </button>
         </div>
@@ -317,6 +326,22 @@
         font-family: Gilroy-Medium, Gilroy;
         font-weight: 500;
         color: #ff3c00;
+      }
+    }
+    .notice-content-gas {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      width: 100%;
+      /*height: 64px;*/
+      background: rgba(96, 90, 165, 0.1);
+      border-radius: 4px;
+      div {
+        font-size: 14px;
+        font-family: Gilroy-Medium, Gilroy;
+        font-weight: 500;
+        color: rgba(96, 90, 165, 1);
       }
     }
   }

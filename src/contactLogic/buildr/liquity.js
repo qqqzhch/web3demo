@@ -63,13 +63,11 @@ export const fetchLiquityEntity = ({library, account, chainID}) => {
 
 
 /**
- * open Trove
+ * Gas Estimate
  * */
 
-export const openTrove = async ({library, account, chainID, depositAmount, borrowLUSDAmount, liquityState}) => {
-  const liquity = fetchLiquityEntity({library, account, chainID});
-  const maxBorrowingRate = getMaxBorrowingRate(liquityState);
-
+export const getGasEstimate = async ({liquity, library, account, chainID, depositAmount, borrowLUSDAmount}) => {
+  liquity = liquity || fetchLiquityEntity({library, account, chainID});
 
   const tx = await liquity.populate.openTrove({
     depositCollateral: depositAmount,
@@ -81,10 +79,24 @@ export const openTrove = async ({library, account, chainID, depositAmount, borro
   try {
     originalGasEstimate = await library.estimateGas(tx.rawPopulatedTransaction);
     originalGasEstimate = originalGasEstimate.add(50000).toString();
-    console.log('originalGasEstimate',originalGasEstimate, originalGasEstimate.toString(), 99999);
+    // console.log('originalGasEstimate',originalGasEstimate, originalGasEstimate.toString(), 99999);
   } catch (e) {
     console.log(e, 8888);
   }
+
+  return originalGasEstimate;
+};
+
+
+/**
+ * open Trove
+ * */
+
+export const openTrove = async ({library, account, chainID, depositAmount, borrowLUSDAmount, liquityState}) => {
+  const liquity = fetchLiquityEntity({library, account, chainID});
+  const maxBorrowingRate = getMaxBorrowingRate(liquityState);
+
+  const originalGasEstimate = await getGasEstimate({liquity, library, account, chainID, depositAmount, borrowLUSDAmount});
 
   const transaction = await liquity.send.openTrove({
     depositCollateral: depositAmount,
