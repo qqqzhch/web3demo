@@ -424,7 +424,7 @@
       {
         var {numberOfTroves,lusdBalance}  = this.$data.state;
         if (numberOfTroves === 1) {
-          return `You're not allowed to close your Trove when there are no other Troves in the system.`;
+          return `You're not allowed to close your Trove when there are no other Vaults in the system.`;
         }
         if (recoveryMode) {
           return `You're not allowed to close your Trove during recovery mode.`;
