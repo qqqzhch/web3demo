@@ -108,7 +108,7 @@
         </div>
       </div>
     </div>
-    <!--mobild content-->
+    <!--mobile content-->
     <div v-if="!isPC">
       <div v-if="isOpen" class="CDP-content">
         <div v-if="!poolsData.length">

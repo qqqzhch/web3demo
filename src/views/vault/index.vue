@@ -72,7 +72,7 @@
       text-align: right;
     }
     .box-shadow {
-      padding: 32px;
+      padding: 20px;
       box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
       border-radius: 12px;
     }
