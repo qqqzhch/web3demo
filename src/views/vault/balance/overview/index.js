@@ -12,6 +12,9 @@ export default {
   },
   computed: {
     ...mapState('buildr', ['liquityState']),
+    isPC() {
+      return window.screen.width > 1200;
+    },
     price() {
       return this.liquityState.price.toString();
     },

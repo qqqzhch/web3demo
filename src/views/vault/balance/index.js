@@ -26,6 +26,9 @@ export default {
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
+    isPC() {
+      return window.screen.width > 1200;
+    },
   },
   methods: {
     ...mapActions('buildr', ['setPoolsData', 'setAllPoolsEnable']),

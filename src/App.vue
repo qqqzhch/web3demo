@@ -85,7 +85,7 @@ export default {
       }
       .main-wrapper {
         margin-top: 0px;
-        min-width: 1200px;
+        /*min-width: 1200px;*/
       }
       .synth-wrapper {
         margin-top: 0px;
