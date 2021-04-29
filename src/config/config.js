@@ -1,5 +1,5 @@
 export default {
-  defaultChainID: 97,
+  defaultChainID: 56,
   scUSDContractAddress: '0xe9d8a936bfb1a4dceccd8d97ed3c973399de303a',
   erc20Abi: require('../constants/abis/erc20.json'),
   netInfo: {
@@ -31,15 +31,15 @@ export default {
     '56': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Main',
-      isBan: true
+      isBan: false
     },
     '97': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Test',
-      isBan: false
+      isBan: true
     },
   },
-  gasLimit: 8000000,
+  gasLimit: 800000,
   defaultNet: {
     '97': {
       chainIDHex: '0x61',
@@ -49,6 +49,15 @@ export default {
       decimals: 18,
       rpcUrl: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
       explorerUrl: ['https://testnet.bscscan.com/']
+    },
+    '56': {
+      chainIDHex: '0x38',
+      netName: 'BSC Main NET',
+      symbolNet: 'bsc',
+      symbol: 'BNB',
+      decimals: 18,
+      rpcUrl: ['https://bsc-dataseed.binance.org'],
+      explorerUrl: ['https://bscscan.com/']
     }
   },
   walletconnectRPC:{

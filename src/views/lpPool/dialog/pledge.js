@@ -38,6 +38,7 @@ export default {
     },
 
     percentage(val) {
+      console.log('--');
       const balance = this.$BigNumber(this.data.data.LPTokenbalance);
       const percent = this.$BigNumber(val);
       this.pledgeAmount = balance.multipliedBy(percent).decimalPlaces(6).toNumber();

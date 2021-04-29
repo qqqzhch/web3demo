@@ -32,8 +32,8 @@
     },
     {
         "name":"BNB",
-        "title":"BNB-A",
-        "titlei18":"BNB-A",
+        "title":"BNB",
+        "titlei18":"BNB",
         "token":"BNB",
         "desc":"BNB",
         "state":true

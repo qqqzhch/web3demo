@@ -33,8 +33,7 @@
         </div>
       </div>
 
-      <!-- <a class="pancake" :href="getAddress" target="_blank">Get Pancake LP</a> -->
-      <a style="    color: #c3c2c7;" class="pancake" target="_blank">Get Pancake LP</a>
+      
 
       <div class="pool-detail">
         <!-- <div class="detail-item">
@@ -60,6 +59,8 @@
 
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
+          <a class="pancake pool-btn" :href="getAddress" target="_blank">Get Pancake LP</a>
+      
           <button class="pool-btn" @click="openPledge">
             Stake LP
           </button>
@@ -103,6 +104,8 @@ import event from '@/common/js/event';
 import web3 from 'web3';
 import _ from 'underscore';
 import tokenList from '@/constants/token.json';
+const debounce = require('debounce');
+
 export default {
   data() {
     return {
@@ -117,7 +120,7 @@ export default {
     loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
-    async getListData() {
+   getListData:debounce (async function() {
       this.showLoading = true;
       try {
         const data = await StakingRewardListbatch(this.ethersprovider, this.ethAddress, this.ethChainID);
@@ -148,7 +151,7 @@ export default {
       } finally {
         this.showLoading = false;
       }
-    },
+    },2000),
     async getPriceData(item, pairListPrice) {
       const obj = {};
       const tokensymbolA = item.symbol[0];
@@ -222,7 +225,7 @@ export default {
         return '#';
       }
       // https://exchange.pancakeswap.finance/#/add/BNB/0x6020CBa45Ce63BE22f904C76047a944Ee85c41c0
-      const url = `https://exchange.pancakeswap.finance/#/add/BNB/${item.address}`;
+      const url = `https://pancakeswap.babel.fi/#/add/BNB/${item.address}`;
       return url;
     },
   },
@@ -232,6 +235,11 @@ export default {
         this.getListData();
       }
     },
+    isConnect(value) {
+      if (value) {
+        this.getListData();
+      }
+    }
   },
   created() {
     if (this.isReady) {
