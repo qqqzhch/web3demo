@@ -59,7 +59,7 @@
 
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
-          <a class="pancake pool-btn" :href="getAddress" target="_blank">Get Pancake LP</a>
+          <a class="pancake pool-btn" :href="getAddress" target="_blank">Get Pancake V1 LP</a>
       
           <button class="pool-btn" @click="openPledge">
             Stake LP
