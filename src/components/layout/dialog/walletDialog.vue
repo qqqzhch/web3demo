@@ -142,8 +142,8 @@ export default {
 
 <style lang="less" scoped>
 .modal-content {
-  width: 500px;
-  padding: 24px 44px;
+  // width: 500px;
+  // padding: 24px 44px;
   .button-wrapper {
     height: 48px;
     margin-top: 30px;

@@ -1,6 +1,6 @@
 <template>
   <header class="header-wrapper header-wrapper-bg">
-    <nav class="nav-wrapper container mx-auto flex justify-between items-center">
+    <nav v-if="!isMobile" class="nav-wrapper container mx-auto flex justify-between items-center">
       <div class="left-wrapper flex items-center">
         <img class="logo" src="../../assets/logo.svg" alt="logo">
         <div class="menu-wrapper">
@@ -90,7 +90,70 @@
         </button>
       </div>
     </nav>
+
+    <nav v-else class="nav-wrapper container mobileHeader">
+      <div class="content-left">
+        <img src="../../assets/logo.svg" alt="logo">
+      </div>
+      <div class="content-right flex items-center">
+        <Dropdown trigger="click" class="network-wrapper" @on-click="choseNetWork">
+          <div class="netWork flex justify-between items-center" :class="getBg">
+            <div class="dot" :class="statusVal" />
+            <span>{{ network }}</span>
+            <img class="arrow" src="../../assets/img/down.svg" alt="down">
+          </div>
+          <DropdownMenu slot="list" class="list-wrapper">
+            <template v-for="(item, index) in getNetList">
+              <DropdownItem v-if="netInfo[item].isBan === false" :key="index" class="list-item" :name="item">
+                <img :src="netInfo[item].imgSrc" :alt="item">
+                <span>{{ netInfo[item].name }}</span>
+              </DropdownItem>
+              <DropdownItem v-else :key="index" disabled class="list-item" :name="item">
+                <img :src="netInfo[item].imgSrc" :alt="item">
+                <span>{{ netInfo[item].name }}</span>
+              </DropdownItem>
+            </template>
+          </DropdownMenu>
+        </Dropdown>
+        <div class="wallet-wrapper">
+          <img
+            v-if="!ethAddress"
+            v-clickoutside="closeWallet"
+            src="../../assets/m-img/link1.svg"
+            alt="link"
+            class="headerIco"
+            @click="openWalletDialog"
+          >
+          <img
+            v-else
+            v-clickoutside="closeWallet"
+            src="../../assets/m-img/link1.svg"
+            alt="headerico"
+            class="headerIco"
+            @click="showWallet"
+          >
+          <div v-if="isShowWallet" class="wallet-item">
+            <div>
+              <img v-if="WalletName=='metamask'" src="../../assets/img/metamask18.svg" alt="metamask">
+              <img v-else src="../../assets/img/walletconnect-hexagon-blue.svg" alt="walletconnect">
+              <p>{{ getShortAddress }}</p>
+            </div>
+            <button @click="copyAddress">
+              {{ $t('header.copyAddress') }}
+            </button>
+            <button v-if="WalletConnectprovider" @click="disconnectWallet">
+              {{ $t('header.Disconnect') }}
+            </button>
+          </div>
+        </div>
+        <div class="set-wrapper">
+          <img src="../../assets/m-img/setting.svg" alt="setting" class="headerset" @click="openSettingDialog">
+        </div>
+      </div>
+    </nav>
+
     <walletdialog ref="wallet" />
+    <settingdialog ref="setting" />
   </header>
 </template>
 
@@ -102,6 +165,7 @@ export default {
   inject: ['reload'],
   components: {
     walletdialog: () => import('./dialog/walletDialog'),
+    settingdialog: () => import('./dialog/mSettingDialog'),
   },
   data() {
     return {
@@ -111,11 +175,17 @@ export default {
       netInfo: config.netInfo,
       netID: '1',
       statusVal: '',
+      // isMobile:true,
+      isShowWallet:false,
+      isShowSetting:false,
     };
   },
   methods: {
     openWalletDialog() {
       this.$refs.wallet.open();
+    },
+    openSettingDialog() {
+      this.$refs.setting.open();
     },
     copyAddress() {
       this.$copyText(this.ethAddress).then(() => {
@@ -212,9 +282,15 @@ export default {
       }
       // console.log(this.statusVal);
     },
+    showWallet() {
+      this.isShowWallet = true;
+    },
+    closeWallet() {
+      this.isShowWallet = false;
+    },
   },
   computed: {
-    ...mapState(['ethAddress', 'ethChainID','WalletConnectprovider','WalletName']),
+    ...mapState(['ethAddress', 'ethChainID','WalletConnectprovider','WalletName','isMobile']),
     getShortAddress() {
       return `${this.ethAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
     },
@@ -275,6 +351,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "./media/index.less";
 .header-wrapper {
   width: 100%;
   height: 88px;

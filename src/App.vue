@@ -28,7 +28,8 @@ export default {
     };
   },
   data() {
-    return {
+    return {     
+      screenWidth: document.body.clientWidth,
       isRouterAlive: true,
       isSynth: true,
     };
@@ -44,11 +45,23 @@ export default {
       this.$nextTick(() => (this.isRouterAlive = true));
     },
   },
+
   mounted() {
     event.$on("sendSuccess", () => {
       this.$refs.haveSendtx.open("");
     });
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = document.body.clientWidth;
+        if (this.screenWidth < 1200) {
+          this.$store.commit('changeIsMobile', true);
+        } else {
+          this.$store.commit('changeIsMobile', false);
+        }
+      })();
+    };
   },
+
   watch: {
     $route(to) {
       const synth = to.path.substr(0,6);
@@ -81,7 +94,7 @@ export default {
       overflow-y: hidden;
       .header-wrapper {
         position: static;
-        min-width: 1200px;
+        // min-width: 1200px;
       }
       .main-wrapper {
         margin-top: 0px;
@@ -89,9 +102,6 @@ export default {
       }
       .synth-wrapper {
         margin-top: 0px;
-        min-width: 1200px;
-      }
-      .footer-wrapper {
         min-width: 1200px;
       }
     }

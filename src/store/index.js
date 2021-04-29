@@ -18,7 +18,8 @@ const store = new vuex.Store({
     scashPrice: '',
     chainTokenName: '',
     WalletConnectprovider:null,
-    WalletName:''
+    WalletName:'',
+    isMobile: document.body.clientWidth<1200?true:false
   },
   mutations: {
     changeToken(state, token) {
@@ -60,6 +61,9 @@ const store = new vuex.Store({
     },
     WalletName(state, name){
       state.WalletName = name; 
+    },
+    changeIsMobile(state,status) {
+      state.isMobile  = status;
     }
   },
   actions: {
