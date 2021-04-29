@@ -9,6 +9,7 @@ import Vue from 'vue';
 const debounce = require('debounce');
 
 let isSubscribe = false;
+let liquity;
 
 export default {
   inject: ['reload'],
@@ -52,8 +53,10 @@ export default {
             library: this.ethersprovider,
             account: this.ethAddress,
           };
-          const liquity = fetchLiquityEntity(params);
-        if(isSubscribe === false && liquity.store) {
+          
+          
+          liquity = fetchLiquityEntity(params);
+        
           console.log('init store');
           liquity.store.onLoaded = () => {
 
@@ -65,6 +68,7 @@ export default {
 
             console.log(liquity.store.state);
           };
+        if(isSubscribe === false && this.ethAddress) {
 
 
             liquity.store.subscribe(({ newState, oldState }) => {
@@ -72,13 +76,14 @@ export default {
               this.setLiquityState(newState);
             });
             isSubscribe = true;
-            liquity.store.start();
-      }else{
-        this.liquityReady = true;
-      }
+            
+        }else{
+          this.liquityReady = true;
+        }
+        liquity.store.start();
 
       
-    },2000),
+    },1000),
 
 
 
