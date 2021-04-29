@@ -169,7 +169,7 @@ export default {
                 title: this.$t('notice.n'),
                 desc: this.$t('notice.n11'),
               });
-              this.$store.commit('changeEthChainID', chainConfig.defaultChainID);
+              this.$store.commit('changeEthChainID', chainConfig.getChainID());
 
               // return false;
             }
@@ -177,7 +177,7 @@ export default {
         }else if(usewalletname == 'walletconnect'){
                  const WalletConnectprovider = new WalletConnectProvider({
                       rpc: chainConfig.walletconnectRPC,
-                      chainId:chainConfig.defaultChainID 
+                      chainId:chainConfig.getChainID() 
                     });
                     
                   web3Provider=this.WalletConnectprovider||WalletConnectprovider;
@@ -206,10 +206,10 @@ export default {
            web3 = new Web3(web3Provider);
            ethersprovider = new ethers.providers.Web3Provider(web3Provider);
         }else{
-          ethersprovider = getethProvider({chainId:chainConfig.defaultChainID });
-          web3 = new Web3(chainConfig.walletconnectRPC[chainConfig.defaultChainID]);
-          this.$store.commit('changeEthChainID', chainConfig.defaultChainID);
-          console.log(chainConfig.defaultChainID,ethersprovider);
+          ethersprovider = getethProvider({chainId:chainConfig.getChainID() });
+          web3 = new Web3(chainConfig.walletconnectRPC[chainConfig.getChainID()]);
+          this.$store.commit('changeEthChainID', chainConfig.getChainID());
+          console.log(chainConfig.getChainID(),ethersprovider);
         }
 
         this.$store.commit('changeweb3', { web3, ethersprovider });

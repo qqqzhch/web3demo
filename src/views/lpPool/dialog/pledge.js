@@ -25,7 +25,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3','chainTokenPrice']),
+    ...mapState(['ethersprovider', 'ethAddress', 'ethChainID', 'web3','chainTokenPrice','LAI','BNB','BABEL']),
   },
   methods: {
     open(data) {

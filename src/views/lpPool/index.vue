@@ -20,7 +20,7 @@
           <img src="../../../public/tokenlogo/LAI.svg" class="imgRight" alt="lai">
         </div>
         <h2 class="title" target="_blank">
-          BNB-LAI
+          {{ BNB }}-{{ LAI }}
         </h2>
       </div>
 
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      
+
 
       <div class="pool-detail">
         <!-- <div class="detail-item">
@@ -52,15 +52,15 @@
         </div>
 
         <div class="detail-item">
-          <span class="title">Unclaimed BABEL</span>
-          <span class="value">{{ unclaim || '--' }} BABEL</span>
+          <span class="title">Unclaimed {{ BABEL }}</span>
+          <span class="value">{{ unclaim || '--' }} {{ BABEL }}</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
           <a class="pancake pool-btn" :href="getAddress" target="_blank">Get Pancake V1 LP</a>
-      
+
           <button class="pool-btn" @click="openPledge">
             Stake LP
           </button>
@@ -194,7 +194,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'earnPrice', 'scashPrice']),
+    ...mapState(['ethersprovider', 'ethChainID', 'ethAddress', 'earnPrice', 'scashPrice','LAI','BABEL','BNB']),
     isReady() {
       return this.ethChainID && this.ethersprovider;
     },

@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }} LAI</span>
+              <span>{{ balance }} {{ LAI }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -35,7 +35,7 @@
         <div class="price-wrapper">
           <div class="price-item flex justify-between items-center">
             <span>{{ $t('stability.willUnstake') }}</span>
-            <p>{{ takeAmount || 0 }} LAI</p>
+            <p>{{ takeAmount || 0 }} {{ LAI }}</p>
           </div>
         </div>
 
@@ -70,6 +70,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['LAI']),
     ...mapState('buildr', ['liquityState']),
     ...mapState('pool', ['liquity']),
     liquityInstance() {

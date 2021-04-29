@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }} BABEL</span>
+              <span>{{ balance }} {{ BABEL }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -35,7 +35,7 @@
         <div class="price-wrapper">
           <div class="price-item flex justify-between items-center">
             <span>{{ $t('stability.willUnstake') }}</span>
-            <p>{{ takeAmount || 0 }} BABEL</p>
+            <p>{{ takeAmount || 0 }} {{ BABEL }}</p>
           </div>
         </div>
 
@@ -70,6 +70,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['LAI','BABEL','BNB']),
     ...mapState('buildr', ['liquityState']),
     ...mapState('pool', ['liquity']),
     liquityInstance() {
@@ -108,8 +109,8 @@ export default {
         event.$emit('sendtx', [
           data.rawSentTransaction,
           {
-            okinfo: `${this.$t('common.unstake')} ${this.takeAmount} BABEL ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.unstake')} ${this.takeAmount} BABEL  ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.unstake')} ${this.takeAmount} ${this.BABEL} ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.takeAmount} ${this.BABEL}  ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {

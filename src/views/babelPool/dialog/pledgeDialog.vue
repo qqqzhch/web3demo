@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ balance }} BABEL</span>
+              <span>{{ balance }} {{ BABEL }}</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
@@ -70,6 +70,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['LAI','BABEL','BNB']),
     ...mapState('pool', ['liquity']),
     liquityInstance() {
       const val = this.liquity && this.liquity.send;

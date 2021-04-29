@@ -6,14 +6,15 @@
           {{ $t('myPage.claim') }}
         </p>
         <p v-else class="title text-center">
-          {{ $t('stability.claimAndMove') }}
+          <!-- {{ $t('stability.claimAndMove') }} -->
+          Claim {{ BABEL }} and {{ BNB }} move to vault
         </p>
         <div class="simple-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
-              <span>{{ claimAmount }} {{ rewardToken }} , {{ unclaimBNB }} BNB</span>
+              <span>{{ claimAmount }} {{ BABEL }} , {{ unclaimBNB }} {{ BNB }}</span>
             </div>
           </div>
           <div class="simple-wrapper">
@@ -23,7 +24,7 @@
         <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
-            <p>{{ claimAmount }} {{ rewardToken }} , {{ unclaimBNB }} BNB</p>
+            <p>{{ claimAmount }} {{ BABEL }} , {{ unclaimBNB }} {{ BNB }}</p>
           </div>
         </div>
 
@@ -56,13 +57,14 @@ export default {
     };
   },
   computed: {
+    ...mapState(['BABEL','BNB']),
     ...mapState('pool', ['liquity']),
     liquityInstance() {
       const val = this.liquity && this.liquity.send;
       return val;
     },
     amountClaim() {
-      return `${this.claimAmount} BABEL,${this.unclaimBNB} BNB`;
+      return `${this.claimAmount} ${this.BABEL},${this.unclaimBNB} ${this.BNB}`;
     }
   },
   methods: {

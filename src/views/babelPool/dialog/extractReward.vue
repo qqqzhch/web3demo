@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
-              <span>{{ collateralGain }} BNB {{ lusdGain }} LAI</span>
+              <span>{{ collateralGain }} {{ BNB }} {{ lusdGain }} {{ LAI }}</span>
             </div>
           </div>
           <div class="simple-wrapper">
@@ -20,7 +20,7 @@
         <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
-            <p>{{ collateralGain }} BNB {{ lusdGain }} LAI</p>
+            <p>{{ collateralGain }} {{ BNB }} {{ lusdGain }} LAI</p>
           </div>
         </div>
 
@@ -105,13 +105,14 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
+    ...mapState(['LAI','BABEL','BNB']),
     ...mapState('pool', ['liquity']),
     liquityInstance() {
       const val = this.liquity && this.liquity.send;
       return val;
     },
     amountClaim() {
-      return `${this.collateralGain} BNB,${this.lusdGain} LAI`;
+      return `${this.collateralGain} ${this.BNB},${this.lusdGain} ${this.LAI}`;
     },
   },
 };

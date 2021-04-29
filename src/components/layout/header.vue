@@ -202,6 +202,7 @@ export default {
 
       this.network = this.netInfo[val].name;
       jscookie.set('net', this.network, { expires: 180 });
+      // this.addChain();
     },
 
     async choseFunc(val) {
@@ -225,7 +226,7 @@ export default {
 
     // 添加并且切换网络类型
     addChain() {
-      const defaultNet = config.defaultNet[config.defaultChainID];
+      const defaultNet = config.defaultNet[config.getChainID()];
       const param = {
         chainId: defaultNet.chainIDHex,
         chainName: defaultNet.netName,
@@ -249,11 +250,12 @@ export default {
     },
 
     getStatus() {
+      console.log('----');
       const targetID = parseInt(jscookie.get('targetNet')) || config.defaultChainID;
 
       this.network = jscookie.get('net');
       if (!this.network) {
-        this.network = this.netInfo[config.defaultChainID].name;
+        this.network = this.netInfo[config.getChainID()].name;
       }
       // console.log(targetID, this.ethChainID, this.network);
       if (!this.ethAddress) {
@@ -343,7 +345,7 @@ export default {
     } else {
       this.statusVal = 'notConnect';
       // 设置默认网络
-      this.network = this.netInfo[config.defaultChainID].name;
+      this.network = this.netInfo[config.getChainID()].name;
       this.addChain();
     }
   },

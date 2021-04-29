@@ -5,7 +5,9 @@ export default function getChainCoinInfo(chianID){
         case 4:
         case 3:info={
             coinName:'ETH',
-            tokenID:'ethereum'
+            tokenID:'ethereum',
+            LAI:'LUSD',
+            BABEL:'LQTY'
 
         } ;break;
         case 128:
@@ -17,12 +19,16 @@ export default function getChainCoinInfo(chianID){
         case 56:
         case 97:info={
             coinName:'BNB',
-            tokenID:'binancecoin'
+            tokenID:'binancecoin',
+            LAI:'LAI',
+            BABEL:'BABEL'
 
         } ;break;
         default: info={
             coinName:'ETH',
-            tokenID:'ethereum'
+            tokenID:'ethereum',
+            LAI:'LAI',
+            BABEL:'BABEL'
 
         };
 

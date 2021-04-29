@@ -118,7 +118,7 @@ export default {
         // 请求用户授权
         const provider = new WalletConnectProvider({
           rpc: chainConfig.walletconnectRPC,
-          chainId:chainConfig.defaultChainID 
+          chainId:chainConfig.getChainID() 
         });
         console.log('provider',provider);
         // await provider.disconnect();

@@ -21,7 +21,7 @@
 
       <div class="tag-wrapper flex justify-center items-center">
         <div class="tag-item tag1">
-          BABEL
+          {{ BABEL }}
         </div>
         <div class="tag-item tag2">
           {{ $t('stability.fee') }}
@@ -36,34 +36,34 @@
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.total') }}</span>
-          <span class="value">{{ totalStake }} LAI</span>
+          <span class="value">{{ totalStake }} {{ LAI }}</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.staked') }}</span>
-          <span class="value">{{ haveStake }} LAI</span>
+          <span class="value">{{ haveStake }} {{ LAI }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">{{ $t('stability.unclaim') }} BNB</span>
-          <span class="value">{{ unclaimBNB }} BNB</span>
+          <span class="title">{{ $t('stability.unclaim') }} {{ BNB }}</span>
+          <span class="value">{{ unclaimBNB }} {{ BNB }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">{{ $t('stability.unclaim') }} BABEL</span>
-          <span class="value">{{ unclaimBabel }} BABEL</span>
+          <span class="title">{{ $t('stability.unclaim') }} {{ BABEL }}</span>
+          <span class="value">{{ unclaimBabel }} {{ BABEL }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">{{ $t('stability.remain') }} BABEL</span>
-          <span class="value">{{ unReleaseBabel }} BABEL</span>
+          <span class="title">{{ $t('stability.remain') }} {{ BABEL }}</span>
+          <span class="value">{{ unReleaseBabel }} {{ BABEL }}</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
           <button class="pool-btn" @click="openPledge">
-            {{ $t('stability.stake') }}  LAI
+            {{ $t('stability.stake') }}  {{ LAI }}
           </button>
 
           <Poptip placement="bottom" class="claim-wrapper pool-btn">
@@ -72,23 +72,25 @@
             </div>
             <div slot="content" class="claim-btn-wrapper">
               <button class="claim-btn" @click="handleClaim('claim')">
-                {{ $t('stability.claimReward') }}
+                Claim {{ BNB }} and {{ BABEL }}
+                <!-- {{ $t('stability.claimReward') }} -->
               </button>
 
               <button class="claim-btn ml-4" @click="handleClaim('move')">
-                {{ $t('stability.claimAndMove') }}
+                Claim {{ BABEL }} and {{ BNB }} move to vault
+                <!-- {{ $t('stability.claimAndMove') }} -->
               </button>
             </div>
           </Poptip>
 
           <button class="pool-btn" @click="openTake">
-            {{ $t('stability.unstake') }}  LAI
+            {{ $t('stability.unstake') }}  {{ LAI }}
           </button>
         </template>
 
         <template v-else>
           <button class="pool-btn disableBtn">
-            {{ $t('stability.stake') }}  LAI
+            {{ $t('stability.stake') }}  {{ LAI }}
           </button>
 
           <button class="pool-btn disableBtn">
@@ -96,7 +98,7 @@
           </button>
 
           <button class="pool-btn disableBtn">
-            {{ $t('stability.unstake') }}  LAI
+            {{ $t('stability.unstake') }}  {{ LAI }}
           </button>
         </template>
       </div>
@@ -119,7 +121,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['ethAddress']),
+    ...mapState(['ethAddress','LAI','BABEL','BNB']),
     ...mapState('buildr', ['liquityState']),
     stabilityDeposit() {
       const val = this.liquityState && this.liquityState.stabilityDeposit;

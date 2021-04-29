@@ -14,9 +14,9 @@
     </div>
     <div v-else class="pool-content">
       <div class="title-wrapper flex justify-center items-center">
-        <img src="../../../public/tokenlogo/babel.svg" alt="babel">
+        <img :src="getTokenImg(BABEL)" alt="babel">
         <h2 class="title">
-          BABEL
+          {{ BABEL }}
         </h2>
       </div>
 
@@ -37,29 +37,29 @@
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.total') }}</span>
-          <span class="value">{{ totalStakedLQTY }} BABEL</span>
+          <span class="value">{{ totalStakedLQTY }} {{ BABEL }}</span>
         </div>
 
         <div class="detail-item">
           <span class="title">{{ $t('stability.staked') }}</span>
-          <span class="value">{{ stakedLQTY }} BABEL</span>
+          <span class="value">{{ stakedLQTY }} {{ BABEL }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">{{ $t('stability.unclaim') }} BNB</span>
-          <span class="value">{{ collateralGain }} BNB</span>
+          <span class="title">{{ $t('stability.unclaim') }} {{ BNB }}</span>
+          <span class="value">{{ collateralGain }} {{ BNB }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="title">{{ $t('stability.unclaim') }} LAI</span>
-          <span class="value">{{ lusdGain }} LAI</span>
+          <span class="title">{{ $t('stability.unclaim') }} {{ LAI }}</span>
+          <span class="value">{{ lusdGain }} {{ LAI }}</span>
         </div>
       </div>
 
       <div class="pool-btn-wrapper">
         <template v-if="ethAddress">
           <button class="pool-btn" @click="openPledge">
-            {{ $t('stability.stake') }} BABEL
+            {{ $t('stability.stake') }} {{ BABEL }}
           </button>
 
           <button class="pool-btn" @click="openExtract">
@@ -67,13 +67,13 @@
           </button>
 
           <button class="pool-btn" @click="openTake">
-            {{ $t('stability.unstake') }} BABEL
+            {{ $t('stability.unstake') }} {{ BABEL }}
           </button>
         </template>
 
         <template v-else>
           <button class="pool-btn disableBtn">
-            {{ $t('stability.stake') }} BABEL
+            {{ $t('stability.stake') }} {{ BABEL }}
           </button>
 
           <button class="pool-btn disableBtn">
@@ -81,7 +81,7 @@
           </button>
 
           <button class="pool-btn disableBtn">
-            {{ $t('stability.unstake') }} BABEL
+            {{ $t('stability.unstake') }} {{ BABEL }}
           </button>
         </template>
       </div>
@@ -96,6 +96,8 @@
 <script>
 import initLiquity from '@/common/mixin/initLiquity';
 import { mapState } from 'vuex';
+import {  getTokenImg } from '@/contactLogic/readbalance.js';
+
 export default {
   mixins: [initLiquity],
   data() {
@@ -110,6 +112,11 @@ export default {
     loading: () => import('@/components/basic/loading.vue'),
   },
   methods: {
+    getTokenImg() {
+      const chainID = this.ethChainID;
+      const tokensymbol = this.BABEL;
+      return getTokenImg(tokensymbol, chainID);
+    },
     openPledge() {
       this.$refs.pledge.open(this.lqtyBalance);
     },
@@ -131,6 +138,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(['LAI','BABEL','BNB']),
     ...mapState('buildr', ['liquityState']),
     totalStakedLQTY() {
       const val =

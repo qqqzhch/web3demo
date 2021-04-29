@@ -3,12 +3,13 @@ import vuex from "vuex";
 import buildrStore from './buildr';
 import synthStore from './synth';
 import pool from './pool';
+import networkCoinconfig from '@/constants/networkCoinconfig.js';
 
 Vue.use(vuex);
 
 const store = new vuex.Store({
   state: {
-    token: "ETH",
+    BNB: "ETH",
     ethAddress: "",
     ethChainID: "",
     web3: null,
@@ -23,14 +24,21 @@ const store = new vuex.Store({
   },
   mutations: {
     changeToken(state, token) {
-      state.token = token;
+      state.BNB = token;
     },
     changeEthAddress(state, address) {
       state.ethAddress = address;
     },
 
     changeEthChainID(state, id) {
+      console.log('changeEthChainID',networkCoinconfig);
       state.ethChainID = id;
+
+      const netinfo = networkCoinconfig(id);
+
+      state.LAI = netinfo.LAI;
+      state.BABEL =netinfo.BABEL;
+      state.BNB =netinfo.coinName;
     },
     changeweb3(state, obj) {
       console.log('changeweb3');
@@ -56,11 +64,11 @@ const store = new vuex.Store({
 
     },
     changeWalletConnectprovider(state, Connectprovider){
-      state.WalletConnectprovider = Connectprovider; 
+      state.WalletConnectprovider = Connectprovider;
 
     },
     WalletName(state, name){
-      state.WalletName = name; 
+      state.WalletName = name;
     },
     changeIsMobile(state,status) {
       state.isMobile  = status;

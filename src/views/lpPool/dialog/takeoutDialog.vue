@@ -3,13 +3,13 @@
     <Modal v-model="openRemoveDialog" class-name="simple-modal" :footer-hide="true" :closable="true">
       <div class="simple-content">
         <p class="title text-center">
-          {{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}
+          {{ $t('myPage.dialog.unstake.unstake') }} {{ LAI }}/{{ BNB }} LP
         </p>
         <div class="simple-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
-              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ coinName }}</span>
+              <span class="mr-2 text-secondary">{{ $t('myPage.dialog.unstake.staked') }} {{ LAI }}/{{ BNB }} LP</span>
               <span>{{ stakeVal }}</span>
             </div>
           </div>
@@ -19,8 +19,8 @@
         </div>
         <div class="detail-wrapper">
           <div class="detail-item">
-            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ coinName }}</span>
-            <p>{{ stakeVal }} {{ coinName }}</p>
+            <span>{{ $t('myPage.dialog.unstake.unstake') }} {{ LAI }}/{{ BNB }} LP</span>
+            <p>{{ stakeVal }} {{ LAI }}/{{ BNB }} LP</p>
           </div>
         </div>
 
@@ -85,8 +85,8 @@ export default {
         event.$emit('sendtx', [
           result,
           {
-            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n42')}`,
-            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.coinName} ${this.$t('notice.n43')}`,
+            okinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.LAI}}/${this.BNB} LP ${this.$t('notice.n42')}`,
+            failinfo: `${this.$t('common.unstake')} ${this.stakeVal} ${this.LAI}/${this.BNB} LP ${this.$t('notice.n43')}`,
           },
         ]);
       } catch (error) {
@@ -104,7 +104,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress']),
+    ...mapState(['ethersprovider', 'ethAddress','LAI','BNB','BABEL']),
   },
 };
 </script>

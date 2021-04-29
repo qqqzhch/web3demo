@@ -1,13 +1,19 @@
+import jscookie from 'js-cookie';
+
 export default {
   defaultChainID: 56,
+  getChainID:function(){
+    return jscookie.get('targetNet')||this.defaultChainID;
+
+  },
   scUSDContractAddress: '0xe9d8a936bfb1a4dceccd8d97ed3c973399de303a',
   erc20Abi: require('../constants/abis/erc20.json'),
   netInfo: {
-    // '1': {
-    //   imgSrc: require('../assets/img/eth48.png'),
-    //   name: 'Ethereum',
-    //   isBan: true
-    // },
+    '1': {
+      imgSrc: require('../assets/img/eth48.png'),
+      name: 'Ethereum',
+      isBan: false
+    },
     // '3': {
     //   imgSrc: require('../assets/img/eth48.png'),
     //   name: 'Ropsten',
@@ -41,6 +47,15 @@ export default {
   },
   gasLimit: 800000,
   defaultNet: {
+    '1': {
+      chainIDHex: '0x1',
+      netName: 'Ethereum main NET',
+      symbolNet: 'eth',
+      symbol: 'ETH',
+      decimals: 18,
+      rpcUrl: ['https://mainnet.infura.io/v3/undefined'],
+      explorerUrl: ['https://etherscan.io']
+    },
     '97': {
       chainIDHex: '0x61',
       netName: 'BSC TEST NET',
@@ -64,7 +79,7 @@ export default {
     128: "https://http-mainnet-node.huobichain.com",
     256:'https://http-testnet.hecochain.com',
     4:"https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82",
-    1:"https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82",
+    1:"https://mainnet.infura.io/v3/9a211ba3375a44af9d920594ec49e4a5",
     97:'https://data-seed-prebsc-1-s1.binance.org:8545',
     56:'https://bsc-dataseed.binance.org',
 

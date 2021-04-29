@@ -10,7 +10,7 @@
             <span class="card-title">{{ $t('common.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('myPage.dialog.claim.unclaim') }}</span>
-              <span>{{ claimAmount }} {{ rewardToken }}</span>
+              <span>{{ claimAmount }} {{ BABEL }}</span>
             </div>
           </div>
           <div class="simple-wrapper">
@@ -20,7 +20,7 @@
         <div class="detail-wrapper">
           <div class="detail-item">
             <span>{{ $t('common.willRecieive') }}</span>
-            <p>{{ claimAmount }} {{ rewardToken }}</p>
+            <p>{{ claimAmount }} {{ BABEL }}</p>
           </div>
         </div>
 
@@ -107,7 +107,7 @@ export default {
     Buttons: () => import('@/components/basic/buttons'),
   },
   computed: {
-    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3', 'scashPrice']),
+    ...mapState(['ethersprovider', 'ethAddress', 'chainTokenPrice', 'web3', 'scashPrice','BABEL']),
   },
 };
 </script>

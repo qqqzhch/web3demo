@@ -2200,12 +2200,10 @@
   dependencies:
     ethers "^5.0.0"
 
-"@webfans/lib-ethers@^3.2.3":
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/@webfans/lib-ethers/-/lib-ethers-3.2.3.tgz#4bbd3406b175a112e2854577fe283621deb5967e"
-  integrity sha512-mIZTIzXOOdZ8JV7ed9Mp0a3TVE8fwUxL65HU38mJwleEALQDULfuPUJJOAVjunMnYy89qqmmWqL89As6CdL5/w==
-  dependencies:
-    run-s "0.0.0"
+"@webfans/lib-ethers@^3.3.7":
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/@webfans/lib-ethers/-/lib-ethers-3.3.7.tgz#99a46ff5c6ce0a5cbfa5a64142f93d3ab7b7bb01"
+  integrity sha512-fkgpqVN3OfptoMEZE7xDFM2A2c99uYZcvG8ubDnDd6QrCn/FrWmC8ywZ0KoyemZF9X155pOXM/PZwLqAZ5eGFw==
 
 "@webfans/uniswapsdk@23.0.3":
   version "23.0.3"
@@ -9496,11 +9494,6 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   integrity sha1-6Eg5bwV9Ij8kOGkkYY4laUFh7Ec=
   dependencies:
     aproba "^1.1.1"
-
-run-s@0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/run-s/-/run-s-0.0.0.tgz#599912be20c00ba7698655c9936d075d31b71754"
-  integrity sha1-WZkSviDAC6dphlXJk20HXTG3F1Q=
 
 rustbn.js@~0.2.0:
   version "0.2.0"

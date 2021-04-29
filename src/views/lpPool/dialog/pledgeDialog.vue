@@ -3,14 +3,14 @@
     <Modal v-model="openPledgeDialog" class-name="pledge-modal" :transfer="false" :footer-hide="true" :closable="true">
       <div class="pledge-content">
         <p class="title text-center">
-          {{ $t('stability.stake') }} {{ coinName }}
+          {{ $t('stability.stake') }} {{ LAI }}/{{ BNB }} LP
         </p>
         <div class="pledge-wrapper">
           <div class="title-content">
             <span class="card-title">{{ $t('earn.dialog.stakeDialog.amount') }}</span>
             <div class="balance-item">
               <span class="mr-2 text-secondary">{{ $t('earn.dialog.stakeDialog.balance') }}</span>
-              <span>{{ data.data && data.data.LPTokenbalance }} {{ coinName }}</span>
+              <span>{{ data.data && data.data.LPTokenbalance }} {{ LAI }}/{{ BNB }} LP</span>
             </div>
           </div>
           <div class="pledge-wrapper flex">
