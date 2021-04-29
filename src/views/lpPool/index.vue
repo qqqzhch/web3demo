@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       liquidityData: {},
-      showLoading: false,
+      showLoading: true,
     };
   },
   components: {
@@ -151,7 +151,7 @@ export default {
       } finally {
         this.showLoading = false;
       }
-    },2000),
+    },1000),
     async getPriceData(item, pairListPrice) {
       const obj = {};
       const tokensymbolA = item.symbol[0];
