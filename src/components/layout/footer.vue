@@ -99,12 +99,14 @@ export default {
           path:`/${name}`,
       });
     },
+    //获取当前路由
+    getRouterActive(){
+      this.isActive = window.location.href.split('#/')[1];
+    }
   },
   mounted() {
     // this.getKey();
-    if (this.isReady) {
-      this.getStatus();
-    }
+    this.getRouterActive();
   },
   computed: {
     ...mapState(['isMobile']),
