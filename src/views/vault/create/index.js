@@ -63,7 +63,10 @@ export default {
     borrowLUSDAmount() {
       const { liquidationReserve, borrowingRate } = this.troveIndicators;
       return this.borrowAmount < 20 ? 0 : BigNumber(this.borrowAmount).minus(liquidationReserve).div(BigNumber(1).plus(borrowingRate)).plus(0.000001).toNumber();
-    }
+    },
+    isPC() {
+      return window.screen.width > 1200;
+    },
   },
   methods: {
     getTokenImg(tokensymbol){
