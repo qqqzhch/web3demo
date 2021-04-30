@@ -225,7 +225,8 @@ export default {
     },
 
     // 添加并且切换网络类型
-    addChain() {
+    addChain(isuser) {
+      console.log('addChain');
       const defaultNet = config.defaultNet[config.getChainID()];
       const param = {
         chainId: defaultNet.chainIDHex,
@@ -238,7 +239,13 @@ export default {
         rpcUrls: defaultNet.rpcUrl,
         blockExplorerUrls: defaultNet.explorerUrl,
       };
+
       const ethereum = window.ethereum;
+      
+      if(ethereum== undefined&&isuser==true){
+        window.location.reload();
+        return ;
+      }
       ethereum
         .request({ method: 'wallet_addEthereumChain', params: [param] })
         .then((res) => {
@@ -246,6 +253,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          // window.location.reload();
         });
     },
 
@@ -265,14 +273,15 @@ export default {
           desc: this.$t('notice.n38'),
         });
       }
-      if (this.ethAddress && targetID !== this.ethChainID) {
+      if (targetID !== this.ethChainID) {
         this.statusVal = 'wrongConnect';
         this.$Notice.error({
           title: this.$t('notice.n39'),
           desc: this.$t('notice.n40'),
           duration: 30,
         });
-        this.addChain();
+        const isuser = true;
+        this.addChain(isuser);
       }
 
       if (this.ethAddress && targetID === this.ethChainID) {
@@ -346,7 +355,8 @@ export default {
       this.statusVal = 'notConnect';
       // 设置默认网络
       this.network = this.netInfo[config.getChainID()].name;
-      this.addChain();
+      const isuser = false;
+      this.addChain(isuser);
     }
   },
 };

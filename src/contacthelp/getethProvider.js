@@ -7,25 +7,26 @@ export default function(Tokencoin){
     // console.log('getnetwork');
     //https://eth-mainnet.alchemyapi.io/v2/_-mMjxdfTD-C6NBe24iwXsLFelLocsei
     if(Tokencoin.chainId==1){
-        //https://eth-mainnet.alchemyapi.io/v2/_-mMjxdfTD-C6NBe24iwXsLFelLocsei
-        //https://eth-mainnet.alchemyapi.io/v2/_-mMjxdfTD-C6NBe24iwXsLFelLocsei
-        console.log(getNetwork(Tokencoin.chainId));
-        console.log(getDefaultProvider(getNetwork(Tokencoin.chainId),{
-            alchemy:'_-mMjxdfTD-C6NBe24iwXsLFelLocsei',
-            etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
-         //    infura:{
-         //     projectId:'9a211ba3375a44af9d920594ec49e4a5',
-         //     projectSecret:'f2b6bbaa7b3349e091e2784c272b875f'
-         //    }
-         }));
-       return  getDefaultProvider(getNetwork(Tokencoin.chainId),{
-       alchemy:'_-mMjxdfTD-C6NBe24iwXsLFelLocsei',
-       etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
-    //    infura:{
-    //     projectId:'9a211ba3375a44af9d920594ec49e4a5',
-    //     projectSecret:'f2b6bbaa7b3349e091e2784c272b875f'
-    //    }
-    });
+        return new ethers.providers.JsonRpcProvider('https://eth-mainnet.alchemyapi.io/v2/zyCVxF_4dpNdoIk_xOJ5yiD5By6_yU3X');
+    //     //https://eth-mainnet.alchemyapi.io/v2/_-mMjxdfTD-C6NBe24iwXsLFelLocsei
+    //     //https://eth-mainnet.alchemyapi.io/v2/_-mMjxdfTD-C6NBe24iwXsLFelLocsei
+    //     console.log(getNetwork(Tokencoin.chainId));
+    //     console.log(getDefaultProvider(getNetwork(Tokencoin.chainId),{
+    //         alchemy:'_-mMjxdfTD-C6NBe24iwXsLFelLocsei',
+    //         etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
+    //      //    infura:{
+    //      //     projectId:'9a211ba3375a44af9d920594ec49e4a5',
+    //      //     projectSecret:'f2b6bbaa7b3349e091e2784c272b875f'
+    //      //    }
+    //      }));
+    //    return  getDefaultProvider(getNetwork(Tokencoin.chainId),{
+    //    alchemy:'_-mMjxdfTD-C6NBe24iwXsLFelLocsei',
+    //    etherscan:'717YNHIQ7RSXPDYJ823QK34NXTKVZW33J1',
+    // //    infura:{
+    // //     projectId:'9a211ba3375a44af9d920594ec49e4a5',
+    // //     projectSecret:'f2b6bbaa7b3349e091e2784c272b875f'
+    // //    }
+    // });
     }else if(Tokencoin.chainId==256){
         // var netowrk = {
         //     chainId: 256,

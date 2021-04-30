@@ -31,7 +31,7 @@ const store = new vuex.Store({
     },
 
     changeEthChainID(state, id) {
-      console.log('changeEthChainID',networkCoinconfig);
+      // console.log('changeEthChainID',networkCoinconfig);
       state.ethChainID = id;
 
       const netinfo = networkCoinconfig(id);

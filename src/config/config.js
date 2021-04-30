@@ -42,7 +42,7 @@ export default {
     '97': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Test',
-      isBan: true
+      isBan: false
     },
   },
   gasLimit: 800000,
@@ -79,7 +79,7 @@ export default {
     128: "https://http-mainnet-node.huobichain.com",
     256:'https://http-testnet.hecochain.com',
     4:"https://rinkeby.infura.io/v3/0dd2833fd0b9495885ebc1e44323fb82",
-    1:"https://mainnet.infura.io/v3/9a211ba3375a44af9d920594ec49e4a5",
+    1:"https://eth-mainnet.alchemyapi.io/v2/zyCVxF_4dpNdoIk_xOJ5yiD5By6_yU3X",
     97:'https://data-seed-prebsc-1-s1.binance.org:8545',
     56:'https://bsc-dataseed.binance.org',
 
