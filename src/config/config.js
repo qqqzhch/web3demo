@@ -12,7 +12,7 @@ export default {
     '1': {
       imgSrc: require('../assets/img/eth48.png'),
       name: 'Ethereum',
-      isBan: false
+      isBan: true
     },
     // '3': {
     //   imgSrc: require('../assets/img/eth48.png'),
@@ -42,7 +42,7 @@ export default {
     '97': {
       imgSrc: require('../assets/img/binance48.svg'),
       name: 'BSC Test',
-      isBan: false
+      isBan: true
     },
   },
   gasLimit: 800000,
