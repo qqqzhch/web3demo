@@ -1,12 +1,12 @@
 <template>
   <div class="create box-shadow">
-    <div v-if="isPC" class="header">
+    <div v-if="!isMobile" class="header">
       <div class="title">
         {{ $t('build-deposit-digital-assets') }}
       </div>
     </div>
     <!--pc content-->
-    <div v-if="isPC" class="grid-2 mrg-tb-20">
+    <div v-if="!isMobile" class="grid-2 mrg-tb-20">
       <div class="content-left">
         <div class="asset-item cursor-pointer">
           <div class="connect flex justify-between items-center">
@@ -148,7 +148,7 @@
       </div>
     </div>
     <!--mobile content-->
-    <div v-if="!isPC">
+    <div v-else>
       <div class="content-left">
         <!--<div class="asset-item cursor-pointer">-->
         <!--<div class="connect flex justify-between items-center">-->

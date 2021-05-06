@@ -21,14 +21,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress', 'currPool']),
+    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress', 'currPool','isMobile']),
     ...mapState('buildr', ['currPool', 'liquityState', 'isOpen']),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
     },
-    isPC() {
-      return window.screen.width > 1200;
-    },
+    // isPC() {
+    //   return window.screen.width > 1200;
+    // },
   },
   methods: {
     ...mapActions('buildr', ['setPoolsData', 'setAllPoolsEnable']),

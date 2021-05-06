@@ -12,6 +12,7 @@ export default {
   },
   computed: {
     ...mapState('buildr', ['liquityState']),
+    ...mapState(['isMobile']),
     isPC() {
       return window.screen.width > 1200;
     },

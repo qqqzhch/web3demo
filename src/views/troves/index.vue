@@ -36,7 +36,7 @@
         <Table :columns="getColumns" :data="troveList">
           <template slot="Owner" slot-scope="{ row }">
             <div class="Owner">
-              <p>{{ row.ownerAddress }}</p>
+              <p>{{ getShortAddress(row.ownerAddress) }}</p>
             </div>
           </template>
           <template slot="Collateral" slot-scope="{ row }">
@@ -80,34 +80,37 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import event from '@/common/js/event';
-import initLiquity from '@/common/mixin/initLiquity';
+import { mapState } from "vuex";
+import event from "@/common/js/event";
+import initLiquity from "@/common/mixin/initLiquity";
 
 import {
   MINIMUM_COLLATERAL_RATIO,
   CRITICAL_COLLATERAL_RATIO,
-} from '@liquity/lib-base';
+} from "@liquity/lib-base";
 
 export default {
   mixins: [initLiquity],
   data() {
     return {
       troveList: [],
-      shortAdress: '',
+      shortAdress: "",
       clampedPage: 0,
-      showLoading:false
+      showLoading: false,
+      shortTableAdress:[]
     };
   },
   methods: {
     async cleartrove(ownerAddress, disable) {
-      console.log('ownerAddress');
+      console.log("ownerAddress");
       if (disable == false) {
         try {
-          const data = await this.liquity.send.liquidate(ownerAddress, { gasLimit: this.$globalConfig.gasLimit });
-          event.$emit('sendSuccess');
+          const data = await this.liquity.send.liquidate(ownerAddress, {
+            gasLimit: this.$globalConfig.gasLimit,
+          });
+          event.$emit("sendSuccess");
 
-          event.$emit('sendtx', [
+          event.$emit("sendtx", [
             data.rawSentTransaction,
             {
               okinfo: `Liquidation ${ownerAddress} success`,
@@ -120,7 +123,7 @@ export default {
         // this.list();
       } else {
         this.$Notice.warning({
-          title: this.$t('notice.n'),
+          title: this.$t("notice.n"),
           desc: disable,
         });
       }
@@ -132,20 +135,31 @@ export default {
     async list() {
       const pageSize = 20;
       const clampedPage = this.$data.clampedPage;
-      const { numberOfTroves, price, total, lusdInStabilityPool, blockTag } = this.liquityState;
+      const {
+        numberOfTroves,
+        price,
+        total,
+        lusdInStabilityPool,
+        blockTag,
+      } = this.liquityState;
       const recoveryMode = total.collateralRatioIsBelowCritical(price);
       const totalCollateralRatio = total.collateralRatio(price);
       const data = await this.liquity.getTroves(
         {
           first: pageSize,
-          sortedBy: 'ascendingCollateralRatio',
+          sortedBy: "ascendingCollateralRatio",
           startingAt: clampedPage * pageSize,
         },
         { blockTag }
       );
       data.forEach((trove) => {
         if (recoveryMode) {
-          trove.disable = this.liquidatableInRecoveryMode(trove, price, totalCollateralRatio, lusdInStabilityPool);
+          trove.disable = this.liquidatableInRecoveryMode(
+            trove,
+            price,
+            totalCollateralRatio,
+            lusdInStabilityPool
+          );
         } else {
           trove.disable = this.liquidatableInNormalMode(trove, price);
         }
@@ -153,25 +167,36 @@ export default {
         const collateralRatio = trove.collateralRatio(price);
 
         trove.color = collateralRatio.gt(CRITICAL_COLLATERAL_RATIO)
-          ? 'success'
+          ? "success"
           : collateralRatio.gt(1.2)
-          ? 'warning'
-          : 'danger';
+          ? "warning"
+          : "danger";
         trove.collateral = trove.collateral.prettify();
         trove.Debt = trove.debt.prettify();
-        trove.collateralRatio = collateralRatio.mul(100).prettify() + '%';
+        trove.collateralRatio = collateralRatio.mul(100).prettify() + "%";
 
         // if(collateralRatio.lt(1.1)){
 
         // }
       });
       this.$data.troveList = this.$data.troveList.concat(data);
-      // this.shortAdress = `${this.troveList.ownerAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
-      console.log(this.$data.troveList);
+      // // this.shortAdress = `${this.troveList.ownerAddress.slice(0, 6)}...${this.ethAddress.slice(-6)}`;
+      // this.$data.troveList.forEach(item=>{
+      //   this.shortTableAdress.push(`${item.ownerAddress.slice(0, 6)}...${item.ownerAddress.slice(-6)}`);
+      // });
+      // console.log(this.shortTableAdress,'----------------------------------------------------------------1');
     },
-    liquidatableInRecoveryMode(trove, price, totalCollateralRatio, lusdInStabilityPool) {
+    liquidatableInRecoveryMode(
+      trove,
+      price,
+      totalCollateralRatio,
+      lusdInStabilityPool
+    ) {
       const collateralRatio = trove.collateralRatio(price);
-      if (collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) && collateralRatio.lt(totalCollateralRatio)) {
+      if (
+        collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) &&
+        collateralRatio.lt(totalCollateralRatio)
+      ) {
         if (trove.debt.lte(lusdInStabilityPool)) {
           return false;
         } else {
@@ -185,15 +210,18 @@ export default {
       if (trove.collateralRatioIsBelowMinimum(price)) {
         return false;
       } else {
-        return 'Collateral ratio not low enough';
+        return "Collateral ratio not low enough";
       }
+    },
+    getShortAddress(adress) {
+      return `${adress.slice(0, 6)}...${adress.slice(-6)}`;
     },
   },
   mounted() {
-    console.log('---');
-    this.$data.showLoading =true;
+    console.log("---");
+    this.$data.showLoading = true;
     const _this = this;
-    event.$on('txsuccess', () => {
+    event.$on("txsuccess", () => {
       setTimeout(() => {
         _this.$data.clampedPage = 0;
         _this.$data.troveList = [];
@@ -202,22 +230,25 @@ export default {
     });
 
     var id = setInterval(() => {
-      if (_this.liquityState && _this.liquityState.price && this.liquity&&this.liquity.getTroves) {
+      if (
+        _this.liquityState &&
+        _this.liquityState.price &&
+        this.liquity &&
+        this.liquity.getTroves
+      ) {
         clearInterval(id);
         try {
-          
           _this.list();
         } catch (error) {
           console.log(error);
         }
         this.$data.showLoading = false;
-        
       }
     }, 100);
   },
   computed: {
-    ...mapState('pool', ['liquity']),
-    ...mapState('buildr', ['liquityState', 'liquityReady']),
+    ...mapState("pool", ["liquity",'isMobile']),
+    ...mapState("buildr", ["liquityState", "liquityReady"]),
     liquityInstance() {
       const val = this.liquity && this.liquity.send;
       return val;
@@ -225,36 +256,36 @@ export default {
     getColumns() {
       const columns = [
         {
-          title: this.$t('troves.owner'),
-          slot: 'Owner',
-          minWidth: 350,
+          title: this.$t("troves.owner"),
+          slot: "Owner",
+          minWidth: 250,
         },
         {
-          title: this.$t('troves.collateral'),
-          slot: 'Collateral',
-          minWidth: 50,
+          title: this.$t("troves.collateral"),
+          slot: "Collateral",
+          minWidth: 200,
         },
         {
-          title: this.$t('troves.debt'),
-          slot: 'Debt',
-          minWidth: 50,
+          title: this.$t("troves.debt"),
+          slot: "Debt",
+          minWidth: 200,
         },
         {
-          title: this.$t('troves.ratio'),
-          slot: 'Coll.Ratio',
-          minWidth: 100,
+          title: this.$t("troves.ratio"),
+          slot: "Coll.Ratio",
+          minWidth: 200,
         },
         {
-          title: this.$t('troves.liquidate'),
-          slot: 'Coll.Liquidate',
-          minWidth: 50,
+          title: this.$t("troves.liquidate"),
+          slot: "Coll.Liquidate",
+          minWidth: 150,
         },
       ];
       return columns;
-    }
+    },
   },
   components: {
-    loading: () => import('@/components/basic/loading.vue'),
+    loading: () => import("@/components/basic/loading.vue"),
   },
 };
 </script>

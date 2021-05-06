@@ -48,7 +48,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress']),
+    ...mapState(['web3', 'ethersprovider', 'ethChainID', 'ethAddress','isMobile']),
     ...mapState('buildr', ['liquityState', "isOpen"]),
     isReady() {
       return this.ethersprovider && this.ethChainID && this.ethAddress;
@@ -64,9 +64,9 @@ export default {
       const { liquidationReserve, borrowingRate } = this.troveIndicators;
       return this.borrowAmount < 20 ? 0 : BigNumber(this.borrowAmount).minus(liquidationReserve).div(BigNumber(1).plus(borrowingRate)).plus(0.000001).toNumber();
     },
-    isPC() {
-      return window.screen.width > 1200;
-    },
+    // isPC() {
+    //   return window.screen.width > 1200;
+    // },
   },
   methods: {
     getTokenImg(tokensymbol){

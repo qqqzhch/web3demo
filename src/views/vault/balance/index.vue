@@ -4,7 +4,7 @@
       <Overview />
     </div>
     <!--pc content-->
-    <div v-if="isPC">
+    <div v-if="!isMobile">
       <div v-if="isOpen" class="CDP-content">
         <div v-if="!poolsData.length">
           <Loading />
@@ -109,7 +109,7 @@
       </div>
     </div>
     <!--mobile content-->
-    <div v-if="!isPC">
+    <div v-else>
       <div v-if="isOpen" class="CDP-content">
         <div v-if="!poolsData.length">
           <Loading />
@@ -307,10 +307,6 @@
           color: #828489;
           font-size: 14px;
         }
-        .item-title {
-          > span {
-          }
-        }
         .text-right {
           position: relative;
           .create-btn {
@@ -340,10 +336,6 @@
         span {
           color: #828489;
           font-size: 14px;
-        }
-        .item-title {
-          > span {
-          }
         }
       }
       .CDP-item {

@@ -1,6 +1,6 @@
 <template>
   <div class="overview-warp">
-    <div v-if="isPC" class="content-warpper flex items-center">
+    <div v-if="!isMobile" class="content-warpper flex items-center">
       <div v-if="liquityState&&liquityState.price" class="content">
         <div class="total-warpper">
           <h2>{{ $t('vault-total-value-locked') }}</h2>
@@ -41,7 +41,7 @@
       <!--</div>-->
     </div>
 
-    <div v-if="!isPC" class="content-warpper flex items-center">
+    <div v-else class="content-warpper flex items-center">
       <div v-if="liquityState&&liquityState.price" class="content">
         <div class="total-warpper">
           <h2>{{ $t('vault-total-value-locked') }}</h2>
