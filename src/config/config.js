@@ -53,7 +53,7 @@ export default {
     defaultNet: {
         '1': {
             chainIDHex: '0x1',
-            netName: 'Ethereum main NET',
+            netName: 'Ethereum main Net',
             symbolNet: 'eth',
             symbol: 'ETH',
             decimals: 18,
@@ -62,7 +62,7 @@ export default {
         },
         '97': {
             chainIDHex: '0x61',
-            netName: 'BSC TEST NET',
+            netName: 'BSC TEST Net',
             symbolNet: 'bsc',
             symbol: 'BNB',
             decimals: 18,
@@ -71,7 +71,7 @@ export default {
         },
         '56': {
             chainIDHex: '0x38',
-            netName: 'BSC Main NET',
+            netName: 'BSC Main Net',
             symbolNet: 'bsc',
             symbol: 'BNB',
             decimals: 18,
@@ -81,7 +81,7 @@ export default {
 
         '65': {
             chainIDHex: '0x41',
-            netName: 'OKEx Main NET',
+            netName: 'OKEx Test Net',
             symbolNet: 'OKB',
             symbol: 'OKB',
             decimals: 18,
