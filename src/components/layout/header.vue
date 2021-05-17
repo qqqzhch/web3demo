@@ -241,7 +241,7 @@ export default {
       };
 
       const ethereum = window.ethereum;
-      
+
       if(ethereum== undefined&&isuser==true){
         window.location.reload();
         return ;
@@ -355,8 +355,8 @@ export default {
       this.statusVal = 'notConnect';
       // 设置默认网络
       this.network = this.netInfo[config.getChainID()].name;
-      const isuser = false;
-      this.addChain(isuser);
+      // const isuser = false;
+      // this.addChain(isuser);
     }
   },
 };
