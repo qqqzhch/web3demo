@@ -1,4 +1,6 @@
-# superCashUI
+# web3demo
 
-erc20lambda.json 非标准的，用在以太主网和测试网
-erc20.json 标准的。
+This is a demo of the Liquity ui
+Running on bsc test network and bsc main network
+Of course I run it on the bsc test network more often than not
+
