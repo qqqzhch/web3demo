@@ -42,12 +42,7 @@ export default {
             imgSrc: require('../assets/img/binance48.svg'),
             name: 'BSC Test',
             isBan: false
-        },
-        '65': {
-            imgSrc: require('../assets/img/binance48.svg'),
-            name: 'OKEx Test',
-            isBan: false
-        },
+        }
     },
     gasLimit: 800000,
     defaultNet: {
